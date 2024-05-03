@@ -1,5 +1,4 @@
 <template>
-
 	<header-component />
   <router-view />
 	<footer-component />
