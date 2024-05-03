@@ -14,7 +14,7 @@
         <swiper-slide v-for="item in 3" :key="item">
           <div class="main__banner-container">
             <div class="main__banner-item image">
-              <img src="@/assets/img/yarn-image.png" alt="yarn image">
+              <img src="../../../assets/img/yarn-image.png" alt="yarn image">
             </div>
             <div class="main__banner-item text-block">
               <h2 class="main__banner-item-label">
@@ -49,10 +49,10 @@ export default {
   },
   setup() {
     const onSwiper = (swiper) => {
-      console.log(swiper);
+      console.log(`swiper main - ${swiper}`);
     };
     const onSlideChange = () => {
-      console.log('slide change');
+      // console.log('slide change');
     };
     return {
       onSwiper,
