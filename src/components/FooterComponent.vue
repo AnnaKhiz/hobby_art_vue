@@ -9,7 +9,7 @@
           </div>
           <ul>
             <ui-contacts
-                :contacts="contacts"
+              :contacts="contacts"
             />
           </ul>
         </div>
