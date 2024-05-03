@@ -45,6 +45,47 @@
        </div>
      </div>
    </section>
+
+   <section class="main__instagram">
+     <div class="container">
+       <h2 class="main__instagram-label">
+         Наш instagram
+       </h2>
+       <div class="main__instagram-gallery-container">
+         <div  class="big-image-1" >
+           <div v-if="isBActiveLikesButton" class="main__instagram-gallery-container-feedback">
+             <div class="main__instagram-gallery-container-likes-btn">
+               <svg id="likes-btn" width="37" height="35" viewBox="0 0 37 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path id="svg-path" fill-rule="evenodd" clip-rule="evenodd" d="M18.4379 3.02862C28.6665 -7.48585 54.2405 10.9133 18.4379 34.572C-17.3648 10.9156 8.20918 -7.48585 18.4379 3.02862Z"/>
+               </svg>
+               <span class="main__instagram-gallery-container-likes-digit" id="likes-digit"></span>
+             </div>
+             <div class="main__instagram-gallery-container-comments">
+               <svg id="comments-popup" width="35" height="36" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path fill-rule="evenodd" clip-rule="evenodd" d="M26.7011 30.8166L31.1111 35.2435V27.1294C33.5417 24.2796 35 20.6509 35 16.7002C35 7.53791 27.1639 0.108887 17.5 0.108887C7.83611 0.108887 0 7.53791 0 16.7002C0 25.8626 7.83611 33.2916 17.5 33.2916C20.7316 33.302 23.9076 32.4477 26.7011 30.8166Z" fill="white"/>
+               </svg>
+               <span class="main__instagram-gallery-container-comments-digit" id="comments-digit">0</span>
+             </div>
+             <img src="@/assets/img/insta-img-1.png" alt="image instagram" >
+           </div>
+         </div>
+
+         <div v-for="image in 4" :key="image" :class="`small-image-${image}`">
+           <img :src="require(`@/assets/img/insta-img-${image+1}.png`)" alt="image instagram" >
+         </div>
+
+         <div class="big-image-2">
+           <img src="@/assets/img/insta-img-6.png" alt="image instagram" >
+         </div>
+       </div>
+
+       <a href="#" class="main__instagram-button"><span>@</span>hobbyart_dv</a>
+     </div>
+   </section>
+
+
+
+
  </div>
 
 </template>
@@ -62,6 +103,7 @@ export default defineComponent({
   components: {UiItemPreference, UiCatalogItem, UiPopularProducts, UiSwitcherMain, UiMainBanner},
   data() {
     return {
+      isBActiveLikesButton: true,
       catalogItemsInfo: [
         { text: 'Макраме', value: 'makrame', price: '250', link: '', image: 'catalog-img-pink.png' },
         { text: 'Вязание', value: 'knitting', price: '250', link: '', image: 'catalog-img-violet.png' },
@@ -76,7 +118,8 @@ export default defineComponent({
         { text: 'Поставщики', value: 'suppliers', image: 'pref-delivery.png', description: 'Мы работаем только с надежными и проверенными поставщиками товаров для творчества' },
         { text: 'Товары', value: 'products', image: 'preferences-knit.png', description: 'Мы привозим актуальные и новые товары, инструменты для вашего творчества по низким ценам' },
         { text: 'Бонусы', value: 'bonuses', image: 'preferences-bonus.png', description: 'У нас действует накопительная бонусная система скидок. Дарим в день рождения 500 бонусных рублей' },
-      ]
+      ],
+
     }
   }
 })
