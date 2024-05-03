@@ -83,7 +83,26 @@
      </div>
    </section>
 
+   <section class="main__feedback">
+     <div class="container">
+       <img src="@/assets/img/questions-image.png" alt="image fon">
 
+       <ui-feedback-form
+         name="Ваше имя"
+         phone="Телефон"
+         after-text="* нажимая на кнопку, вы соглашаетесь с политикой конфиденциальности"
+         >
+
+         <template #text-before>
+           <h3 class="main__feedback-label">
+             Есть вопрос? Мы перезвоним!
+           </h3>
+         </template>
+
+       </ui-feedback-form>
+
+     </div>
+   </section>
 
 
  </div>
@@ -96,11 +115,12 @@ import {defineComponent} from "vue";
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiSwitcherMain from "@/components/UI/uiSwitcherMain.vue";
 import UiPopularProducts from "@/components/UI/sliders/uiPopularProducts.vue";
-import UiCatalogItem from "@/components/UI/uiCatalogItem.vue"
-import UiItemPreference from "@/components/UI/uiItemPreference.vue"
+import UiCatalogItem from "@/components/UI/uiCatalogItem.vue";
+import UiItemPreference from "@/components/UI/uiItemPreference.vue";
+import UiFeedbackForm from "@/components/UI/forms/uiFeedbackForm.vue";
 
 export default defineComponent({
-  components: {UiItemPreference, UiCatalogItem, UiPopularProducts, UiSwitcherMain, UiMainBanner},
+  components: {UiFeedbackForm, UiItemPreference, UiCatalogItem, UiPopularProducts, UiSwitcherMain, UiMainBanner},
   data() {
     return {
       isBActiveLikesButton: true,

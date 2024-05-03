@@ -50,7 +50,7 @@
 
 <script>
 import UiContacts from "@/components/UI/uiContacts.vue";
-import UiSubscribe from "@/components/UI/uiSubscribe.vue"
+import UiSubscribe from "@/components/UI/forms/uiSubscribeForm.vue"
 
 export default {
 	name: "FooterComponent.vue",
