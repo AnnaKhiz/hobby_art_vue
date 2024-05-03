@@ -25,8 +25,23 @@
          <ui-catalog-item
           v-for="item in catalogItemsInfo"
           :key="item.value"
-          :catalogItemsInfo="item"
+          :catalog-items-info="item"
          />
+       </div>
+     </div>
+   </section>
+
+   <section class="main__preferences" id="benefits">
+     <div class="container">
+       <h2 class="main__preferences-label">
+         Хобби арт: 9 лет на рынке
+       </h2>
+       <div class="main__preferences-container">
+        <ui-item-preference
+          v-for="item in preferenceItemsInfo"
+          :key="item.value"
+          :preference-item="item"
+        />
        </div>
      </div>
    </section>
@@ -41,9 +56,10 @@ import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiSwitcherMain from "@/components/UI/uiSwitcherMain.vue";
 import UiPopularProducts from "@/components/UI/sliders/uiPopularProducts.vue";
 import UiCatalogItem from "@/components/UI/uiCatalogItem.vue"
+import UiItemPreference from "@/components/UI/uiItemPreference.vue"
 
 export default defineComponent({
-  components: {UiCatalogItem, UiPopularProducts, UiSwitcherMain, UiMainBanner},
+  components: {UiItemPreference, UiCatalogItem, UiPopularProducts, UiSwitcherMain, UiMainBanner},
   data() {
     return {
       catalogItemsInfo: [
@@ -55,6 +71,11 @@ export default defineComponent({
         { text: 'Упаковка', value: 'package', price: '250', link: '', image: 'catalog-img-violet.png' },
         { text: 'Товары для творчества', value: 'art-supplies', price: '250', link: '', image: 'catalog-img-pink-shadow.png' },
         { text: 'Книги', value: 'books', price: '250', link: '', image: 'catalog-img-pink-shadow.png' },
+      ],
+      preferenceItemsInfo: [
+        { text: 'Поставщики', value: 'suppliers', image: 'pref-delivery.png', description: 'Мы работаем только с надежными и проверенными поставщиками товаров для творчества' },
+        { text: 'Товары', value: 'products', image: 'preferences-knit.png', description: 'Мы привозим актуальные и новые товары, инструменты для вашего творчества по низким ценам' },
+        { text: 'Бонусы', value: 'bonuses', image: 'preferences-bonus.png', description: 'У нас действует накопительная бонусная система скидок. Дарим в день рождения 500 бонусных рублей' },
       ]
     }
   }
