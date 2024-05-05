@@ -25,7 +25,7 @@
        </h2>
        <div class="main__catalog-container">
          <ui-catalog-item
-          v-for="item in catalogItemsInfo"
+          v-for="item in getSidebarMainItems"
           :key="item.value"
           :catalog-items-info="item"
          />
@@ -105,7 +105,6 @@
 
      </div>
    </section>
-
    <section id="contacts"></section>
  </div>
 
@@ -129,16 +128,6 @@ export default defineComponent({
       isActiveLikesButton: true,
       isTypeSliderNew: false,
       clickedLink: '',
-      catalogItemsInfo: [
-        { text: 'Макраме', value: 'makrame', price: '250', link: '', image: 'catalog-img-pink.png' },
-        { text: 'Вязание', value: 'knitting', price: '250', link: '', image: 'catalog-img-violet.png' },
-        { text: 'Вышивка', value: 'crosstich', price: '250', link: '', image: 'catalog-img-pink-shadow.png' },
-        { text: 'Лепка', value: 'modeling', price: '250', link: '', image: 'catalog-img-pink-shadow.png' },
-        { text: 'Инструменты', value: 'tools', price: '250', link: '', image: 'catalog-img-pink.png' },
-        { text: 'Упаковка', value: 'package', price: '250', link: '', image: 'catalog-img-violet.png' },
-        { text: 'Товары для творчества', value: 'art-supplies', price: '250', link: '', image: 'catalog-img-pink-shadow.png' },
-        { text: 'Книги', value: 'books', price: '250', link: '', image: 'catalog-img-pink-shadow.png' },
-      ],
       preferenceItemsInfo: [
         { text: 'Поставщики', value: 'suppliers', image: 'pref-delivery.png', description: 'Мы работаем только с надежными и проверенными поставщиками товаров для творчества' },
         { text: 'Товары', value: 'products', image: 'preferences-knit.png', description: 'Мы привозим актуальные и новые товары, инструменты для вашего творчества по низким ценам' },
@@ -164,7 +153,10 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters({getCheckedHeaderLink: 'links/getCheckedHeaderLink'}),
+    ...mapGetters({
+      getCheckedHeaderLink: 'links/getCheckedHeaderLink',
+      getSidebarMainItems: 'links/getSidebarGeneralItems'
+    }),
 
     itemsForSlider() {
       return !this.isTypeSliderNew ? this.sliderNewProductItems : this.sliderPopularItems
@@ -183,6 +175,7 @@ export default defineComponent({
   watch: {
     getCheckedHeaderLink() {
       const element = document.getElementById(this.getCheckedHeaderLink);
+      console.log(element)
       if (!element) {
         return
       }

@@ -145,9 +145,10 @@ body
         @media screen and (max-width: 1600px)
           justify-content: center
           margin-bottom: 30px
-        & a
+        & span
           @include trans
           @include textMenuBold
+          cursor: pointer
           &:hover
             color: #976464
             @include trans
@@ -653,14 +654,14 @@ body.bg-white .header__menu-search input
         &:hover, &:checked
           background: linear-gradient(59.75deg, #C5C5A8 -2.61%, #E2E1CF 76.3%, #E2E1CF 76.3%)
           @include trans
-        &:first-of-type:after
-          @include headerContactsIcon (url('@/assets/img/catalog-img-link1.png'), 0, 60%)
-          @media screen and (max-width: 920px)
-            display: none
-        &:nth-of-type(2):after
-          @include headerContactsIcon (url('@/assets/img/catalog-img-link2.png'), 6%, 66%)
-          @media screen and (max-width: 920px)
-            display: none
+        //&:first-of-type:after
+        //  @include headerContactsIcon (url('@/assets/img/catalog-img-link1.png'), 0, 60%)
+        //  @media screen and (max-width: 920px)
+        //    display: none
+        //&:nth-of-type(2):after
+        //  @include headerContactsIcon (url('@/assets/img/catalog-img-link2.png'), 6%, 66%)
+        //  @media screen and (max-width: 920px)
+        //    display: none
         a
           display: block
           padding: 40px 49px 38px

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainPage from "@/components/pages/MainPage.vue";
+import DeliveryComponent from "@/components/pages/DeliveryComponent.vue";
 
 
 const routes = [
@@ -12,7 +13,16 @@ const routes = [
       title: 'Главная',
       favicon: '',
     },
-
+  },
+  {
+    path: '/delivery',
+    name: 'Delivery',
+    component: DeliveryComponent,
+    props: true,
+    meta: {
+      title: 'Доставка',
+      favicon: '',
+    },
   },
 ]
 

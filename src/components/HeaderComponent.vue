@@ -7,10 +7,10 @@
 					<nav class="header__menu-nav">
 						<ul id="menu-links">
 							<li
-								v-for="link in navMenuLinks"
+								v-for="link in getNavMenuLinks"
 								:key="link.url"
 							>
-								<a :href="`${link.url}`" @click.prevent="setCheckedHeaderLink(link.value)">{{ link.text }} </a>
+								<span @click="openMenuPage(link.url, link.value)">{{ link.text }} </span>
 							</li>
 						</ul>
 					</nav>
@@ -50,28 +50,32 @@
 <script>
 import HeaderInfoComponent from "@/components/HeaderInfoComponent.vue"
 import UiSearchForm from "@/components/UI/forms/uiSearchForm.vue"
-import {mapMutations} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 
 export default {
 	name: "HeaderComponent.vue",
 	components: {UiSearchForm, HeaderInfoComponent },
 	data() {
 		return {
-			navMenuLinks: [
-				{ text: 'Каталог', value: 'catalog', url: '' },
-				{ text: 'Оплата и доставка', value: 'delivery', url: '' },
-				{ text: 'Бонусная программа', value: 'bonuses', url: '' },
-				{ text: 'О компании', value: 'about', url: '' },
-				{ text: 'Контакты', value: 'contacts', url: '' }
-			]
+
 		}
 	},
   emits: ['send-checked-link'],
+  computed: {
+    ...mapGetters({
+      getNavMenuLinks: 'links/getNavMenuLinks'
+    })
+  },
   methods: {
     ...mapMutations({
       setCheckedHeaderLink: 'links/setCheckedHeaderLink'
     }),
-
+    openMenuPage(link, value) {
+      if (link) {
+        this.$router.push(`${link}`);
+      }
+      this.setCheckedHeaderLink(value)
+    }
   }
 }
 </script>
