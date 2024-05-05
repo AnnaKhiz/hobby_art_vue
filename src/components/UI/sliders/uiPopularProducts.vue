@@ -10,7 +10,7 @@
     autoplay
   >
     <swiper-slide
-        v-for="slide in sliderPopularItems"
+        v-for="slide in sliderItems"
         :key="slide.value"
         class="main__slider-popular-item"
     >
@@ -37,6 +37,12 @@ export default {
     Swiper,
     SwiperSlide,
   },
+  props: {
+    sliderItems: {
+      type: Array,
+      default: () => []
+    }
+  },
   setup() {
     const onSwiperPopular = (swiper) => {
       console.log(`swiper popular - ${swiper}`);
@@ -50,18 +56,7 @@ export default {
       modules: [Navigation, Autoplay],
     };
   },
-  data() {
-    return {
-      sliderPopularItems: [
-        { text: 'Пряжа Macrametr', value: 'macrametr', link: '', image: 'slider-img-1.png' },
-        { text: 'Кольца бамбук', value: 'bumbac', link: '', image: 'slider-img-2.png' },
-        { text: 'Трикотажная пряжа Zefirka', value: 'tricotat', link: '', image: 'slider-img-3.png' },
-        { text: 'Шпагат крученый', value: 'shpagat', link: '', image: 'slider-img-4.png' },
-        { text: 'Джут «Арахна»', value: 'dzhut', link: '', image: 'slider-img-5.png' },
-        { text: 'Трикотажная пряжа Zefirka', value: 'tricotat', link: '', image: 'slider-img-3.png' },
-      ]
-    }
-  }
+
 }
 </script>
 

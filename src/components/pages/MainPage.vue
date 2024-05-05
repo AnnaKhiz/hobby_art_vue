@@ -9,7 +9,7 @@
         >
 
           <template #popular-swiper>
-            <ui-popular-products />
+            <ui-popular-products :slider-items="itemsForSlider" />
           </template>
 
         </ui-switcher-main>
@@ -55,7 +55,7 @@
        </h2>
        <div class="main__instagram-gallery-container">
          <div  class="big-image-1" >
-           <div v-if="isBActiveLikesButton" class="main__instagram-gallery-container-feedback">
+           <div v-if="isActiveLikesButton" class="main__instagram-gallery-container-feedback">
              <div class="main__instagram-gallery-container-likes-btn">
                <svg id="likes-btn" width="37" height="35" viewBox="0 0 37 35" fill="none" xmlns="http://www.w3.org/2000/svg">
                  <path id="svg-path" fill-rule="evenodd" clip-rule="evenodd" d="M18.4379 3.02862C28.6665 -7.48585 54.2405 10.9133 18.4379 34.572C-17.3648 10.9156 8.20918 -7.48585 18.4379 3.02862Z"/>
@@ -106,7 +106,7 @@
      </div>
    </section>
 
-
+   <section id="contacts"></section>
  </div>
 
 </template>
@@ -120,12 +120,15 @@ import UiPopularProducts from "@/components/UI/sliders/uiPopularProducts.vue";
 import UiCatalogItem from "@/components/UI/uiCatalogItem.vue";
 import UiItemPreference from "@/components/UI/uiItemPreference.vue";
 import UiFeedbackForm from "@/components/UI/forms/uiFeedbackForm.vue";
+import {mapGetters, mapMutations} from "vuex";
 
 export default defineComponent({
   components: {UiFeedbackForm, UiItemPreference, UiCatalogItem, UiPopularProducts, UiSwitcherMain, UiMainBanner},
   data() {
     return {
-      isBActiveLikesButton: true,
+      isActiveLikesButton: true,
+      isTypeSliderNew: false,
+      clickedLink: '',
       catalogItemsInfo: [
         { text: 'Макраме', value: 'makrame', price: '250', link: '', image: 'catalog-img-pink.png' },
         { text: 'Вязание', value: 'knitting', price: '250', link: '', image: 'catalog-img-violet.png' },
@@ -141,13 +144,53 @@ export default defineComponent({
         { text: 'Товары', value: 'products', image: 'preferences-knit.png', description: 'Мы привозим актуальные и новые товары, инструменты для вашего творчества по низким ценам' },
         { text: 'Бонусы', value: 'bonuses', image: 'preferences-bonus.png', description: 'У нас действует накопительная бонусная система скидок. Дарим в день рождения 500 бонусных рублей' },
       ],
+      sliderPopularItems: [
+        { text: 'Пряжа Macrametr', value: 'macrametr', link: '', image: 'slider-img-1.png' },
+        { text: 'Кольца бамбук', value: 'bumbac', link: '', image: 'slider-img-2.png' },
+        { text: 'Трикотажная пряжа Zefirka', value: 'tricotat', link: '', image: 'slider-img-3.png' },
+        { text: 'Шпагат крученый', value: 'shpagat', link: '', image: 'slider-img-4.png' },
+        { text: 'Джут «Арахна»', value: 'dzhut', link: '', image: 'slider-img-5.png' },
+        { text: 'Трикотажная пряжа Zefirka', value: 'tricotat', link: '', image: 'slider-img-3.png' },
+      ],
+      sliderNewProductItems: [
+        { text: 'Джут «Арахна»', value: 'dzhut', link: '', image: 'slider-img-5.png' },
+        { text: 'Трикотажная пряжа Zefirka', value: 'tricotat', link: '', image: 'slider-img-3.png' },
+        { text: 'Пряжа Macrametr', value: 'macrametr', link: '', image: 'slider-img-1.png' },
+        { text: 'Кольца бамбук', value: 'bumbac', link: '', image: 'slider-img-2.png' },
+        { text: 'Шпагат крученый', value: 'shpagat', link: '', image: 'slider-img-4.png' },
+        { text: 'Пряжа Macrametr', value: 'macrametr', link: '', image: 'slider-img-1.png' },
+      ]
 
     }
   },
-  methods: {
-    getSwitcherState(value) {
-      console.log(value)
+  computed: {
+    ...mapGetters({getCheckedHeaderLink: 'links/getCheckedHeaderLink'}),
+
+    itemsForSlider() {
+      return !this.isTypeSliderNew ? this.sliderNewProductItems : this.sliderPopularItems
     }
+  },
+  methods: {
+    ...mapMutations({
+      setCheckedHeaderLink: 'links/setCheckedHeaderLink'
+    }),
+
+    getSwitcherState(value) {
+      this.isTypeSliderNew = value
+
+    },
+  },
+  watch: {
+    getCheckedHeaderLink() {
+      const element = document.getElementById(this.getCheckedHeaderLink);
+      if (!element) {
+        return
+      }
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  },
+  mounted() {
+    console.log(this.getCheckedHeaderLink)
   }
 })
 </script>

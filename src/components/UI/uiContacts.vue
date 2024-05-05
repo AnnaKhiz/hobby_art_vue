@@ -3,7 +3,7 @@
       v-for="item in contacts"
       :key="item.value"
   >
-    <a v-if="item.isLink" :href="`${item.href}`" class="header__contacts-tel">{{ item.text }}</a>
+    <a v-if="item.isLink" :href="`${item.href}`" class="header__contacts-tel" >{{ item.text }}</a>
     <span v-else>{{ item.text }}</span>
   </li>
 </template>
@@ -16,7 +16,7 @@ export default {
       type: Array,
       default: () => []
     }
-  }
+  },
 }
 </script>
 

@@ -10,17 +10,15 @@
 								v-for="link in navMenuLinks"
 								:key="link.url"
 							>
-								<a :href="`${link.url}`">{{ link.text }}</a>
+								<a :href="`${link.url}`" @click.prevent="setCheckedHeaderLink(link.value)">{{ link.text }} </a>
 							</li>
 						</ul>
 					</nav>
-					<a href="https://www.anna-khizhniak.site/portfolio/store-HobbyArt" class="header__menu-logo">
+					<a href="/" class="header__menu-logo">
 						<img src="@/assets/img/logo.png" alt="logo">
 					</a>
 					<div class="header__menu-subitem">
-						<form action="#" method="get" class="header__menu-search elem-sub">
-							<input type="text" placeholder="Поиск товара">
-						</form>
+            <ui-search-form />
 						<a href="" class="header__menu-enterButton elem-sub" id="callModal" data-modal="callModal">
 							Войти
 						</a>
@@ -51,10 +49,12 @@
 </template>
 <script>
 import HeaderInfoComponent from "@/components/HeaderInfoComponent.vue"
+import UiSearchForm from "@/components/UI/forms/uiSearchForm.vue"
+import {mapMutations} from "vuex";
 
 export default {
 	name: "HeaderComponent.vue",
-	components: {HeaderInfoComponent},
+	components: {UiSearchForm, HeaderInfoComponent },
 	data() {
 		return {
 			navMenuLinks: [
@@ -65,7 +65,14 @@ export default {
 				{ text: 'Контакты', value: 'contacts', url: '' }
 			]
 		}
-	}
+	},
+  emits: ['send-checked-link'],
+  methods: {
+    ...mapMutations({
+      setCheckedHeaderLink: 'links/setCheckedHeaderLink'
+    }),
+
+  }
 }
 </script>
 <style scoped lang="sass">

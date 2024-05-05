@@ -3,15 +3,9 @@
 		<div class="container">
 			<ul class="header__contacts-list">
         <ui-contacts
-            :contacts="contacts"
+          :contacts="contacts"
+
         />
-<!--				<li-->
-<!--					v-for="item in contacts"-->
-<!--					:key="item.value"-->
-<!--				>-->
-<!--					<a v-if="item.isLink" :href="`${item.href}`" class="header__contacts-tel">{{ item.text }}</a>-->
-<!--					<span v-else>{{ item.text }}</span>-->
-<!--				</li>-->
 			</ul>
 
 		</div>
