@@ -5,8 +5,8 @@ export const linksModule = {
     navMenuLinks: [
       { text: 'Каталог', value: 'catalog', url: '/' },
       { text: 'Оплата и доставка', value: 'delivery', url: 'delivery' },
-      { text: 'Бонусная программа', value: 'bonuses', url: '' },
-      { text: 'О компании', value: 'about', url: '' },
+      { text: 'Бонусная программа', value: 'bonuses', url: 'bonuses' },
+      { text: 'О компании', value: 'about', url: 'about' },
       { text: 'Контакты', value: 'contacts', url: '' }
     ],
     sidebarGeneralItems: [

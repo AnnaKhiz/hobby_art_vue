@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainPage from "@/components/pages/MainPage.vue";
 import DeliveryComponent from "@/components/pages/DeliveryComponent.vue";
+import BonusesComponent from "@/components/pages/BonusesComponent.vue";
 
 
 const routes = [
@@ -21,6 +22,16 @@ const routes = [
     props: true,
     meta: {
       title: 'Доставка',
+      favicon: '',
+    },
+  },
+  {
+    path: '/bonuses',
+    name: 'Bonuses',
+    component: BonusesComponent,
+    props: true,
+    meta: {
+      title: 'Бонусы',
       favicon: '',
     },
   },

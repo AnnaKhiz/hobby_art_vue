@@ -1,8 +1,9 @@
 <template>
-  <ui-main-banner />
-  <section class="main__delivery__page">
+  <main class="main">
+    <ui-main-banner />
+    <section class="main__delivery__page">
     <div class="container">
-      <ui-breadcrumbs />
+      <ui-breadcrumbs :link="getCheckedHeaderLink" />
       <section class="main__delivery__page-container">
         <ui-sidebar-general />
         <div class="main__delivery__page-content">
@@ -43,6 +44,7 @@
     </div>
 
   </section>
+  </main>
 </template>
 
 <script>
