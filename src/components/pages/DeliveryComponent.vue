@@ -1,4 +1,5 @@
 <template>
+  <ui-main-banner />
   <section class="main__delivery__page">
     <div class="container">
       <ui-breadcrumbs />
@@ -48,10 +49,11 @@
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue"
 import {mapGetters} from "vuex";
 import UiSidebarGeneral from "@/components/UI/sidebars/uiSidebarGeneral.vue";
+import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue"
 
 export default {
   name: "DeliveryComponent.vue",
-  components: { UiSidebarGeneral, UiBreadcrumbs },
+  components: {UiMainBanner, UiSidebarGeneral, UiBreadcrumbs },
   computed: {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
