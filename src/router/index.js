@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import MainPage from "@/components/pages/MainPage.vue";
 import DeliveryComponent from "@/components/pages/DeliveryComponent.vue";
 import BonusesComponent from "@/components/pages/BonusesComponent.vue";
+import AboutComponent from "@/components/pages/AboutComponent.vue";
 
 
 const routes = [
@@ -32,6 +33,16 @@ const routes = [
     props: true,
     meta: {
       title: 'Бонусы',
+      favicon: '',
+    },
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: AboutComponent,
+    props: true,
+    meta: {
+      title: 'О компании',
       favicon: '',
     },
   },

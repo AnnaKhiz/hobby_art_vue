@@ -73,9 +73,12 @@ export default {
     openMenuPage(link, value) {
       if (link) {
         this.$router.push(`${link}`);
+      } else {
+        const height = window.outerHeight * 100;
+        window.scrollTo({  top: height, behavior: 'smooth' })
       }
       this.setCheckedHeaderLink(value)
-    }
+    },
   }
 }
 </script>

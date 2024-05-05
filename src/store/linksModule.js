@@ -7,7 +7,7 @@ export const linksModule = {
       { text: 'Оплата и доставка', value: 'delivery', url: 'delivery' },
       { text: 'Бонусная программа', value: 'bonuses', url: 'bonuses' },
       { text: 'О компании', value: 'about', url: 'about' },
-      { text: 'Контакты', value: 'contacts', url: '' }
+      { text: 'Контакты', value: 'contacts', url: `` }
     ],
     sidebarGeneralItems: [
       { id: 1, text: 'Макраме', value: 'makrame', price: '250', link: '', image: 'catalog-img-pink.png' },
