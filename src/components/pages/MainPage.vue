@@ -4,7 +4,9 @@
 
    <section class="main__slider-popular">
      <div class="container">
-        <ui-switcher-main >
+        <ui-switcher-main
+          @switcher-state="getSwitcherState"
+        >
 
           <template #popular-swiper>
             <ui-popular-products />
@@ -140,6 +142,11 @@ export default defineComponent({
         { text: 'Бонусы', value: 'bonuses', image: 'preferences-bonus.png', description: 'У нас действует накопительная бонусная система скидок. Дарим в день рождения 500 бонусных рублей' },
       ],
 
+    }
+  },
+  methods: {
+    getSwitcherState(value) {
+      console.log(value)
     }
   }
 })

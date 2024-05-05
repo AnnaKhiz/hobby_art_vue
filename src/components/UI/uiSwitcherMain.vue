@@ -1,15 +1,15 @@
 <template>
-  <div class="main__slider-popular-switcher" id="popular-new">
-    <p class="main__slider-popular-switcher-label red-text" id="switcher-label-1">
+  <div class="main__slider-popular-switcher" >
+    <p class="main__slider-popular-switcher-label " :class="{ 'red-text' : !isSwitchOn }">
       Новинки
     </p>
 
-    <div class="switcher-button">
-      <div class="switch-btn switch-off" data-id="#bl-2" ></div>
-      <div id="bl-2"></div>
+    <div class="switcher-button" >
+      <div class="switch-btn switch-off" @click="toggleSwitcher" :class="{ 'switch-on' : isSwitchOn}"></div>
+      <div id="bl-2" ></div>
     </div>
 
-    <p class="main__slider-popular-switcher-label" id="switcher-label-2">
+    <p class="main__slider-popular-switcher-label" :class="{ 'red-text' : isSwitchOn }">
       Популярное
     </p>
   </div>
@@ -20,7 +20,18 @@
 
 export default {
   name: "uiSwitcherMain.vue",
-
+  data() {
+    return {
+      isSwitchOn: false
+    }
+  },
+  emits: ['switcher-state'],
+  methods: {
+    toggleSwitcher() {
+      this.isSwitchOn = !this.isSwitchOn;
+      this.$emit('switcher-state', this.isSwitchOn);
+    }
+  }
 }
 </script>
 
