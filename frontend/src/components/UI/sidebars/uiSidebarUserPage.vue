@@ -1,0 +1,35 @@
+<template>
+  <div class="main__user-page-content-block first-block" id="user-page-content-block">
+
+    <div class="main__user-page-content-user-info" id="user-name-info">
+      <div class="main__user-page-content-user-photo" id="auth-user-photo">
+        <img src="@/assets/img/user-photo.png" alt="user-photo">
+      </div>
+      <p class="main__user-page-content-user-name" id="auth-user-name">
+        Ольга Иванова
+      </p>
+    </div>
+
+    <ul class="main__user-page-content-user-list" id="user-menu-list">
+      <li><a href="#" id="my-data">Мои данные</a></li>
+      <li><a href="" id="bonuses">Бонусный счет</a></li>
+      <li><a href="" id="favorites">Избранные товары</a></li>
+      <li><a href="" id="story-orders">История заказов</a></li>
+      <li><a href="" id="mailing">Рассылка</a></li>
+      <li><a href="" id="review">Отзывы</a></li>
+    </ul>
+    <a href="" class="main__user-page-content-user-exit" id="user-page-exit">
+      Выйти из личного кабинета
+    </a>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "uiSidebarUserPage.vue"
+}
+</script>
+
+<style scoped lang="sass">
+
+</style>
