@@ -8,7 +8,7 @@ export const linksModule = {
       { text: 'Бонусная программа', value: 'bonuses', url: 'bonuses' },
       { text: 'О компании', value: 'about', url: 'about' },
       { text: 'Контакты', value: 'contacts', url: `` },
-      { text: 'Личный кабинет', value: 'user', url: `user/1` }
+      { text: 'Личный кабинет', value: 'user', url: `user/${localStorage.getItem('id')}` }
     ],
     sidebarGeneralItems: [
       { id: 1, text: 'Макраме', value: 'makrame', price: '250', link: '', image: 'catalog-img-pink.png' },

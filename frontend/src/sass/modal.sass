@@ -75,12 +75,18 @@
       &::placeholder
         @include textSmall (0.875rem, 1.0625rem, $colorTextMain)
     &-message
+      display: inline-block
       text-align: left
-      margin-bottom: 40px
-      display: block
+      //margin-bottom: 40px
       @include textSmall (0.75rem, 0.9375rem, $colorTextMain)
       &.sec
-        margin-top: -40px
+        margin-bottom: 20px
+        //margin-top: -40px
+      & + .error-message
+        display: block
+        color: red
+        margin-bottom: 15px
+        height: 20px
     &-button
       @include button
       margin: 0 auto 20px auto
@@ -101,7 +107,7 @@
       height: 1px
       background: $grayLinkColor
       margin: 40px 0
-    &.login
+    &.login, &.regist
       & input[type="checkbox"]
         margin-right: 16px
         width: 30px

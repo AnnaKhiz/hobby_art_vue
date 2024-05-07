@@ -6,17 +6,17 @@
         <img src="@/assets/img/user-photo.png" alt="user-photo">
       </div>
       <p class="main__user-page-content-user-name" id="auth-user-name">
-        Ольга Иванова
+        {{ userData.name }} {{ userData.lastName }}
       </p>
     </div>
 
     <ul class="main__user-page-content-user-list" id="user-menu-list">
-      <li><a href="#" id="my-data">Мои данные</a></li>
-      <li><a href="" id="bonuses">Бонусный счет</a></li>
-      <li><a href="" id="favorites">Избранные товары</a></li>
-      <li><a href="" id="story-orders">История заказов</a></li>
-      <li><a href="" id="mailing">Рассылка</a></li>
-      <li><a href="" id="review">Отзывы</a></li>
+      <li
+        v-for="link in userSidebarItems"
+        :key="link.value"
+      >
+        <a :href="link.url" id="my-data">{{ link.text }}</a>
+      </li>
     </ul>
     <a href="" class="main__user-page-content-user-exit" id="user-page-exit">
       Выйти из личного кабинета
@@ -25,8 +25,45 @@
 </template>
 
 <script>
+import { mapGetters} from "vuex";
+
 export default {
-  name: "uiSidebarUserPage.vue"
+  name: "uiSidebarUserPage.vue",
+  data() {
+    return {
+      userData: {},
+      userSidebarItems: [
+        { text: 'Мои данные', value: 'general', url: '' },
+        { text: 'Бонусный счет', value: 'bonuses', url: '' },
+        { text: 'Избранные товары', value: 'favorites', url: '' },
+        { text: 'История заказов', value: 'history', url: '' },
+        { text: 'Рассылка', value: 'mailing', url: '' },
+        { text: 'Отзывы', value: 'feedback', url: '' },
+      ]
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getUserInfo: 'user/getUserInfo',
+    }),
+  },
+  methods: {
+    async getUser() {
+      // this.userData = this.getUserInfo;
+      // if (!userData) {
+      //   return
+      // }
+      const result = await fetch(`http://localhost:5000/user/${localStorage.getItem('id')}`)
+      const data = await result.json()
+      const [ user ] = data.user
+      this.userData = user
+      console.log(this.userData)
+    }
+  },
+  mounted() {
+    this.getUser()
+  }
+
 }
 </script>
 

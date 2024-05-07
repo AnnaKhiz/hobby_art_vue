@@ -22,16 +22,12 @@
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
-import {mapGetters} from "vuex";
+
 
 export default {
   name: "UserPageComponent.vue",
   components: {UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
-  computed: {
-    ...mapGetters({
-      getCheckedHeaderLink: 'links/getCheckedHeaderLink',
-    }),
-  },
+
 
 }
 </script>

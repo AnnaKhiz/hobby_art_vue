@@ -1,6 +1,6 @@
 <template>
-  <div class="scroll_on" id="regist-inner-content">
-    <form action="#" class="modal__registration-form" id="registration-form">
+  <div  id="regist-inner-content">
+    <form action="#" class="modal__registration-form regist" id="registration-form">
       <h2 class="modal__registration-form-label">
         Регистрация
       </h2>
@@ -17,17 +17,46 @@
           placeholder="Фамилия"
           required
       >
-      <input type="text" name="sur-name" id="user-sur-name-reg" placeholder="Отчество" data-register="new-user" required>
-      <input type="tel" name="phone" id="regist-user-phone-reg" placeholder="Номер телефона" data-register="new-user" required>
-      <input type="email" name="email" id="user-email-reg" placeholder="E-mail" data-register="new-user" required>
+      <input
+          v-model="entityData.surName"
+          type="text"
+          placeholder="Отчество"
+          required>
+      <input
+          v-model="entityData.phone"
+          type="tel"
+          placeholder="Номер телефона"
+          required
+      >
+      <input
+          v-model="entityData.email"
+          type="email"
+          placeholder="E-mail"
+          required
+      >
       <input
           v-model="entityData.password"
           type="password"
           placeholder="Придумайте пароль"
           required>
-      <input type="password" name="password-confirm" id="user-confirm-password-reg" placeholder="Повторите пароль" data-register="new-user" required>
+      <input
+          v-model="entityData.passwordSubmit"
+          type="password"
+          placeholder="Повторите пароль"
+          required
+      >
       <span class="modal__registration-form-message">Пароль должен содержать от 6 символов</span>
       <span class="modal__registration-form-message sec">(большие и маленькие латинские буквы, цифры)</span>
+      <span class="error-message">{{ error }}</span>
+      <div class="modal__registration-subitem-ch ">
+        <input
+            v-model="entityData.mailing"
+            :value="false"
+            type="checkbox"
+            id="checkbox-save-user"
+        >
+        <label for="checkbox-save-user" class="checkbox-label">Запомнить меня</label>
+      </div>
 
       <button class="modal__registration-form-button" id="send-registered-data" @click.prevent="registerOne">Зарегистрироваться</button>
     </form>
@@ -50,30 +79,48 @@ export default {
   name: "uiRegistForm.vue",
   data() {
     return {
-      entityData: {}
+      entityData: {},
+      error: ''
     }
   },
   computed: {
     ...mapGetters({
-      getIsRegisteredInfo: 'user/getIsRegisteredInfo'
+      getIsRegisteredInfo: 'user/getIsRegisteredInfo',
+      getDisplayDialogState: 'dialog/getDisplayDialogState'
     })
   },
   methods: {
     ...mapMutations({
-      setIsRegisteredInfo: 'user/setIsRegisteredInfo'
+      setIsRegisteredInfo: 'user/setIsRegisteredInfo',
+      setUserInfo: 'user/setUserInfo',
+      setDisplayDialogState: 'dialog/setDisplayDialogState',
     }),
 
     async registerOne() {
       console.log(this.entityData)
       const result = await fetch('http://localhost:5000/register', {
-            method: 'POST',
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.entityData)
-          }
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify( {
+          ...this.entityData,
+          login: this.entityData.email
+        })
+      }
       )
       console.log(result)
+      const data = await result.json()
+      if (result.status !== 200) {
+        this.error = data.result
+      }
+      localStorage.setItem('id', data.id)
+      // document.cookie=`token=${data.token}`
+      this.setUserInfo(data.user);
+      this.$router.push(`/user/${data.id}`);
+      this.setDisplayDialogState(false)
+      console.log(data)
     }
   }
 }

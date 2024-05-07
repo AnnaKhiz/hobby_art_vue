@@ -1,10 +1,10 @@
 <template>
-  <div class="scroll_on" id="login-inner-content" v-if="getIsRegisteredInfo">
+  <div class="scroll_on" id="login-inner-content" v-if="getIsRegisteredInfo" >
     <form action="#" class="modal__registration-form login" id="login-form">
       <h2 class="modal__registration-form-label login">
         Войти в личный кабинет
       </h2>
-      <div class="modal__registration-form-error-block" id="enter-error-block">
+      <div class="modal__registration-form-error-block" id="enter-error-block" >
 
       </div>
       <input
@@ -21,7 +21,7 @@
       >
       <div class="modal__registration-subitem-ch">
         <input
-            v-model="entityData.isRemember"
+            v-model="entityData.mailing"
             :value="false"
             type="checkbox"
         >

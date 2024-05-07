@@ -4,9 +4,19 @@ const {  User, ObjectId } = require('../db');
 const { hashPass, checkPass, generateJWt } = require('../utils/authEncoding');
 const { protectedRoute } = require('../middleware/route');
 const { parserJwt } = require('../middleware/auth');
+router.get('/', async (req, res) => {
+  res.send({ "result": "Server started here" })
+})
 
-router.get('/', (req, res) => {
-  res.send('good')
+router.get('/user/:id',  async (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  const user = await User.find( { _id: new ObjectId(id)});
+  console.log(user)
+  if (!user) {
+    res.send({ "result": "User not found" })
+  }
+  res.send({"result": "User exist", "user": user})
 })
 // router.route('/auth/login')
 //   .get((_req, res) => res.render('login'))
@@ -54,26 +64,47 @@ router.post('/register', parserJwt, async (req, res) => {
     const { body: user } = req;
     console.log(user)
 
-    const newUser = await new User({
+    const userInfo = {
       ...user,
-      // posts: [],
-      // comments: [],
+      birthDate: '',
+      address: '',
+      bonuses: '',
+    }
+
+    const newUser = await new User({
+      ...userInfo,
+      passwordSubmit: true,
       password: await hashPass(user.password)
     });
-
+    // console.log(newUser)
+    // try {
     const result = await newUser.save();
 
-    req._auth = { role: 'user', userId: result._id.toString() };
+    console.log(result)
+    // } catch (e) {
+    //   console.log(e)
+    // }
 
+
+    req._auth = { role: 'user', id: result._id.toString() };
+
+    console.log(req._auth)
     const token = generateJWt(req._auth);
-    // res.cookie('token', token, { httpOnly: true });
-    console.log(token)
-    res.send({"result" : "New user added"})
-    // res.redirect(`/user/${result._id.toString()}`);
+
+    res.cookie('token', token, { httpOnly: true, path: '/',
+      expires: new Date(Date.now() + 1000000), });
+
+
+
+    console.log(`token` + token)
+    res.send({"result" : "New user added", "id": result._id.toString(), "user": userInfo})
+
+    // res.redirect(`http://localhost:8080/user/${result._id.toString()}`);
 
   } catch (error) {
+    console.log(error)
     if (error.code === 11000) {
-      res.status(401).send({'result': 'User with this login already exist'});
+      res.status(401).send({'result': 'User with this email already exist'});
     }
   }
 })

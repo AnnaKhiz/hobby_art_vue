@@ -22,8 +22,18 @@ const mongoose = require('mongoose');
 // });
 
 const UserSchema = new mongoose.Schema({
-  name: { type: String, unique: true },
-  password: String,
+  name: { type: String},
+  login: {type: String, unique: true},
+  lastName: { type: String },
+  surName: { type: String },
+  birthDate: { type: String },
+  phone: { type: String },
+  email: { type: String, unique: true },
+  address: { type: String },
+  bonuses: { type: String },
+  mailing: { type: Boolean },
+  password: { type: String },
+  passwordSubmit: {type: Boolean}
   // posts: [{
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: 'posts'

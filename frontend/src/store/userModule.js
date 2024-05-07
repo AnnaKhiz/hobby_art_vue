@@ -2,7 +2,8 @@ export const userModule = {
   namespaced: true,
   state: () => ({
     isRegistered: true,
-    isAuthorized: false
+    isAuthorized: false,
+    user: {}
 
   }),
   getters: {
@@ -11,6 +12,9 @@ export const userModule = {
     },
     getIsAuthorizedInfo(state) {
       return state.isAuthorized
+    },
+    getUserInfo(state) {
+      return state.user
     }
   },
   mutations: {
@@ -19,6 +23,9 @@ export const userModule = {
     },
     setIsAuthorizedInfo(state, payload) {
       state.isAuthorized = payload
+    },
+    setUserInfo(state, payload) {
+      state.user = payload
     }
   }
 }

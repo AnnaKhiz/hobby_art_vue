@@ -33,7 +33,7 @@
 			</div>
 		</section>
     <teleport to="body" >
-      <ui-modal-window v-if="displayDialog" @close="displayDialog = false">
+      <ui-modal-window v-if="getDisplayDialogState" @close="setDisplayDialogState(false)" >
         <template #default>
           <ui-login-form />
         </template>
@@ -52,6 +52,11 @@ import UiLoginForm from "@/components/UI/forms/uiLoginForm.vue"
 export default {
 	name: "HeaderComponent.vue",
 	components: {UiLoginForm, UiModalWindow, UiSearchForm, HeaderInfoComponent },
+  props: {
+    getModalActive: {
+      type: Function
+    }
+  },
 	data() {
 		return {
       displayDialog: false
@@ -60,16 +65,19 @@ export default {
   emits: ['send-checked-link'],
   computed: {
     ...mapGetters({
-      getNavMenuLinks: 'links/getNavMenuLinks'
+      getNavMenuLinks: 'links/getNavMenuLinks',
+      getDisplayDialogState: 'dialog/getDisplayDialogState'
     })
   },
   methods: {
     ...mapMutations({
       setCheckedHeaderLink: 'links/setCheckedHeaderLink',
-      setIsRegisteredInfo: 'user/setIsRegisteredInfo'
+      setIsRegisteredInfo: 'user/setIsRegisteredInfo',
+      setDisplayDialogState: 'dialog/setDisplayDialogState'
     }),
     openDialog() {
-      this.displayDialog = true;
+      this.setDisplayDialogState(true)
+      // this.displayDialog = true;
       this.setIsRegisteredInfo(true)
     },
     openMenuPage(link, value) {
@@ -81,6 +89,11 @@ export default {
       }
       this.setCheckedHeaderLink(value)
     },
+  },
+  watch: {
+    // displayDialog() {
+    //   this.$emit('getModalActive', this.displayDialog)
+    // }
   }
 }
 </script>

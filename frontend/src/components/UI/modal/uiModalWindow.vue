@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" id="modal" >
+  <div class="modal" id="modal" :class="{ scroll : getDisplayDialogState }">
     <div class="modal__login">
       <div class="modal__registration-block login">
         <a href="#" id="closeModal" class="modal__registration-closeLink link-style login" @click.stop="$emit('close')">
@@ -17,8 +17,21 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
-  name: "uiModalWindow.vue"
+  name: "uiModalWindow.vue",
+  // props: {
+  //   display: {
+  //     type: Boolean,
+  //     default: false
+  //   }
+  // },
+  computed: {
+    ...mapGetters({
+      getDisplayDialogState: 'dialog/getDisplayDialogState'
+    })
+  },
 }
 </script>
 

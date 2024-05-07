@@ -1,7 +1,10 @@
 <template>
-	<header-component />
-  <router-view />
-	<footer-component />
+  <div :class=" { fixed: getDisplayDialogState }">
+    <header-component />
+    <router-view />
+    <footer-component />
+  </div>
+
 </template>
 
 <script>
@@ -9,6 +12,7 @@
 
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
+import {mapGetters} from "vuex";
 
 export default {
   name: 'App',
@@ -16,6 +20,21 @@ export default {
 		FooterComponent,
 		HeaderComponent
 	},
+  computed: {
+    ...mapGetters({
+      getDisplayDialogState: 'dialog/getDisplayDialogState'
+    })
+  },
+  // data() {
+  //   return {
+  //     active: false
+  //   }
+  // },
+  methods: {
+    // getModalActive(value) {
+    //   this.active = value
+    // }
+  }
 
 }
 </script>
