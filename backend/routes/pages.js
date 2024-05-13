@@ -8,8 +8,8 @@ router.get('/', async (req, res) => {
   res.send({ "result": "Server started here" })
 })
 
-router.get('/user/:id',  async (req, res) => {
-  const { id } = req.params;
+router.get('/user/:id',  parserJwt, async (req, res) => {
+  const { id } = req._auth;
   console.log(id)
   const user = await User.find( { _id: new ObjectId(id)});
   console.log(user)
@@ -59,10 +59,9 @@ router.get('/user/:id',  async (req, res) => {
 
 //REGISTER
 // router.post('/', parserJwt, protectedRoute(['user'], '/auth/login'), addNewPost);
-router.post('/register', parserJwt, async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const { body: user } = req;
-    console.log(user)
 
     const userInfo = {
       ...user,
@@ -91,15 +90,13 @@ router.post('/register', parserJwt, async (req, res) => {
     console.log(req._auth)
     const token = generateJWt(req._auth);
 
-    res.cookie('token', token, { httpOnly: true, path: '/',
-      expires: new Date(Date.now() + 1000000), });
-
+    res.cookie('token', token, { httpOnly: true, path: 'http://localhost:8080', expires: new Date(Date.now() + 1000000) });
 
 
     console.log(`token` + token)
-    res.send({"result" : "New user added", "id": result._id.toString(), "user": userInfo})
+    // res.send({"result" : "New user added", "id": result._id.toString(), "user": userInfo})
 
-    // res.redirect(`http://localhost:8080/user/${result._id.toString()}`);
+    res.redirect(`http://localhost:8080/user/${result._id.toString()}`);
 
   } catch (error) {
     console.log(error)

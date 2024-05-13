@@ -53,11 +53,12 @@ export default {
       // if (!userData) {
       //   return
       // }
-      const result = await fetch(`http://localhost:5000/user/${localStorage.getItem('id')}`)
-      const data = await result.json()
-      const [ user ] = data.user
-      this.userData = user
-      console.log(this.userData)
+      // const result = await fetch(`http://localhost:5000/user/${localStorage.getItem('id')}`)
+
+      // const data = await result.json()
+      // const [ user ] = data.user
+      // this.userData = user
+      // console.log(this.userData)
     }
   },
   mounted() {

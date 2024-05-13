@@ -19,8 +19,7 @@ const server = express();
 //   next();
 //
 // });
-server.use(cors());
-server.use(cookieParser());
+
 
 server.listen(port, (req, resp) => {
   server.get('/', (req, res) => {
@@ -30,7 +29,8 @@ server.listen(port, (req, resp) => {
   console.log(`Server started on port ${port}`)
 });
 
-
+server.use(cors());
+server.use(cookieParser());
 
 
 
