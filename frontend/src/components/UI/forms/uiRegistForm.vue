@@ -103,17 +103,18 @@ export default {
           login: this.entityData.email
         })
       console.log(result)
-
+      const data = await result.data
       if (result.status !== 200) {
-        const data = await result.json()
+
         this.error = data.result
       }
       // localStorage.setItem('id', data.id)
-      // document.cookie=`token=${data.token}`
+
+      document.cookie=`token=${data.token}`
       // this.setUserInfo(data.user);
-      return result
-      // this.$router.push(`/user/${data.id}`);
-      // this.setDisplayDialogState(false)
+
+      this.$router.push(`/user/${data.id}`);
+      this.setDisplayDialogState(false)
       // console.log(data)
     }
   }

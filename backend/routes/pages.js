@@ -90,13 +90,13 @@ router.post('/register', async (req, res) => {
     console.log(req._auth)
     const token = generateJWt(req._auth);
 
-    res.cookie('token', token, { httpOnly: true, path: 'http://localhost:8080', expires: new Date(Date.now() + 1000000) });
+    res.cookie('token', token, { httpOnly: true});
 
 
     console.log(`token` + token)
-    // res.send({"result" : "New user added", "id": result._id.toString(), "user": userInfo})
+    res.send({"result" : "New user added", "id": result._id.toString(), "token": token})
 
-    res.redirect(`http://localhost:8080/user/${result._id.toString()}`);
+    // res.redirect(`http://localhost:8080/user/${result._id.toString()}`);
 
   } catch (error) {
     console.log(error)

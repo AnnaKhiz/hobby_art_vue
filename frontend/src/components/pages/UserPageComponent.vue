@@ -22,12 +22,23 @@
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
-
+import axios from 'axios';
 
 export default {
   name: "UserPageComponent.vue",
   components: {UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
-
+  methods: {
+    async getUser() {
+      const result = await axios('http://localhost:5000/user/:id');
+      if (!result) {
+        console.log('no requested result')
+      }
+      console.log(result)
+    }
+  },
+  mounted() {
+    // this.getUser()
+  }
 
 }
 </script>
