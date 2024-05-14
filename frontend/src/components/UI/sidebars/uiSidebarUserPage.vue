@@ -6,8 +6,9 @@
         <img src="@/assets/img/user-photo.png" alt="user-photo">
       </div>
       <p class="main__user-page-content-user-name" id="auth-user-name">
-        {{ userData.name }} {{ userData.lastName }}
+        {{ user.name }} {{ user.lastName }}
       </p>
+
     </div>
 
     <ul class="main__user-page-content-user-list" id="user-menu-list">
@@ -29,9 +30,15 @@ import { mapGetters} from "vuex";
 
 export default {
   name: "uiSidebarUserPage.vue",
+	props: {
+		user: {
+			type: Object,
+			default: () => {}
+		}
+	},
   data() {
     return {
-      userData: {},
+      // userData: {},
       userSidebarItems: [
         { text: 'Мои данные', value: 'general', url: '' },
         { text: 'Бонусный счет', value: 'bonuses', url: '' },
@@ -48,7 +55,7 @@ export default {
     }),
   },
   methods: {
-    async getUser() {
+    // async getUser() {
       // this.userData = this.getUserInfo;
       // if (!userData) {
       //   return
@@ -59,10 +66,10 @@ export default {
       // const [ user ] = data.user
       // this.userData = user
       // console.log(this.userData)
-    }
+    // }
   },
   mounted() {
-    this.getUser()
+    // this.getUser()
   }
 
 }

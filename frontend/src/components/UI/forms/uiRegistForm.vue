@@ -74,6 +74,7 @@
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
+// import api from '../../../api';
 import axios from 'axios';
 export default {
   name: "uiRegistForm.vue",
@@ -98,19 +99,21 @@ export default {
 
     async registerOne() {
       console.log(this.entityData)
+
       const result = await axios.post('http://localhost:5000/register', {
           ...this.entityData,
           login: this.entityData.email
         })
       console.log(result)
+
       const data = await result.data
       if (result.status !== 200) {
 
         this.error = data.result
       }
-      // localStorage.setItem('id', data.id)
+			localStorage.setItem('token', data.token)
 
-      document.cookie=`token=${data.token}`
+      // document.cookie=`token=${data.token}`
       // this.setUserInfo(data.user);
 
       this.$router.push(`/user/${data.id}`);

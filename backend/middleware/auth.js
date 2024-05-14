@@ -2,10 +2,11 @@ const { jwtKey } = require('config');
 const { verifyJwt } = require('../utils/authEncoding');
 
 function parserJwt(req, res, next) {
-  const { token } = req.cookies;
-  console.log(`token from auth ${token}`)
-  if (token) {
-    const payload = verifyJwt(token, jwtKey);
+  console.log(req)
+  const { id } = req.params;
+  console.log(`token from auth ${id}`)
+  if (id) {
+    const payload = verifyJwt(id, jwtKey);
     req._auth = payload || {};
   } else {
     req._auth = {};

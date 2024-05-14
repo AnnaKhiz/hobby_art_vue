@@ -8,7 +8,9 @@
           <h2 class="main__user-page-content-label">Личный кабинет</h2>
 
           <div class="main__user-page-content">
-            <ui-sidebar-user-page />
+            <ui-sidebar-user-page
+							:user="user"
+						/>
 
             <div class="main__user-page-content-block second-block main__user-page-content" id="user-page-date-block"></div>
           </div>
@@ -27,17 +29,29 @@ import axios from 'axios';
 export default {
   name: "UserPageComponent.vue",
   components: {UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
+	data() {
+		return {
+			user: {}
+		}
+	},
+	computed: {
+		userId() {
+			return this.$route.params.id
+		}
+	},
   methods: {
     async getUser() {
-      const result = await axios('http://localhost:5000/user/:id');
+			const token = localStorage.getItem('token')
+      const result = await axios(`http://localhost:5000/user/${token}`);
       if (!result) {
         console.log('no requested result')
       }
-      console.log(result)
+			this.user = result.data.user[0]
+      console.log(this.user)
     }
   },
   mounted() {
-    // this.getUser()
+    this.getUser()
   }
 
 }

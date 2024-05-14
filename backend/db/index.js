@@ -34,6 +34,8 @@ const UserSchema = new mongoose.Schema({
   mailing: { type: Boolean },
   password: { type: String },
   passwordSubmit: {type: Boolean}
+
+
   // posts: [{
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: 'posts'
