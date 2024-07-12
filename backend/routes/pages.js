@@ -9,8 +9,9 @@ router.get('/', async (req, res) => {
   res.send({ "result": "Server started here" })
 })
 
-router.get('/user/:id', parserJwt, async (req, res) => {
-  const { userId: id } = req._auth;
+router.get('/user', parserJwt, async (req, res) => {
+  console.log(req._auth)
+  const { id } = req._auth;
   console.log(id)
   const user = await User.find( { _id: new ObjectId(id)});
 
@@ -19,7 +20,14 @@ router.get('/user/:id', parserJwt, async (req, res) => {
   } else {
     res.send({"result": true, "user": user })
   }
+})
 
+router.get('/user/logout',  (req, res, next) => {
+  res.clearCookie('token');
+  // console.log(res.cookies)
+  // res.redirect('/')
+  res.send({"result": "successful"})
+  next()
 })
 
 router.post('/user/login', async (req, res, next) => {
@@ -38,7 +46,7 @@ router.post('/user/login', async (req, res, next) => {
     return res.send({'result': 'Wrong password', 'status': 404});
   }
 
-  const authData = { role: 'user', userId: user._id.toString() };
+  const authData = { role: 'user', id: user._id.toString() };
 
   const token = generateJWt(authData);
 
@@ -78,7 +86,7 @@ router.post('/register', async (req, res) => {
 
     res
       .cookie('token', token, { httpOnly: true })
-      .send({"result" : "New user added", "id": result._id.toString(), "token": token})
+      .send({"result" : "New user added", "id": result._id.toString()})
       // .redirect(`http://localhost:8080/user/${result._id.toString()}`)
 
 
@@ -95,7 +103,7 @@ router.post('/register', async (req, res) => {
 
 
 // router.get('/*', parserJwt, async (req, res) => {
-//   const { userId: id } = req._auth;
+//   const { id } = req._auth;
 //   console.log(id)
 //   const user = await User.find( { _id: new ObjectId(id)});
 //

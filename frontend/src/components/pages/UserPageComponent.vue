@@ -31,7 +31,6 @@ export default {
   name: "UserPageComponent.vue",
   components: {UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
   props: {
-
     id: String
   },
 	data() {
@@ -51,7 +50,7 @@ export default {
     async getUser() {
 			// const token = localStorage.getItem('token')
       // console.log(this.id)
-      const result = await axios.get(`/user/${this.id}`);
+      const result = await axios.get(`/user`);
       if (!result) {
         console.log('no requested result')
       }

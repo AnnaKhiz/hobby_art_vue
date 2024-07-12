@@ -19,8 +19,14 @@
 					</a>
 					<div class="header__menu-subitem">
             <ui-search-form />
-						<a href="" class="header__menu-enterButton elem-sub" id="callModal" data-modal="callModal" @click.prevent="openDialog">
-							Войти
+						<a
+              href=""
+              class="header__menu-enterButton elem-sub"
+              id="callModal"
+              data-modal="callModal"
+              @click.prevent="checkFunction"
+            >
+							{{ userPageLabel()  }}
 						</a>
 						<a href="" class="header__menu-favoriteButton elem-sub" id="favorite-header" data-modal="callModal">
 							Избранное
@@ -48,6 +54,7 @@ import UiSearchForm from "@/components/UI/forms/uiSearchForm.vue"
 import {mapGetters, mapMutations} from "vuex";
 import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue"
 import UiLoginForm from "@/components/UI/forms/uiLoginForm.vue"
+import axios from "axios";
 
 export default {
 	name: "HeaderComponent.vue",
@@ -59,7 +66,8 @@ export default {
   },
 	data() {
 		return {
-      displayDialog: false
+      displayDialog: false,
+      user: {}
 		}
 	},
   emits: ['send-checked-link'],
@@ -67,18 +75,28 @@ export default {
     ...mapGetters({
       getNavMenuLinks: 'links/getNavMenuLinks',
       getDisplayDialogState: 'dialog/getDisplayDialogState'
-    })
+    }),
+
+
   },
   methods: {
     ...mapMutations({
       setCheckedHeaderLink: 'links/setCheckedHeaderLink',
       setIsRegisteredInfo: 'user/setIsRegisteredInfo',
-      setDisplayDialogState: 'dialog/setDisplayDialogState'
+      setDisplayDialogState: 'dialog/setDisplayDialogState',
+      setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
+    userPageLabel() {
+      return localStorage.getItem('auth') === 'true' ? 'Кабинет' : 'Войти'
+    },
+    checkFunction() {
+      return localStorage.getItem('auth') === 'true' ? this.getUser() : this.openDialog()
+    },
     openDialog() {
       this.setDisplayDialogState(true)
       // this.displayDialog = true;
       this.setIsRegisteredInfo(true)
+
     },
     openMenuPage(link, value) {
       if (link) {
@@ -89,6 +107,20 @@ export default {
       }
       this.setCheckedHeaderLink(value)
     },
+    async getUser() {
+      const result = await axios.get(`/user`);
+      if (!result) {
+        console.log('no requested result')
+      }
+      console.log(result)
+      this.setIsAuthorizedInfo(true)
+      // localStorage.setItem('auth', 'true')
+      this.user = await result.data.user[0]
+
+      this.$router.push(`/user_page/${this.user._id}`);
+      console.log(this.user)
+      // this.$router.push(`/user_page/${}`)
+    }
   },
   watch: {
     // displayDialog() {

@@ -19,21 +19,42 @@
         <a :href="link.url" id="my-data">{{ link.text }}</a>
       </li>
     </ul>
-    <a href="" class="main__user-page-content-user-exit" id="user-page-exit">
+    <a
+      href=""
+      class="main__user-page-content-user-exit"
+      id="user-page-exit"
+      @click.stop="logOut"
+    >
       Выйти из личного кабинета
     </a>
   </div>
 </template>
 
 <script>
-import { mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
+import axios from "axios";
 
 export default {
   name: "uiSidebarUserPage.vue",
 	props: {
 		user: {
 			type: Object,
-			default: () => {}
+			default: () => {
+        return {
+          name: '',
+          login: '',
+          lastName: '',
+          surName: '',
+          birthDate: '',
+          phone: '',
+          email: '',
+          address: '',
+          bonuses: '',
+          mailing: false,
+          password: '',
+          passwordSubmit: false
+        }
+      }
 		}
 	},
   data() {
@@ -55,6 +76,24 @@ export default {
     }),
   },
   methods: {
+    ...mapMutations({
+      setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
+    }),
+    async logOut() {
+      this.setIsAuthorizedInfo(false)
+      localStorage.setItem('auth', 'false');
+
+      const result = await axios.get('/user/logout');
+
+      // if(!result) {
+      //   console.log('did not logout')
+      //   return
+      // }
+
+      console.log('logout res', result)
+
+      this.$router.push('/')
+    }
     // async getUser() {
       // this.userData = this.getUserInfo;
       // if (!userData) {

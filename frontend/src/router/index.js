@@ -6,8 +6,6 @@ import AboutComponent from "@/components/pages/AboutComponent.vue";
 import UserPageComponent from "@/components/pages/UserPageComponent.vue";
 
 
-
-
 const routes = [
 
   {
@@ -75,7 +73,7 @@ router.beforeEach((to, from, next) => {
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
-    if (!isAuthenticated) {
+    if (isAuthenticated === 'false') {
       next('/');
     } else {
       next();
