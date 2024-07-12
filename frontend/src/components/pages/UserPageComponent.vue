@@ -25,33 +25,49 @@ import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
 import axios from 'axios';
+import {mapMutations} from "vuex";
 
 export default {
   name: "UserPageComponent.vue",
   components: {UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
+  props: {
+
+    id: String
+  },
 	data() {
 		return {
 			user: {}
 		}
 	},
 	computed: {
-		userId() {
-			return this.$route.params.id
-		}
+		// userId() {
+		// 	return this.$route.params.id
+		// }
 	},
   methods: {
+    ...mapMutations({
+      setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
+    }),
     async getUser() {
-			const token = localStorage.getItem('token')
-      const result = await axios(`http://localhost:5000/user/${token}`);
+			// const token = localStorage.getItem('token')
+      // console.log(this.id)
+      const result = await axios.get(`/user/${this.id}`);
       if (!result) {
         console.log('no requested result')
       }
-			this.user = result.data.user[0]
+      console.log(result)
+      this.setIsAuthorizedInfo(true)
+      // localStorage.setItem('auth', 'true')
+			this.user = await result.data.user[0]
+
+      this.$router.push(`/user_page/${this.user._id}`);
       console.log(this.user)
     }
   },
   mounted() {
+    console.log('mounted')
     this.getUser()
+
   }
 
 }

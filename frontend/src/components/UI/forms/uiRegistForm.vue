@@ -87,7 +87,8 @@ export default {
   computed: {
     ...mapGetters({
       getIsRegisteredInfo: 'user/getIsRegisteredInfo',
-      getDisplayDialogState: 'dialog/getDisplayDialogState'
+      getDisplayDialogState: 'dialog/getDisplayDialogState',
+
     })
   },
   methods: {
@@ -95,12 +96,13 @@ export default {
       setIsRegisteredInfo: 'user/setIsRegisteredInfo',
       setUserInfo: 'user/setUserInfo',
       setDisplayDialogState: 'dialog/setDisplayDialogState',
+      setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
 
     async registerOne() {
       console.log(this.entityData)
 
-      const result = await axios.post('http://localhost:5000/register', {
+      const result = await axios.post('/register', {
           ...this.entityData,
           login: this.entityData.email
         })
@@ -111,13 +113,14 @@ export default {
 
         this.error = data.result
       }
-			localStorage.setItem('token', data.token)
+			// localStorage.setItem('token', data.token)
 
       // document.cookie=`token=${data.token}`
       // this.setUserInfo(data.user);
-
-      this.$router.push(`/user/${data.id}`);
+      localStorage.setItem('auth', 'true')
+      this.$router.push(`/user_page/${data.id}`);
       this.setDisplayDialogState(false)
+      // this.setIsAuthorizedInfo(true)
       // console.log(data)
     }
   }

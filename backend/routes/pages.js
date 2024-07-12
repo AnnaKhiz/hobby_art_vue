@@ -4,21 +4,50 @@ const {  User, ObjectId } = require('../db');
 const { hashPass, checkPass, generateJWt } = require('../utils/authEncoding');
 const { protectedRoute } = require('../middleware/route');
 const { parserJwt } = require('../middleware/auth');
+const path = require("path");
 router.get('/', async (req, res) => {
   res.send({ "result": "Server started here" })
 })
 
-router.get('/user/:id',  parserJwt, async (req, res) => {
-  const { id } = req._auth;
+router.get('/user/:id', parserJwt, async (req, res) => {
+  const { userId: id } = req._auth;
   console.log(id)
-
   const user = await User.find( { _id: new ObjectId(id)});
-  console.log(user)
 
   if (!user) {
-    res.send({ "result": "User not found" })
+    res.send({ "result": false })
+  } else {
+    res.send({"result": true, "user": user })
   }
-  res.send({"result": "User exist", "user": user})
+
+})
+
+router.post('/user/login', async (req, res, next) => {
+  const { login, password } = req.body;
+
+  console.log( login, password )
+
+  const user = await User.findOne( { login });
+
+  if (!user) {
+    return res.send({'result': 'User with such login not found', 'status': 404});
+  }
+
+  const result = await checkPass(password, user.password);
+  if (!result) {
+    return res.send({'result': 'Wrong password', 'status': 404});
+  }
+
+  const authData = { role: 'user', userId: user._id.toString() };
+
+  const token = generateJWt(authData);
+
+  res.cookie('token', token, { httpOnly: true });
+
+  // res.redirect(`/user/${user._id.toString()}`)
+
+  res.send({'id': user._id.toString(), 'role': 'user', 'status': 200});
+  next();
 })
 
 
@@ -65,8 +94,18 @@ router.post('/register', async (req, res) => {
 })
 
 
-router.get('/*', (req, res) => {
-  res.redirect('/');
-});
+// router.get('/*', parserJwt, async (req, res) => {
+//   const { userId: id } = req._auth;
+//   console.log(id)
+//   const user = await User.find( { _id: new ObjectId(id)});
+//
+//   if (!user) {
+//     res.clearCookie('token');
+//     res.redirect('/');
+//   } else {
+//     res.send({"result": true, "user": user })
+//   }
+//
+// });
 
 module.exports = { router };

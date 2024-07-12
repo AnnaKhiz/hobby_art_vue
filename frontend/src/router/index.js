@@ -6,7 +6,10 @@ import AboutComponent from "@/components/pages/AboutComponent.vue";
 import UserPageComponent from "@/components/pages/UserPageComponent.vue";
 
 
+
+
 const routes = [
+
   {
     path: '/',
     name: 'Hobby Art',
@@ -48,13 +51,14 @@ const routes = [
     },
   },
   {
-    path: '/user/:id',
+    path: '/user_page/:id',
     name: 'User',
     component: UserPageComponent,
     props: true,
     meta: {
       title: 'Личный кабинет',
       favicon: '',
+      requiresAuth: true
     },
   },
 ]
@@ -63,6 +67,22 @@ const router = createRouter({
 	routes,
 	history: createWebHistory(process.env.BASE_URL),
 
+})
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('auth')
+  console.log('isAuthenticated', isAuthenticated)
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+
+    if (!isAuthenticated) {
+      next('/');
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 })
 // eslint-disable-next-line
 router.afterEach((to, from) => {

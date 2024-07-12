@@ -8,7 +8,7 @@
 
       </div>
       <input
-          v-model="entityData.name"
+          v-model="entityData.login"
           type="text"
           placeholder="Email"
           value="eve.holt@reqres.in"
@@ -51,6 +51,7 @@
 <script>
 import UiRegistForm from "@/components/UI/forms/uiRegistForm.vue"
 import {mapGetters, mapMutations} from "vuex";
+import axios from "axios";
 
 export default {
   name: "uiLoginForm.vue",
@@ -66,13 +67,31 @@ export default {
     })
   },
   methods: {
-    ...mapMutations({
-      setIsRegisteredInfo: 'user/setIsRegisteredInfo'
-    }),
+		...mapMutations({
+			setIsRegisteredInfo: 'user/setIsRegisteredInfo',
+      setDisplayDialogState: 'dialog/setDisplayDialogState',
+      setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
+      setUserInfo: 'user/setUserInfo'
+		}),
 
-    logIn() {
-      console.log(this.entityData)
-    }
+		async logIn() {
+
+			const result = await axios.post(`/user/login`, this.entityData);
+			if (!result) {
+				console.log('no requested result')
+			}
+      localStorage.setItem('auth', 'true')
+			this.user = result.data
+      this.setUserInfo = this.user
+      this.$router.push(`/user_page/${this.user.id}`)
+      // this.setIsRegisteredInfo(true)
+      // this.setIsAuthorizedInfo(true)
+      this.setDisplayDialogState(false)
+			console.log(this.user)
+		}
+	},
+  mounted() {
+
   }
 }
 </script>
