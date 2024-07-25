@@ -9,10 +9,13 @@
 
           <div class="main__user-page-content">
             <ui-sidebar-user-page
+              @input="currentLink = $event"
 							:user="user"
 						/>
 
-            <div class="main__user-page-content-block second-block main__user-page-content" id="user-page-date-block"></div>
+            <div class="main__user-page-content-block second-block main__user-page-content" id="user-page-date-block">
+              <ui-user-page-about-form v-if="currentLink === 'general'"/>
+            </div>
           </div>
         </section>
       </div>
@@ -26,16 +29,19 @@ import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
 import axios from 'axios';
 import {mapMutations} from "vuex";
+import UiUserPageAboutForm from "@/components/UI/forms/uiUserPageAboutForm.vue"
+
 
 export default {
   name: "UserPageComponent.vue",
-  components: {UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
+  components: {UiUserPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
   props: {
     id: String
   },
 	data() {
 		return {
-			user: {}
+			user: {},
+      currentLink: 'general'
 		}
 	},
 	computed: {
@@ -65,7 +71,7 @@ export default {
   },
   mounted() {
     console.log('mounted')
-    this.getUser()
+    // this.getUser()
 
   }
 

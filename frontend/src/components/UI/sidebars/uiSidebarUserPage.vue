@@ -16,7 +16,7 @@
         v-for="link in userSidebarItems"
         :key="link.value"
       >
-        <a :href="link.url" id="my-data">{{ link.text }}</a>
+        <a :href="link.url" id="my-data" @click.prevent="$emit('input', link.value)">{{ link.text }}</a>
       </li>
     </ul>
     <a

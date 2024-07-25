@@ -26,7 +26,7 @@
               data-modal="callModal"
               @click.prevent="checkFunction"
             >
-							{{ userPageLabel()  }}
+<!--							{{ userPageLabel()  }}-->
 						</a>
 						<a href="" class="header__menu-favoriteButton elem-sub" id="favorite-header" data-modal="callModal">
 							Избранное
@@ -87,10 +87,11 @@ export default {
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
     userPageLabel() {
-      return localStorage.getItem('auth') === 'true' ? 'Кабинет' : 'Войти'
+      return localStorage.getItem('auth') ? 'Кабинет' : 'Войти'
     },
     checkFunction() {
-      return localStorage.getItem('auth') === 'true' ? this.getUser() : this.openDialog()
+      this.$router.push('/user_page/1')
+      // return localStorage.getItem('auth') === 'true' ? this.getUser() : this.openDialog()
     },
     openDialog() {
       this.setDisplayDialogState(true)
