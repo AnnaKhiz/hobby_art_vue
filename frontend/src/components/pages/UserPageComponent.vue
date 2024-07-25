@@ -20,6 +20,7 @@
               <user-page-favorites v-if="currentLink === 'favorites'" :user="user"/>
               <user-page-history v-if="currentLink === 'history'" :user="user" />
               <user-page-mailing v-if="currentLink === 'mailing'" :user="user" />
+              <user-page-feedback v-if="currentLink === 'feedback'" :user="user" />
             </div>
           </div>
         </section>
@@ -39,11 +40,13 @@ import UserPageBonuses from "@/components/user-page/userPageBonuses.vue"
 import UserPageFavorites from "@/components/user-page/userPageFavorites.vue"
 import UserPageHistory from "@/components/user-page/userPageHistory.vue"
 import UserPageMailing from "@/components/user-page/userPageMailing.vue"
+import UserPageFeedback from "@/components/user-page/userPageFeedback.vue"
 
 
 export default {
   name: "UserPageComponent.vue",
   components: {
+    UserPageFeedback,
     UserPageMailing,
     UserPageHistory,
     UserPageFavorites, UserPageBonuses, userPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},

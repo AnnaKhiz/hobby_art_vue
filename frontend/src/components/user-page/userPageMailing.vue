@@ -10,7 +10,6 @@
     <div class="main__user-page-content-mailing-block">
       <p class="main__user-page-content-mailing-subscribe">
         {{ mailing ? 'Подписаться на рассылку о новинках и акциях' : 'Хотите отписаться от рассылки?' }}
-
       </p>
       <form v-if="mailing" action="#" method="get" class="footer__item-form main__user-page-content-mailing-form">
         <input type="email" placeholder="Ваш Email" class="email-mailing">
