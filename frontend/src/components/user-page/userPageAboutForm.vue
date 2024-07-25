@@ -8,25 +8,25 @@
         <li>
           <input type="text" placeholder="Имя:" value="Имя:" id="user-name">
           <a href="" class="main__user-page-content-user-edit-link">
-            <img src="@/assets/img/edit.svg" alt="edit icon">Изменить
+            <img src="../../assets/img/edit.svg" alt="edit icon">Изменить
           </a>
         </li>
         <li>
           <input type="text" placeholder="Фамилия:" value="Фамилия:" id="user-surname">
           <a href="" class="main__user-page-content-user-edit-link">
-            <img src="@/assets/img/edit.svg" alt="edit icon">Изменить
+            <img src="../../assets/img/edit.svg" alt="edit icon">Изменить
           </a>
         </li>
         <li>
           <input type="text" placeholder="Отчество:" value="Отчество:" id="user-surname-2">
           <a href="" class="main__user-page-content-user-edit-link">
-            <img src="@/assets/img/edit.svg" alt="edit icon">Изменить
+            <img src="../../assets/img/edit.svg" alt="edit icon">Изменить
           </a>
         </li>
         <li>
           <input type="text" placeholder="Дата рождения:" value="Дата рождения:" id="user-birth-date">
           <a href="" class="main__user-page-content-user-edit-link">
-            <img src="@/assets/img/edit.svg" alt="edit icon">Изменить
+            <img src="../../assets/img/edit.svg" alt="edit icon">Изменить
           </a>
         </li>
       </ul>
@@ -34,25 +34,25 @@
         <li>
           <input type="text" placeholder="Номер телефона:" value="Номер телефона:" id="user-phone">
           <a href="" class="main__user-page-content-user-edit-link">
-            <img src="@/assets/img/edit.svg" alt="edit icon">Изменить
+            <img src="../../assets/img/edit.svg" alt="edit icon">Изменить
           </a>
         </li>
         <li>
           <input type="text" placeholder="E-mail:" value="E-mail:" id="user-email">
           <a href="" class="main__user-page-content-user-edit-link">
-            <img src="@/assets/img/edit.svg" alt="edit icon">Изменить
+            <img src="../../assets/img/edit.svg" alt="edit icon">Изменить
           </a>
         </li>
         <li>
           <input type="text" placeholder="Адрес:" value="Адрес:" id="user-address">
           <a href="" class="main__user-page-content-user-edit-link">
-            <img src="@/assets/img/edit.svg" alt="edit icon">Изменить
+            <img src="../../assets/img/edit.svg" alt="edit icon">Изменить
           </a>
         </li>
         <li>
           <input type="text" placeholder="Пароль:" value="Пароль:" id="user-password">
           <a href="" class="main__user-page-content-user-edit-link">
-            <img src="@/assets/img/edit.svg" alt="edit icon">Изменить
+            <img src="../../assets/img/edit.svg" alt="edit icon">Изменить
           </a>
         </li>
       </ul>

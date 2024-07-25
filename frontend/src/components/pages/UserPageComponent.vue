@@ -14,7 +14,10 @@
 						/>
 
             <div class="main__user-page-content-block second-block main__user-page-content" id="user-page-date-block">
-              <ui-user-page-about-form v-if="currentLink === 'general'"/>
+              <user-page-about-form v-if="currentLink === 'general'"/>
+              <user-page-bonuses v-if="currentLink === 'bonuses'" />
+              <!--  передать пропс bonuses  -->
+
             </div>
           </div>
         </section>
@@ -29,12 +32,13 @@ import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
 import axios from 'axios';
 import {mapMutations} from "vuex";
-import UiUserPageAboutForm from "@/components/UI/forms/uiUserPageAboutForm.vue"
+import userPageAboutForm from "@/components/user-page/userPageAboutForm.vue"
+import UserPageBonuses from "@/components/user-page/userPageBonuses.vue"
 
 
 export default {
   name: "UserPageComponent.vue",
-  components: {UiUserPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
+  components: {UserPageBonuses, userPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
   props: {
     id: String
   },
