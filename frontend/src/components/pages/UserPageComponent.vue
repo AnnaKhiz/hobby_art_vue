@@ -13,11 +13,12 @@
 							:user="user"
 						/>
 
-            <div class="main__user-page-content-block second-block main__user-page-content" id="user-page-date-block">
+            <div class="main__user-page-content-block second-block main__user-page-content">
               <user-page-about-form v-if="currentLink === 'general'"/>
               <user-page-bonuses v-if="currentLink === 'bonuses'" />
               <!--  передать пропс bonuses  -->
               <user-page-favorites v-if="currentLink === 'favorites'" :user="user"/>
+              <user-page-history v-if="currentLink === 'history'" :user="user" />
             </div>
           </div>
         </section>
@@ -35,11 +36,14 @@ import {mapMutations} from "vuex";
 import userPageAboutForm from "@/components/user-page/userPageAboutForm.vue"
 import UserPageBonuses from "@/components/user-page/userPageBonuses.vue"
 import UserPageFavorites from "@/components/user-page/userPageFavorites.vue"
+import UserPageHistory from "@/components/user-page/userPageHistory.vue"
 
 
 export default {
   name: "UserPageComponent.vue",
-  components: {UserPageFavorites, UserPageBonuses, userPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
+  components: {
+    UserPageHistory,
+    UserPageFavorites, UserPageBonuses, userPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
   props: {
     id: String
   },
