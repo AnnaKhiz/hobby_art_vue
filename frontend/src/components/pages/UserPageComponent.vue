@@ -17,7 +17,7 @@
               <user-page-about-form v-if="currentLink === 'general'"/>
               <user-page-bonuses v-if="currentLink === 'bonuses'" />
               <!--  передать пропс bonuses  -->
-
+              <user-page-favorites v-if="currentLink === 'favorites'" :user="user"/>
             </div>
           </div>
         </section>
@@ -34,11 +34,12 @@ import axios from 'axios';
 import {mapMutations} from "vuex";
 import userPageAboutForm from "@/components/user-page/userPageAboutForm.vue"
 import UserPageBonuses from "@/components/user-page/userPageBonuses.vue"
+import UserPageFavorites from "@/components/user-page/userPageFavorites.vue"
 
 
 export default {
   name: "UserPageComponent.vue",
-  components: {UserPageBonuses, userPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
+  components: {UserPageFavorites, UserPageBonuses, userPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
   props: {
     id: String
   },
