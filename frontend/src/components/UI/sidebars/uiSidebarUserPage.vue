@@ -6,7 +6,7 @@
         <img src="@/assets/img/user-photo.png" alt="user-photo">
       </div>
       <p class="main__user-page-content-user-name" id="auth-user-name">
-        {{ user.name }} {{ user.lastName }}
+        {{ userData.name }} {{ userData.lastName }}
       </p>
 
     </div>
@@ -39,27 +39,12 @@ export default {
 	props: {
 		user: {
 			type: Object,
-			default: () => {
-        return {
-          name: '',
-          login: '',
-          lastName: '',
-          surName: '',
-          birthDate: '',
-          phone: '',
-          email: '',
-          address: '',
-          bonuses: '',
-          mailing: false,
-          password: '',
-          passwordSubmit: false
-        }
-      }
+			default: () => {}
 		}
 	},
   data() {
     return {
-      // userData: {},
+      userData: {},
       userSidebarItems: [
         { text: 'Мои данные', value: 'general', url: '' },
         { text: 'Бонусный счет', value: 'bonuses', url: '' },
@@ -108,7 +93,8 @@ export default {
     // }
   },
   mounted() {
-    console.log(this.user)
+    this.userData = this.user
+    console.log('this.userData', this.userData)
     // this.getUser()
   }
 

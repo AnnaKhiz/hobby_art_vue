@@ -2,6 +2,10 @@ const { dbUrl } = require('config');
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
+const AdminSchema = new mongoose.Schema({
+  login: { type: String, unique: true },
+  password: String
+});
 const OrderSchema = new mongoose.Schema({
   itemCode: { type: String },
   date: { type: String },
@@ -108,6 +112,7 @@ const Item = mongoose.model('items', ItemSchema);
 const User = mongoose.model('users', UserSchema);
 const Order = mongoose.model('orders', OrderSchema);
 const Comment = mongoose.model('comments', CommentSchema);
+const Admin = mongoose.model('admins', AdminSchema)
 
 async function init() {
   try {
@@ -127,5 +132,6 @@ module.exports = {
   User,
   Order,
   Comment,
-  Item
+  Item,
+  Admin
 };

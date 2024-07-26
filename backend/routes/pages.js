@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {  User, ObjectId } = require('../db');
+const {  User, ObjectId, Order, Comment, Item, Admin } = require('../db');
 const { hashPass, checkPass, generateJWt } = require('../utils/authEncoding');
 const { protectedRoute } = require('../middleware/route');
 const { parserJwt } = require('../middleware/auth');
@@ -10,14 +10,14 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/user', parserJwt, async (req, res) => {
-  console.log(req._auth)
   const { id } = req._auth;
-  console.log(id)
   const user = await User.find( { _id: new ObjectId(id)});
 
   if (!user) {
     res.send({ "result": false })
   } else {
+    user[0].password = ''
+    console.log('user', user)
     res.send({"result": true, "user": user })
   }
 })
@@ -29,33 +29,50 @@ router.get('/user/logout',  (req, res, next) => {
   res.send({"result": "successful"})
   next()
 })
-
 router.post('/user/login', async (req, res, next) => {
   const { login, password } = req.body;
 
   console.log( login, password )
 
-  const user = await User.findOne( { login });
+  const admin = await Admin.findOne( { login })
 
-  if (!user) {
-    return res.send({'result': 'User with such login not found', 'status': 404});
+  if (admin) {
+    const result = await checkPass(password, admin.password);
+
+    if (!result) {
+      return res.send({ "result": "Wrong password"})
+    }
+
+    const authData = { role: "admin", id: admin._id.toString() };
+    const token = generateJWt(authData);
+    res.cookie('token', token, { httpOnly: true } )
+
+    res.send({ id: admin._id.toString(), role: "admin" })
+
+  } else {
+    const user = await User.findOne( { login });
+
+    if (!user) {
+      return res.send({'result': 'User with such login not found', 'status': 404});
+    }
+
+    const result = await checkPass(password, user.password);
+    if (!result) {
+      return res.send({'result': 'Wrong password', 'status': 404});
+    }
+
+    const authData = { role: 'user', id: user._id.toString() };
+
+    const token = generateJWt(authData);
+
+    res.cookie('token', token, { httpOnly: true });
+
+    // res.redirect(`/user/${user._id.toString()}`)
+
+    res.send({id: user._id.toString(), role: "user", status: 200});
+    next();
   }
 
-  const result = await checkPass(password, user.password);
-  if (!result) {
-    return res.send({'result': 'Wrong password', 'status': 404});
-  }
-
-  const authData = { role: 'user', id: user._id.toString() };
-
-  const token = generateJWt(authData);
-
-  res.cookie('token', token, { httpOnly: true });
-
-  // res.redirect(`/user/${user._id.toString()}`)
-
-  res.send({'id': user._id.toString(), 'role': 'user', 'status': 200});
-  next();
 })
 
 
@@ -68,11 +85,14 @@ router.post('/register', async (req, res) => {
       birthDate: '',
       address: '',
       bonuses: '',
+      favorites: [],
+      orders: [],
+      comments: []
     }
 
     const newUser = await new User({
       ...userInfo,
-      passwordSubmit: true,
+      isPasswordSubmit: true,
       password: await hashPass(userInfo.password)
     });
 
@@ -101,19 +121,35 @@ router.post('/register', async (req, res) => {
   }
 })
 
+// ADMIN PAGE
+router.get('/admin', parserJwt, protectedRoute(['admin'], '/'), async (req,res) => {
+  const { role } = req._auth;
 
-// router.get('/*', parserJwt, async (req, res) => {
-//   const { id } = req._auth;
-//   console.log(id)
-//   const user = await User.find( { _id: new ObjectId(id)});
-//
-//   if (!user) {
-//     res.clearCookie('token');
-//     res.redirect('/');
-//   } else {
-//     res.send({"result": true, "user": user })
-//   }
-//
-// });
+  const users = await User.find().populate('orders').populate('comments');
+  const items = await Item.find().populate('comments');
+  const comments = await Comment.find().populate('users').populate('items');
+  const orders = await Order.find().populate('users').populate('items')
+
+  res.render('admin_home', { users, items, comments, orders, role });
+
+});
+
+router.patch('/user/edit', parserJwt, async (req, res, next) => {
+  const { id } = req._auth;
+  const { body: newUser } = req;
+
+  const user = await User.find( { _id: new ObjectId(id)});
+
+  if (!user) {
+    res.send({"result" : "User not found"})
+  }
+
+  try {
+    const updatedUser = await User.findOneAndUpdate({ _id: new ObjectId(id)}, newUser, { new: true })
+    res.send({"result": updatedUser})
+  } catch (error) {
+    console.log('update user error', error)
+  }
+})
 
 module.exports = { router };

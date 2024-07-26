@@ -184,7 +184,7 @@ export default defineComponent({
   },
   mounted() {
     console.log(this.getCheckedHeaderLink)
-  }
+  },
 })
 </script>
 

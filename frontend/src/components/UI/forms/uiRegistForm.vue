@@ -80,7 +80,9 @@ export default {
   name: "uiRegistForm.vue",
   data() {
     return {
-      entityData: {},
+      entityData: {
+        mailing: false
+      },
       error: ''
     }
   },

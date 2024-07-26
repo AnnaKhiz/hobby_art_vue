@@ -4,13 +4,15 @@ import DeliveryComponent from "@/components/pages/DeliveryComponent.vue";
 import BonusesComponent from "@/components/pages/BonusesComponent.vue";
 import AboutComponent from "@/components/pages/AboutComponent.vue";
 import UserPageComponent from "@/components/pages/UserPageComponent.vue";
+import AdminLogin from "@/components/pages/AdminLogin.vue";
+
 
 
 const routes = [
 
   {
     path: '/',
-    name: 'Hobby Art',
+    name: 'HobbyArt',
     component: MainPage,
     props: true,
     meta: {
@@ -47,6 +49,18 @@ const routes = [
       title: 'О компании',
       favicon: '',
     },
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminLogin,
+    props: true,
+    meta: {
+      title: 'Админ',
+      favicon: '',
+      requiresAuth: true
+    },
+
   },
   {
     path: '/user_page/:id',
@@ -88,5 +102,6 @@ router.afterEach((to, from) => {
 	const favicon = to.meta.favicon || '';
 	document.querySelector('link[rel="icon"]').href = favicon;
 });
+
 
 export default router

@@ -9,18 +9,19 @@
 
           <div class="main__user-page-content">
             <ui-sidebar-user-page
+              v-if="show"
               @input="currentLink = $event"
-							:user="user"
+							:user="{...this.user}"
 						/>
 
             <div class="main__user-page-content-block second-block main__user-page-content">
-              <user-page-about-form v-if="currentLink === 'general'"/>
-              <user-page-bonuses v-if="currentLink === 'bonuses'" />
+              <user-page-about-form v-if="currentLink === 'general'" :user="{...this.user}"/>
+              <user-page-bonuses v-if="currentLink === 'bonuses'" :bonuses="Number(user.bonuses)"/>
               <!--  передать пропс bonuses  -->
-              <user-page-favorites v-if="currentLink === 'favorites'" :user="user"/>
-              <user-page-history v-if="currentLink === 'history'" :user="user" />
-              <user-page-mailing v-if="currentLink === 'mailing'" :user="user" />
-              <user-page-feedback v-if="currentLink === 'feedback'" :user="user" />
+              <user-page-favorites v-if="currentLink === 'favorites'" :user="{...this.user}"/>
+              <user-page-history v-if="currentLink === 'history'" :user="{...this.user}" />
+              <user-page-mailing v-if="currentLink === 'mailing'" :user="{...this.user}" />
+              <user-page-feedback v-if="currentLink === 'feedback'" :user="{...this.user}" />
             </div>
           </div>
         </section>
@@ -51,43 +52,37 @@ export default {
     UserPageHistory,
     UserPageFavorites, UserPageBonuses, userPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
   props: {
-    id: String
+    id: String,
   },
 	data() {
 		return {
+      show: false,
 			user: {},
-      currentLink: 'general'
+      currentLink: ''
 		}
-	},
-	computed: {
-		// userId() {
-		// 	return this.$route.params.id
-		// }
 	},
   methods: {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
     async getUser() {
-			// const token = localStorage.getItem('token')
-      // console.log(this.id)
       const result = await axios.get(`/user`);
       if (!result) {
         console.log('no requested result')
+        return
       }
-      console.log(result)
-      this.setIsAuthorizedInfo(true)
-      // localStorage.setItem('auth', 'true')
-			this.user = await result.data.user[0]
 
+      this.setIsAuthorizedInfo(true)
+			this.user = await result.data.user[0]
       this.$router.push(`/user_page/${this.user._id}`);
-      console.log(this.user)
+      return this.user
     }
   },
-  mounted() {
-    console.log('mounted')
-    // this.getUser()
 
+  async created() {
+    await this.getUser()
+    this.currentLink = 'general'
+    this.show = true;
   }
 
 }

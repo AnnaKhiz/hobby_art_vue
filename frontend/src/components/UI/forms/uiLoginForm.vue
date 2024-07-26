@@ -83,7 +83,12 @@ export default {
       localStorage.setItem('auth', 'true')
 			this.user = result.data
       this.setUserInfo = this.user
-      this.$router.push(`/user_page/${this.user.id}`)
+      if (this.user.role === 'admin') {
+        this.$router.push(`/admin`)
+      } else {
+        this.$router.push(`/user_page/${this.user.id}`)
+      }
+
       // this.setIsRegisteredInfo(true)
       // this.setIsAuthorizedInfo(true)
       this.setDisplayDialogState(false)

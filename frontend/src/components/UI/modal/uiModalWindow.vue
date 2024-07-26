@@ -32,6 +32,14 @@ export default {
       getDisplayDialogState: 'dialog/getDisplayDialogState'
     })
   },
+  // beforeRouteEnter(to, from, next) {
+  //   if (to.path) {
+  //     console.log('1111111')
+  //   }
+  //   next()
+  //   // this.$store.commit('setDisplayDialogState', true);
+  // }
+
 }
 </script>
 

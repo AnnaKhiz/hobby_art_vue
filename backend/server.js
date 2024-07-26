@@ -13,7 +13,6 @@ server.use(cookieParser());
 
 server.listen(port, (req, resp) => {
   server.get('/', (req, res) => {
-
     res.send('hello world')
   })
   console.log(`Server started on port ${port}`)
