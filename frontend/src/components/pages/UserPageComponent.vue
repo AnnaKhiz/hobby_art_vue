@@ -11,17 +11,35 @@
             <ui-sidebar-user-page
               v-if="show"
               @input="currentLink = $event"
-							:user="{...this.user}"
+							:user="{...user}"
 						/>
 
             <div class="main__user-page-content-block second-block main__user-page-content">
-              <user-page-about-form v-if="currentLink === 'general'" :user="{...this.user}"/>
-              <user-page-bonuses v-if="currentLink === 'bonuses'" :bonuses="Number(user.bonuses)"/>
-              <!--  передать пропс bonuses  -->
-              <user-page-favorites v-if="currentLink === 'favorites'" :user="{...this.user}"/>
-              <user-page-history v-if="currentLink === 'history'" :user="{...this.user}" />
-              <user-page-mailing v-if="currentLink === 'mailing'" :user="{...this.user}" />
-              <user-page-feedback v-if="currentLink === 'feedback'" :user="{...this.user}" />
+              <user-page-about-form
+                v-if="currentLink === 'general'"
+                :user="{...user}"
+              />
+              <user-page-bonuses
+                v-if="currentLink === 'bonuses'"
+                :bonuses="Number(user.bonuses)"
+              />
+              <user-page-favorites
+                v-if="currentLink === 'favorites'"
+                :user="{...user}"
+              />
+              <user-page-history
+                v-if="currentLink === 'history'"
+                :user="{...user}"
+              />
+              <user-page-mailing
+                v-if="currentLink === 'mailing'"
+                :mailing="user.mailing"
+                @mail="user.mailing = $event"
+              />
+              <user-page-feedback
+                v-if="currentLink === 'feedback'"
+                :user="{...user}"
+              />
             </div>
           </div>
         </section>
