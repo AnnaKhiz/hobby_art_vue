@@ -84,7 +84,7 @@ router.post('/register', async (req, res) => {
       ...user,
       birthDate: '',
       address: '',
-      bonuses: '',
+      bonuses: 0,
       favorites: [],
       orders: [],
       comments: []

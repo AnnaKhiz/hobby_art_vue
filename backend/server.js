@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { port } = require('config');
 const { router: pageRouter } = require('./routes/pages.js');
+const { router: itemsRouter } = require('./routes/items.js')
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path')
@@ -31,6 +32,7 @@ server.use(express.urlencoded({ extended: true }));
 server.use(staticFileMiddleware);
 
 server.use('/', pageRouter);
+server.use('/api/items', itemsRouter)
 
 server.use(history());
 server.use(staticFileMiddleware);

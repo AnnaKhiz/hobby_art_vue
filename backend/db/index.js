@@ -31,7 +31,9 @@ const ItemSchema = new mongoose.Schema({
   isSold: { type: Boolean },
   isDiscount: { type: Boolean },
   discountPercentage: { type: Number },
-  color: [{ type: String }],
+  color: [
+    { text: String, value: String }
+  ],
   rating: { type: Number },
   comments: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -47,7 +49,7 @@ const UserSchema = new mongoose.Schema({
   phone: { type: String },
   email: { type: String, unique: true },
   address: { type: String },
-  bonuses: { type: String },
+  bonuses: { type: Number },
   mailing: { type: Boolean },
   password: { type: String },
   isPasswordSubmit: { type: Boolean },
