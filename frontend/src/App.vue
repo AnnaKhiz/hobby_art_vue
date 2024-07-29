@@ -1,8 +1,8 @@
 <template>
   <div :class=" { fixed: getDisplayDialogState }">
-    <header-component />
+    <header-component v-if="$router.currentRoute.value.href !== '/admin'" />
     <router-view />
-    <footer-component />
+    <footer-component v-if="$router.currentRoute.value.href !== '/admin'"/>
   </div>
 
 </template>
@@ -34,6 +34,9 @@ export default {
     // getModalActive(value) {
     //   this.active = value
     // }
+  },
+  mounted() {
+    console.log(this.$router)
   }
 
 }

@@ -1,5 +1,5 @@
 <template>
-  <form class="modal__registration-form no_line" style="width: 30%; margin: auto;">
+  <form class="modal__registration-form no_line">
     <label for="name" class="form-label">Название</label>
     <input
       v-model="form.name"
@@ -33,9 +33,9 @@
       v-model="form.color"
       id="color"
       multiple
-      style="width: 100%; margin: 0 auto 24px auto; border: 1px solid #BDBDBD;"
+      class="form-select multiple"
     >
-      <option v-for="option in colorsSelect" :key="option" :value="option.value">
+      <option v-for="option in colorsSelect" :key="option" :value="option.value" class="form-option">
         {{ option.text }}
       </option>
     </select>
@@ -51,9 +51,9 @@
     <select
       v-model="form.isSold"
       id="isSold"
-      style="width: 100%; margin: 0 auto 24px auto; border: 1px solid #BDBDBD; height: 30px"
+      class="form-select"
     >
-      <option v-for="option in boolOptions" :key="option" :value="option.value">
+      <option v-for="option in boolOptions" :key="option" :value="option.value" class="form-option">
         {{ option.text }}
       </option>
     </select>
@@ -62,9 +62,9 @@
     <select
       v-model="form.isDiscount"
       id="isDiscount"
-      style="width: 100%; margin: 0 auto 24px auto; border: 1px solid #BDBDBD; height: 30px"
+      class="form-select"
     >
-      <option v-for="option in boolOptions" :key="option" :value="option.value">
+      <option v-for="option in boolOptions" :key="option" :value="option.value" class="form-option">
         {{ option.text }}
       </option>
     </select>
@@ -114,6 +114,21 @@ export default {
   display: block
   padding-left: 20px
   margin-bottom: 5px
-.no_line::after
-  content: none
+.no_line
+  width: 50%
+  margin: 0
+  padding: 20px 100px
+  &::after
+    content: none
+.form-select
+  color: black
+  height: 45px
+  width: 100%
+  border: 1px solid #BDBDBD
+  &.multiple
+    height: 90px
+    border-radius: 10px
+.form-option
+  color: black
+  margin: 5px
 </style>
