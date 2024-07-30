@@ -86,9 +86,9 @@
     <button
       class="modal__registration-form-button"
       style="text-align: center"
-      @click.prevent="addNewItem"
+      @click.prevent="!Object.values(this.editFormData).length ? addNewItem() : sendEditedItem()"
     >
-      Добавить
+      {{ Object.values(this.editFormData).length ? 'Сохранить изменения' : 'Добавить' }}
     </button>
     <p class="info-message">{{message}}</p>
   </form>
@@ -99,6 +99,12 @@
 
 export default {
   name: "adminItemsForm.vue",
+  props: {
+    editFormData: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
       message: '',
@@ -118,7 +124,7 @@ export default {
       ]
     }
   },
-  emits: ['goBack'],
+  emits: ['goBack', 'submitEdit'],
   methods: {
     async addNewItem() {
       const checkedColors = this.colorsSelect.filter(el =>  this.form.color.includes(el.value));
@@ -143,11 +149,27 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    sendEditedItem() {
+      if (this.form.color.length) {
+        const colorsObject = this.colorsSelect.filter(el => this.form.color.includes(el.value))
+        this.form.color = colorsObject
+      }
+      this.$emit('submitEdit', this.form)
     }
   },
   mounted() {
-    this.form = {
-      color: [],
+    if (Object.values(this.editFormData).length) {
+      this.form = this.editFormData
+    } else {
+      this.form = {
+        color: [],
+      }
+    }
+  },
+  watch: {
+    editFormData(val) {
+      this.form = val
     }
   }
 

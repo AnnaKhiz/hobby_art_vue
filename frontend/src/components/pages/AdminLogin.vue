@@ -7,7 +7,7 @@
           <button @click="openMenu('items')" class="modal__registration-form-button block">Товары</button>
           <div v-if="checkedMenu === 'items'" class="sidebar">
             <a href="#" class="sidebar__submenu" @click.prevent="getItemsList">Все товары</a>
-            <a href="#" class="sidebar__submenu"  @click.prevent="addItem = true" >Добавить товар</a>
+            <a href="#" class="sidebar__submenu"  @click.prevent="openAddProduct" >Добавить товар</a>
           </div>
           <button @click="openMenu('orders')" class="modal__registration-form-button block">Заказы</button>
           <button @click="openMenu('users')" class="modal__registration-form-button block">Пользователи</button>
@@ -16,9 +16,9 @@
         </div>
         <div v-if="checkedMenu === 'items'" class="container__item content">
           <div v-if="!addItem" class="items-container">
-            <ui-admin-product-card  :itemsList="itemsList" @update="removeProduct"/>
+            <ui-admin-product-card  :itemsList="itemsList" @update="removeProduct" @editItem="openEditItem"/>
           </div>
-          <admin-items-form v-else @goBack="addProduct" />
+          <admin-items-form v-else @goBack="addProduct" :editFormData="editFormData" @submitEdit="editItem"/>
         </div>
         <div v-else class="container__item content">
 
@@ -41,8 +41,15 @@ import UiAdminProductCard from "@/components/UI/uiAdminProductCard.vue"
 export default {
   name: "AdminLogin.vue",
   components: {UiAdminProductCard, AdminItemsForm},
+  // props: {
+  //   edit: {
+  //     type: Boolean,
+  //     default: false
+  //   }
+  // },
   data() {
     return {
+      editFormData: {},
       itemsList: [],
       form: {},
       checkedMenu: '',
@@ -53,6 +60,37 @@ export default {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
+    openAddProduct() {
+      this.addItem = true;
+      this.editFormData = {}
+    },
+    openEditItem(item) {
+
+      this.addItem = true
+
+      this.editFormData = item
+      console.log('edit item' , item)
+    },
+    async editItem(item) {
+
+      try {
+        const result = await fetch(`http://localhost:3000/api/items/update/${item._id}`, {
+          method: 'PATCH',
+          body: JSON.stringify(item),
+          headers: { "Content-Type": "application/json" }
+        })
+
+        const data = await result.json();
+
+        if (!data.result) return;
+
+        // this.$emit('update', id)
+
+        console.log('edit result', data)
+      } catch (error) {
+        console.log(error)
+      }
+    },
 
     openMenu(name) {
       this.checkedMenu = name
@@ -62,6 +100,7 @@ export default {
     addProduct(item) {
 
       this.addItem = false;
+      this.editFormData = {}
       this.itemsList.push(item)
 
 
@@ -78,6 +117,7 @@ export default {
     },
     async getItemsList() {
       this.addItem = false
+      this.editFormData = {}
       try {
         const result = await fetch('http://localhost:3000/api/items')
         const data = await result.json();
@@ -119,7 +159,7 @@ export default {
     await this.initPage()
     this.checkedMenu = 'items';
 
-  }
+  },
 }
 </script>
 

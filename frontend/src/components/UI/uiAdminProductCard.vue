@@ -10,8 +10,8 @@
     <p class="item-row"><span class="label">Цвета:</span> {{ renderColorsArray(item.color)}}</p>
     <p class="item-row"><span class="label">Рейтинг:</span> {{item.rating}}</p>
     <div class="actions">
-      <button class="button">Edit</button>
-      <button class="button" @click.prevent="removeItem(item._id)">Delete</button>
+      <button class="button" @click.prevent="$emit('editItem', item)">Редактировать</button>
+      <button class="button" @click.prevent="removeItem(item._id)">Удалить</button>
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
       default: () => []
     }
   },
-  emits: ['update'],
+  emits: ['update', 'editItem'],
   methods: {
     renderColorsArray(item){
       if (!item) return
@@ -33,6 +33,7 @@ export default {
       item.forEach(el => items += el.text + ', ')
       return items.slice(0, -2)
     },
+
     async removeItem(id) {
       console.log(id)
       try {

@@ -9,6 +9,7 @@ import AdminAuth from "@/components/pages/AdminAuth.js.vue";
 
 
 
+
 const routes = [
 
   {
@@ -72,8 +73,19 @@ const routes = [
       favicon: '',
       requiresAuth: true
     },
-
   },
+  // {
+  //   path: '/admin/item/:id',
+  //   name: 'admin-item',
+  //   component: AdminLogin,
+  //   props: { edit: true },
+  //   meta: {
+  //     title: 'Админ',
+  //     favicon: '',
+  //     requiresAuth: true
+  //   },
+  // },
+
   {
     path: '/user_page/:id',
     name: 'User',

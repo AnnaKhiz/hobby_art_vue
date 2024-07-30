@@ -45,6 +45,28 @@ router.delete('/remove/:id',  async (req, res, next) => {
   }
 })
 
+router.patch('/update/:id', async (req, res, next) => {
+  const { id } = req.params;
+  const { body: itemBody } = req;
+
+  console.log(id)
+  console.log(itemBody)
+
+  const item = await Item.find( { _id: new ObjectId(id)});
+
+  if (!item) {
+    res.send({"result" : false, data: "Item not found"})
+  }
+
+  try {
+    const updatedItem = await Item.findOneAndUpdate({ _id: new ObjectId(id)}, itemBody, { new: true })
+    res.send({"result": true, data: updatedItem})
+  } catch (error) {
+    console.log('update user error', error)
+  }
+
+})
+
 
 
 module.exports = { router };
