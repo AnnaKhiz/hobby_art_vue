@@ -7,32 +7,21 @@
           <button @click="openMenu('items')" class="modal__registration-form-button block">Товары</button>
           <div v-if="checkedMenu === 'items'" class="sidebar">
             <a href="#" class="sidebar__submenu" @click.prevent="getItemsList">Все товары</a>
-            <a href="#" class="sidebar__submenu">Добавить товар</a>
+            <a href="#" class="sidebar__submenu"  @click.prevent="addItem = true" >Добавить товар</a>
           </div>
           <button @click="openMenu('orders')" class="modal__registration-form-button block">Заказы</button>
           <button @click="openMenu('users')" class="modal__registration-form-button block">Пользователи</button>
           <button @click="openMenu('comments')" class="modal__registration-form-button block">Комментарии</button>
           <button @click="logOut" class="modal__registration-form-button block exit">Выход</button>
         </div>
-        <div class="container__item content">
-          <div class="items-container">
-            <div v-for="item in itemsList" :key="item._id" class="items-container__item">
-              <h3 class="item-row"><span class="label">Название:</span> {{item.name}}</h3>
-              <p class="item-row"><span class="label">Описание:</span> {{item.description}}</p>
-              <p class="item-row"><span class="label">Цена:</span> {{item.price}}</p>
-              <p class="item-row"><span class="label">Остатки (количество):</span> {{item.restBalance}}</p>
-              <p class="item-row"><span class="label">Наличие на складе:</span> {{item.isSold}}</p>
-              <p class="item-row"><span class="label">Наличие скидки:</span> {{item.isDiscount}}</p>
-              <p class="item-row"><span class="label">Размер скидки:</span> {{item.discountPercentage}}%</p>
-              <p class="item-row"><span class="label">Цвета:</span> {{ renderColorsArray(item.color)}}</p>
-              <p class="item-row"><span class="label">Рейтинг:</span> {{item.rating}}</p>
-              <div class="actions">
-                <button class="button">Edit</button>
-                <button class="button">Delete</button>
-              </div>
-            </div>
+        <div v-if="checkedMenu === 'items'" class="container__item content">
+          <div v-if="!addItem" class="items-container">
+            <ui-admin-product-card  :itemsList="itemsList" @update="removeProduct"/>
           </div>
-          <admin-items-form v-if="false" />
+          <admin-items-form v-else @goBack="addProduct" />
+        </div>
+        <div v-else class="container__item content">
+
         </div>
       </div>
     </div>
@@ -46,34 +35,49 @@
 
 import AdminItemsForm from "@/components/UI/forms/adminItemsForm.vue"
 import {mapMutations} from "vuex";
+import UiAdminProductCard from "@/components/UI/uiAdminProductCard.vue"
 
 
 export default {
   name: "AdminLogin.vue",
-  components: {AdminItemsForm},
+  components: {UiAdminProductCard, AdminItemsForm},
   data() {
     return {
       itemsList: [],
       form: {},
-      checkedMenu: ''
+      checkedMenu: '',
+      addItem: false
     }
-  },
-  computed: {
-
   },
   methods: {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
-    renderColorsArray(item){
-      let items = ''
-      item.forEach(el => items += el.text + ', ')
-      return items.slice(0, -2)
-    },
+
     openMenu(name) {
       this.checkedMenu = name
+      name === 'items' ? this.getItemsList() : ''
+    },
+
+    addProduct(item) {
+
+      this.addItem = false;
+      this.itemsList.push(item)
+
+
+    },
+
+    removeProduct(id) {
+      const index = this.itemsList.findIndex(el => el._id === id)
+
+      console.log(index)
+
+      if (index === -1) return;
+
+      this.itemsList.splice(index, 1)
     },
     async getItemsList() {
+      this.addItem = false
       try {
         const result = await fetch('http://localhost:3000/api/items')
         const data = await result.json();
@@ -95,6 +99,8 @@ export default {
       if (!data.result) {
         this.$router.push('/admin/login')
       }
+
+      await this.getItemsList()
     },
     async logOut() {
       this.setIsAuthorizedInfo(false)
@@ -174,34 +180,6 @@ export default {
   align-items: stretch
   justify-content: start
   flex-wrap: wrap
-
   gap: 15px
-  &__item
-    //border: 1px solid black
-    background: #E8E8E8
-    border-radius: 12px
-    width: 30%
-    padding: 15px
-    flex-grow: 1
-    & > .actions
-      display: flex
-      align-items: center
-      justify-content: start
-      gap: 20px
-      margin-top: 15px
-.button
-  font-size: 1rem
-  color: #7B4646
-  transition: color 0.3s ease-in-out 0s
-  background: transparent
-  &:hover
-    transition: color 0.3s ease-in-out 0s
-    color: #5E5C5A
-    text-decoration: underline
-.label
-  font-weight: bold
-  font-size: 1rem
 
-.item-row
-  margin-bottom: 5px
 </style>

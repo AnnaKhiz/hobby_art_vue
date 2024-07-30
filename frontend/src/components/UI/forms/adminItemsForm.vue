@@ -1,6 +1,5 @@
 <template>
   <form class="modal__registration-form no_line">
-    <p class="info-message">{{ message }}</p>
     <label for="name" class="form-label">Название</label>
     <input
       v-model="form.name"
@@ -91,6 +90,7 @@
     >
       Добавить
     </button>
+    <p class="info-message">{{message}}</p>
   </form>
 </template>
 
@@ -107,7 +107,7 @@ export default {
       },
       boolOptions: [
         { text: 'В наличии', value: true },
-        { text: 'Нет на складе', value: false }
+        { text: 'Нет', value: false }
       ],
       colorsSelect: [
         { text: 'Красный', value: 'red' },
@@ -118,6 +118,7 @@ export default {
       ]
     }
   },
+  emits: ['goBack'],
   methods: {
     async addNewItem() {
       const checkedColors = this.colorsSelect.filter(el =>  this.form.color.includes(el.value));
@@ -135,17 +136,18 @@ export default {
         this.message = "Товар добавлен в базу данных"
 
         setTimeout(() => {
-          this.message = ""
-        }, 1000)
+          this.message = "";
+          this.$emit('goBack', data.data)
+        }, 1500)
 
-
-
-        console.log(data.data)
-
-        console.log(result)
       } catch (error) {
         console.log(error)
       }
+    }
+  },
+  mounted() {
+    this.form = {
+      color: [],
     }
   }
 
@@ -161,7 +163,7 @@ export default {
   position: relative
   width: 50%
   margin: 0
-  padding: 50px 100px
+  padding-bottom: 20px
   &::after
     content: none
 .form-select
@@ -179,6 +181,6 @@ export default {
   color: red
   height: 20px
   position: absolute
-  top: 20px
-  left: 100px
+  bottom: 0
+  left: 0
 </style>
