@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "uiUserPageAboutForm.vue",
@@ -61,9 +61,16 @@ export default {
       this.$refs.inputs[index].focus()
     },
     async saveChanges() {
-      const result = await axios.patch('http://localhost:3000/user/edit', this.entityDataResult);
+      const result = await fetch('http://localhost:3000/user/edit', {
+        method: 'PATCH',
+        body: JSON.stringify(this.entityDataResult),
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include'
+      });
 
-      if (!result) return;
+      const data = await result.json()
+
+      if (!data.result) return;
 
       this.message = 'Данные успешно обновлены. Страница будет перезагружена автоматически.'
 

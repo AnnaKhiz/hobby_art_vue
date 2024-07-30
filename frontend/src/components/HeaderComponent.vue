@@ -54,7 +54,7 @@ import UiSearchForm from "@/components/UI/forms/uiSearchForm.vue"
 import {mapGetters, mapMutations} from "vuex";
 import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue"
 import UiLoginForm from "@/components/UI/forms/uiLoginForm.vue"
-import axios from "axios";
+// import axios from "axios";
 
 export default {
 	name: "HeaderComponent.vue",
@@ -113,18 +113,24 @@ export default {
       this.setCheckedHeaderLink(value)
     },
     async getUser() {
-      const result = await axios.get(`/user`);
-      if (!result) {
-        console.log('no requested result')
-      }
-      console.log(result)
-      this.setIsAuthorizedInfo(true)
-      // localStorage.setItem('auth', 'true')
-      this.user = await result.data.user[0]
+      const result = await fetch(`http://localhost:3000/user`, {
+        method: 'GET',
+        credentials: 'include'
+      });
 
-      this.$router.push(`/user_page/${this.user._id}`);
-      console.log(this.user)
-      // this.$router.push(`/user_page/${}`)
+      const data = await result.json()
+      console.log('get result', data)
+
+      if (!data.result) {
+        console.log('no requested result')
+        this.$router.back()
+        // await this.getAdmin()
+      } else {
+        this.setIsAuthorizedInfo(true)
+        this.user = await data.user[0]
+        this.$router.push(`/user_page/${this.user._id}`);
+        return this.user
+      }
     }
   },
   watch: {

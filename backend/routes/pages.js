@@ -48,8 +48,6 @@ router.get('/user/logout',  (req, res, next) => {
     path: "/",
 
   });
-  // console.log(res.cookies)
-  // res.redirect('/')
   res.send({"result": "successful"})
   next()
 })
@@ -193,6 +191,12 @@ router.get('/admin', parserJwt, async (req,res) => {
 router.patch('/user/edit', parserJwt, async (req, res, next) => {
   const { id } = req._auth;
   const { body: newUser } = req;
+
+  if (newUser.password) {
+    newUser.password = await hashPass(newUser.password)
+  }
+
+  console.log('user object for editing', newUser)
 
   const user = await User.find( { _id: new ObjectId(id)});
 
