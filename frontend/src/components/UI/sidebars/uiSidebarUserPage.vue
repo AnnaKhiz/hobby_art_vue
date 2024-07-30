@@ -73,6 +73,8 @@ export default {
         credentials: 'include'
       });
 
+      console.log('result')
+
       this.$router.push('/')
     }
     // async getUser() {
