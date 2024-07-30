@@ -1,8 +1,12 @@
 <template>
   <div :class=" { fixed: getDisplayDialogState }">
-    <header-component v-if="$router.currentRoute.value.href !== '/admin'" />
+    <header-component
+      v-if="$router.currentRoute.value.href !== '/admin' && $router.currentRoute.value.href !== '/admin/login'"
+    />
     <router-view />
-    <footer-component v-if="$router.currentRoute.value.href !== '/admin'"/>
+    <footer-component
+      v-if="$router.currentRoute.value.href !== '/admin' && $router.currentRoute.value.href !== '/admin/login'"
+    />
   </div>
 
 </template>

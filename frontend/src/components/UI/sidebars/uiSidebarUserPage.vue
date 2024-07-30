@@ -32,7 +32,7 @@
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "uiSidebarUserPage.vue",
@@ -68,14 +68,10 @@ export default {
       this.setIsAuthorizedInfo(false)
       localStorage.setItem('auth', 'false');
 
-      const result = await axios.get('/user/logout');
-
-      // if(!result) {
-      //   console.log('did not logout')
-      //   return
-      // }
-
-      console.log('logout res', result)
+      const result = await fetch('http://localhost:3000/user/logout', {
+        method: 'GET',
+        credentials: 'include'
+      });
 
       this.$router.push('/')
     }

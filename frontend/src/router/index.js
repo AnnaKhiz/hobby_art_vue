@@ -5,6 +5,7 @@ import BonusesComponent from "@/components/pages/BonusesComponent.vue";
 import AboutComponent from "@/components/pages/AboutComponent.vue";
 import UserPageComponent from "@/components/pages/UserPageComponent.vue";
 import AdminLogin from "@/components/pages/AdminLogin.vue";
+import AdminAuth from "@/components/pages/AdminAuth.js.vue";
 
 
 
@@ -48,6 +49,17 @@ const routes = [
     meta: {
       title: 'О компании',
       favicon: '',
+    },
+  },
+  {
+    path: '/admin/login',
+    name: 'admin-login',
+    component: AdminAuth,
+    props: true,
+    meta: {
+      title: 'Админ',
+      favicon: '',
+      requiresAuth: true
     },
   },
   {

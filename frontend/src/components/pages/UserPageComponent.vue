@@ -52,7 +52,7 @@
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
-import axios from 'axios';
+// import axios from 'axios';
 import {mapMutations} from "vuex";
 import userPageAboutForm from "@/components/user-page/userPageAboutForm.vue"
 import UserPageBonuses from "@/components/user-page/userPageBonuses.vue"
@@ -84,21 +84,43 @@ export default {
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
     async getUser() {
-      const result = await axios.get(`/user`);
-      if (!result) {
+      const result = await fetch(`http://localhost:3000/user`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      const data = await result.json()
+      console.log('get result', data)
+
+      if (!data.result) {
         console.log('no requested result')
-        return
+        this.$router.back()
+        // await this.getAdmin()
+      } else {
+        this.setIsAuthorizedInfo(true)
+        this.user = await data.user[0]
+        this.$router.push(`/user_page/${this.user._id}`);
+        return this.user
       }
 
-      this.setIsAuthorizedInfo(true)
-			this.user = await result.data.user[0]
-      this.$router.push(`/user_page/${this.user._id}`);
-      return this.user
-    }
+
+    },
+    // async getAdmin() {
+    //   try {
+    //     const result = await axios.get('/admin');
+    //     if (!result) return;
+    //     this.$router.push('/admin')
+    //   } catch (error) {
+    //     console.log('Getting admin page error:', error)
+    //   }
+    // }
+
   },
 
   async created() {
     await this.getUser()
+
+
     this.currentLink = 'general'
     this.show = true;
   }

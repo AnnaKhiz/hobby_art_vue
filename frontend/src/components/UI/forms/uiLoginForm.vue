@@ -4,8 +4,8 @@
       <h2 class="modal__registration-form-label login">
         Войти в личный кабинет
       </h2>
-      <div class="modal__registration-form-error-block" id="enter-error-block" >
-
+      <div class="modal__registration-form-error-block" >
+        {{ message }}
       </div>
       <input
           v-model="entityData.login"
@@ -51,14 +51,15 @@
 <script>
 import UiRegistForm from "@/components/UI/forms/uiRegistForm.vue"
 import {mapGetters, mapMutations} from "vuex";
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "uiLoginForm.vue",
   components: {UiRegistForm},
   data() {
     return {
-      entityData: {}
+      entityData: {},
+      message: ''
     }
   },
   computed: {
@@ -76,17 +77,35 @@ export default {
 
 		async logIn() {
 
-			const result = await axios.post(`/user/login`, this.entityData);
-			if (!result) {
+			const result = await fetch(`http://localhost:3000/user/login`, {
+        method: 'POST',
+        body: JSON.stringify(this.entityData),
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include'
+      });
+
+      console.log(result)
+      const data = await result.json()
+
+      console.log('data log in', data)
+
+      if (!data.result) {
 				console.log('no requested result')
+        this.message = 'Пользователь не найден'
+        return
 			}
+
+      this.message = ''
       localStorage.setItem('auth', 'true')
-			this.user = result.data
-      this.setUserInfo = this.user
-      if (this.user.role === 'admin') {
+			// this.user = data.user
+      // this.setUserInfo = this.user
+
+      // console.log('user login', this.user)
+
+      if (result.role === 'admin') {
         this.$router.push(`/admin`)
       } else {
-        this.$router.push(`/user_page/${this.user.id}`)
+        this.$router.push(`/user_page/${data.id}`)
       }
 
       // this.setIsRegisteredInfo(true)

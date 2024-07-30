@@ -41,7 +41,13 @@ router.get('/user', parserJwt, async (req, res) => {
 })
 
 router.get('/user/logout',  (req, res, next) => {
-  res.clearCookie('token');
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: false,
+    sameSite: "Lax",
+    path: "/",
+
+  });
   // console.log(res.cookies)
   // res.redirect('/')
   res.send({"result": "successful"})
@@ -64,7 +70,13 @@ router.post('/user/login', async (req, res, next) => {
     req._auth = { role: 'user', id: admin._id.toString() };
     const authData = { role: "admin", id: admin._id.toString() };
     const token = generateJWt(authData);
-    res.cookie('token', token, { httpOnly: true } )
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      path: "/"
+    } )
 
     res.send({ id: admin._id.toString(), role: "admin" })
 
@@ -85,7 +97,13 @@ router.post('/user/login', async (req, res, next) => {
 
     const token = generateJWt(authData);
 
-    res.cookie('token', token, { httpOnly: true });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      path: "/"
+    });
 
     // res.redirect(`/user/${user._id.toString()}`)
 
@@ -131,7 +149,7 @@ router.post('/register', async (req, res) => {
         httpOnly: true,
         secure: false,
         sameSite: "Lax",
-        maxAge: 24 * 60 * 60 * 1000,
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
         path: "/"
       })
       .send({"result" : "New user added", "id": result._id.toString()})

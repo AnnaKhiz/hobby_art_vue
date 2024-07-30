@@ -61,7 +61,7 @@ export default {
       this.$refs.inputs[index].focus()
     },
     async saveChanges() {
-      const result = await axios.patch('/user/edit', this.entityDataResult);
+      const result = await axios.patch('http://localhost:3000/user/edit', this.entityDataResult);
 
       if (!result) return;
 

@@ -75,7 +75,7 @@
 <script>
 import {mapGetters, mapMutations} from "vuex";
 // import api from '../../../api';
-import axios from 'axios';
+// import axios from 'axios';
 export default {
   name: "uiRegistForm.vue",
   data() {
@@ -101,21 +101,30 @@ export default {
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
 
-    async registerOne() {
+    registerOne: async function () {
       console.log(this.entityData)
 
-      const result = await axios.post('/register', {
-          ...this.entityData,
-          login: this.entityData.email
-        })
-      console.log(result)
+      const result = await fetch('http://localhost:3000/register', {
+        method: 'POST',
+        body: JSON.stringify(
+          {
+            ...this.entityData,
+            login: this.entityData.email
+          }
+        ),
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include'
+      })
 
-      const data = await result.data
-      if (result.status !== 200) {
+
+      const data = await result.json()
+      console.log('data', data)
+
+      if (data.status !== 200) {
 
         this.error = data.result
       }
-			// localStorage.setItem('token', data.token)
+      // localStorage.setItem('token', data.token)
 
       // document.cookie=`token=${data.token}`
       // this.setUserInfo(data.user);
