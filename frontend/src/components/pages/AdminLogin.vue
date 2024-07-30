@@ -8,7 +8,7 @@
           <button @click="checkedMenu = 'items'" class="modal__registration-form-button block">Заказы</button>
           <button @click="checkedMenu = 'items'" class="modal__registration-form-button block">Пользователи</button>
           <button @click="checkedMenu = 'items'" class="modal__registration-form-button block">Комментарии</button>
-          <button @click="$router.push('/')" class="modal__registration-form-button block exit">Выход</button>
+          <button @click="logOut" class="modal__registration-form-button block exit">Выход</button>
         </div>
         <div class="container__item content">
           <admin-items-form v-if="checkedMenu === 'items'" />
@@ -24,6 +24,7 @@
 
 
 import AdminItemsForm from "@/components/UI/forms/adminItemsForm.vue"
+import {mapMutations} from "vuex";
 
 
 export default {
@@ -36,11 +37,37 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
+    }),
+    async initPage() {
+      const result = await fetch('http://localhost:3000/admin', {
+        method: 'GET',
+        credentials: 'include'
+      })
+      const data = await result.json()
+      console.log(data)
 
+      if (!data.result) {
+        this.$router.push('/admin/login')
+      }
+    },
+    async logOut() {
+      this.setIsAuthorizedInfo(false)
+      localStorage.setItem('auth', 'false');
+
+      const result = await fetch('http://localhost:3000/admin/logout', {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      console.log(result)
+      this.$router.push('/')
+    }
   },
   async mounted() {
+    await this.initPage()
     this.checkedMenu = 'items';
-
 
   }
 }

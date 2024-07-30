@@ -93,27 +93,40 @@ const router = createRouter({
 
 })
 
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('auth')
-  console.log('isAuthenticated', isAuthenticated)
-
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-
-    if (isAuthenticated === 'false') {
-      next('/');
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   const isAuthenticated = localStorage.getItem('auth')
+//   console.log('isAuthenticated', isAuthenticated)
+//
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//
+//     if (isAuthenticated === 'false') {
+//       next('/');
+//     } else {
+//       next();
+//     }
+//   } else {
+//     next();
+//   }
+// })
 // eslint-disable-next-line
 router.afterEach((to, from) => {
 	document.title = to.meta.title || 'Главная';
 	const favicon = to.meta.favicon || '';
 	document.querySelector('link[rel="icon"]').href = favicon;
 });
+
+// async function initPage() {
+//   const result = await fetch('http://localhost:3000/admin', {
+//     method: 'GET',
+//     credentials: 'include'
+//   })
+//   const data = await result.json()
+//   console.log(data)
+//
+//   if (!data.result) {
+//     this.$router.push('/admin/login')
+//   }
+// }
 
 
 export default router

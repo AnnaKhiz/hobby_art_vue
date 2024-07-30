@@ -166,13 +166,13 @@ router.post('/register', async (req, res) => {
 })
 
 // ADMIN PAGE
-router.get('/admin', parserJwt, async (req,res) => {
+router.get('/admin', parserJwt, protectedRoute(['admin']), async (req,res) => {
 
   console.log('req._auth 2', req._auth)
   const { role } = req._auth;
 
   if (!role) {
-    return res.redirect('/admin/login')
+    return res.send({"result": false, role: role})
   }
 
   const users = await User.find().populate('orders').populate('comments');
@@ -180,9 +180,9 @@ router.get('/admin', parserJwt, async (req,res) => {
   const comments = await Comment.find().populate('users').populate('items');
   const orders = await Order.find().populate('users').populate('items')
 
-  // res.send({"result": true})
+  res.send({"result": true, role: role})
 
-  res.redirect('/admin')
+  // res.redirect('http://localhost:8080/admin/login')
   // res.render('admin_home', { users, items, comments, orders, role });
   // res.render('/admin', { users, items, comments, orders, role });
 
@@ -229,20 +229,39 @@ router.post('/admin/login', async (req, res, next) => {
   const result = await checkPass(password, admin.password);
 
   if (!result) {
-    return res.send({ "result": "Wrong password"})
+    return res.send({ "result": false})
   }
 
   req._auth = { role: 'user', id: admin._id.toString() };
   const authData = { role: "admin", id: admin._id.toString() };
   const token = generateJWt(authData);
-  res.cookie('token', token, { httpOnly: true } )
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "Lax",
+    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    path: "/admin"
+  } )
 
   res.send({ id: admin._id.toString(), role: "admin" })
 
 })
-router.get('/admin/login', (req, res) => {
-  res.sendFile(path.resolve(path.join(__dirname, '../../frontend/dist'), 'index.html'));
-});
+
+
+router.get('/admin/logout',  (req, res, next) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: false,
+    sameSite: "Lax",
+    path: "/admin",
+
+  });
+  res.send({"result": true})
+  next()
+})
+// router.get('/admin/login', (req, res) => {
+//   res.sendFile(path.resolve(path.join(__dirname, '../../frontend/dist'), 'index.html'));
+// });
 
 
 module.exports = { router };

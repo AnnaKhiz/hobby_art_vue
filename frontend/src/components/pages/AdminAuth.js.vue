@@ -33,7 +33,7 @@
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "AdminAuth.js",
@@ -55,23 +55,34 @@ export default {
       setUserInfo: 'user/setUserInfo'
     }),
     async initPage() {
-      const result = await axios.get('/admin/login')
-      console.log(result)
-      if (result.data.result) {
+      const result = await fetch('http://localhost:3000/admin/login', {
+        method: 'GET',
+        credentials: 'include'
+      })
+      const data = await result.json()
+      console.log(data)
+      if (data.result) {
         this.$router.push('/admin/login')
       }
     },
 
     async logIn() {
 
-      const result = await axios.post(`/admin/login`, this.entityData);
-      if (!result) {
+      const result = await fetch(`http://localhost:3000/admin/login`, {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(this.entityData),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      const data = await result.json()
+      if (!data.result) {
         console.log('no requested result')
       }
       // localStorage.setItem('auth', 'true')
-      this.user = result.data
-      this.setUserInfo = this.user
-      if (this.user.role === 'admin') {
+      // this.user = data.result
+      // this.setUserInfo = this.user
+      if (result.role === 'admin') {
         this.$router.push(`/admin`)
       } else {
         this.$router.back()
