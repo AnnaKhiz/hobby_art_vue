@@ -11,13 +11,10 @@
           <button @click="$router.push('/')" class="modal__registration-form-button block exit">Выход</button>
         </div>
         <div class="container__item content">
-                  <admin-items-form v-if="checkedMenu === 'items'" />
+          <admin-items-form v-if="checkedMenu === 'items'" />
         </div>
       </div>
-
     </div>
-
-
   </main>
 </template>
 
@@ -28,6 +25,7 @@
 
 import AdminItemsForm from "@/components/UI/forms/adminItemsForm.vue"
 
+
 export default {
   name: "AdminLogin.vue",
   components: {AdminItemsForm},
@@ -37,8 +35,13 @@ export default {
       checkedMenu: ''
     }
   },
-  mounted() {
-    this.checkedMenu = 'items'
+  methods: {
+
+  },
+  async mounted() {
+    this.checkedMenu = 'items';
+
+
   }
 }
 </script>

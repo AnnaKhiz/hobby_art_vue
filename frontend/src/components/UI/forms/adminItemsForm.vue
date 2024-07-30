@@ -83,16 +83,26 @@
       type="number"
     >
 
-    <button class="modal__registration-form-button" style="text-align: center">Добавить</button>
+    <button
+      class="modal__registration-form-button"
+      style="text-align: center"
+      @click.prevent="addNewItem"
+    >
+      Добавить
+    </button>
   </form>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "adminItemsForm.vue",
   data() {
     return {
-      form: {},
+      form: {
+        color: [],
+      },
       boolOptions: [
         { text: 'В наличии', value: true },
         { text: 'Нет на складе', value: false }
@@ -105,7 +115,20 @@ export default {
         { text: 'Белый', value: 'white' },
       ]
     }
+  },
+  methods: {
+    async addNewItem() {
+      const checkedColors = this.colorsSelect.filter(el =>  this.form.color.includes(el.value));
+      this.form.color = checkedColors;
+      try {
+        const result = await axios.post('/api/items/add', this.form);
+        console.log(result)
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
+
 }
 </script>
 

@@ -10,16 +10,34 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/user', parserJwt, async (req, res) => {
+  console.log(req._auth)
+
   const { id } = req._auth;
+  console.log(id)
+
   const user = await User.find( { _id: new ObjectId(id)});
 
   if (!user) {
     res.send({ "result": false })
-  } else {
-    user[0].password = ''
-    console.log('user', user)
-    res.send({"result": true, "user": user })
   }
+  console.log(user)
+  user[0].password = ''
+  console.log('user', user)
+  res.send({"result": true, "user": user })
+
+
+
+
+  // const { id } = req._auth;
+  // const user = await User.find( { _id: new ObjectId(id)});
+  //
+  // if (!user) {
+  //   res.send({ "result": false })
+  // } else {
+  //   user[0].password = ''
+  //   console.log('user', user)
+  //   res.send({"result": true, "user": user })
+  // }
 })
 
 router.get('/user/logout',  (req, res, next) => {
@@ -43,6 +61,7 @@ router.post('/user/login', async (req, res, next) => {
       return res.send({ "result": "Wrong password"})
     }
 
+    req._auth = { role: 'user', id: admin._id.toString() };
     const authData = { role: "admin", id: admin._id.toString() };
     const token = generateJWt(authData);
     res.cookie('token', token, { httpOnly: true } )
@@ -53,10 +72,11 @@ router.post('/user/login', async (req, res, next) => {
     const user = await User.findOne( { login });
 
     if (!user) {
-      return res.send({'result': 'User with such login not found', 'status': 404});
+      return res.send({'result': false, 'status': 404});
     }
 
     const result = await checkPass(password, user.password);
+
     if (!result) {
       return res.send({'result': 'Wrong password', 'status': 404});
     }
@@ -69,7 +89,7 @@ router.post('/user/login', async (req, res, next) => {
 
     // res.redirect(`/user/${user._id.toString()}`)
 
-    res.send({id: user._id.toString(), role: "user", status: 200});
+    res.send({result: true, id: user._id.toString(), role: "user", status: 200});
     next();
   }
 
@@ -90,6 +110,8 @@ router.post('/register', async (req, res) => {
       comments: []
     }
 
+    console.log('userInfo', userInfo)
+
     const newUser = await new User({
       ...userInfo,
       isPasswordSubmit: true,
@@ -105,7 +127,13 @@ router.post('/register', async (req, res) => {
     const token = generateJWt(req._auth);
 
     res
-      .cookie('token', token, { httpOnly: true })
+      .cookie('token', token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "Lax",
+        maxAge: 24 * 60 * 60 * 1000,
+        path: "/"
+      })
       .send({"result" : "New user added", "id": result._id.toString()})
       // .redirect(`http://localhost:8080/user/${result._id.toString()}`)
 
@@ -122,15 +150,25 @@ router.post('/register', async (req, res) => {
 })
 
 // ADMIN PAGE
-router.get('/admin', parserJwt, protectedRoute(['admin'], '/'), async (req,res) => {
+router.get('/admin', parserJwt, async (req,res) => {
+
+  console.log('req._auth 2', req._auth)
   const { role } = req._auth;
+
+  if (!role) {
+    return res.redirect('/admin/login')
+  }
 
   const users = await User.find().populate('orders').populate('comments');
   const items = await Item.find().populate('comments');
   const comments = await Comment.find().populate('users').populate('items');
   const orders = await Order.find().populate('users').populate('items')
 
-  res.render('admin_home', { users, items, comments, orders, role });
+  // res.send({"result": true})
+
+  res.redirect('/admin')
+  // res.render('admin_home', { users, items, comments, orders, role });
+  // res.render('/admin', { users, items, comments, orders, role });
 
 });
 
@@ -151,5 +189,38 @@ router.patch('/user/edit', parserJwt, async (req, res, next) => {
     console.log('update user error', error)
   }
 })
+
+// router.get('/admin/login', async (req, res, next) => {
+//   res.send({"result": true})
+//
+//
+// })
+
+router.post('/admin/login', async (req, res, next) => {
+  const { login, password } = req.body;
+
+  console.log( login, password )
+
+  const admin = await Admin.findOne( { login })
+
+
+  const result = await checkPass(password, admin.password);
+
+  if (!result) {
+    return res.send({ "result": "Wrong password"})
+  }
+
+  req._auth = { role: 'user', id: admin._id.toString() };
+  const authData = { role: "admin", id: admin._id.toString() };
+  const token = generateJWt(authData);
+  res.cookie('token', token, { httpOnly: true } )
+
+  res.send({ id: admin._id.toString(), role: "admin" })
+
+})
+router.get('/admin/login', (req, res) => {
+  res.sendFile(path.resolve(path.join(__dirname, '../../frontend/dist'), 'index.html'));
+});
+
 
 module.exports = { router };
