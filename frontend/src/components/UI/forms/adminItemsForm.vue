@@ -1,5 +1,6 @@
 <template>
   <form class="modal__registration-form no_line">
+    <p class="info-message">{{ message }}</p>
     <label for="name" class="form-label">Название</label>
     <input
       v-model="form.name"
@@ -94,12 +95,13 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "adminItemsForm.vue",
   data() {
     return {
+      message: '',
       form: {
         color: [],
       },
@@ -121,7 +123,25 @@ export default {
       const checkedColors = this.colorsSelect.filter(el =>  this.form.color.includes(el.value));
       this.form.color = checkedColors;
       try {
-        const result = await axios.post('/api/items/add', this.form);
+        const result = await fetch('http://localhost:3000/api/items/add', {
+          method: 'POST',
+          body: JSON.stringify(this.form),
+          headers: { "Content-Type": "application/json"}
+        });
+        const data = await  result.json();
+
+        if (!data.result) return;
+
+        this.message = "Товар добавлен в базу данных"
+
+        setTimeout(() => {
+          this.message = ""
+        }, 1000)
+
+
+
+        console.log(data.data)
+
         console.log(result)
       } catch (error) {
         console.log(error)
@@ -138,9 +158,10 @@ export default {
   padding-left: 20px
   margin-bottom: 5px
 .no_line
+  position: relative
   width: 50%
   margin: 0
-  padding: 20px 100px
+  padding: 50px 100px
   &::after
     content: none
 .form-select
@@ -154,4 +175,10 @@ export default {
 .form-option
   color: black
   margin: 5px
+.info-message
+  color: red
+  height: 20px
+  position: absolute
+  top: 20px
+  left: 100px
 </style>

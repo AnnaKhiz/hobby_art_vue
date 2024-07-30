@@ -10,9 +10,9 @@ router.get('/', async (req, res, next) => {
   const items = await Item.find();
 
   if (!items) {
-    res.send({ "result": "No items found" });
+    res.send({ "result": false, items: [] });
   } else {
-    res.send({ "result": items })
+    res.send({ "result": true, items: items })
   }
 })
 router.post('/add', async (req, res, next) => {
@@ -25,9 +25,9 @@ router.post('/add', async (req, res, next) => {
 
     const result = await newItem.save()
 
-    res.send({ "result" : result })
+    res.send({ "result" : true, data: result })
   } catch (error) {
-    res.send({ "result" : error })
+    res.send({ "result" : false, data: error })
   }
 })
 
