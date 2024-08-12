@@ -7,7 +7,7 @@
       от {{ catalogItemsInfo.price }} ₽
     </p>
     <div class="main__catalog-item-subitem">
-      <a :href="`${catalogItemsInfo.link}`" class="main__catalog-item-link">
+      <a :href="`${catalogItemsInfo.link}/${catalogItemsInfo.value}`" class="main__catalog-item-link">
         Подробнее
       </a>
       <img :src="require(`@/assets/img/${catalogItemsInfo.image}`)" alt="image catalog">

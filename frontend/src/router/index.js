@@ -7,6 +7,8 @@ import UserPageComponent from "@/components/pages/UserPageComponent.vue";
 import AdminLogin from "@/components/pages/admin/AdminLogin.vue";
 import AdminAuth from "@/components/pages/admin/AdminAuth.vue";
 import BasketComponent from "@/components/pages/BasketComponent.vue";
+import ProductPageComponent from "@/components/pages/ProductPageComponent.vue";
+import ProductPageDetails from "@/components/pages/ProductPageDetails.vue";
 
 
 
@@ -62,6 +64,28 @@ const routes = [
       title: 'Корзина',
       favicon: '',
     },
+  },
+  {
+    path: '/product-page/:type',
+    name: 'Product-page',
+    component: ProductPageComponent,
+    props: true,
+    meta: {
+      title: 'Товары',
+      favicon: '',
+    },
+    children: [
+      {
+        path: '/:id',
+        name: 'Product-page-details',
+        component: ProductPageDetails,
+        props: true,
+        meta: {
+          title: 'Товары',
+          favicon: '',
+        },
+      }
+    ]
   },
   {
     path: '/admin/login',
