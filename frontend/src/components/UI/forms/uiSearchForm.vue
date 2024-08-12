@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "uiSearchForm.vue"
+  name: "uiSearchForm"
 }
 </script>
 

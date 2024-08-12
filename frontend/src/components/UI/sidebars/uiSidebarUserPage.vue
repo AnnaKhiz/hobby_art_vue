@@ -35,7 +35,7 @@ import {mapGetters, mapMutations} from "vuex";
 // import axios from "axios";
 
 export default {
-  name: "uiSidebarUserPage.vue",
+  name: "uiSidebarUserPage",
 	props: {
 		user: {
 			type: Object,

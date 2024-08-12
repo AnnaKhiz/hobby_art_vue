@@ -32,7 +32,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
 export default {
-  name: "uiPopularProducts.vue",
+  name: "uiPopularProducts",
   components: {
     Swiper,
     SwiperSlide,

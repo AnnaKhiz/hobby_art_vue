@@ -54,7 +54,7 @@ import UiSidebarGeneral from "@/components/UI/sidebars/uiSidebarGeneral.vue";
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue"
 
 export default {
-  name: "DeliveryComponent.vue",
+  name: "DeliveryComponent",
   components: {UiMainBanner, UiSidebarGeneral, UiBreadcrumbs },
   computed: {
     ...mapGetters({

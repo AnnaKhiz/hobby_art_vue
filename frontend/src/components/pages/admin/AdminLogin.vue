@@ -39,7 +39,7 @@ import UiAdminProductCard from "@/components/UI/uiAdminProductCard.vue"
 
 
 export default {
-  name: "AdminLogin.vue",
+  name: "AdminLogin",
   components: {UiAdminProductCard, AdminItemsForm},
   // props: {
   //   edit: {

@@ -19,7 +19,7 @@
 <script>
 
 export default {
-  name: "uiSwitcherMain.vue",
+  name: "uiSwitcherMain",
   data() {
     return {
       isSwitchOn: false

@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: "uiContacts.vue",
+  name: "uiContacts",
   props: {
     contacts: {
       type: Array,

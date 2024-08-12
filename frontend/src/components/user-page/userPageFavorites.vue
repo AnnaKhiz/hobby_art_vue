@@ -62,7 +62,7 @@
 
 <script>
 export default {
-  name: "userPageFavorites.vue",
+  name: "userPageFavorites",
   props: {
     user: {
       type: Object,

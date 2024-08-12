@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: "uiSubscribe.vue"
+  name: "uiSubscribe"
 }
 </script>
 

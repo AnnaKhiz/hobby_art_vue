@@ -54,7 +54,7 @@ import {mapGetters, mapMutations} from "vuex";
 // import axios from "axios";
 
 export default {
-  name: "uiLoginForm.vue",
+  name: "uiLoginForm",
   components: {UiRegistForm},
   data() {
     return {
@@ -89,6 +89,7 @@ export default {
 
       console.log('data log in', data)
 
+      console.log('data resulkt', data.result)
       if (!data.result) {
 				console.log('no requested result')
         this.message = 'Пользователь не найден'

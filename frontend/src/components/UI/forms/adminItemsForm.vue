@@ -98,7 +98,7 @@
 // import axios from "axios";
 
 export default {
-  name: "adminItemsForm.vue",
+  name: "adminItemsForm",
   props: {
     editFormData: {
       type: Object,

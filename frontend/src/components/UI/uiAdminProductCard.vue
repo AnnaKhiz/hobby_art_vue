@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: "uiAdminProductCard.vue",
+  name: "uiAdminProductCard",
   props: {
     itemsList: {
       type: Array,

@@ -63,7 +63,7 @@ import UserPageFeedback from "@/components/user-page/userPageFeedback.vue"
 
 
 export default {
-  name: "UserPageComponent.vue",
+  name: "UserPageComponent",
   components: {
     UserPageFeedback,
     UserPageMailing,

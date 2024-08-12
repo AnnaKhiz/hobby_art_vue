@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "uiFeedbackForm.vue",
+  name: "uiFeedbackForm",
   props: {
     name: {
       type: String,

@@ -32,7 +32,7 @@
 // import axios from "axios";
 
 export default {
-  name: "uiUserPageAboutForm.vue",
+  name: "uiUserPageAboutForm",
   props: {
     user: {
       type: Object,

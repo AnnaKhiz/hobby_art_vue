@@ -36,7 +36,7 @@ import {mapGetters, mapMutations} from "vuex";
 // import axios from "axios";
 
 export default {
-  name: "AdminAuth.js",
+  name: "AdminAuth",
   data() {
     return {
       entityData: {}

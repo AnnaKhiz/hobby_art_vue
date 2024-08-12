@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "userPageBonuses.vue",
+  name: "userPageBonuses",
   props: {
     bonuses: {
       type: Number,

@@ -46,7 +46,7 @@ import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarGeneral from "@/components/UI/sidebars/uiSidebarGeneral.vue";
 
 export default {
-  name: "AboutComponent.vue",
+  name: "AboutComponent",
   components: {UiSidebarGeneral, UiBreadcrumbs, UiMainBanner},
   computed: {
     ...mapGetters({

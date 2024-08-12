@@ -17,10 +17,11 @@ router.get('/user', parserJwt, async (req, res) => {
 
   const user = await User.find( { _id: new ObjectId(id)});
 
-  if (!user) {
-    res.send({ "result": false })
+  if (!user.length) {
+    console.log('user', user)
+    return res.send({ "result": false })
   }
-  console.log(user)
+  console.log('user', user)
   user[0].password = ''
   console.log('user', user)
   res.send({"result": true, "user": user })
@@ -56,29 +57,6 @@ router.post('/user/login', async (req, res, next) => {
 
   console.log( login, password )
 
-  const admin = await Admin.findOne( { login })
-
-  if (admin) {
-    const result = await checkPass(password, admin.password);
-
-    if (!result) {
-      return res.send({ "result": "Wrong password"})
-    }
-
-    req._auth = { role: 'user', id: admin._id.toString() };
-    const authData = { role: "admin", id: admin._id.toString() };
-    const token = generateJWt(authData);
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-      path: "/"
-    } )
-
-    res.send({ id: admin._id.toString(), role: "admin" })
-
-  } else {
     const user = await User.findOne( { login });
 
     if (!user) {
@@ -88,7 +66,7 @@ router.post('/user/login', async (req, res, next) => {
     const result = await checkPass(password, user.password);
 
     if (!result) {
-      return res.send({'result': 'Wrong password', 'status': 404});
+      return res.send({'result': false, message: 'Wrong passwword', 'status': 404});
     }
 
     const authData = { role: 'user', id: user._id.toString() };
@@ -107,7 +85,7 @@ router.post('/user/login', async (req, res, next) => {
 
     res.send({result: true, id: user._id.toString(), role: "user", status: 200});
     next();
-  }
+  // }
 
 })
 

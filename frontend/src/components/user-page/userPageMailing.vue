@@ -40,7 +40,7 @@
 import axios from "axios";
 
 export default {
-  name: "userPageMailing.vue",
+  name: "userPageMailing",
   props: {
     mailing: {
       type: Boolean,

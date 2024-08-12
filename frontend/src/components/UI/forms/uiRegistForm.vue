@@ -77,7 +77,7 @@ import {mapGetters, mapMutations} from "vuex";
 // import api from '../../../api';
 // import axios from 'axios';
 export default {
-  name: "uiRegistForm.vue",
+  name: "uiRegistForm",
   data() {
     return {
       entityData: {

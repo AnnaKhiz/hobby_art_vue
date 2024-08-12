@@ -42,7 +42,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
 export default {
-  name: "uiMainBanner.vue",
+  name: "uiMainBanner",
   components: {
     Swiper,
     SwiperSlide,

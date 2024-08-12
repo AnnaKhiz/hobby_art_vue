@@ -4,8 +4,9 @@ import DeliveryComponent from "@/components/pages/DeliveryComponent.vue";
 import BonusesComponent from "@/components/pages/BonusesComponent.vue";
 import AboutComponent from "@/components/pages/AboutComponent.vue";
 import UserPageComponent from "@/components/pages/UserPageComponent.vue";
-import AdminLogin from "@/components/pages/AdminLogin.vue";
-import AdminAuth from "@/components/pages/AdminAuth.js.vue";
+import AdminLogin from "@/components/pages/admin/AdminLogin.vue";
+import AdminAuth from "@/components/pages/admin/AdminAuth.vue";
+import BasketComponent from "@/components/pages/BasketComponent.vue";
 
 
 
@@ -53,6 +54,16 @@ const routes = [
     },
   },
   {
+    path: '/basket',
+    name: 'Basket',
+    component: BasketComponent,
+    props: true,
+    meta: {
+      title: 'Корзина',
+      favicon: '',
+    },
+  },
+  {
     path: '/admin/login',
     name: 'admin-login',
     component: AdminAuth,
@@ -60,7 +71,7 @@ const routes = [
     meta: {
       title: 'Админ',
       favicon: '',
-      requiresAuth: true
+
     },
   },
   {
@@ -71,7 +82,7 @@ const routes = [
     meta: {
       title: 'Админ',
       favicon: '',
-      requiresAuth: true
+
     },
   },
   // {
@@ -105,21 +116,21 @@ const router = createRouter({
 
 })
 
-// router.beforeEach((to, from, next) => {
-//   const isAuthenticated = localStorage.getItem('auth')
-//   console.log('isAuthenticated', isAuthenticated)
-//
-//   if (to.matched.some(record => record.meta.requiresAuth)) {
-//
-//     if (isAuthenticated === 'false') {
-//       next('/');
-//     } else {
-//       next();
-//     }
-//   } else {
-//     next();
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('auth')
+  console.log('isAuthenticated', isAuthenticated)
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+
+    if (isAuthenticated === 'false' && to.name !== 'admin' ) {
+      next('/');
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+})
 // eslint-disable-next-line
 router.afterEach((to, from) => {
 	document.title = to.meta.title || 'Главная';

@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "uiCatalogItem.vue",
+  name: "uiCatalogItem",
   props: {
     catalogItemsInfo: {
       type: Object,

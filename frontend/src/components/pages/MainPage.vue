@@ -123,6 +123,7 @@ import {mapGetters, mapMutations} from "vuex";
 import axios from "axios";
 
 export default defineComponent({
+  name: 'MainPage',
   components: {UiFeedbackForm, UiItemPreference, UiCatalogItem, UiPopularProducts, UiSwitcherMain, UiMainBanner},
   data() {
     return {

@@ -43,7 +43,7 @@
 
 <script>
 export default {
-  name: "userPageFeedback.vue",
+  name: "userPageFeedback",
   props: {
     user: {
       type: Object,

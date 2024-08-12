@@ -53,7 +53,7 @@ import UiContacts from "@/components/UI/uiContacts.vue";
 import UiSubscribe from "@/components/UI/forms/uiSubscribeForm.vue"
 
 export default {
-	name: "FooterComponent.vue",
+	name: "FooterComponent",
   components: {UiSubscribe, UiContacts},
   data() {
     return {

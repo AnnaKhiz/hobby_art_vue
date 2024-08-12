@@ -47,7 +47,7 @@
 
 <script>
 export default {
-  name: "userPageHistory.vue",
+  name: "userPageHistory",
   props: {
     user: {
       type: Object,

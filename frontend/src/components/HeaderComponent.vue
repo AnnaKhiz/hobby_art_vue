@@ -31,7 +31,7 @@
 						<a href="" class="header__menu-favoriteButton elem-sub" id="favorite-header" data-modal="callModal">
 							Избранное
 						</a>
-						<a href="basket.html" class="header__menu-basketButton elem-sub">
+						<a class="header__menu-basketButton elem-sub" @click="$router.push('/basket')">
 							Корзина
 						</a>
 					</div>
@@ -57,7 +57,7 @@ import UiLoginForm from "@/components/UI/forms/uiLoginForm.vue"
 // import axios from "axios";
 
 export default {
-	name: "HeaderComponent.vue",
+	name: "HeaderComponent",
 	components: {UiLoginForm, UiModalWindow, UiSearchForm, HeaderInfoComponent },
   props: {
     getModalActive: {

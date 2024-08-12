@@ -17,7 +17,7 @@
 import UiContacts from "@/components/UI/uiContacts.vue";
 
 export default {
-	name: "HeaderInfoComponent.vue",
+	name: "HeaderInfoComponent",
   components: {UiContacts},
 	data() {
 		return {

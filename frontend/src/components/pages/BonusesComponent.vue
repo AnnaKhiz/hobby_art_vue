@@ -52,7 +52,7 @@ import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import {mapGetters} from "vuex";
 
 export default {
-  name: "BonusesComponent.vue",
+  name: "BonusesComponent",
   components: {UiBreadcrumbs, UiSidebarGeneral, UiMainBanner},
   computed: {
     ...mapGetters({

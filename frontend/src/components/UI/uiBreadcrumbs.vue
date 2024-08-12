@@ -14,7 +14,7 @@
 import {mapGetters} from "vuex";
 
 export default {
-  name: "uiBreadcrumbs.vue",
+  name: "uiBreadcrumbs",
   props: {
     link: {
       type: String,
