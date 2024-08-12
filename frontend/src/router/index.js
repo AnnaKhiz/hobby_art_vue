@@ -74,18 +74,16 @@ const routes = [
       title: 'Товары',
       favicon: '',
     },
-    children: [
-      {
-        path: '/:id',
-        name: 'Product-page-details',
-        component: ProductPageDetails,
-        props: true,
-        meta: {
-          title: 'Товары',
-          favicon: '',
-        },
-      }
-    ]
+  },
+  {
+    path: '/product-page/:type/:id',
+    name: 'product-page-details',
+    component: ProductPageDetails,
+    props: true,
+    meta: {
+      title: 'Товары',
+      favicon: '',
+    },
   },
   {
     path: '/admin/login',

@@ -21,6 +21,7 @@
         <section class="main__product-page-container">
           <ui-filter-sidebar />
           <ui-product-list-page />
+
         </section>
       </div>
     </section>
