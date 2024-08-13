@@ -7,7 +7,6 @@ const AdminSchema = new mongoose.Schema({
   password: String
 });
 const OrderSchema = new mongoose.Schema({
-  itemCode: { type: String },
   date: { type: String },
   timeCreated: { type: String},
   dateCompleted: { type: String},

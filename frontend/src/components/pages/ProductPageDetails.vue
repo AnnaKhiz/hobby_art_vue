@@ -10,13 +10,7 @@
                 <img :src="require(`@/assets/${productItem.photo ? productItem.photo : 'img/image-full-info-1.png'}`)" alt="image">
               </div>
               <div class="main__product-details-about-item-image">
-                <p
-                  v-for="color in productItem.color"
-                  :key="color._id"
-                  :style="`background-color: ${color.value}; border: 1px solid ${color.value === 'white' ? 'lightgray' : 'none'}`"
-                  class="render-colors"
-                  @click.prevent="order.color = color"
-                ></p>
+                <ui-colors-icon :items="productItem.color" size="50" position="center"/>
               </div>
             </div>
             <div class="main__product-details-about-item right-item">
@@ -58,14 +52,14 @@
                 <div class="main__product-details-about-item-basket-flex">
                   <span data-name="count" class="bl-hidden"></span>
                   <p class="main__product-details-about-item-basket-flex-price" data-price="basket-item-price">
-                    {{ order.quantity === 1 ? productItem.price : countFinalPrice() }} ₽
+                    {{ countFinalPrice() }} ₽
                   </p>
                   <button class="main__product-details-about-item-basket-flex-count">
                     <span class="minus" @click.prevent="removeItem">-</span>
                     <span class="result">{{ order.quantity }}</span>
                     <span class="plus" @click.prevent="addItem">+</span>
                   </button>
-                  <a href="basket.html" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn">
+                  <a @click.prevent="addToBasket" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn" style="cursor: pointer">
                     Добавить в корзину
                   </a>
                 </div>
@@ -223,12 +217,13 @@
 <script>
 
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
+import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
 
 export default {
   name: "ProductPageDetails",
-  components: {UiProductItemHeader, UiBreadcrumbs},
+  components: {UiColorsIcon, UiProductItemHeader, UiBreadcrumbs},
 
   props: {
     id: {
@@ -241,7 +236,8 @@ export default {
       productItem: {},
       order: {
         quantity: 1,
-        price: 0
+        price: 0,
+        item: {}
       }
     }
   },
@@ -252,6 +248,19 @@ export default {
 
   },
   methods: {
+    ...mapMutations('order', ['addToOrder']),
+    addToBasket() {
+      this.addToOrder(this.order);
+
+      this.order = {
+        quantity: 1,
+        price: 0,
+        item: {...this.productItem}
+      }
+    },
+    countFinalPrice() {
+      return this.order.price = this.productItem.price * this.order.quantity
+    },
     removeItem() {
       if (this.order.quantity === 1) {
         return false
@@ -261,12 +270,7 @@ export default {
     addItem() {
       return this.order.quantity += 1
     },
-    colorItemsShowMore(colors) {
-      return colors.length > 4 ? `${colors.length - 4} +` : ''
-    },
-    countFinalPrice() {
-      return this.order.price = this.productItem.price * this.order.quantity
-    },
+
     async getProductList() {
       try {
         const result = await fetch(`http://localhost:3000/api/items/${this.id}`, {
@@ -283,6 +287,11 @@ export default {
   },
   async mounted() {
     await this.getProductList()
+    this.order.price = this.productItem.price
+    this.order.item = {...this.productItem}
+  },
+  beforeUnmount() {
+    this.order = {}
   }
 }
 </script>
@@ -290,14 +299,4 @@ export default {
 
 
 <style scoped lang="sass">
-.render-colors
-  display: inline-block
-  margin-left: 5px
-  width: 50px
-  height: 50px
-  border-radius: 50%
-  transition: box-shadow 0.3s ease-in-out 0s
-  &:hover
-    cursor: pointer
-    box-shadow: 1px 1px 4px gray
 </style>

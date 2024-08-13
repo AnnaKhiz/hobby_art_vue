@@ -11,7 +11,7 @@
         <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">{{ item.name }}</a>
       </div>
       <div class="main__product-page-content-item-color-variants">
-        <ui-colors-icon :items="item.color"/>
+        <ui-colors-icon :items="item.color" size="20" position="flex-start"/>
       </div>
       <div class="main__product-page-content-item-price">
         {{ item.price }} ₽
@@ -27,6 +27,7 @@
 <script>
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue"
+import {mapMutations} from "vuex";
 
 
 export default {
@@ -38,8 +39,7 @@ export default {
     }
   },
   methods: {
-
-
+    ...mapMutations('order', ['addToOrder']),
     async getProductList() {
       try {
         const result = await fetch('http://localhost:3000/api/items', {
