@@ -6,8 +6,8 @@
         <section class="main__product-details-about">
           <div class="main__product-details-about-flex">
             <div class="main__product-details-about-item left-item">
-              <div class="main__product-details-about-item-image">
-                <img src="@/assets/img/image-full-info-1.png" alt="image">
+              <div class="main__product-details-about-item-image big">
+                <img :src="require(`@/assets/${productItem.photo ? productItem.photo : 'img/image-full-info-1.png'}`)" alt="image">
               </div>
               <div class="main__product-details-about-item-image">
                 <img src="@/assets/img/colors-image.png" alt="colors image">
@@ -17,13 +17,10 @@
 
               <div class="main__product-details-about-item-text">
                 <p class="main__product-details-about-item-text-header">
-                  Шпагат Macrametr 4 мм, 100 нитей
+                  {{ productItem.name }}
                 </p>
                 <p class="main__product-details-about-item-text-desc">
-                  Хлопковый шпагат для рукоделия 4 мм состоит из 100 тонких скрученных нитей.
-                  создания модных перьев (листьев), кисточек, панно, ловцов снов, брелков, украшений,
-                  салфеток, кашпо, наволочек и других изделий в технике макраме. Мягкий и приятный на
-                  ощупь, при желании, можно легко расплести в бахрому.
+                  {{ productItem.description }}
                 </p>
               </div>
 
@@ -42,10 +39,10 @@
                   </div>
                   <div class="main__product-details-about-item-options-flex-item">
                     <ul class="main__product-details-about-item-options-flex-list column-right">
-                      <li>100 м</li>
-                      <li>Россия</li>
-                      <li>100% хлопок</li>
-                      <li>4 мм (100 нитей)</li>
+                      <li>{{ productItem.length }}</li>
+                      <li>{{ productItem.brand }}</li>
+                      <li>{{ productItem.composition }}</li>
+                      <li>{{ productItem.width }}</li>
                     </ul>
                   </div>
                 </div>
@@ -55,7 +52,7 @@
                 <div class="main__product-details-about-item-basket-flex">
                   <span data-name="count" class="bl-hidden"></span>
                   <p class="main__product-details-about-item-basket-flex-price" data-price="basket-item-price">
-                    332 ₽
+                    {{ productItem.price }} ₽
                   </p>
                   <button class="main__product-details-about-item-basket-flex-count" data-name="count">
                     <span class="minus" data-name="count">-</span><span class="result" data-name="count">1</span><span class="plus" data-name="count">+</span>
@@ -229,6 +226,39 @@ export default {
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
   },
+  props: {
+    id: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      productItem: {}
+    }
+  },
+  methods: {
+    colorItemsShowMore(colors) {
+      return colors.length > 4 ? `${colors.length - 4} +` : ''
+    },
+
+    async getProductList() {
+      try {
+        const result = await fetch(`http://localhost:3000/api/items/${this.id}`, {
+          method: 'GET',
+          credentials: 'include'
+        })
+        const data = await result.json();
+        this.productItem = data.item;
+        console.log('productList', this.productItem)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  },
+  async mounted() {
+    await this.getProductList()
+  }
 }
 </script>
 

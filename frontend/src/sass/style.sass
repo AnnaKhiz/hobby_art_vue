@@ -1298,7 +1298,7 @@ body.bg-white .header__menu-search input
         display: flex
         column-gap: 44px
         justify-content: center
-        align-items: end
+        align-items: stretch
         @media screen and (max-width: 1090px)
           display: block
           text-align: center
@@ -1308,13 +1308,20 @@ body.bg-white .header__menu-search input
           width: 100%
         &-image
           margin-bottom: 26px
-          & img
-            width: 90%
-            height: auto
+          &.big
+            width: 100%
+            & img
+              width: 100%
+              aspect-ratio: 3 / 2
+              object-fit: contain
+              height: auto
         &.left-item
           text-align: center
           @media screen and (max-width: 1090px)
             margin-bottom: 26px
+        &.right-item
+          display: flex
+          flex-direction: column
         &-text
           //padding-top: 14px
           &-header
@@ -1325,6 +1332,7 @@ body.bg-white .header__menu-search input
             margin-bottom: 40px
             @include textBlock-width (1120px)
         &-options
+          flex-grow: 1
           &-header
             @include textSmallBold (1.75rem, 2.125rem, $colorTextMain)
             margin-bottom: 32px
