@@ -83,6 +83,7 @@ export default {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
+
     async getUser() {
       const result = await fetch(`http://localhost:3000/user`, {
         method: 'GET',

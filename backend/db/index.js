@@ -7,7 +7,6 @@ const AdminSchema = new mongoose.Schema({
   password: String
 });
 const OrderSchema = new mongoose.Schema({
-  itemCode: { type: String },
   date: { type: String },
   timeCreated: { type: String},
   dateCompleted: { type: String},
@@ -28,6 +27,10 @@ const ItemSchema = new mongoose.Schema({
   photo: { type: String },
   price: { type: Number },
   restBalance: { type: Number },
+  length: { type: Number },
+  brand: { type: String },
+  composition: { type: String },
+  width: { type: Number },
   isSold: { type: Boolean },
   isDiscount: { type: Boolean },
   discountPercentage: { type: Number },

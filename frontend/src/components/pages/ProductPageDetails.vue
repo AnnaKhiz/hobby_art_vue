@@ -2,28 +2,25 @@
   <main class="main bg-white">
     <div class="main__product-details" id="product-details">
       <div class="container">
-        <ui-breadcrumbs :link="getCheckedHeaderLink" product />
+        <ui-breadcrumbs :link="getCheckedHeaderLink" product details />
         <section class="main__product-details-about">
           <div class="main__product-details-about-flex">
             <div class="main__product-details-about-item left-item">
-              <div class="main__product-details-about-item-image">
-                <img src="@/assets/img/image-full-info-1.png" alt="image">
+              <div class="main__product-details-about-item-image big">
+                <img :src="require(`@/assets/${productItem.photo ? productItem.photo : 'img/image-full-info-1.png'}`)" alt="image">
               </div>
               <div class="main__product-details-about-item-image">
-                <img src="@/assets/img/colors-image.png" alt="colors image">
+                <ui-colors-icon :items="productItem.color" size="50" position="center"/>
               </div>
             </div>
             <div class="main__product-details-about-item right-item">
 
               <div class="main__product-details-about-item-text">
                 <p class="main__product-details-about-item-text-header">
-                  Шпагат Macrametr 4 мм, 100 нитей
+                  {{ productItem.name }}
                 </p>
                 <p class="main__product-details-about-item-text-desc">
-                  Хлопковый шпагат для рукоделия 4 мм состоит из 100 тонких скрученных нитей.
-                  создания модных перьев (листьев), кисточек, панно, ловцов снов, брелков, украшений,
-                  салфеток, кашпо, наволочек и других изделий в технике макраме. Мягкий и приятный на
-                  ощупь, при желании, можно легко расплести в бахрому.
+                  {{ productItem.description }}
                 </p>
               </div>
 
@@ -42,10 +39,10 @@
                   </div>
                   <div class="main__product-details-about-item-options-flex-item">
                     <ul class="main__product-details-about-item-options-flex-list column-right">
-                      <li>100 м</li>
-                      <li>Россия</li>
-                      <li>100% хлопок</li>
-                      <li>4 мм (100 нитей)</li>
+                      <li>{{ productItem.length }}</li>
+                      <li>{{ productItem.brand }}</li>
+                      <li>{{ productItem.composition }}</li>
+                      <li>{{ productItem.width }}</li>
                     </ul>
                   </div>
                 </div>
@@ -55,12 +52,14 @@
                 <div class="main__product-details-about-item-basket-flex">
                   <span data-name="count" class="bl-hidden"></span>
                   <p class="main__product-details-about-item-basket-flex-price" data-price="basket-item-price">
-                    332 ₽
+                    {{ countFinalPrice() }} ₽
                   </p>
-                  <button class="main__product-details-about-item-basket-flex-count" data-name="count">
-                    <span class="minus" data-name="count">-</span><span class="result" data-name="count">1</span><span class="plus" data-name="count">+</span>
+                  <button class="main__product-details-about-item-basket-flex-count">
+                    <span class="minus" @click.prevent="removeItem">-</span>
+                    <span class="result">{{ order.quantity }}</span>
+                    <span class="plus" @click.prevent="addItem">+</span>
                   </button>
-                  <a href="basket.html" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn">
+                  <a @click.prevent="addToBasket" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn" style="cursor: pointer">
                     Добавить в корзину
                   </a>
                 </div>
@@ -218,22 +217,86 @@
 <script>
 
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
+import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
 
 export default {
   name: "ProductPageDetails",
-  components: {UiProductItemHeader, UiBreadcrumbs},
+  components: {UiColorsIcon, UiProductItemHeader, UiBreadcrumbs},
+
+  props: {
+    id: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      productItem: {},
+      order: {
+        quantity: 1,
+        price: 0,
+        item: {}
+      }
+    }
+  },
   computed: {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
+
   },
+  methods: {
+    ...mapMutations('order', ['addToOrder']),
+    addToBasket() {
+      this.addToOrder(this.order);
+
+      this.order = {
+        quantity: 1,
+        price: 0,
+        item: {...this.productItem}
+      }
+    },
+    countFinalPrice() {
+      return this.order.price = this.productItem.price * this.order.quantity
+    },
+    removeItem() {
+      if (this.order.quantity === 1) {
+        return false
+      }
+      return this.order.quantity -= 1
+    },
+    addItem() {
+      return this.order.quantity += 1
+    },
+
+    async getProductList() {
+      try {
+        const result = await fetch(`http://localhost:3000/api/items/${this.id}`, {
+          method: 'GET',
+          credentials: 'include'
+        })
+        const data = await result.json();
+        this.productItem = data.item;
+        console.log('productList', this.productItem)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  },
+  async mounted() {
+    await this.getProductList()
+    this.order.price = this.productItem.price
+    this.order.item = {...this.productItem}
+  },
+  beforeUnmount() {
+    this.order = {}
+  }
 }
 </script>
 
 
 
 <style scoped lang="sass">
-
 </style>

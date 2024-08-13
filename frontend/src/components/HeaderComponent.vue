@@ -31,7 +31,7 @@
 						<a href="" class="header__menu-favoriteButton elem-sub" id="favorite-header" data-modal="callModal">
 							Избранное
 						</a>
-						<a class="header__menu-basketButton elem-sub" @click="$router.push('/basket')">
+						<a class="header__menu-basketButton elem-sub basket-count" @click="$router.push('/basket')">
 							Корзина
 						</a>
 					</div>
@@ -67,14 +67,17 @@ export default {
 	data() {
 		return {
       displayDialog: false,
-      user: {}
+      user: {},
+      basketQuantity: 0
 		}
 	},
   emits: ['send-checked-link'],
   computed: {
     ...mapGetters({
+      order: 'order/order',
       getNavMenuLinks: 'links/getNavMenuLinks',
-      getDisplayDialogState: 'dialog/getDisplayDialogState'
+      getDisplayDialogState: 'dialog/getDisplayDialogState',
+      totalQuantity: 'order/totalQuantity'
     }),
 
 
@@ -133,13 +136,40 @@ export default {
       }
     }
   },
+  mounted() {
+    setTimeout(() => {
+      this.basketQuantity = JSON.parse(localStorage.getItem('order')).totalQuantity
+      document.documentElement.style.setProperty('--basket-count', `"${ this.basketQuantity || 0 }"`);
+    }, 10)
+  },
   watch: {
-    // displayDialog() {
-    //   this.$emit('getModalActive', this.displayDialog)
-    // }
+    order: {
+      handler(val) {
+        this.basketQuantity = val
+      },
+      deep: true
+    }
   }
 }
 </script>
 <style scoped lang="sass">
-
+.basket-count
+  &:after
+    content: var(--basket-count)
+    position: absolute
+    top: -6px
+    left: calc(100% - 13%)
+    z-index: 2
+    width: 17px
+    height: 17px
+    background-color: #D3D3B5
+    border-radius: 50%
+    -webkit-text-fill-color: #5E5C5A
+    text-fill-color: #5E5C5A
+    display: flex
+    justify-content: center
+    align-items: center
+    font: 400 normal 0.625rem 'Montserrat'
+    line-height: 0.75rem
+    color: #5E5C5A
 </style>

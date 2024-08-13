@@ -137,8 +137,8 @@ body
       display: flex
       &:before
         @include headerContactsIcon (url('@/assets/img/basket.svg'), 12px, 20px)
-      &:after
-        @include headerContactEllipse ('1', -6px, calc(100% - 13%))
+      //&:after
+      //  @include headerContactEllipse ('1', -6px, calc(100% - 13%))
     &-nav
       @media screen and (max-width: 780px)
         display: none
@@ -875,8 +875,13 @@ body.bg-white .header__menu-search input
             object-fit: contain
         &-label
           @include textBlock-width (166px)
-          height: 40px
+          height: 35px
           margin-bottom: 17px
+          display: -webkit-box
+          -webkit-box-orient: vertical
+          -webkit-line-clamp: 2
+          overflow: hidden
+          text-overflow: ellipsis
           & a
             @include textSmall (1rem, 1.0625rem, $colorTextMain)
         &-color-variants
@@ -1293,7 +1298,7 @@ body.bg-white .header__menu-search input
         display: flex
         column-gap: 44px
         justify-content: center
-        align-items: end
+        align-items: stretch
         @media screen and (max-width: 1090px)
           display: block
           text-align: center
@@ -1303,13 +1308,20 @@ body.bg-white .header__menu-search input
           width: 100%
         &-image
           margin-bottom: 26px
-          & img
-            width: 90%
-            height: auto
+          &.big
+            width: 100%
+            & img
+              width: 100%
+              aspect-ratio: 3 / 2
+              object-fit: contain
+              height: auto
         &.left-item
           text-align: center
           @media screen and (max-width: 1090px)
             margin-bottom: 26px
+        &.right-item
+          display: flex
+          flex-direction: column
         &-text
           //padding-top: 14px
           &-header
@@ -1320,6 +1332,7 @@ body.bg-white .header__menu-search input
             margin-bottom: 40px
             @include textBlock-width (1120px)
         &-options
+          flex-grow: 1
           &-header
             @include textSmallBold (1.75rem, 2.125rem, $colorTextMain)
             margin-bottom: 32px

@@ -15,6 +15,24 @@ router.get('/',async (req, res, next) => {
     res.send({ "result": true, items: items })
   }
 })
+
+router.get('/:id',async (req, res, next) => {
+  const { id } = req.params
+
+  try {
+    const item = await Item.findById({ _id: new ObjectId(id)});
+    if (!item) {
+      res.send({ "result": false, item: {} });
+    } else {
+      res.send({ "result": true, item: item })
+    }
+
+  } catch (e) {
+    console.log(e)
+  }
+
+
+})
 router.post('/add',  async (req, res, next) => {
   const { body: item } = req;
 
