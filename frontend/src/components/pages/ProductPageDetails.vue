@@ -2,7 +2,7 @@
   <main class="main bg-white">
     <div class="main__product-details" id="product-details">
       <div class="container">
-        <ui-breadcrumbs :link="getCheckedHeaderLink" product />
+        <ui-breadcrumbs :link="getCheckedHeaderLink" product details />
         <section class="main__product-details-about">
           <div class="main__product-details-about-flex">
             <div class="main__product-details-about-item left-item">

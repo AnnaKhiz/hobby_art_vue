@@ -5,7 +5,9 @@
       <li><span class="arrow-symbol">&#8594;</span></li>
       <li v-if="product"><a @click="`${$router.push('/#catalog')}`" style="cursor: pointer">Каталог</a></li>
       <li v-if="product"><span class="arrow-symbol">&#8594;</span></li>
-      <li>{{ product ? changeLinkValueSidebarToText : changeLinkValueToText }}</li>
+      <li v-if="details && product"><a @click="$router.back()" style="cursor: pointer">{{changeLinkValueSidebarToText}}</a></li>
+      <li v-else >{{ product ? changeLinkValueSidebarToText : changeLinkValueToText }}</li>
+
     </ul>
   </div>
 </template>
@@ -23,6 +25,10 @@ export default {
       default: ''
     },
     product: {
+      type: Boolean,
+      default: false
+    },
+    details: {
       type: Boolean,
       default: false
     }

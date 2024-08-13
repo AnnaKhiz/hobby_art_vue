@@ -875,8 +875,13 @@ body.bg-white .header__menu-search input
             object-fit: contain
         &-label
           @include textBlock-width (166px)
-          height: 40px
+          height: 35px
           margin-bottom: 17px
+          display: -webkit-box
+          -webkit-box-orient: vertical
+          -webkit-line-clamp: 2
+          overflow: hidden
+          text-overflow: ellipsis
           & a
             @include textSmall (1rem, 1.0625rem, $colorTextMain)
         &-color-variants

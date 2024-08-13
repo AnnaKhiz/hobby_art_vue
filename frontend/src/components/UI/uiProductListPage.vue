@@ -1,14 +1,14 @@
 <template>
   <div class="main__product-page-content">
-    <div v-if="$router.currentRoute.value.name === 'Product-page'" class="main__product-page-content-item">
+    <div v-for="item in productList" :key="item._id" class="main__product-page-content-item">
       <ui-product-item-header />
       <div class="main__product-page-content-item-img">
-        <a @click="$router.push('/1')" style="cursor: pointer">
-          <img src="@/assets/img/image-card-item1.png" alt="card image">
+        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">
+          <img :src="require(`@/assets/${item.photo}`)" alt="card image">
         </a>
       </div>
       <div class="main__product-page-content-item-label">
-        <a @click="$router.push(`${$router.currentRoute.value.href}/1`)" style="cursor: pointer">Шпагат Macrametr 4 мм, 100 нитей</a>
+        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">{{ item.name }}</a>
       </div>
       <div class="main__product-page-content-item-color-variants">
         <svg width="97" height="20" viewBox="0 0 97 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,7 @@
         </svg>
       </div>
       <div class="main__product-page-content-item-price">
-        332 ₽
+        {{ item.price }} ₽
       </div>
       <a href="" class="main__product-page-content-item-btnBuy">
         В корзину
@@ -161,16 +161,39 @@
 
 <script>
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
-import router from "@/router";
+// import router from "@/router";
 
 export default {
   name: "uiProductListPage.vue",
-  methods: {
-    router() {
-      return router
+  components: {UiProductItemHeader},
+  data() {
+    return {
+      productList: []
     }
   },
-  components: {UiProductItemHeader}
+  methods: {
+    // router() {
+    //   return router
+    // }
+    async getProductList() {
+      try {
+        const result = await fetch('http://localhost:3000/api/items', {
+          method: 'GET',
+          credentials: 'include'
+        })
+        const data = await result.json();
+        this.productList = data.items;
+        console.log('productList', this.productList)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  },
+
+  async mounted() {
+    await this.getProductList()
+  },
+
 }
 </script>
 
