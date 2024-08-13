@@ -10,7 +10,13 @@
                 <img :src="require(`@/assets/${productItem.photo ? productItem.photo : 'img/image-full-info-1.png'}`)" alt="image">
               </div>
               <div class="main__product-details-about-item-image">
-                <img src="@/assets/img/colors-image.png" alt="colors image">
+                <p
+                  v-for="color in productItem.color"
+                  :key="color._id"
+                  :style="`background-color: ${color.value}; border: 1px solid ${color.value === 'white' ? 'lightgray' : 'none'}`"
+                  class="render-colors"
+                  @click.prevent="order.color = color"
+                ></p>
               </div>
             </div>
             <div class="main__product-details-about-item right-item">
@@ -52,10 +58,12 @@
                 <div class="main__product-details-about-item-basket-flex">
                   <span data-name="count" class="bl-hidden"></span>
                   <p class="main__product-details-about-item-basket-flex-price" data-price="basket-item-price">
-                    {{ productItem.price }} ₽
+                    {{ order.quantity === 1 ? productItem.price : countFinalPrice() }} ₽
                   </p>
-                  <button class="main__product-details-about-item-basket-flex-count" data-name="count">
-                    <span class="minus" data-name="count">-</span><span class="result" data-name="count">1</span><span class="plus" data-name="count">+</span>
+                  <button class="main__product-details-about-item-basket-flex-count">
+                    <span class="minus" @click.prevent="removeItem">-</span>
+                    <span class="result">{{ order.quantity }}</span>
+                    <span class="plus" @click.prevent="addItem">+</span>
                   </button>
                   <a href="basket.html" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn">
                     Добавить в корзину
@@ -221,11 +229,7 @@ import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 export default {
   name: "ProductPageDetails",
   components: {UiProductItemHeader, UiBreadcrumbs},
-  computed: {
-    ...mapGetters({
-      getCheckedHeaderLink: 'links/getCheckedHeaderLink',
-    }),
-  },
+
   props: {
     id: {
       type: String,
@@ -234,14 +238,35 @@ export default {
   },
   data() {
     return {
-      productItem: {}
+      productItem: {},
+      order: {
+        quantity: 1,
+        price: 0
+      }
     }
   },
+  computed: {
+    ...mapGetters({
+      getCheckedHeaderLink: 'links/getCheckedHeaderLink',
+    }),
+
+  },
   methods: {
+    removeItem() {
+      if (this.order.quantity === 1) {
+        return false
+      }
+      return this.order.quantity -= 1
+    },
+    addItem() {
+      return this.order.quantity += 1
+    },
     colorItemsShowMore(colors) {
       return colors.length > 4 ? `${colors.length - 4} +` : ''
     },
-
+    countFinalPrice() {
+      return this.order.price = this.productItem.price * this.order.quantity
+    },
     async getProductList() {
       try {
         const result = await fetch(`http://localhost:3000/api/items/${this.id}`, {
@@ -265,5 +290,14 @@ export default {
 
 
 <style scoped lang="sass">
-
+.render-colors
+  display: inline-block
+  margin-left: 5px
+  width: 50px
+  height: 50px
+  border-radius: 50%
+  transition: box-shadow 0.3s ease-in-out 0s
+  &:hover
+    cursor: pointer
+    box-shadow: 1px 1px 4px gray
 </style>

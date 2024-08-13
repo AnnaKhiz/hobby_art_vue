@@ -12,7 +12,6 @@
       </div>
       <div class="main__product-page-content-item-color-variants">
         <ui-colors-icon :items="item.color"/>
-        {{ colorItemsShowMore(item.color) }}
       </div>
       <div class="main__product-page-content-item-price">
         {{ item.price }} ₽
@@ -39,9 +38,7 @@ export default {
     }
   },
   methods: {
-    colorItemsShowMore(colors) {
-      return colors.length > 4 ? `${colors.length - 4} +` : ''
-    },
+
 
     async getProductList() {
       try {

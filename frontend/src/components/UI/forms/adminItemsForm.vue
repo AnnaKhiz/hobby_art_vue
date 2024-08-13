@@ -14,6 +14,34 @@
       type="text"
     >
 
+    <label for="length" class="form-label">Длина нити</label>
+    <input
+      v-model="form.length"
+      id="length"
+      type="number"
+    >
+
+    <label for="width" class="form-label">Толщина нити</label>
+    <input
+      v-model="form.width"
+      id="width"
+      type="number"
+    >
+
+    <label for="brand" class="form-label">Производитель</label>
+    <input
+      v-model="form.brand"
+      id="brand"
+      type="text"
+    >
+
+    <label for="composition" class="form-label">Состав</label>
+    <input
+      v-model="form.composition"
+      id="composition"
+      type="text"
+    >
+
     <label for="photo" class="form-label">Ссылка на изображение</label>
     <input
       v-model="form.photo"
