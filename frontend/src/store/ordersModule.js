@@ -8,7 +8,8 @@ export const ordersModule = {
     }
   }),
   getters: {
-    order: state => state.order
+    order: state => state.order,
+    totalQuantity: state => state.totalQuantity
   },
   mutations: {
     updateOrders(state, payload) {
