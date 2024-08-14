@@ -8,7 +8,13 @@
 
 <script>
 export default {
-  name: "iuQuantityCounter.vue",
+  name: "uiQuantityCounter",
+  props: {
+    orderCount: {
+      type: Number,
+      default: 1
+    }
+  },
   data() {
     return {
       quantity: 1
@@ -25,6 +31,9 @@ export default {
     addItem() {
       return this.quantity += 1
     },
+  },
+  mounted() {
+    this.orderCount ? this.quantity = this.orderCount : this.quantity
   },
   watch: {
     quantity(newValue) {

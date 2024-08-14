@@ -58,7 +58,7 @@ const routes = [
   },
   {
     path: '/basket',
-    name: 'Basket',
+    name: 'basket',
     component: BasketComponent,
     props: true,
     meta: {
@@ -156,9 +156,15 @@ router.beforeEach((to, from, next) => {
 })
 
 router.beforeEach((to, from, next) => {
-  const basketItems = JSON.parse(localStorage.getItem('order'));
-  store.state.order.order = basketItems;
-  next()
+  if (!localStorage.getItem('order')) {
+    next()
+  } else {
+    const basketItems = JSON.parse(localStorage.getItem('order'));
+    store.state.order.order = basketItems;
+    next()
+  }
+
+
 })
 // eslint-disable-next-line
 router.afterEach((to, from) => {

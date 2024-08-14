@@ -54,11 +54,7 @@
                   <p class="main__product-details-about-item-basket-flex-price" data-price="basket-item-price">
                     {{ countFinalPrice() }} ₽
                   </p>
-                  <button class="main__product-details-about-item-basket-flex-count">
-                    <span class="minus" @click.prevent="removeItem">-</span>
-                    <span class="result">{{ order.quantity }}</span>
-                    <span class="plus" @click.prevent="addItem">+</span>
-                  </button>
+                  <ui-quantity-counter @input="order.quantity = $event"/>
                   <a @click.prevent="addToBasket" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn" style="cursor: pointer">
                     Добавить в корзину
                   </a>
@@ -211,8 +207,6 @@
         </section>
       </div>
     </div>
-
-    <code>display: {{display}}</code>
     <!--   dialogs -->
     <Transition name="fade">
       <ui-notify-dialog v-if="display" />
@@ -226,11 +220,12 @@ import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import {mapGetters, mapMutations} from "vuex";
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
-import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue"
+import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
+import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 
 export default {
   name: "ProductPageDetails",
-  components: {UiNotifyDialog, UiColorsIcon, UiProductItemHeader, UiBreadcrumbs},
+  components: {UiNotifyDialog, UiColorsIcon, UiProductItemHeader, UiBreadcrumbs, UiQuantityCounter},
 
   props: {
     id: {
