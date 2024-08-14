@@ -212,6 +212,10 @@
       </div>
     </div>
 
+    <code>display: {{display}}</code>
+    <!--   dialogs -->
+    <ui-modal-template v-if="display" v-model="display" @input="display = $event"/>
+
   </main>
 </template>
 <script>
@@ -220,10 +224,11 @@ import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import {mapGetters, mapMutations} from "vuex";
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
+import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue"
 
 export default {
   name: "ProductPageDetails",
-  components: {UiColorsIcon, UiProductItemHeader, UiBreadcrumbs},
+  components: {UiModalTemplate, UiColorsIcon, UiProductItemHeader, UiBreadcrumbs},
 
   props: {
     id: {
@@ -233,6 +238,7 @@ export default {
   },
   data() {
     return {
+      display: false,
       productItem: {},
       order: {
         quantity: 1,
@@ -251,6 +257,7 @@ export default {
     ...mapMutations('order', ['addToOrder']),
     addToBasket() {
       this.addToOrder(this.order);
+      this.display = true;
 
       this.order = {
         quantity: 1,

@@ -138,17 +138,15 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.basketQuantity = JSON.parse(localStorage.getItem('order')).totalQuantity
+      this.basketQuantity = this.order.totalQuantity
       document.documentElement.style.setProperty('--basket-count', `"${ this.basketQuantity || 0 }"`);
     }, 10)
   },
   watch: {
-    order: {
-      handler(val) {
-        this.basketQuantity = val
-      },
-      deep: true
-    }
+    order(val) {
+      this.basketQuantity = val.totalQuantity
+    },
+    deep: true
   }
 }
 </script>
