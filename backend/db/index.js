@@ -18,6 +18,7 @@ const OrderSchema = new mongoose.Schema({
     paymentMethod: { type: String },
     receiver: {
       fullName: { type: String },
+      phone: { type: Number },
       email: { type: String },
       isMailing: { type: Boolean }
     },

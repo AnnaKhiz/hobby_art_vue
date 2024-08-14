@@ -7,46 +7,110 @@
           <div class="main__basket-info-item user-info">
             <form action="#">
               <div class="main__basket-info-delivery">
+                <code>deliveryInfo: {{deliveryInfo}}</code>
                 <h2 class="main__basket-info-delivery-label">
                   Способ получения
                 </h2>
-                <input type="text" placeholder="Город" id="city">
+                <input
+                  v-model="deliveryInfo.address.city"
+                  type="text"
+                  placeholder="Город"
+                  style="width: 100%"
+                >
                 <div class="main__basket-info-delivery-method">
-                  <select id="del-method" name="del-method" >
-                    <option value="nova">Новая почта</option>
-                    <option value="ukr">Укрпочта</option>
-                    <option value="samovivoz">Самовывоз</option>
+                  <select v-model="deliveryInfo.deliveryMethod" style="color: #424242">
+                    <option
+                      v-for="method in deliveryMethods"
+                      :key="method"
+                      :value="method.value"
+                    >
+                      {{ method.text }}
+                    </option>
                   </select>
                 </div>
-
                 <div class="main__basket-info-delivery-subflex">
-                  <input type="text" placeholder="Улица" id="street">
-                  <input type="text" placeholder="Дом" id="house">
-                  <input type="text" placeholder="Квартира" id="apartment">
-                  <input type="text" placeholder="Индекс" id="code">
+                  <input
+                    v-model="deliveryInfo.address.street"
+                    type="text"
+                    placeholder="Улица"
+                    id="street"
+                  >
+                  <input
+                    v-model="deliveryInfo.address.house"
+                    type="text"
+                    placeholder="Дом"
+                    id="house"
+                  >
+                  <input
+                    v-model="deliveryInfo.address.apartment"
+                    type="number"
+                    placeholder="Квартира"
+                    id="apartment"
+                  >
+                  <input
+                    v-model="deliveryInfo.address.postcode"
+                    type="number"
+                    placeholder="Индекс"
+                    id="postcode"
+                  >
                 </div>
-                <input type="text" placeholder="Добавить комментарий" id="comment">
+                <input
+                  v-model="deliveryInfo.userComment"
+                  type="text"
+                  placeholder="Добавить комментарий"
+                  id="comment"
+                >
               </div>
               <div class="main__basket-info-user">
                 <h2 class="main__basket-info-user-label">
                   Данные получателя
                 </h2>
                 <div class="main__basket-info-user-subflex">
-                  <input type="text" placeholder="Фамилия" id="del-lastname">
-                  <input type="text" placeholder="Имя" id="del-firstname">
-                  <input type="text" placeholder="Отчество" id="del-surname">
+                  <input
+                    v-model="deliveryInfo.user.lastname"
+                    type="text"
+                    placeholder="Фамилия"
+                    id="del-lastname"
+                  >
+                  <input
+                    v-model="deliveryInfo.user.name"
+                    type="text"
+                    placeholder="Имя"
+                    id="del-firstname"
+                  >
+                  <input
+                    v-model="deliveryInfo.user.surname"
+                    type="text"
+                    placeholder="Отчество"
+                    id="del-surname"
+                  >
                 </div>
-                <input type="tel" placeholder="Номер телефона" id="del-phone">
+                <input
+                  v-model="deliveryInfo.receiver.phone"
+                  type="tel"
+                  placeholder="Номер телефона"
+                  id="del-phone"
+                >
                 <p class="main__basket-info-user-text">
                   По этому номеру телефона мы с вяжемся с вами для подтверждения заказа
                 </p>
-                <input type="email" placeholder="E-mail" id="del-email">
+                <input
+                  v-model="deliveryInfo.receiver.email"
+                  type="email"
+                  placeholder="E-mail"
+                  id="del-email"
+                >
                 <p class="main__basket-info-user-text">
                   На эту почту вам придет письмо с составом заказа, а так же трэк-номер для его отслеживания
                 </p>
 
                 <label for="subscribe-basket" class="main__basket-info-user-checkbox">
-                  <input type="checkbox" id="subscribe-basket" name="subscribed">
+                  <input
+                    v-model="deliveryInfo.receiver.isMailing"
+                    type="checkbox"
+                    id="subscribe-basket"
+                    name="subscribed"
+                  >
                   <span class="main__basket-info-user-checkbox-text">Подписаться на рассылку новинок и акций</span>
                 </label>
 
@@ -56,13 +120,21 @@
                 <h2 class="main__basket-info-payment-label">
                   Способ оплаты
                 </h2>
-                <label for="cash" class="main__basket-info-payment-radio-btn">
-                  <input type="radio" value="cash" name="payment" id="cash" >
-                  <span class="main__basket-info-payment-radio-text">Оплата при получении наличными или картой</span>
-                </label>
-                <label for="online" class="main__basket-info-payment-radio-btn">
-                  <input type="radio" value="online" name="payment" id="online" checked >
-                  <span class="main__basket-info-payment-radio-text">Оплата банковской картой онлайн</span>
+                <label
+                  v-for="option in paymentMethod"
+                  :key="option"
+                  :for="option.value"
+                  class="main__basket-info-payment-radio-btn"
+                  style="margin-bottom: 20px"
+                >
+                  <input
+                    v-model="deliveryInfo.paymentMethod"
+                    type="radio"
+                    name="payment"
+                    :value="option.value"
+                    style="margin-bottom: 0;"
+                  >
+                  <span class="main__basket-info-payment-radio-text">{{ option.text }}</span>
                 </label>
               </div>
             </form>
@@ -110,7 +182,7 @@
               <div class="main__basket-info-item-order-total">
                 <div class="main__basket-info-item-order-total-item">
                   <p class="main__basket-info-item-order-total-item-text">
-                    Товары, <span id="count-products"></span> шт
+                    Товары, <span> {{ $store.state.order.order.totalQuantity }} </span> шт
                   </p>
                   <p class="main__basket-info-item-order-total-item-sum" id="total-sum">
 
@@ -138,12 +210,17 @@
                     <span class="basket-bonuses">51 бонус</span>
                   </p>
                   <p class="main__basket-info-item-order-total-item-final" id="total-sum-discount">
-
+                    {{ $store.state.order.order.totalPrice + 254 - 25 }} ₽
                   </p>
                 </div>
               </div>
               <div class="main__basket-info-item-order-submit">
-                <a href="" class="main__basket-info-item-order-submit-link" id="send-order">
+                <a
+                  @click.prevent="sendOrder"
+                  class="main__basket-info-item-order-submit-link"
+                  id="send-order"
+                  style="cursor: pointer"
+                >
                   Оформить заказ
                 </a>
                 <p class="main__basket-info-item-order-submit-text">
@@ -170,19 +247,61 @@ export default {
   components: {UiQuantityCounter, UiDeleteIcon, UiBreadcrumbs},
   data() {
     return {
-
+      order: {
+        date: '',
+        timeCreated: '',
+        dateCompleted:'',
+        totalPrice: '',
+        totalQuantity: '',
+        deliveryInfo: {},
+      },
+      deliveryInfo: {
+        deliveryMethod: 'novapost',
+        paymentMethod: 'cash',
+        address: {},
+        receiver: {},
+        user: {}
+      },
+      deliveryMethods: [
+        { text: 'Новая почта', value: 'novapost', price: 254 },
+        { text: 'Укрпочта', value: 'ukrpost', price: 150 },
+        { text: 'Самовывоз', value: 'pickup', price: 0 },
+      ],
+      paymentMethod: [
+        { text: 'Оплата при получении наличными или картой', value: 'cash' },
+        { text: 'Оплата банковской картой онлайн', value: 'online' },
+      ]
     }
   },
   computed: {
     ...mapState('order', ['order']),
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
-
     }),
+    address() {
+      const { city, street, house, apartment, postcode } = this.deliveryInfo.address;
+      if (!city || !street || !house || !apartment || !postcode) return false;
+      return `Город: ${city}, ул. ${street}, дом ${house}, кв. ${apartment}. Индекс ${postcode}`
+    },
+    fullName() {
+      const { name, lastname, surname } = this.deliveryInfo.user;
+      if (!name || !lastname || !surname) return false;
+      return `${lastname} ${name} ${surname}`
+    }
 
   },
   methods: {
     ...mapMutations('order', ['updateOrders', 'updateTotalQuantity', 'updateTotalPrice']),
+    sendOrder() {
+      this.deliveryInfo.receiver.fullName = this.fullName;
+      this.deliveryInfo.fullAddress = this.address;
+
+      // delete this.deliveryInfo.address
+      // delete this.deliveryInfo.user
+
+      console.log(this.deliveryInfo)
+
+    },
     countPrice(index, quantity) {
       this.$store.state.order.order.items[index].quantity = quantity;
       const price = this.$store.state.order.order.items[index].item.price;
