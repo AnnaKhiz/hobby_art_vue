@@ -249,7 +249,6 @@ export default {
     return {
       order: {
         date: '',
-        timeCreated: '',
         dateCompleted:'',
         totalPrice: '',
         totalQuantity: '',
@@ -296,10 +295,17 @@ export default {
       this.deliveryInfo.receiver.fullName = this.fullName;
       this.deliveryInfo.fullAddress = this.address;
 
+      this.order.deliveryInfo = {...this.deliveryInfo};
+
+      this.order.date = Date.now();
+      this.order.totalPrice = this.$store.state.order.order.totalPrice;
+      this.order.totalQuantity = this.$store.state.order.order.totalQuantity;
+      this.order.items = this.$store.state.order.order.items;
+
       // delete this.deliveryInfo.address
       // delete this.deliveryInfo.user
 
-      console.log(this.deliveryInfo)
+      console.log(this.order)
 
     },
     countPrice(index, quantity) {
