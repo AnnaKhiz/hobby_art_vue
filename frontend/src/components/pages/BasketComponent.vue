@@ -7,7 +7,6 @@
           <div class="main__basket-info-item user-info">
             <form action="#">
               <div class="main__basket-info-delivery">
-                <code>deliveryInfo: {{deliveryInfo}}</code>
                 <h2 class="main__basket-info-delivery-label">
                   Способ получения
                 </h2>
