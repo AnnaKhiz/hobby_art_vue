@@ -6,11 +6,11 @@
 @import "switcher"
 @import "burger"
 @import "modal"
+@import "app"
+
 html
   height: 100%
-#app
-  display: contents
-  height: 100%
+
 body
   display: flex
   justify-content: space-between
@@ -1584,7 +1584,7 @@ body.bg-white .header__menu-search input
         &#cash, &#online
           margin-bottom: 0
         &::placeholder
-          @include textSmall (0.875rem, 1.0625rem, #E8E8E8)
+          @include textSmall (0.875rem, 1.0625rem, #424242)
       &-delivery
         margin-bottom: 64px
         @media screen and (max-width: 768px)
@@ -1638,7 +1638,7 @@ body.bg-white .header__menu-search input
           column-gap: 16px
           @media screen and (max-width: 670px)
             display: block
-          & input#city, & input#street, & input#house, & input#apartment, & input#code
+          & input#city, & input#street, & input#house, & input#apartment, & input#postcode
             @media screen and (max-width: 670px)
               width: 100%
       &-user
@@ -1736,7 +1736,7 @@ body.bg-white .header__menu-search input
           &-count
             margin-bottom: 17px
           &-img
-            max-width: 200px
+            width: 200px
             height: 200px
             object-fit: contain
             display: flex

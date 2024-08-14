@@ -34,6 +34,13 @@ export const ordersModule = {
       }
     },
 
+    updateTotalQuantity(state) {
+      state.order.totalQuantity = state.order.items.reduce((acc, curVal) => acc + +curVal.quantity, 0)
+    },
+    updateTotalPrice(state) {
+      state.order.totalPrice = state.order.items.reduce((acc, curVal) => acc + +curVal.price, 0)
+    },
+
     clearOrder(state) {
       state.orderItems = {}
     }

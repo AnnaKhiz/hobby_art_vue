@@ -10,8 +10,20 @@ const OrderSchema = new mongoose.Schema({
   date: { type: String },
   timeCreated: { type: String},
   dateCompleted: { type: String},
-  total: { type: Number},
-  totalItems: { type: Number},
+  totalPrice: { type: Number},
+  totalQuantity: { type: Number},
+  deliveryInfo: {
+    fullAddress: { type: String },
+    deliveryMethod: { type: String },
+    paymentMethod: { type: String },
+    receiver: {
+      fullName: { type: String },
+      phone: { type: Number },
+      email: { type: String },
+      isMailing: { type: Boolean }
+    },
+    userComment: { type: String }
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users'

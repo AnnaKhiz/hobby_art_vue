@@ -9,6 +9,7 @@ import AdminAuth from "@/components/pages/admin/AdminAuth.vue";
 import BasketComponent from "@/components/pages/BasketComponent.vue";
 import ProductPageComponent from "@/components/pages/ProductPageComponent.vue";
 import ProductPageDetails from "@/components/pages/ProductPageDetails.vue";
+import store from "@/store";
 
 
 
@@ -57,7 +58,7 @@ const routes = [
   },
   {
     path: '/basket',
-    name: 'Basket',
+    name: 'basket',
     component: BasketComponent,
     props: true,
     meta: {
@@ -152,6 +153,18 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+})
+
+router.beforeEach((to, from, next) => {
+  if (!localStorage.getItem('order')) {
+    next()
+  } else {
+    const basketItems = JSON.parse(localStorage.getItem('order'));
+    store.state.order.order = basketItems;
+    next()
+  }
+
+
 })
 // eslint-disable-next-line
 router.afterEach((to, from) => {

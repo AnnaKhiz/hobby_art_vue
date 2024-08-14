@@ -16,11 +16,18 @@
       <div class="main__product-page-content-item-price">
         {{ item.price }} ₽
       </div>
-      <a href="" class="main__product-page-content-item-btnBuy">
+      <a
+        class="main__product-page-content-item-btnBuy"
+        style="cursor: pointer"
+        @click.prevent="addToBasket(item)"
+      >
         В корзину
       </a>
     </div>
-
+    <!--   dialogs -->
+    <Transition name="fade">
+      <ui-notify-dialog v-if="display" />
+    </Transition>
   </div>
 </template>
 
@@ -28,18 +35,26 @@
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue"
 import {mapMutations} from "vuex";
+import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 
 
 export default {
   name: "uiProductListPage.vue",
-  components: {UiColorsIcon, UiProductItemHeader},
+  components: {UiNotifyDialog, UiColorsIcon, UiProductItemHeader},
   data() {
     return {
+      display: false,
       productList: []
     }
   },
   methods: {
     ...mapMutations('order', ['addToOrder']),
+    addToBasket(item) {
+      const orderItem = {quantity: 1, price: item.price, item: item}
+      this.addToOrder(orderItem);
+      this.display = true;
+
+    },
     async getProductList() {
       try {
         const result = await fetch('http://localhost:3000/api/items', {
@@ -58,6 +73,15 @@ export default {
   async mounted() {
     await this.getProductList()
   },
+  watch: {
+    display(val) {
+      if (val) {
+        setTimeout(() => {
+          this.display = false
+        }, 2000)
+      }
+    }
+  }
 
 }
 </script>
