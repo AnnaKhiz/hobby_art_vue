@@ -214,7 +214,9 @@
 
     <code>display: {{display}}</code>
     <!--   dialogs -->
-    <ui-modal-template v-if="display" v-model="display" @input="display = $event"/>
+    <Transition name="fade">
+      <ui-notify-dialog v-if="display" />
+    </Transition>
 
   </main>
 </template>
@@ -224,11 +226,11 @@ import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import {mapGetters, mapMutations} from "vuex";
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
-import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue"
+import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue"
 
 export default {
   name: "ProductPageDetails",
-  components: {UiModalTemplate, UiColorsIcon, UiProductItemHeader, UiBreadcrumbs},
+  components: {UiNotifyDialog, UiColorsIcon, UiProductItemHeader, UiBreadcrumbs},
 
   props: {
     id: {
@@ -299,6 +301,15 @@ export default {
   },
   beforeUnmount() {
     this.order = {}
+  },
+  watch: {
+    display(val) {
+      if (val) {
+        setTimeout(() => {
+          this.display = false
+        }, 2000)
+      }
+    }
   }
 }
 </script>
@@ -306,4 +317,11 @@ export default {
 
 
 <style scoped lang="sass">
+.fade-enter-active,
+.fade-leave-active
+  transition: opacity 0.8s ease
+
+.fade-enter-from,
+.fade-leave-to
+  opacity: 0
 </style>

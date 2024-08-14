@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import UiMessageDialog from "@/components/UI/modal/uiMessageDialog.vue";
+import UiMessageDialog from "@/components/UI/modal/uiConfirmDialog.vue";
 
 export default {
   name: "uiModalTemplate.vue",

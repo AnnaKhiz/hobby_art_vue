@@ -20,7 +20,7 @@
 import UiCloseIcon from "@/components/UI/icons/uiCloseIcon.vue";
 
 export default {
-  name: "uiMessageDialog",
+  name: "uiConfirmDialog",
   components: { UiCloseIcon },
   props: {
     header: {
