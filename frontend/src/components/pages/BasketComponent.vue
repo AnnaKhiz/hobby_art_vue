@@ -71,7 +71,7 @@
             <h2 class="main__basket-info-item-label">
               Состав заказа
             </h2>
-            <div class="main__basket-info-item-product-count">
+            <div v-if="$store.state.order.order.items.length" class="main__basket-info-item-product-count">
               <div v-for="(item, index) in order.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
                 <div class="main__basket-info-item-product-img">
                   <img :src="require(`@/assets/${item.item.photo ? item.item.photo : 'img/image-card-item7.png'}`)" alt="product image">
@@ -83,10 +83,12 @@
                 <p class="main__basket-info-item-product-price" data-price="basket-item-price">
                   {{ item.price }} ₽
                 </p>
-                <ui-delete-icon />
-
+                <ui-delete-icon @remove="deleteItemFromBasket(index)"/>
               </div>
 
+            </div>
+            <div v-else class="empty-basket">
+              Корзина пуста
             </div>
             <div class="main__basket-info-item-order">
               <h2 class="main__basket-info-item-order-label">
@@ -186,6 +188,14 @@ export default {
       const price = this.$store.state.order.order.items[index].item.price;
       this.$store.state.order.order.items[index].price = price * quantity;
 
+      this.updateStore();
+    },
+    deleteItemFromBasket(index) {
+      this.$store.state.order.order.items.splice(index, 1)
+
+      this.updateStore();
+    },
+    updateStore() {
       this.updateTotalQuantity();
       this.updateTotalPrice();
 
@@ -198,22 +208,15 @@ export default {
       this.updateOrders(orders)
     }
   },
-  // watch: {
-  //   order(value) {
-  //     console.log(value)
-  //     this.order.items.forEach((el, index) => {
-  //       const price = el.price / el.quantity
-  //       console.log(price)
-  //       this.$store.state.order.order.items[index].price = price * el.quantity
-  //     })
-  //   },
-  //
-  // }
 }
 </script>
 
 
 
 <style scoped lang="sass">
-
+.empty-basket
+  font: 400 normal 1rem/1rem 'Montserrat'
+  height: 100px
+  padding: 30px 20px
+  text-align: center
 </style>
