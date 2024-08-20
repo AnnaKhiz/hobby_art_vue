@@ -42,7 +42,11 @@ export const ordersModule = {
     },
 
     clearOrder(state) {
-      state.orderItems = {}
+      state.order = {
+        items: [],
+        totalPrice: 0,
+        totalQuantity: 0
+      }
     }
   },
 

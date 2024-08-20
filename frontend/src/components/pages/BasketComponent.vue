@@ -7,12 +7,11 @@
           <div class="main__basket-info-item user-info">
             <form action="#">
               <div class="main__basket-info-delivery">
-                <code>deliveryInfo: {{deliveryInfo}}</code>
                 <h2 class="main__basket-info-delivery-label">
                   Способ получения
                 </h2>
                 <input
-                  v-model="deliveryInfo.address.city"
+                  v-model="userAddress.city"
                   type="text"
                   placeholder="Город"
                   style="width: 100%"
@@ -30,25 +29,25 @@
                 </div>
                 <div class="main__basket-info-delivery-subflex">
                   <input
-                    v-model="deliveryInfo.address.street"
+                    v-model="userAddress.street"
                     type="text"
                     placeholder="Улица"
                     id="street"
                   >
                   <input
-                    v-model="deliveryInfo.address.house"
+                    v-model="userAddress.house"
                     type="text"
                     placeholder="Дом"
                     id="house"
                   >
                   <input
-                    v-model="deliveryInfo.address.apartment"
+                    v-model="userAddress.apartment"
                     type="number"
                     placeholder="Квартира"
                     id="apartment"
                   >
                   <input
-                    v-model="deliveryInfo.address.postcode"
+                    v-model="userAddress.postcode"
                     type="number"
                     placeholder="Индекс"
                     id="postcode"
@@ -67,19 +66,19 @@
                 </h2>
                 <div class="main__basket-info-user-subflex">
                   <input
-                    v-model="deliveryInfo.user.lastname"
+                    v-model="user.lastname"
                     type="text"
                     placeholder="Фамилия"
                     id="del-lastname"
                   >
                   <input
-                    v-model="deliveryInfo.user.name"
+                    v-model="user.name"
                     type="text"
                     placeholder="Имя"
                     id="del-firstname"
                   >
                   <input
-                    v-model="deliveryInfo.user.surname"
+                    v-model="user.surname"
                     type="text"
                     placeholder="Отчество"
                     id="del-surname"
@@ -143,8 +142,8 @@
             <h2 class="main__basket-info-item-label">
               Состав заказа
             </h2>
-            <div v-if="$store.state.order.order.items.length" class="main__basket-info-item-product-count">
-              <div v-for="(item, index) in order.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
+            <div v-if="orders.items.length" class="main__basket-info-item-product-count">
+              <div v-for="(item, index) in orders.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
                 <div class="main__basket-info-item-product-img">
                   <img :src="require(`@/assets/${item.item.photo ? item.item.photo : 'img/image-card-item7.png'}`)" alt="product image">
                 </div>
@@ -193,7 +192,7 @@
                     Доставка
                   </p>
                   <p class="main__basket-info-item-order-total-item-sum" id="delivery-price">
-                    254 ₽
+                    {{ deliveryPrice !== 0 ? `${deliveryPrice} ₽` : "Бесплатно" }}
                   </p>
                 </div>
                 <div class="main__basket-info-item-order-total-item">
@@ -210,7 +209,7 @@
                     <span class="basket-bonuses">51 бонус</span>
                   </p>
                   <p class="main__basket-info-item-order-total-item-final" id="total-sum-discount">
-                    {{ $store.state.order.order.totalPrice + 254 - 25 }} ₽
+                    {{ $store.state.order.order.totalPrice + (deliveryPrice !== 0 && orders.items.length ? deliveryPrice - 25 : 0) }} ₽
                   </p>
                 </div>
               </div>
@@ -232,6 +231,10 @@
         </section>
       </div>
     </div>
+    <!--   dialogs -->
+    <Transition name="fade">
+      <ui-notify-dialog v-if="display" text="Заказ успешно отправлен!"/>
+    </Transition>
   </main>
 </template>
 
@@ -241,28 +244,35 @@ import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import {mapGetters, mapMutations, mapState} from "vuex";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
+import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 
 export default {
   name: "BasketComponent",
-  components: {UiQuantityCounter, UiDeleteIcon, UiBreadcrumbs},
+  components: {UiNotifyDialog, UiQuantityCounter, UiDeleteIcon, UiBreadcrumbs},
   data() {
     return {
-      order: {
+      display: false,
+      orders: {
+        items: [],
+      },
+
+      currentOrder: {
         date: '',
         dateCompleted:'',
         totalPrice: '',
         totalQuantity: '',
         deliveryInfo: {},
+        isMailing: false
       },
       deliveryInfo: {
         deliveryMethod: 'novapost',
         paymentMethod: 'cash',
-        address: {},
         receiver: {},
-        user: {}
       },
+      user: {},
+      userAddress: {},
       deliveryMethods: [
-        { text: 'Новая почта', value: 'novapost', price: 254 },
+        { text: 'Новая почта', value: 'novapost', price: 250 },
         { text: 'Укрпочта', value: 'ukrpost', price: 150 },
         { text: 'Самовывоз', value: 'pickup', price: 0 },
       ],
@@ -277,36 +287,83 @@ export default {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
+    deliveryPrice() {
+      const deliveryObject = this.deliveryMethods.find(el => el.value === this.deliveryInfo.deliveryMethod);
+
+      if(!deliveryObject) return;
+
+      return deliveryObject.price
+    },
     address() {
-      const { city, street, house, apartment, postcode } = this.deliveryInfo.address;
+      const { city, street, house, apartment, postcode } = this.userAddress;
       if (!city || !street || !house || !apartment || !postcode) return false;
       return `Город: ${city}, ул. ${street}, дом ${house}, кв. ${apartment}. Индекс ${postcode}`
     },
     fullName() {
-      const { name, lastname, surname } = this.deliveryInfo.user;
+      const { name, lastname, surname } = this.user;
       if (!name || !lastname || !surname) return false;
       return `${lastname} ${name} ${surname}`
     }
 
   },
   methods: {
-    ...mapMutations('order', ['updateOrders', 'updateTotalQuantity', 'updateTotalPrice']),
-    sendOrder() {
+    ...mapMutations('order', ['updateOrders', 'updateTotalQuantity', 'updateTotalPrice', 'clearOrder']),
+    async sendOrder() {
       this.deliveryInfo.receiver.fullName = this.fullName;
       this.deliveryInfo.fullAddress = this.address;
 
-      this.order.deliveryInfo = {...this.deliveryInfo};
+      this.currentOrder.deliveryInfo = {...this.deliveryInfo};
 
-      this.order.date = Date.now();
-      this.order.totalPrice = this.$store.state.order.order.totalPrice;
-      this.order.totalQuantity = this.$store.state.order.order.totalQuantity;
-      this.order.items = this.$store.state.order.order.items;
+      this.currentOrder.date = Date.now();
+      this.currentOrder.totalPrice = this.$store.state.order.order.totalPrice;
+      this.currentOrder.totalQuantity = this.$store.state.order.order.totalQuantity;
+      this.currentOrder.items = this.$store.state.order.order.items.map(el => ( { _id: el.item._id, price : el.price, quantity: el.quantity } ));
 
-      // delete this.deliveryInfo.address
-      // delete this.deliveryInfo.user
+      console.log(this.currentOrder)
 
-      console.log(this.order)
+      await this.addNewOrder();
 
+      this.clearOrderInfo();
+      this.display = true;
+    },
+
+    clearOrderInfo() {
+      this.orders = {
+        items: [],
+      };
+
+      this.currentOrder = {
+        date: '',
+        dateCompleted:'',
+        totalPrice: '',
+        totalQuantity: '',
+        deliveryInfo: {},
+        isMailing: false
+      };
+
+      this.deliveryInfo = {
+        deliveryMethod: 'novapost',
+        paymentMethod: 'cash',
+        receiver: {},
+      };
+      this.user = {};
+      this.userAddress = {};
+
+      localStorage.removeItem('order');
+      this.clearOrder()
+    },
+
+    async addNewOrder() {
+      const result = await fetch('http://localhost:3000/api/orders/add', {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(this.currentOrder),
+        headers: { 'Content-Type': 'application/json' }
+      })
+
+      const response = await result.json();
+
+      console.log(response)
     },
     countPrice(index, quantity) {
       this.$store.state.order.order.items[index].quantity = quantity;
@@ -327,12 +384,28 @@ export default {
       localStorage.setItem('order', JSON.stringify(this.$store.state.order.order))
     }
   },
-  mounted() {
+ created() {
     if( localStorage.getItem('order') ) {
-      const orders = JSON.parse(localStorage.getItem('order'));
-      this.updateOrders(orders)
+      this.orders = JSON.parse(localStorage.getItem('order'));
+      this.updateOrders(this.orders)
     }
   },
+  mounted() {
+    // if( localStorage.getItem('order') ) {
+    //   this.orders = JSON.parse(localStorage.getItem('order'));
+    //   this.updateOrders(this.orders)
+    // }
+  },
+  watch: {
+    display(val) {
+      if (val) {
+        setTimeout(() => {
+          this.display = false
+        }, 2000)
+      }
+    }
+  }
+
 }
 </script>
 
@@ -344,4 +417,11 @@ export default {
   height: 100px
   padding: 30px 20px
   text-align: center
+.fade-enter-active,
+.fade-leave-active
+  transition: opacity 0.8s ease
+
+.fade-enter-from,
+.fade-leave-to
+  opacity: 0
 </style>

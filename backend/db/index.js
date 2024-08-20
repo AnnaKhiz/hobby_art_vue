@@ -1,13 +1,23 @@
 const { dbUrl } = require('config');
-const { ObjectId } = require('mongodb');
+const { ObjectId, Timestamp} = require('mongodb');
 const mongoose = require('mongoose');
 
 const AdminSchema = new mongoose.Schema({
   login: { type: String, unique: true },
   password: String
 });
+
+const OrderItemDetailsSchema = new mongoose.Schema({
+  item: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Item',
+  },
+  price: {type: Number},
+  quantity: {type: Number}
+});
+
 const OrderSchema = new mongoose.Schema({
-  date: { type: String },
+  date: { type: Date },
   dateCompleted: { type: String},
   totalPrice: { type: Number},
   totalQuantity: { type: Number},
@@ -17,21 +27,24 @@ const OrderSchema = new mongoose.Schema({
     paymentMethod: { type: String },
     receiver: {
       fullName: { type: String },
-      phone: { type: Number },
+      phone: { type: String },
       email: { type: String },
       isMailing: { type: Boolean }
     },
     userComment: { type: String }
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'users'
+    type: new mongoose.Schema({
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+      },
+    }, { _id: false }),
+    default: {}
   },
-  items: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'items'
-  }]
+  items: [OrderItemDetailsSchema],
 })
+
 const ItemSchema = new mongoose.Schema({
   name: { type: String },
   description: { type: String },
