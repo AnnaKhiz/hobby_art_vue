@@ -262,6 +262,7 @@ export default {
         totalPrice: '',
         totalQuantity: '',
         deliveryInfo: {},
+        isMailing: false
       },
       deliveryInfo: {
         deliveryMethod: 'novapost',
@@ -330,6 +331,24 @@ export default {
       this.orders = {
         items: [],
       };
+
+      this.currentOrder = {
+        date: '',
+        dateCompleted:'',
+        totalPrice: '',
+        totalQuantity: '',
+        deliveryInfo: {},
+        isMailing: false
+      };
+
+      this.deliveryInfo = {
+        deliveryMethod: 'novapost',
+        paymentMethod: 'cash',
+        receiver: {},
+      };
+      this.user = {};
+      this.userAddress = {};
+
       localStorage.removeItem('order');
       this.clearOrder()
     },
