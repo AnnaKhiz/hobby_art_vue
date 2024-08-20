@@ -34,10 +34,12 @@ const OrderSchema = new mongoose.Schema({
     userComment: { type: String }
   },
   user: {
-    type: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'users'
-    },
+    type: new mongoose.Schema({
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+      },
+    }, { _id: false }),
     default: {}
   },
   items: [OrderItemDetailsSchema],
