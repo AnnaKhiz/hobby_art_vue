@@ -6,8 +6,18 @@ const AdminSchema = new mongoose.Schema({
   login: { type: String, unique: true },
   password: String
 });
+
+const OrderItemDetailsSchema = new mongoose.Schema({
+  item: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Item',
+  },
+  price: {type: Number},
+  quantity: {type: Number}
+});
+
 const OrderSchema = new mongoose.Schema({
-  date: { type: Timestamp },
+  date: { type: Date },
   dateCompleted: { type: String},
   totalPrice: { type: Number},
   totalQuantity: { type: Number},
@@ -30,11 +40,9 @@ const OrderSchema = new mongoose.Schema({
     },
     default: {}
   },
-  items: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'items'
-  }],
+  items: [OrderItemDetailsSchema],
 })
+
 const ItemSchema = new mongoose.Schema({
   name: { type: String },
   description: { type: String },

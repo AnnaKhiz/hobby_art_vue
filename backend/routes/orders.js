@@ -19,16 +19,19 @@ router.get('/',async (req, res, next) => {
 
 router.post('/add',  parserJwt, async (req, res, next) => {
   const { body: order } = req;
-  const { id } = req._auth;
-  console.log(id)
+
+
+  if (req._auth) {
+    const { id } = req._auth;
+    console.log(id)
+  }
+
+
 
   if (!order) {
     return res.send({ "result" : false, data: 'No incoming data!' })
   }
 
-  if (!id) {
-    order.user = {}
-  }
 
   try {
     const newOrder = await new Order(order)
