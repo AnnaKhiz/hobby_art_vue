@@ -1751,6 +1751,12 @@ body.bg-white .header__menu-search input
             @include textSmallBold (1.125rem, 1.375rem, $colorTextMain)
             @include textBlock-width (260px)
             max-height: 50px
+            &.admin-order-view
+              font-size: 0.8rem
+              width: 600px
+              overflow: hidden
+              text-overflow: ellipsis
+              white-space: nowrap
             @media screen and (max-width: 768px)
               font-size: 0.9rem
               line-height: 1rem

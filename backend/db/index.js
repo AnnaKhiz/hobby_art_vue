@@ -7,42 +7,45 @@ const AdminSchema = new mongoose.Schema({
   password: String
 });
 
-const OrderItemDetailsSchema = new mongoose.Schema({
-  item: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Item',
-  },
-  price: {type: Number},
-  quantity: {type: Number}
-});
-
 const OrderSchema = new mongoose.Schema({
-  date: { type: Date },
-  dateCompleted: { type: String},
-  totalPrice: { type: Number},
-  totalQuantity: { type: Number},
+  date: {type: Date},
+  dateCompleted: {type: String},
+  totalPrice: {type: Number},
+  totalQuantity: {type: Number},
   deliveryInfo: {
-    fullAddress: { type: String },
-    deliveryMethod: { type: String },
-    paymentMethod: { type: String },
+    fullAddress: {type: String},
+    deliveryMethod: {type: String},
+    paymentMethod: {type: String},
     receiver: {
-      fullName: { type: String },
-      phone: { type: String },
-      email: { type: String },
-      isMailing: { type: Boolean }
+      fullName: {type: String},
+      phone: {type: String},
+      email: {type: String},
+      isMailing: {type: Boolean}
     },
-    userComment: { type: String }
+    userComment: {type: String}
   },
-  user: {
-    type: new mongoose.Schema({
+  users: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
+    default: null
+    // type: new mongoose.Schema({
+    //   _id: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'users',
+    //   },
+    // }, { _id: false }),
+    // default: {}
+  },
+  items: [
+    {
       _id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'items',
       },
-    }, { _id: false }),
-    default: {}
-  },
-  items: [OrderItemDetailsSchema],
+      price: {type: Number},
+      quantity: {type: Number},
+    }
+  ]
 })
 
 const ItemSchema = new mongoose.Schema({
