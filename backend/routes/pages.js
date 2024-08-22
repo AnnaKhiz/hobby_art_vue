@@ -156,9 +156,9 @@ router.get('/admin', parserJwt, protectedRoute(['admin']), async (req,res) => {
   const users = await User.find().populate('orders').populate('comments');
   const items = await Item.find().populate('comments');
   const comments = await Comment.find().populate('users').populate('items');
-  const orders = await Order.find().populate('user._id').populate('items')
+  const orders = await Order.find().populate('users').populate('items._id')
 
-  res.send({"result": true, role: role})
+  res.send({"result": true, role: role, data: [users, orders, items]})
 
   // res.redirect('http://localhost:8080/admin/login')
   // res.render('admin_home', { users, items, comments, orders, role });

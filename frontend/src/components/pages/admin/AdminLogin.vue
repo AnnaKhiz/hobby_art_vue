@@ -21,6 +21,9 @@
           <admin-items-form v-else @goBack="addProduct" :editFormData="editFormData" @submitEdit="editItem"/>
         </div>
         <div v-else class="container__item content">
+          <div class="items-container">
+            <ui-admin-orders-card />
+          </div>
 
         </div>
       </div>
@@ -33,14 +36,15 @@
 
 
 
-import AdminItemsForm from "@/components/UI/forms/adminItemsForm.vue"
+import AdminItemsForm from "@/components/pages/admin/UI/adminItemsForm.vue"
 import {mapMutations} from "vuex";
-import UiAdminProductCard from "@/components/UI/uiAdminProductCard.vue"
+import UiAdminProductCard from "@/components/pages/admin/UI/uiAdminProductCard.vue"
+import UiAdminOrdersCard from "@/components/pages/admin/UI/uiAdminOrdersCard.vue"
 
 
 export default {
   name: "AdminLogin",
-  components: {UiAdminProductCard, AdminItemsForm},
+  components: {UiAdminOrdersCard, UiAdminProductCard, AdminItemsForm},
   // props: {
   //   edit: {
   //     type: Boolean,

@@ -7,8 +7,8 @@ const { parserJwt } = require('../middleware/auth');
 const path = require("path");
 
 
-router.get('/',async (req, res, next) => {
-  const orders = await Order.find();
+router.get('/', async (req, res, next) => {
+  const orders = await Order.find().populate('items._id')
 
   if (!orders) {
     res.send({ "result": false, orders: [] });
