@@ -1,7 +1,12 @@
 <template>
-  <div class="items-container__item" v-for="(order, index) in orders" :key="order._id">
+  <div
+    class="items-container__item"
+    :class="{ 'hidden' : isShowDetails}"
+    v-for="(order, index) in orders"
+    :key="order._id"
+  >
     <div class="title">
-      <h3  class="item-row"><span class="label">Заказ №: </span> {{index +1}}</h3>
+      <h3  class="item-row"><span class="label">Заказ №: </span> {{index + 1}}</h3>
     </div>
     <div class="content">
       <p class="item-row"><span class="label">Стоимость: </span> {{order.totalPrice}} ₽</p>
@@ -13,17 +18,52 @@
     </div>
 
     <div class="actions">
-      <button class="button" @click.prevent="$emit('details', item)">Подробнее</button>
+      <button class="button" @click.prevent="showOrderDetails(order)">Подробнее</button>
       <button class="button" @click.prevent="removeItem(item._id)">Удалить</button>
     </div>
   </div>
+
+
+  <div v-if="isShowDetails">
+    <ui-table-content
+      :items="selectedOrder ? tableItems : []"
+    >
+      <template #deliveryMethod="{item}">
+        {{ parseDeliveryValue(item.value) }}
+      </template>
+
+      <template #paymentMethod="{item}">
+        {{ parsePaymentValue(item.value) }}
+      </template>
+    </ui-table-content>
+
+    <button class="button" @click="isShowDetails = false">Назад</button>
+  </div>
+
 </template>
 
 <script>
+import UiTableContent from "@/components/pages/admin/UI/table/uiTableContent.vue"
+
 export default {
   name: "uiAdminOrdersCard.vue",
+  components: {UiTableContent},
   data() {
     return {
+      isShowDetails: false,
+      selectedOrder: {
+        deliveryInfo: {
+          receiver: {
+            fullName: '',
+            phone: '',
+            email: '',
+          },
+          fullAddress: '',
+          deliveryMethod: '',
+          paymentMethod: '',
+          userComment: ''
+        }
+      },
       orders: [],
       deliveryMethods: [
         { text: 'Новая почта', value: 'novapost', price: 250 },
@@ -37,9 +77,25 @@ export default {
     }
   },
   computed: {
-
+    tableItems() {
+      return [
+        { text: 'Получатель', value: this.selectedOrder.deliveryInfo.receiver.fullName, name: 'receiver' },
+        { text: 'Телефон', value: this.selectedOrder.deliveryInfo.receiver.phone, name: 'phone' },
+        { text: 'E-mail', value: this.selectedOrder.deliveryInfo.receiver.email, name: 'email'  },
+        { text: 'Адресс доставки', value: this.selectedOrder.deliveryInfo.fullAddress, name: 'address'  },
+        { text: 'Способ доставки', value: this.selectedOrder.deliveryInfo.deliveryMethod, name: 'deliveryMethod'  },
+        { text: 'Способ оплаты', value: this.selectedOrder.deliveryInfo.paymentMethod, name: 'paymentMethod'  },
+        { text: 'Комментарий', value: this.selectedOrder.deliveryInfo.userComment, name: 'comment'  },
+      ]
+    },
   },
   methods: {
+    showOrderDetails(order) {
+      this.isShowDetails = true
+      this.selectedOrder = order;
+    },
+
+
     parseDeliveryValue(value) {
       const deliveryObject = this.deliveryMethods.find(el => el.value === value);
 
@@ -123,4 +179,7 @@ export default {
     transition: color 0.3s ease-in-out 0s
     color: #5E5C5A
     text-decoration: underline
+.hidden
+  display: none
+
 </style>
