@@ -24,7 +24,7 @@
   </div>
 
 
-  <div v-if="isShowDetails">
+  <div v-if="isShowDetails" class="items-container__item" style="width: 100%; padding: 0">
     <ui-table-content
       :items="selectedOrder ? tableItems : []"
     >
@@ -36,16 +36,19 @@
         {{ parsePaymentValue(item.value) }}
       </template>
     </ui-table-content>
-<!--    <code>selectedOrder.items: {{selectedOrder.items}}</code>-->
 
-    <div class="main__basket-info-item-product-count">
+
+    <div class="main__basket-info-item-product-count" style="width: 100%; padding: 0 20px">
       <div v-for="(item, index) in selectedOrder.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
-        <div class="main__basket-info-item-product-img">
-          <img :src="require(`@/assets/${item._id.photo ? item._id.photo : 'img/image-card-item7.png'}`)" alt="product image">
+        <div style="display: flex; align-items: center; justify-content: flex-start; column-gap: 15px">
+          <div class="main__basket-info-item-product-img" style="width: 50px; height: 50px">
+            <img :src="require(`@/assets/${item._id.photo ? item._id.photo : 'img/image-card-item7.png'}`)" alt="product image">
+          </div>
+          <p class="main__basket-info-item-product-name admin-order-view" >
+            {{ item._id.name }}
+          </p>
         </div>
-        <p class="main__basket-info-item-product-name">
-          {{ item.name }}
-        </p>
+
         <ui-quantity-counter @input="countPrice(index, $event)" :order-count="item.quantity"/>
         <p class="main__basket-info-item-product-price" data-price="basket-item-price">
           {{ item.price }} ₽
@@ -54,7 +57,7 @@
       </div>
     </div>
 
-    <button class="button" @click="isShowDetails = false">Назад</button>
+    <button class="button" style="padding: 0 20px 15px" @click="isShowDetails = false">Назад</button>
   </div>
 
 </template>
@@ -98,6 +101,7 @@ export default {
   computed: {
     tableItems() {
       return [
+        { text: 'Заказ №', value: this.selectedOrder._id, name: 'title'},
         { text: 'Получатель', value: this.selectedOrder.deliveryInfo.receiver.fullName, name: 'receiver' },
         { text: 'Телефон', value: this.selectedOrder.deliveryInfo.receiver.phone, name: 'phone' },
         { text: 'E-mail', value: this.selectedOrder.deliveryInfo.receiver.email, name: 'email'  },
