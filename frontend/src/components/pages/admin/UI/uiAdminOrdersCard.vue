@@ -36,6 +36,23 @@
         {{ parsePaymentValue(item.value) }}
       </template>
     </ui-table-content>
+<!--    <code>selectedOrder.items: {{selectedOrder.items}}</code>-->
+
+    <div class="main__basket-info-item-product-count">
+      <div v-for="(item, index) in selectedOrder.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
+        <div class="main__basket-info-item-product-img">
+          <img :src="require(`@/assets/${item._id.photo ? item._id.photo : 'img/image-card-item7.png'}`)" alt="product image">
+        </div>
+        <p class="main__basket-info-item-product-name">
+          {{ item.name }}
+        </p>
+        <ui-quantity-counter @input="countPrice(index, $event)" :order-count="item.quantity"/>
+        <p class="main__basket-info-item-product-price" data-price="basket-item-price">
+          {{ item.price }} ₽
+        </p>
+        <ui-delete-icon @remove="deleteItemFromBasket(index)"/>
+      </div>
+    </div>
 
     <button class="button" @click="isShowDetails = false">Назад</button>
   </div>
@@ -44,10 +61,12 @@
 
 <script>
 import UiTableContent from "@/components/pages/admin/UI/table/uiTableContent.vue"
+import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
+import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
 
 export default {
   name: "uiAdminOrdersCard.vue",
-  components: {UiTableContent},
+  components: {UiDeleteIcon, UiQuantityCounter, UiTableContent},
   data() {
     return {
       isShowDetails: false,
@@ -93,6 +112,15 @@ export default {
     showOrderDetails(order) {
       this.isShowDetails = true
       this.selectedOrder = order;
+    },
+
+    countPrice(index, quantity) {
+      console.log(index, quantity)
+      // this.$store.state.order.order.items[index].quantity = quantity;
+      // const price = this.$store.state.order.order.items[index].item.price;
+      // this.$store.state.order.order.items[index].price = price * quantity;
+
+      // this.updateStore();
     },
 
 

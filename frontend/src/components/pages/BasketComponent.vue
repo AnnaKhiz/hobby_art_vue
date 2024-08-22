@@ -142,6 +142,7 @@
             <h2 class="main__basket-info-item-label">
               Состав заказа
             </h2>
+
             <div v-if="orders.items.length" class="main__basket-info-item-product-count">
               <div v-for="(item, index) in orders.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
                 <div class="main__basket-info-item-product-img">
@@ -156,8 +157,8 @@
                 </p>
                 <ui-delete-icon @remove="deleteItemFromBasket(index)"/>
               </div>
-
             </div>
+
             <div v-else class="empty-basket">
               Корзина пуста
             </div>
