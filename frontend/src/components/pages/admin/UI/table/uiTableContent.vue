@@ -1,18 +1,16 @@
 <template>
   <table style="width: 100%; margin-bottom: 20px;">
 
-    <tr v-for="item in items" :key="item">
-      <td :style="{ borderTopLeftRadius: hover ? '12px' : 'none'}" class="column-title">{{item.text}}: </td>
+    <tr v-for="(item, index) in items" :key="item" @mouseover="hover = true" @mouseleave="hover = false">
+      <td :style="{ borderTopLeftRadius: hover && index === 0 ? '12px' : 'none' }" class="column-title">{{item.text}}: </td>
       <td style="width: auto">
         <slot v-if="$slots[item.name]" :name="item.name" :item="item"></slot>
         <span v-else>{{ item.value }}</span>
       </td>
-      <td class="column-edit">
+      <td class="column-edit" :style="{ borderTopRightRadius: hover && index === 0 ? '12px' : 'none' }">
         <img src="@/assets/img/edit.svg" alt="edit icon" style="cursor: pointer; width: 20px; height: auto; display: block; object-fit: contain">
       </td>
     </tr>
-
-
 
   </table>
 </template>
@@ -21,11 +19,12 @@
 
 <script>
 
-import vHover from "@/directives/vHover"
 export default {
   name: "uiTableContent.vue",
-  directives: {
-    hover: vHover
+  data() {
+    return {
+      hover: false
+    }
   },
   props: {
     items: {
@@ -53,8 +52,6 @@ table, th, td
     &:hover
       background: var(--colorTextButton)
       cursor: pointer
-
-      border-top-right-radius: 12px
   & td
     padding: 15px 20px
     &.column-title
