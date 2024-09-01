@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "uiCloseIcon"
+  name: "uiCloseIcon",
 }
 </script>
 

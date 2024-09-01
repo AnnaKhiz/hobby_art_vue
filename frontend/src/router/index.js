@@ -24,6 +24,7 @@ const routes = [
     meta: {
       title: 'Главная',
       favicon: '',
+      requiresAuth: false
     },
   },
   {
@@ -34,6 +35,7 @@ const routes = [
     meta: {
       title: 'Доставка',
       favicon: '',
+      requiresAuth: false
     },
   },
   {
@@ -44,6 +46,7 @@ const routes = [
     meta: {
       title: 'Бонусы',
       favicon: '',
+      requiresAuth: false
     },
   },
   {
@@ -54,6 +57,7 @@ const routes = [
     meta: {
       title: 'О компании',
       favicon: '',
+      requiresAuth: false
     },
   },
   {
@@ -64,6 +68,7 @@ const routes = [
     meta: {
       title: 'Корзина',
       favicon: '',
+      requiresAuth: false
     },
   },
   {
@@ -74,6 +79,7 @@ const routes = [
     meta: {
       title: 'Товары',
       favicon: '',
+      requiresAuth: false
     },
   },
   {
@@ -84,6 +90,7 @@ const routes = [
     meta: {
       title: 'Товары',
       favicon: '',
+      requiresAuth: false
     },
   },
   {
@@ -94,7 +101,7 @@ const routes = [
     meta: {
       title: 'Админ',
       favicon: '',
-
+      requiresAuth: false
     },
   },
   {
@@ -105,7 +112,7 @@ const routes = [
     meta: {
       title: 'Админ',
       favicon: '',
-
+      requiresAuth: false
     },
   },
   // {
@@ -134,14 +141,14 @@ const routes = [
 ]
 
 const router = createRouter({
-	routes,
 	history: createWebHistory(process.env.BASE_URL),
-
+  routes,
 })
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('auth')
   console.log('isAuthenticated', isAuthenticated)
+  console.log(process.env.BASE_URL)
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
