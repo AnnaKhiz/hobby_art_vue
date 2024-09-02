@@ -27,6 +27,8 @@
   <div v-if="isShowDetails" class="items-container__item" style="width: 100%; padding: 0">
     <ui-table-content
       :items="selectedOrder ? tableItems : []"
+      :delivery-methods="deliveryMethods"
+      :payment-method="paymentMethod"
     >
       <template #deliveryMethod="{item}">
         {{ parseDeliveryValue(item.value) }}
@@ -106,9 +108,10 @@ export default {
         { text: 'Телефон', value: this.selectedOrder.deliveryInfo.receiver.phone, name: 'phone' },
         { text: 'E-mail', value: this.selectedOrder.deliveryInfo.receiver.email, name: 'email'  },
         { text: 'Адресс доставки', value: this.selectedOrder.deliveryInfo.fullAddress, name: 'address'  },
+        { text: 'Комментарий', value: this.selectedOrder.deliveryInfo.userComment, name: 'comment'  },
         { text: 'Способ доставки', value: this.selectedOrder.deliveryInfo.deliveryMethod, name: 'deliveryMethod'  },
         { text: 'Способ оплаты', value: this.selectedOrder.deliveryInfo.paymentMethod, name: 'paymentMethod'  },
-        { text: 'Комментарий', value: this.selectedOrder.deliveryInfo.userComment, name: 'comment'  },
+
       ]
     },
   },

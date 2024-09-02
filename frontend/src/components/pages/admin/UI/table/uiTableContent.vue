@@ -1,21 +1,34 @@
 <template>
-  <div>
-    <code>tableItemsList: {{tableItemsList}}</code>
-    <code>entityDataField: {{entityDataField}}</code>
     <table style="width: 100%; margin-bottom: 20px;">
 
       <tr v-for="(item, index) in tableItemsList" :key="item" @mouseover="hover = true" @mouseleave="hover = false">
         <td :style="{ borderTopLeftRadius: hover && index === 0 ? '12px' : 'none' }" class="column-title">{{item.text}}: </td>
         <td :style="`width: auto; ${!item.isReadable ? 'padding: 10px 15px' : 'padding: 0'}`">
-          <slot v-if="$slots[item.name]" :name="item.name" :item="item"></slot>
-          <input
-            v-else
-            type="text"
-
+          <slot v-if="$slots[item.name] && !item.isReadable" :name="item.name" :item="item" ></slot>
+          <select
+            class="select-list"
+            v-if="$slots[item.name] && item.isReadable"
             v-model="item.value"
-            :autofocus="!item.isReadable"
+          >
+            <option
+              v-for="option in (item.name === 'deliveryMethod' ? deliveryMethods : paymentMethod)"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.text }}
+            </option>
+          </select>
+          <input
+            v-if="!$slots[item.name]"
+            ref="inputs"
+            type="text"
+            v-model="item.value"
+
             :style="`
-                ${!item.isReadable ? 'background-color: transparent; padding: 0' : 'background-color: white; padding: 10px 15px;' };
+                ${!item.isReadable
+                    ? 'background-color: transparent; padding: 0'
+                    : 'background-color: white; padding: 10px 15px; box-shadow: 1px -1px 6px inset rgba(94, 92, 90, 0.58)'
+                 };
                 font-size: 1rem; border-radius: 12px; width: 100%`"
             :readonly="!item.isReadable"
           />
@@ -28,31 +41,28 @@
               src="@/assets/img/edit.svg"
               alt="edit icon"
               class="edit-pencil-style"
-              @click.prevent="editElement(item)"
+              @click.prevent="editElement(item, index)"
             >
             <div v-else class="controls-content">
               <img
                 src="@/assets/img/confirm-48.png"
                 alt="edit icon"
                 class="edit-pencil-style confirm"
-                @click.prevent="confirmEditedElement(item)"
+                @click.prevent="confirmEditedElement(item, index)"
               >
               <img
                 src="@/assets/img/close-30.png"
                 alt="edit icon"
                 class="edit-pencil-style close"
-                @click.prevent="closeEditElement(item)"
+                @click.prevent="closeEditElement(item, index)"
               >
             </div>
-
-
           </div>
 
         </td>
       </tr>
 
     </table>
-  </div>
 
 </template>
 
@@ -69,6 +79,14 @@ export default {
       type: Array,
       default: () => []
     },
+    deliveryMethods: {
+      type: Array,
+      default: () => []
+    },
+    paymentMethod: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {
@@ -80,16 +98,22 @@ export default {
   },
 
   methods: {
-    updateHoverState({hover}) {
-      console.log(hover)
-    },
-    editElement(item) {
+
+    editElement(item, index) {
       this.entityDataField = item.value;
       this.tableItemsList.forEach(el => el.isReadable = false);
-      this.findElement(item);
+      this.changeReadableStatus(index);
+
+      if (item.name !== 'deliveryMethod' && item.name !== 'paymentMethod' ) {
+        this.$refs.inputs[index].focus()
+      }
+
     },
-    async confirmEditedElement(item) {
-      this.findElement(item);
+    changeReadableStatus(index) {
+      this.tableItemsList[index].isReadable = !this.tableItemsList[index].isReadable;
+    },
+    confirmEditedElement(item, index) {
+      this.changeReadableStatus(index);
 
       const fieldMap = {
         receiver: () => ({ "deliveryInfo.receiver.fullName": item.value }),
@@ -102,22 +126,12 @@ export default {
       };
 
       const dataField = fieldMap[item.name]();
-      await this.updateOrder(dataField)
+      this.updateOrder(dataField)
     },
 
-    closeEditElement(item) {
-      const index = this.findElement(item);
+    closeEditElement(item, index) {
+      this.changeReadableStatus(index);
       this.tableItemsList[index].value = this.entityDataField;
-    },
-
-    findElement(elem) {
-      const index = this.tableItemsList.findIndex(el => el.value === elem.value);
-
-      if (index === -1) return false;
-
-      this.tableItemsList[index].isReadable = !this.tableItemsList[index].isReadable;
-
-      return index
     },
 
     async updateOrder(dataField) {
@@ -147,7 +161,6 @@ export default {
 
 
 <style scoped lang="sass">
-
 table, th, td
   border-bottom: 1px solid var(--grayLinkColor)
   border-collapse: collapse
@@ -179,4 +192,13 @@ table, th, td
     width: 20px
 
 
+
+.select-list
+  padding: 8px 11px
+  width: 100%
+  background-color: var(--colorTextButton)
+  font-size: 1rem
+  font-family: inherit
+  border-radius: 12px
+  box-shadow: 1px -1px 6px inset rgba(94, 92, 90, 0.58)
 </style>
