@@ -45,10 +45,10 @@
 
 
     <div class="main__basket-info-item-product-count" style="width: 100%; padding: 0 20px">
-      <div v-for="(item, index) in selectedOrder.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
+      <div v-for="(item, index) in selectedOrder.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block" style="margin-bottom: 15px">
         <div style="display: flex; align-items: center; justify-content: flex-start; column-gap: 15px">
-          <div class="main__basket-info-item-product-img" style="width: 50px; height: 50px">
-            <img :src="require(`@/assets/${item._id.photo ? item._id.photo : 'img/image-card-item7.png'}`)" alt="product image">
+          <div class="main__basket-info-item-product-img" style="width: 50px; height: 50px; object-fit: contain; aspect-ratio: 1/1">
+            <img :src="require(`@/assets/${item._id.photo ? item._id.photo : 'img/image-card-item7.png'}`)" alt="product image" style="height: 100%">
           </div>
           <p class="main__basket-info-item-product-name admin-order-view" >
             {{ item._id.name }}
@@ -59,7 +59,7 @@
         <p class="main__basket-info-item-product-price" data-price="basket-item-price">
           {{ item.price }} ₽
         </p>
-        <ui-delete-icon @remove="deleteItemFromBasket(index)"/>
+        <ui-delete-icon @remove="deleteItemFromBasket(item, index)"/>
       </div>
     </div>
 
@@ -144,9 +144,7 @@ export default {
       this.updateOrder(updatedObject, itemId);
     },
 
-    deleteItemFromBasket(index) {
-      console.log(index)
-    },
+
 
     parseDeliveryValue(value) {
       const deliveryObject = this.deliveryMethods.find(el => el.value === value);
@@ -163,6 +161,9 @@ export default {
       return paymentObject.text
     },
 
+    async deleteItemFromBasket(item, index) {
+      console.log(item, index)
+    },
     async removeOrder(orderId, index) {
       try {
         const result = await fetch(`http://localhost:3000/api/orders/remove/${orderId}`, {

@@ -93,4 +93,23 @@ router.delete('/remove/:orderId', async (req, res, next) => {
   }
 })
 
+router.delete('/remove/:orderId/:itemId', async (req, res, next) => {
+  const { orderId, itemId } = req.params;
+
+  try {
+    await Order.findOneAndUpdate(
+      { _id: new ObjectId(orderId)  },
+    { $pull:
+              { items: { _id: new ObjectId(itemId) } }
+            },
+    { new: true }
+    );
+
+    res.status(200).send({result: true });
+
+  } catch (error) {
+    res.status(404).send({result: false, data: `Delete error: ${error}`})
+  }
+})
+
 module.exports = { router };
