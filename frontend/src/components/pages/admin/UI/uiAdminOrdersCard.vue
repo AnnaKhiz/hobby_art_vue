@@ -1,5 +1,9 @@
 <template>
+  <div v-if="!orders.length">
+    Пока нет заказов
+  </div>
   <div
+    v-else
     class="items-container__item"
     :class="{ 'hidden' : isShowDetails}"
     v-for="(order, index) in orders"
@@ -19,7 +23,7 @@
 
     <div class="actions">
       <button class="button" @click.prevent="showOrderDetails(order, index + 1)">Подробнее</button>
-      <button class="button" @click.prevent="removeItem(item._id)">Удалить</button>
+      <button class="button" @click.prevent="removeOrder(order._id, index)">Удалить</button>
     </div>
   </div>
 
@@ -51,7 +55,7 @@
           </p>
         </div>
 
-        <ui-quantity-counter @input="countPrice(index, $event)" :order-count="item.quantity"/>
+        <ui-quantity-counter @input="changeCountAndPrice(index, $event)" :order-count="item.quantity"/>
         <p class="main__basket-info-item-product-price" data-price="basket-item-price">
           {{ item.price }} ₽
         </p>
@@ -122,15 +126,27 @@ export default {
       this.selectedOrder = order;
     },
 
-    countPrice(index, quantity) {
-      console.log(index, quantity)
-      // this.$store.state.order.order.items[index].quantity = quantity;
-      // const price = this.$store.state.order.order.items[index].item.price;
-      // this.$store.state.order.order.items[index].price = price * quantity;
+    changeCountAndPrice(index, quantity) {
+      const updatedFinalPrice = quantity * this.selectedOrder.items[index]._id.price;
 
-      // this.updateStore();
+      this.selectedOrder.items[index].quantity = quantity;
+      this.selectedOrder.items[index].price = updatedFinalPrice;
+
+      const itemId = this.selectedOrder.items[index]._id._id;
+
+      const updatedObject = {
+        'price': updatedFinalPrice,
+        'quantity': quantity,
+        'totalPrice': this.selectedOrder.items.reduce((acc, curElem) => acc + +curElem.price, 0),
+        'totalQuantity': this.selectedOrder.items.reduce((acc, curElem) => acc + +curElem.quantity, 0),
+      }
+
+      this.updateOrder(updatedObject, itemId);
     },
 
+    deleteItemFromBasket(index) {
+      console.log(index)
+    },
 
     parseDeliveryValue(value) {
       const deliveryObject = this.deliveryMethods.find(el => el.value === value);
@@ -147,9 +163,34 @@ export default {
       return paymentObject.text
     },
 
+    async removeOrder(orderId, index) {
+      try {
+        const result = await fetch(`http://localhost:3000/api/orders/remove/${orderId}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        })
+        const data = await result.json();
+        if (!data.result) return false;
+        this.orders.splice(index, 1)
+      } catch (error) {
+        console.log('Update error', error)
+      }
+    },
+    async updateOrder(dataField, itemId) {
 
-
-
+      try {
+        const result = await fetch(`http://localhost:3000/api/orders/update/${this.selectedOrder._id}/${itemId}`, {
+          method: 'PATCH',
+          credentials: 'include',
+          body: JSON.stringify(dataField),
+          headers: {'Content-Type': 'application/json'}
+        })
+        const data = await result.json();
+        console.log(data)
+      } catch (error) {
+        console.log('Update error', error)
+      }
+    },
     async initPage() {
       try {
         const result = await fetch(`http://localhost:3000/api/orders`, {

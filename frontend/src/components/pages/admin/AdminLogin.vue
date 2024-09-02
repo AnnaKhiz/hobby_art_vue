@@ -1,7 +1,7 @@
 <template>
   <main class="main admin"  style="text-align: left">
     <div class="container">
-      <h2 class="container__label">Welcome to Admin panel</h2>
+      <h2 class="container__label">Добро пожаловать в Админ панель!</h2>
       <div class="container__flex">
         <div class="container__item aside">
           <button @click="openMenu('items')" class="modal__registration-form-button block">Товары</button>
