@@ -85,7 +85,9 @@ export default {
 
       if (index === -1) return false;
 
-      this.tableItemsList[index].isReadable = !this.tableItemsList[index].isReadable
+      this.tableItemsList.forEach(el => el.isReadable = false);
+
+      this.tableItemsList[index].isReadable = !this.tableItemsList[index].isReadable;
     }
   },
   mounted() {
