@@ -1,5 +1,9 @@
 <template>
+  <div v-if="!orders.length">
+    Пока нет заказов
+  </div>
   <div
+    v-else
     class="items-container__item"
     :class="{ 'hidden' : isShowDetails}"
     v-for="(order, index) in orders"
@@ -18,8 +22,8 @@
     </div>
 
     <div class="actions">
-      <button class="button" @click.prevent="showOrderDetails(order)">Подробнее</button>
-      <button class="button" @click.prevent="removeItem(item._id)">Удалить</button>
+      <button class="button" @click.prevent="showOrderDetails(order, index + 1)">Подробнее</button>
+      <button class="button" @click.prevent="removeOrder(order._id, index)">Удалить</button>
     </div>
   </div>
 
@@ -41,25 +45,40 @@
 
 
     <div class="main__basket-info-item-product-count" style="width: 100%; padding: 0 20px">
-      <div v-for="(item, index) in selectedOrder.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
+      <div v-for="(item, index) in selectedOrder.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block" style="margin-bottom: 15px">
         <div style="display: flex; align-items: center; justify-content: flex-start; column-gap: 15px">
-          <div class="main__basket-info-item-product-img" style="width: 50px; height: 50px">
-            <img :src="require(`@/assets/${item._id.photo ? item._id.photo : 'img/image-card-item7.png'}`)" alt="product image">
+          <div class="main__basket-info-item-product-img" style="width: 50px; height: 50px; object-fit: contain; aspect-ratio: 1/1">
+            <img :src="require(`@/assets/${item._id.photo ? item._id.photo : 'img/image-card-item7.png'}`)" alt="product image" style="height: 100%">
           </div>
           <p class="main__basket-info-item-product-name admin-order-view" >
             {{ item._id.name }}
           </p>
         </div>
 
-        <ui-quantity-counter @input="countPrice(index, $event)" :order-count="item.quantity"/>
+        <ui-quantity-counter @input="changeCountAndPrice(index, $event)" :order-count="item.quantity"/>
         <p class="main__basket-info-item-product-price" data-price="basket-item-price">
           {{ item.price }} ₽
         </p>
-        <ui-delete-icon @remove="deleteItemFromBasket(index)"/>
+        <ui-delete-icon @remove="selectedOrder.items.length > 1 ? deleteItemFromBasket(item, index) : notify('В заказе должен быть хотябы 1 товар')"/>
       </div>
     </div>
 
-    <button class="button" style="padding: 0 20px 15px" @click="isShowDetails = false">Назад</button>
+    <button class="button" @click="addItemToOrder(item, index)" style="padding-left: 20px">Добавить товар</button>
+    <div class="button-container">
+      <button class="button" @click="isShowDetails = false">Назад</button>
+      <h2 class="notify-message">{{message}}</h2>
+    </div>
+
+
+    <!--  DIALOG add products to order  -->
+    <ui-modal-template :value="isDisplayDialog" @input="isDisplayDialog = $event">
+
+      <template #tableData>
+        <p>content +++</p>
+      </template>
+
+
+    </ui-modal-template>
   </div>
 
 </template>
@@ -68,12 +87,16 @@
 import UiTableContent from "@/components/pages/admin/UI/table/uiTableContent.vue"
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
+import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
 
 export default {
   name: "uiAdminOrdersCard.vue",
-  components: {UiDeleteIcon, UiQuantityCounter, UiTableContent},
+  components: {UiModalTemplate, UiDeleteIcon, UiQuantityCounter, UiTableContent},
   data() {
     return {
+      isDisplayDialog: false,
+      itemsList: [],
+      message: '',
       isShowDetails: false,
       selectedOrder: {
         deliveryInfo: {
@@ -103,7 +126,7 @@ export default {
   computed: {
     tableItems() {
       return [
-        { text: 'Заказ №', value: this.selectedOrder._id, name: 'title'},
+        { text: 'Заказ №', value: this.selectedOrder.index || 0, name: 'title', id: this.selectedOrder._id},
         { text: 'Получатель', value: this.selectedOrder.deliveryInfo.receiver.fullName, name: 'receiver' },
         { text: 'Телефон', value: this.selectedOrder.deliveryInfo.receiver.phone, name: 'phone' },
         { text: 'E-mail', value: this.selectedOrder.deliveryInfo.receiver.email, name: 'email'  },
@@ -116,19 +139,34 @@ export default {
     },
   },
   methods: {
-    showOrderDetails(order) {
+    notify(text) {
+      this.message = text;
+    },
+    showOrderDetails(order, index) {
+      this.message = ''
       this.isShowDetails = true
+      order.index = index;
       this.selectedOrder = order;
     },
 
-    countPrice(index, quantity) {
-      console.log(index, quantity)
-      // this.$store.state.order.order.items[index].quantity = quantity;
-      // const price = this.$store.state.order.order.items[index].item.price;
-      // this.$store.state.order.order.items[index].price = price * quantity;
+    changeCountAndPrice(index, quantity) {
+      const updatedFinalPrice = quantity * this.selectedOrder.items[index]._id.price;
 
-      // this.updateStore();
+      this.selectedOrder.items[index].quantity = quantity;
+      this.selectedOrder.items[index].price = updatedFinalPrice;
+
+      const itemId = this.selectedOrder.items[index]._id._id;
+
+      const updatedObject = {
+        'price': updatedFinalPrice,
+        'quantity': quantity,
+        'totalPrice': this.selectedOrder.items.reduce((acc, curElem) => acc + +curElem.price, 0),
+        'totalQuantity': this.selectedOrder.items.reduce((acc, curElem) => acc + +curElem.quantity, 0),
+      }
+
+      this.updateOrder(updatedObject, itemId);
     },
+
 
 
     parseDeliveryValue(value) {
@@ -147,8 +185,66 @@ export default {
     },
 
 
+    addItemToOrder(item, index) {
+      this.isDisplayDialog = true
 
+      console.log(item, index)
+    },
 
+    async getItemsList() {
+      try {
+        const result = await fetch('http://localhost:3000/api/items')
+        const data = await result.json();
+        if(!data.result) return
+        this.itemsList = data.items
+
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async deleteItemFromBasket(item, index) {
+      this.message = '';
+      try {
+        const result = await fetch(`http://localhost:3000/api/orders/remove/${this.selectedOrder._id}/${item._id._id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        })
+        const data = await result.json();
+        if (!data.result) return false;
+        this.selectedOrder.items.splice(index, 1)
+      } catch (error) {
+        console.log('Update error', error)
+      }
+    },
+    async removeOrder(orderId, index) {
+      try {
+        const result = await fetch(`http://localhost:3000/api/orders/remove/${orderId}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        })
+        const data = await result.json();
+        if (!data.result) return false;
+        this.orders.splice(index, 1)
+      } catch (error) {
+        console.log('Update error', error)
+      }
+    },
+    async updateOrder(dataField, itemId) {
+
+      try {
+        const result = await fetch(`http://localhost:3000/api/orders/update/${this.selectedOrder._id}/${itemId}`, {
+          method: 'PATCH',
+          credentials: 'include',
+          body: JSON.stringify(dataField),
+          headers: {'Content-Type': 'application/json'}
+        })
+        const data = await result.json();
+        console.log(data)
+      } catch (error) {
+        console.log('Update error', error)
+      }
+    },
     async initPage() {
       try {
         const result = await fetch(`http://localhost:3000/api/orders`, {
@@ -170,7 +266,8 @@ export default {
     }
   },
   mounted() {
-    this.initPage()
+    this.initPage();
+
   }
 }
 </script>
@@ -214,7 +311,14 @@ export default {
     transition: color 0.3s ease-in-out 0s
     color: #5E5C5A
     text-decoration: underline
+.button-container
+  padding: 20px
+  display: flex
+  align-items: center
+  justify-content: space-between
+  width: 100%
 .hidden
   display: none
-
+.notify-message
+  color: var(--errorText)
 </style>

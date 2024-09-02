@@ -48,14 +48,68 @@ router.patch('/update/:id',async (req, res, next) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate({_id: new ObjectId(id)}, { $set: order }, { new: true, runValidators: true})
 
-    !updatedOrder
-        ? res.status(404).send({result: false, data: "Order did not found"})
-        : res.status(200).send({result: true, data: updatedOrder });
+    res.status(200).send({result: true, data: updatedOrder });
   } catch (error) {
     console.log(error)
     res.status(404).send({result: false, data: `Error: ${error}`})
   }
 
+})
+
+router.patch('/update/:orderId/:itemId',async (req, res, next) => {
+  const { body: itemsInfo } = req;
+  const { orderId, itemId } = req.params;
+
+  try {
+    const updatedOrder = await Order.findOneAndUpdate(
+      { _id: new ObjectId(orderId), "items._id": new ObjectId(itemId) },
+    { $set: {
+                      "items.$.quantity": itemsInfo.quantity,
+                      "items.$.price": itemsInfo.price,
+                      totalPrice: itemsInfo.totalPrice,
+                      totalQuantity: itemsInfo.totalQuantity
+                    }
+            },
+    { new: true, runValidators: true}
+    );
+
+    res.status(200).send({result: true, data: updatedOrder });
+  } catch (error) {
+    console.log(error)
+    res.status(404).send({result: false, data: `Error: ${error}`})
+  }
+
+})
+
+router.delete('/remove/:orderId', async (req, res, next) => {
+  const { orderId: id } = req.params;
+
+  try {
+    await Order.findOneAndDelete({ _id: new ObjectId(id)} )
+    res.status(200).send({result: true });
+
+  } catch (error) {
+    res.status(404).send({result: false, data: `Delete error: ${error}`})
+  }
+})
+
+router.delete('/remove/:orderId/:itemId', async (req, res, next) => {
+  const { orderId, itemId } = req.params;
+
+  try {
+    await Order.findOneAndUpdate(
+      { _id: new ObjectId(orderId)  },
+    { $pull:
+              { items: { _id: new ObjectId(itemId) } }
+            },
+    { new: true }
+    );
+
+    res.status(200).send({result: true });
+
+  } catch (error) {
+    res.status(404).send({result: false, data: `Delete error: ${error}`})
+  }
 })
 
 module.exports = { router };

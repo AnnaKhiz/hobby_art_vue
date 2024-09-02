@@ -55,20 +55,16 @@ router.delete('/remove/:id',  async (req, res, next) => {
   try {
     const result = await Item.findByIdAndDelete({ _id: new ObjectId(id)})
 
-    !result
-      ? res.status(404).send({ "result": false, data: "Not found" })
-      : res.status(200).send({ "result": true });
+    res.status(200).send({ "result": true, data: result });
   } catch (error) {
     console.log(error)
+    res.status(404).send({ "result": false, data: `Remove item error: ${error}` })
   }
 })
 
 router.patch('/update/:id', async (req, res, next) => {
   const { id } = req.params;
   const { body: itemBody } = req;
-
-  console.log(id)
-  console.log(itemBody)
 
   const item = await Item.find( { _id: new ObjectId(id)});
 
