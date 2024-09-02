@@ -162,7 +162,17 @@ export default {
     },
 
     async deleteItemFromBasket(item, index) {
-      console.log(item, index)
+      try {
+        const result = await fetch(`http://localhost:3000/api/orders/remove/${this.selectedOrder._id}/${item._id._id}`, {
+          method: 'DELETE',
+          credentials: 'include',
+        })
+        const data = await result.json();
+        if (!data.result) return false;
+        this.selectedOrder.items.splice(index, 1)
+      } catch (error) {
+        console.log('Update error', error)
+      }
     },
     async removeOrder(orderId, index) {
       try {
