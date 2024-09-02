@@ -59,11 +59,16 @@
         <p class="main__basket-info-item-product-price" data-price="basket-item-price">
           {{ item.price }} ₽
         </p>
-        <ui-delete-icon @remove="deleteItemFromBasket(item, index)"/>
+        <ui-delete-icon @remove="selectedOrder.items.length > 1 ? deleteItemFromBasket(item, index) : notify('В заказе должен быть хотябы 1 товар')"/>
       </div>
     </div>
 
-    <button class="button" style="padding: 0 20px 15px" @click="isShowDetails = false">Назад</button>
+    <div class="button-container">
+      <button class="button" @click="isShowDetails = false">Назад</button>
+      <h2 class="notify-message">{{message}}</h2>
+    </div>
+
+
   </div>
 
 </template>
@@ -78,6 +83,7 @@ export default {
   components: {UiDeleteIcon, UiQuantityCounter, UiTableContent},
   data() {
     return {
+      message: '',
       isShowDetails: false,
       selectedOrder: {
         deliveryInfo: {
@@ -120,7 +126,11 @@ export default {
     },
   },
   methods: {
+    notify(text) {
+      this.message = text;
+    },
     showOrderDetails(order, index) {
+      this.message = ''
       this.isShowDetails = true
       order.index = index;
       this.selectedOrder = order;
@@ -162,6 +172,7 @@ export default {
     },
 
     async deleteItemFromBasket(item, index) {
+      this.message = '';
       try {
         const result = await fetch(`http://localhost:3000/api/orders/remove/${this.selectedOrder._id}/${item._id._id}`, {
           method: 'DELETE',
@@ -223,7 +234,8 @@ export default {
     }
   },
   mounted() {
-    this.initPage()
+    this.initPage();
+
   }
 }
 </script>
@@ -267,7 +279,14 @@ export default {
     transition: color 0.3s ease-in-out 0s
     color: #5E5C5A
     text-decoration: underline
+.button-container
+  padding: 20px
+  display: flex
+  align-items: center
+  justify-content: space-between
+  width: 100%
 .hidden
   display: none
-
+.notify-message
+  color: var(--errorText)
 </style>
