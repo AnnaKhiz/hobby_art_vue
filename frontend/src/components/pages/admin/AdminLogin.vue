@@ -183,14 +183,18 @@ export default {
   &__item
     border-radius: 24px
     &.aside
-      width: 20%
+      width: 30%
       background: rgba(199, 193, 187, 0.52)
       padding: 20px
+      @media screen and (max-width: 1200px)
+        padding: 10px
     &.content
-      padding: 50px 100px
+      padding: 50px
       text-align: start
       background: rgba(255, 253, 253, 0.47)
       width: 80%
+      @media screen and (max-width: 1200px)
+        padding: 50px
   &__label
     font: 600 normal 1.75rem/2.6875rem 'Spectral SC' //28/43px
     text-transform: uppercase
@@ -199,6 +203,7 @@ export default {
     margin-bottom: 50px
 .block
   display: block
+  width: 100%
   &.exit
     background: #525252
     color: white
@@ -209,6 +214,14 @@ export default {
       background: #ddd9d9
       border: 1px solid #525252
       color: #525252
+  @media screen and (max-width: 1200px)
+    font-size: 0.8rem
+    padding: 13px 30px
+  @media screen and (max-width: 900px)
+    font-size: 0.8rem
+    padding: 10px 20px
+
+
 .sidebar
   padding-bottom: 20px
   &__submenu
