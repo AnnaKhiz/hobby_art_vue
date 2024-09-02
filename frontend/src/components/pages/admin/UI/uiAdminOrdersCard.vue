@@ -18,7 +18,7 @@
     </div>
 
     <div class="actions">
-      <button class="button" @click.prevent="showOrderDetails(order)">Подробнее</button>
+      <button class="button" @click.prevent="showOrderDetails(order, index + 1)">Подробнее</button>
       <button class="button" @click.prevent="removeItem(item._id)">Удалить</button>
     </div>
   </div>
@@ -103,7 +103,7 @@ export default {
   computed: {
     tableItems() {
       return [
-        { text: 'Заказ №', value: this.selectedOrder._id, name: 'title'},
+        { text: 'Заказ №', value: this.selectedOrder.index || 0, name: 'title', id: this.selectedOrder._id},
         { text: 'Получатель', value: this.selectedOrder.deliveryInfo.receiver.fullName, name: 'receiver' },
         { text: 'Телефон', value: this.selectedOrder.deliveryInfo.receiver.phone, name: 'phone' },
         { text: 'E-mail', value: this.selectedOrder.deliveryInfo.receiver.email, name: 'email'  },
@@ -116,8 +116,9 @@ export default {
     },
   },
   methods: {
-    showOrderDetails(order) {
+    showOrderDetails(order, index) {
       this.isShowDetails = true
+      order.index = index;
       this.selectedOrder = order;
     },
 

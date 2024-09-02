@@ -4,7 +4,7 @@
       <tr v-for="(item, index) in tableItemsList" :key="item" @mouseover="hover = true" @mouseleave="hover = false">
         <td :style="{ borderTopLeftRadius: hover && index === 0 ? '12px' : 'none' }" class="column-title">{{item.text}}: </td>
         <td :style="`width: auto; ${!item.isReadable ? 'padding: 10px 15px' : 'padding: 0'}`">
-          <slot v-if="$slots[item.name] && !item.isReadable" :name="item.name" :item="item" ></slot>
+          <slot v-if="$slots[item.name] && !item.isReadable" :name="item.name" :item="item"></slot>
           <select
             class="select-list"
             v-if="$slots[item.name] && item.isReadable"
@@ -106,6 +106,7 @@ export default {
 
       if (item.name !== 'deliveryMethod' && item.name !== 'paymentMethod' ) {
         this.$refs.inputs[index].focus()
+        console.log(this.$refs.inputs)
       }
 
     },
@@ -139,7 +140,7 @@ export default {
       if (!order) return false;
 
       try {
-        const result = await fetch(`http://localhost:3000/api/orders/update/${order.value}`, {
+        const result = await fetch(`http://localhost:3000/api/orders/update/${order.id}`, {
           method: 'PATCH',
           credentials: 'include',
           body: JSON.stringify(dataField),
