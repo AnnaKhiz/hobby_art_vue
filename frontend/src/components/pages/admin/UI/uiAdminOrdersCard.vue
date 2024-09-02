@@ -63,12 +63,22 @@
       </div>
     </div>
 
+    <button class="button" @click="addItemToOrder(item, index)" style="padding-left: 20px">Добавить товар</button>
     <div class="button-container">
       <button class="button" @click="isShowDetails = false">Назад</button>
       <h2 class="notify-message">{{message}}</h2>
     </div>
 
 
+    <!--  DIALOG add products to order  -->
+    <ui-modal-template :value="isDisplayDialog" @input="isDisplayDialog = $event">
+
+      <template #tableData>
+        <p>content +++</p>
+      </template>
+
+
+    </ui-modal-template>
   </div>
 
 </template>
@@ -77,12 +87,15 @@
 import UiTableContent from "@/components/pages/admin/UI/table/uiTableContent.vue"
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
+import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
 
 export default {
   name: "uiAdminOrdersCard.vue",
-  components: {UiDeleteIcon, UiQuantityCounter, UiTableContent},
+  components: {UiModalTemplate, UiDeleteIcon, UiQuantityCounter, UiTableContent},
   data() {
     return {
+      isDisplayDialog: false,
+      itemsList: [],
       message: '',
       isShowDetails: false,
       selectedOrder: {
@@ -169,6 +182,25 @@ export default {
       if (!paymentObject) return;
 
       return paymentObject.text
+    },
+
+
+    addItemToOrder(item, index) {
+      this.isDisplayDialog = true
+
+      console.log(item, index)
+    },
+
+    async getItemsList() {
+      try {
+        const result = await fetch('http://localhost:3000/api/items')
+        const data = await result.json();
+        if(!data.result) return
+        this.itemsList = data.items
+
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     async deleteItemFromBasket(item, index) {

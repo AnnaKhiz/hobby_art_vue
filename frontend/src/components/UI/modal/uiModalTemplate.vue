@@ -2,9 +2,17 @@
   <div
     v-if="display"
     class="modal-message"
+
   >
-    <ui-message-dialog @close="display = false"/>
-    <slot name="content"></slot>
+
+    <ui-message-dialog @close="display = false">
+      <template #content>
+       <slot name="tableData"></slot>
+      </template>
+    </ui-message-dialog>
+
+
+
   </div>
 </template>
 

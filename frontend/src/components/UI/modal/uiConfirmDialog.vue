@@ -1,11 +1,14 @@
 <template>
+
   <div class="dialog-content" >
     <div class="dialog-header">
       <h3>{{ header }}</h3>
       <ui-close-icon @close="$emit('close')" style="position: static;"/>
     </div>
     <div class="dialog-body-text">
-      <h2>{{ text }}</h2>
+      <slot v-if="!text" name="content">
+        <h2>Товар добавлен в корзину</h2>
+      </slot>
     </div>
     <div>
       <button class="dialog-action" @click="$emit('close')">
@@ -29,7 +32,7 @@ export default {
     },
     text: {
       type: String,
-      default: 'Товар добавлен в корзину'
+      default: ''
     }
   }
 }
