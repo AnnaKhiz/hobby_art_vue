@@ -26,12 +26,9 @@ router.post('/add',  parserJwt, async (req, res, next) => {
     console.log(id)
   }
 
-
-
   if (!order) {
     return res.send({ "result" : false, data: 'No incoming data!' })
   }
-
 
   try {
     const newOrder = await new Order(order)
@@ -42,6 +39,23 @@ router.post('/add',  parserJwt, async (req, res, next) => {
   } catch (error) {
     res.send({ "result" : false, data: error })
   }
+})
+
+router.patch('/update/:id',async (req, res, next) => {
+  const { body: order } = req;
+  const { id } = req.params;
+
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate({_id: new ObjectId(id)}, { $set: order }, { new: true, runValidators: true})
+
+    !updatedOrder
+        ? res.status(404).send({result: false, data: "Order did not found"})
+        : res.status(200).send({result: true, data: updatedOrder });
+  } catch (error) {
+    console.log(error)
+    res.status(404).send({result: false, data: `Error: ${error}`})
+  }
+
 })
 
 module.exports = { router };
