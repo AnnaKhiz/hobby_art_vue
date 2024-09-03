@@ -1,6 +1,6 @@
 <template>
 
-  <div class="dialog-content" >
+  <div class="dialog-content scrollable" :style="`width: ${width}; height: ${height}`">
     <div class="dialog-header">
       <h3>{{ header }}</h3>
       <ui-close-icon @close="$emit('close')" style="position: static;"/>
@@ -33,23 +33,36 @@ export default {
     text: {
       type: String,
       default: ''
+    },
+    width: {
+      type: String,
+      default: ''
+    },
+    height: {
+      type: String,
+      default: ''
     }
+
   }
 }
 </script>
 
 <style scoped lang="sass">
+
+
 .dialog
   &-content
     display: flex
     flex-direction: column
-    justify-content: center
+    justify-content: flex-start
     align-items: flex-end
     padding: 20px
     width: 500px
     height: 200px
     border-radius: 12px
     background-color: #FFF
+    overflow-y: scroll
+    overflow-x: hidden
   &-header
     display: flex
     align-items: center
@@ -63,6 +76,7 @@ export default {
     text-align: center
   &-action
     padding: 13px 45px
+    margin-top: 15px
     border-radius: 49px
     font: 600 normal 1rem/1.5rem 'Spectral SC'
     text-transform: uppercase

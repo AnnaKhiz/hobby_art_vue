@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <button class="button" @click="addItemToOrder(item, index)" style="padding-left: 20px">Добавить товар</button>
+    <button class="button" @click="getItemsList" style="padding-left: 20px">Добавить товар</button>
     <div class="button-container">
       <button class="button" @click="isShowDetails = false">Назад</button>
       <h2 class="notify-message">{{message}}</h2>
@@ -71,13 +71,41 @@
 
 
     <!--  DIALOG add products to order  -->
-    <ui-modal-template :value="isDisplayDialog" @input="isDisplayDialog = $event">
-
+    <ui-modal-template :value="isDisplayDialog" @input="isDisplayDialog = $event" width="80%" height="fit-content">
       <template #tableData>
-        <p>content +++</p>
+          <code>{{checkedColor}}</code>
+          <table>
+            <tr>
+              <td v-for="header in headers" :key="header.value">{{header.text}}</td>
+            </tr>
+            <tr v-for="(item, index) in itemsList" :key="item._id">
+              <td style="width: 50px">{{ index + 1 }}</td>
+              <td>{{item._id}}</td>
+              <td>{{item.name}}</td>
+              <td style="width: 200px">
+                <select class="select-list" v-model="item.checkedColor" >
+                  <option :value="item.checkedColor" disabled >Выберите цвет</option>
+                  <option
+                    v-for="option in item.color"
+                    :key="option.value"
+                    :value="option.value"
+                  >
+                    {{ option.text }}
+                  </option>
+                </select>
+              </td>
+              <td style="width: 80px">{{item.restBalance}}</td>
+              <td>{{item.discountPercentage}} %</td>
+              <td>
+                <p :class="{ 'discount-style': item.discountPercentage > 0 }">{{item.price}} ₽</p>
+                <p style="color: var(--errorText)">{{ item.discountPercentage > 0 ? `${item.price - (item.price * item.discountPercentage) / 100} ₽` : '' }} </p>
+              </td>
+              <td>
+                <img src="@/assets/img/add-30.png" alt="add icon" style="cursor: pointer" @click="addItemToOrder(item)">
+              </td>
+            </tr>
+          </table>
       </template>
-
-
     </ui-modal-template>
   </div>
 
@@ -89,11 +117,13 @@ import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
 import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
 
+
 export default {
   name: "uiAdminOrdersCard.vue",
   components: {UiModalTemplate, UiDeleteIcon, UiQuantityCounter, UiTableContent},
   data() {
     return {
+      checkedColor: '',
       isDisplayDialog: false,
       itemsList: [],
       message: '',
@@ -120,6 +150,16 @@ export default {
       paymentMethod: [
         { text: 'Оплата при получении наличными или картой', value: 'cash' },
         { text: 'Оплата банковской картой онлайн', value: 'online' },
+      ],
+      headers: [
+        { text: "№", value: 'count' },
+        { text: "Артикул", value: 'id' },
+        { text: "Название", value: 'name' },
+        { text: "Цвет", value: 'color' },
+        { text: "Остаток", value: 'restBalance' },
+        { text: "Скидка", value: 'discountPercentage' },
+        { text: "Цена", value: 'price' },
+        { text: "Добавить", value: 'add' },
       ]
     }
   },
@@ -185,13 +225,15 @@ export default {
     },
 
 
-    addItemToOrder(item, index) {
-      this.isDisplayDialog = true
+    addItemToOrder(item) {
+      console.log(item)
+      // this.isDisplayDialog = true
 
-      console.log(item, index)
+
     },
 
     async getItemsList() {
+      this.isDisplayDialog = true
       try {
         const result = await fetch('http://localhost:3000/api/items')
         const data = await result.json();
@@ -321,4 +363,25 @@ export default {
   display: none
 .notify-message
   color: var(--errorText)
+table, th, td
+  border: 1px solid var(--grayLinkColor)
+  border-collapse: collapse
+  & tr
+    transition: all 0.3s ease-in-out 0s
+    &:hover
+      background: var(--colorLineBasket)
+  & td
+    padding: 10px
+.discount-style
+  width: 100px
+  text-decoration: line-through
+  color: var(--colorCounter)
+.select-list
+  padding: 8px 11px
+  width: 100%
+  background-color: var(--colorTextButton)
+  font-size: 1rem
+  font-family: inherit
+  border-radius: 12px
+  box-shadow: 1px -1px 6px inset rgba(94, 92, 90, 0.58)
 </style>
