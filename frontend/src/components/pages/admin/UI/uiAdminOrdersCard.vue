@@ -238,7 +238,9 @@ export default {
         const result = await fetch('http://localhost:3000/api/items')
         const data = await result.json();
         if(!data.result) return
-        this.itemsList = data.items
+
+        const list = this.selectedOrder.items.map(el => el._id._id)
+        this.itemsList = data.items.filter(el => !list.includes(el._id))
 
       } catch (error) {
         console.log(error)
