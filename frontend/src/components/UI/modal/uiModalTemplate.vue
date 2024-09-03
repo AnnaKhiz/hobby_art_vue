@@ -2,31 +2,34 @@
   <div
     v-if="display"
     class="modal-message"
-
   >
-
-    <ui-message-dialog @close="display = false">
+    <ui-confirm-dialog @close="display = false" :width="width" :height="width">
       <template #content>
        <slot name="tableData"></slot>
       </template>
-    </ui-message-dialog>
-
-
-
+    </ui-confirm-dialog>
   </div>
 </template>
 
 <script>
-import UiMessageDialog from "@/components/UI/modal/uiConfirmDialog.vue";
+import UiConfirmDialog from "@/components/UI/modal/uiConfirmDialog.vue";
 
 export default {
   name: "uiModalTemplate.vue",
-  components: {UiMessageDialog},
+  components: {UiConfirmDialog},
   props: {
     value: {
       type: Boolean,
       default: true
     },
+    width: {
+      type: String,
+      default: ''
+    },
+    height: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {

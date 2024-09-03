@@ -1,7 +1,7 @@
 <template>
   <div class="modal" id="modal" :class="{ scroll : getDisplayDialogState }">
     <div class="modal__login">
-      <div class="modal__registration-block login">
+      <div class="modal__registration-block login" >
         <ui-close-icon @close="$emit('close')" />
         <div class="scroll_on" id="scroll-on-content">
           <slot name="default"></slot>
@@ -18,12 +18,12 @@ import UiCloseIcon from "@/components/UI/icons/uiCloseIcon.vue";
 export default {
   name: "uiModalWindow",
   components: { UiCloseIcon },
-  // props: {
+  props: {
   //   display: {
   //     type: Boolean,
   //     default: false
   //   }
-  // },
+  },
   computed: {
     ...mapGetters({
       getDisplayDialogState: 'dialog/getDisplayDialogState'
