@@ -74,7 +74,7 @@
     <ui-modal-template :value="isDisplayDialog" @input="isDisplayDialog = $event" width="80%" height="fit-content">
       <template #tableData>
           <code>{{checkedColor}}</code>
-          <table>
+          <table class="order-items-table">
             <tr>
               <td v-for="header in headers" :key="header.value">{{header.text}}</td>
             </tr>
@@ -101,7 +101,7 @@
                 <p style="color: var(--errorText)">{{ item.discountPercentage > 0 ? `${item.price - (item.price * item.discountPercentage) / 100} ₽` : '' }} </p>
               </td>
               <td>
-                <img src="@/assets/img/add-30.png" alt="add icon" style="cursor: pointer" @click="addItemToOrder(item)">
+                <img src="@/assets/img/add-30.png" alt="add icon" style="cursor: pointer" @click="updateItemsListInOrder(item)">
               </td>
             </tr>
           </table>
@@ -244,7 +244,28 @@ export default {
         console.log(error)
       }
     },
+    async updateItemsListInOrder(item) {
+      const updatedItemsList = [...this.selectedOrder.items, { price: item.price, _id: item }]
 
+      try {
+        const result = await fetch(`http://localhost:3000/api/orders/update/${this.selectedOrder._id}`, {
+          method: 'PATCH',
+          credentials: 'include',
+          body: JSON.stringify({
+            items: updatedItemsList
+          }),
+          headers: {'Content-Type': 'application/json'}
+        })
+        const data = await result.json();
+        console.log(data)
+
+        this.selectedOrder.items.push({ price: item.price, _id: item })
+        this.isDisplayDialog = false;
+
+      } catch (error) {
+        console.log('Update error', error)
+      }
+    },
     async deleteItemFromBasket(item, index) {
       this.message = '';
       try {
@@ -363,7 +384,7 @@ export default {
   display: none
 .notify-message
   color: var(--errorText)
-table, th, td
+table.order-items-table, th, td
   border: 1px solid var(--grayLinkColor)
   border-collapse: collapse
   & tr
