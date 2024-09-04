@@ -47,6 +47,7 @@ export default {
       productList: []
     }
   },
+  emits: ['itemsList'],
   methods: {
     ...mapMutations('order', ['addToOrder']),
     addToBasket(item) {
@@ -63,6 +64,7 @@ export default {
         })
         const data = await result.json();
         this.productList = data.items;
+        this.$emit('itemsList', this.productList)
         console.log('productList', this.productList)
       } catch (e) {
         console.log(e)

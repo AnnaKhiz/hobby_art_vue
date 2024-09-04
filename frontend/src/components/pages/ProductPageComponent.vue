@@ -12,16 +12,15 @@
           </div>
 
           <div class="main__product-page-price-block-btn" id="price-up-link">
-            <a href="#">Цена &#8595;</a>
+            <a href="#" @click.prevent="sortProducts('-')">Цена &#8595;</a>
           </div>
           <div class="main__product-page-price-block-btn" id="price-down-link">
-            <a href="#">Цена &#8593;</a>
+            <a href="#" @click.prevent="sortProducts('+')">Цена &#8593;</a>
           </div>
         </section>
         <section class="main__product-page-container">
           <ui-filter-sidebar />
-          <ui-product-list-page />
-
+          <ui-product-list-page @items-list="itemsList = $event" />
         </section>
       </div>
     </section>
@@ -38,11 +37,27 @@ import {mapGetters} from "vuex";
 export default {
   name: "ProductPageComponent",
   components: {UiBreadcrumbs, UiFilterSidebar, UiMainBanner, UiProductListPage},
+  data() {
+    return {
+      itemsList: []
+    }
+  },
   computed: {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
   },
+  methods: {
+    sortProducts(condition) {
+
+      switch(condition) {
+        case '-': return this.itemsList.sort((a, b) => a.price - b.price);
+        case '+': return this.itemsList.sort((a, b) => b.price - a.price);
+        default: return this.itemsList
+      }
+
+    }
+  }
 }
 </script>
 
