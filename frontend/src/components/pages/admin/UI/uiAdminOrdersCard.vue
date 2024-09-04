@@ -13,7 +13,7 @@
       <h3  class="item-row"><span class="label">Заказ №: </span> {{index + 1}}</h3>
     </div>
     <div class="content">
-      <p class="item-row"><span class="label">Стоимость: </span> {{order.totalPrice}} ₽</p>
+      <p class="item-row"><span class="label">Стоимость: </span> {{order.totalPrice}} грн</p>
       <p class="item-row"><span class="label">Количество товаров: </span> {{order.totalQuantity}}</p>
       <p class="item-row"><span class="label">Заказчик: </span> {{order.deliveryInfo.receiver.fullName}}</p>
       <p class="item-row"><span class="label">Способ доставки: </span> {{ parseDeliveryValue(order.deliveryInfo.deliveryMethod) }}</p>
@@ -57,7 +57,7 @@
 
         <ui-quantity-counter @input="changeCountAndPrice(index, $event)" :order-count="item.quantity"/>
         <p class="main__basket-info-item-product-price" data-price="basket-item-price">
-          {{ item.price }} ₽
+          {{ item.price }} грн
         </p>
         <ui-delete-icon @remove="selectedOrder.items.length > 1 ? deleteItemFromBasket(item, index) : notify('В заказе должен быть хотябы 1 товар')"/>
       </div>
@@ -97,8 +97,8 @@
               <td style="width: 80px">{{item.restBalance}}</td>
               <td>{{item.discountPercentage}} %</td>
               <td>
-                <p :class="{ 'discount-style': item.discountPercentage > 0 }">{{item.price}} ₽</p>
-                <p style="color: var(--errorText)">{{ item.discountPercentage > 0 ? `${item.price - (item.price * item.discountPercentage) / 100} ₽` : '' }} </p>
+                <p :class="{ 'discount-style': item.discountPercentage > 0 }">{{item.price}} грн</p>
+                <p style="color: var(--errorText)">{{ item.discountPercentage > 0 ? `${item.price - (item.price * item.discountPercentage) / 100} грн` : '' }} </p>
               </td>
               <td>
                 <img src="@/assets/img/add-30.png" alt="add icon" style="cursor: pointer" @click="updateItemsListInOrder(item)">

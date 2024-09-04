@@ -133,7 +133,7 @@ export default defineComponent({
       preferenceItemsInfo: [
         { text: 'Поставщики', value: 'suppliers', image: 'pref-delivery.png', description: 'Мы работаем только с надежными и проверенными поставщиками товаров для творчества' },
         { text: 'Товары', value: 'products', image: 'preferences-knit.png', description: 'Мы привозим актуальные и новые товары, инструменты для вашего творчества по низким ценам' },
-        { text: 'Бонусы', value: 'bonuses', image: 'preferences-bonus.png', description: 'У нас действует накопительная бонусная система скидок. Дарим в день рождения 500 бонусных рублей' },
+        { text: 'Бонусы', value: 'bonuses', image: 'preferences-bonus.png', description: 'У нас действует накопительная бонусная система скидок. Дарим в день рождения 500 бонусных гривен' },
       ],
       sliderPopularItems: [
         { text: 'Пряжа Macrametr', value: 'macrametr', link: '', image: 'slider-img-1.png' },

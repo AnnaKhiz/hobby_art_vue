@@ -4,7 +4,7 @@
       {{ catalogItemsInfo.text }}
     </h3>
     <p class="main__catalog-item-price">
-      от {{ catalogItemsInfo.price }} ₽
+      от {{ catalogItemsInfo.price }} грн
     </p>
     <div class="main__catalog-item-subitem">
       <a :href="`${catalogItemsInfo.link}/${catalogItemsInfo.value}`" class="main__catalog-item-link">

@@ -14,7 +14,7 @@
         <ui-colors-icon :items="item.color" size="20" position="flex-start"/>
       </div>
       <div class="main__product-page-content-item-price">
-        {{ item.price }} ₽
+        {{ item.price }} грн
       </div>
       <a
         class="main__product-page-content-item-btnBuy"

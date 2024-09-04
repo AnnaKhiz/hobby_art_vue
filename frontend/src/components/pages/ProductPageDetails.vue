@@ -52,7 +52,7 @@
                 <div class="main__product-details-about-item-basket-flex">
                   <span data-name="count" class="bl-hidden"></span>
                   <p class="main__product-details-about-item-basket-flex-price" data-price="basket-item-price">
-                    {{ countFinalPrice() }} ₽
+                    {{ countFinalPrice() }} грн
                   </p>
                   <ui-quantity-counter @input="order.quantity = $event"/>
                   <a @click.prevent="addToBasket" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn" style="cursor: pointer">
@@ -171,7 +171,7 @@
               </a>
 
               <p class="main__product-details-recommend-flex-price">
-                1053 ₽
+                1053 грн
               </p>
               <a href="" class="main__product-details-recommend-flex-btn">
                 В корзину
@@ -196,7 +196,7 @@
               </a>
 
               <p class="main__product-details-recommend-flex-price">
-                852 ₽
+                852 грн
               </p>
               <a href="" class="main__product-details-recommend-flex-btn">
                 В корзину

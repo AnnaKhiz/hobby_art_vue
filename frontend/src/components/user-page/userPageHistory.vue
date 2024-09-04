@@ -3,7 +3,7 @@
     <div class="main__user-page-content-story-container-flex">
       <div class="main__user-page-content-story-block">
         <p class="main__user-page-content-story-desc">
-          Заказ № *order_number* от *date_created* *time_created*, *sum_quantity* товара на сумму *final_price* ₽
+          Заказ № *order_number* от *date_created* *time_created*, *sum_quantity* товара на сумму *final_price* грн
         </p>
         <a href="" class="main__user-page-content-story-link" @click.prevent="expandOrder">
           <span >Подробнее о заказе</span><img src="@/assets/img/arrow-down.svg" alt="arrow-down icon" >
@@ -35,7 +35,7 @@
               *quantity* шт
             </p>
             <p class="main__user-page-content-story-container-items-price">
-              *price* ₽
+              *price* грн
             </p>
           </div>
         </div>
