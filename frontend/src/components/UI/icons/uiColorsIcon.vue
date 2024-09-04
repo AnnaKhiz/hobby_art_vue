@@ -1,13 +1,15 @@
 <template>
-  <div class="color-panel" :style="`justify-content: ${position}`">
+
+  <div class="color-panel" :style="`justify-content: ${position}`" :id="item._id">
     <p
-      v-for="color in cuttedItemsArray"
+      v-for="(color) in cuttedItemsArray"
       :key="color._id"
+      ref="colors"
       :style="`background-color: ${color.value}; border: 1px solid ${color.value === 'white' ? 'lightgray' : 'none'}; width: ${size}px; height: ${size}px; margin-right: 5px`"
       class="render-colors"
-      @click.prevent="$emit('check')"
+      @click.prevent="this.$emit('check', color.value)"
     ></p>
-    <span @click="isFull = !isFull">{{ !isFull ? colorItemsShowMore(items) : 'Hide'}}</span>
+    <span @click="isFull = !isFull">{{ !isFull ? colorItemsShowMore(item.color) : 'Hide'}}</span>
   </div>
 
 </template>
@@ -16,9 +18,9 @@
 export default {
   name: "uiColorsIcon",
   props: {
-    items: {
-      type: Array,
-      default: () => []
+    item: {
+      type: Object,
+      default: () => {}
     },
     size: {
       type: String,
@@ -27,23 +29,25 @@ export default {
     position: {
       type: String,
       default: 'center'
-    }
+    },
   },
   data() {
     return {
-      isFull: false
+      isFull: false,
+      itemIndex: null,
     }
   },
+  emits: ['check'],
   computed: {
     cuttedItemsArray() {
-      return this.isFull ? this.items : this.items.slice(0, 4)
+      return this.isFull ? this.item.color : this.item.color.slice(0, 4)
     }
   },
   methods: {
     colorItemsShowMore(colors) {
       return colors.length > 4 ? `${colors.length - 4} +` : ''
     },
-  }
+  },
 }
 </script>
 
@@ -57,6 +61,8 @@ export default {
   &:hover
     cursor: pointer
     box-shadow: 1px 1px 4px gray
+.checked-color
+  border: 3px solid var(--colorTextDesc)
 .color-panel
   display: flex
   align-items: center

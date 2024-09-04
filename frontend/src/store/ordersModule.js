@@ -59,7 +59,7 @@ function countTotal(state, storeFieldName, objectFieldName) {
 }
 
 function searchForMatches(state, payload) {
-  const index = state.order.items.findIndex(el => el.item._id === payload.item._id);
+  const index = state.order.items.findIndex(el => el.item._id === payload.item._id && el.checkedColor === payload.checkedColor);
 
   if (index === -1) {
     state.order.items.push(payload)

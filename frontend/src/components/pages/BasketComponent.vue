@@ -144,12 +144,16 @@
             </h2>
 
             <div v-if="orders.items.length" class="main__basket-info-item-product-count">
+
               <div v-for="(item, index) in orders.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
                 <div class="main__basket-info-item-product-img">
                   <img :src="require(`@/assets/${item.item.photo ? item.item.photo : 'img/image-card-item7.png'}`)" alt="product image">
                 </div>
                 <p class="main__basket-info-item-product-name">
-                  {{ item.name }}
+                  {{ item.item.name }}
+                </p>
+                <p class="main__basket-info-item-product-name" style="font-size: 0.8rem; font-weight: 400">
+                  ({{ parseCheckedColors(item.checkedColor, item.item._id) }})
                 </p>
                 <ui-quantity-counter @input="countPrice(index, $event)" :order-count="item.quantity"/>
                 <p class="main__basket-info-item-product-price" data-price="basket-item-price">
@@ -309,6 +313,15 @@ export default {
   },
   methods: {
     ...mapMutations('order', ['updateOrders', 'updateTotalQuantity', 'updateTotalPrice', 'clearOrder']),
+    parseCheckedColors(color, itemId) {
+      const currentItem = this.orders.items.find(el => el.item._id === itemId);
+
+      const colorObject = currentItem.item.color.find(el => el.value === color);
+      if (!colorObject) return;
+
+      return colorObject.text
+    },
+
     async sendOrder() {
       this.deliveryInfo.receiver.fullName = this.fullName;
       this.deliveryInfo.fullAddress = this.address;

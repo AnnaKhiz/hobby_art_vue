@@ -53,6 +53,9 @@
           <p class="main__basket-info-item-product-name admin-order-view" >
             {{ item._id.name }}
           </p>
+          <p class="main__basket-info-item-product-name admin-order-view" >
+            {{ item }}
+          </p>
         </div>
 
         <ui-quantity-counter @input="changeCountAndPrice(index, $event)" :order-count="item.quantity"/>
