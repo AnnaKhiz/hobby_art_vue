@@ -10,7 +10,8 @@
                 <img :src="require(`@/assets/${productItem.photo ? productItem.photo : 'img/image-full-info-1.png'}`)" alt="image">
               </div>
               <div class="main__product-details-about-item-image">
-                <ui-colors-icon :items="productItem.color" size="50" position="center"/>
+
+                <ui-colors-icon :item="productItem" size="50" position="center" details/>
               </div>
             </div>
             <div class="main__product-details-about-item right-item">
@@ -219,13 +220,13 @@
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import {mapGetters, mapMutations} from "vuex";
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
-import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
+import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
 
 export default {
   name: "ProductPageDetails",
-  components: {UiNotifyDialog, UiColorsIcon, UiProductItemHeader, UiBreadcrumbs, UiQuantityCounter},
+  components: {UiColorsIcon, UiNotifyDialog, UiProductItemHeader, UiBreadcrumbs, UiQuantityCounter},
 
   props: {
     id: {
@@ -282,8 +283,9 @@ export default {
           credentials: 'include'
         })
         const data = await result.json();
-        this.productItem = data.item;
-        console.log('productList', this.productItem)
+
+        this.productItem = await data.item;
+        console.log('productList !!!!!!!', this.productItem)
       } catch (e) {
         console.log(e)
       }

@@ -1,15 +1,14 @@
 <template>
-
   <div class="color-panel" :style="`justify-content: ${position}`" :id="item._id">
     <p
-      v-for="(color) in cuttedItemsArray"
+      v-for="color in colorsArray"
       :key="color._id"
       ref="colors"
       :style="`background-color: ${color.value}; border: 1px solid ${color.value === 'white' ? 'lightgray' : 'none'}; width: ${size}px; height: ${size}px; margin-right: 5px`"
       class="render-colors"
       @click.prevent="this.$emit('check', color.value)"
     ></p>
-    <span @click="isFull = !isFull">{{ !isFull ? colorItemsShowMore(item.color) : 'Hide'}}</span>
+    <span v-if="!details" @click="isFull = !isFull">{{ !isFull ? colorItemsShowMore(item.color) : 'Hide'}}</span>
   </div>
 
 </template>
@@ -30,6 +29,10 @@ export default {
       type: String,
       default: 'center'
     },
+    details: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -41,6 +44,9 @@ export default {
   computed: {
     cuttedItemsArray() {
       return this.isFull ? this.item.color : this.item.color.slice(0, 4)
+    },
+    colorsArray() {
+      return this.details ? this.item.color : this.cuttedItemsArray
     }
   },
   methods: {
@@ -48,6 +54,9 @@ export default {
       return colors.length > 4 ? `${colors.length - 4} +` : ''
     },
   },
+  mounted() {
+    console.log(this.item)
+  }
 }
 </script>
 

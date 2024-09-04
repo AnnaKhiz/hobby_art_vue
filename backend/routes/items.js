@@ -18,6 +18,7 @@ router.get('/',async (req, res, next) => {
 
 router.get('/:id',async (req, res, next) => {
   const { id } = req.params
+  console.log(id)
 
   try {
     const item = await Item.findById({ _id: new ObjectId(id)});

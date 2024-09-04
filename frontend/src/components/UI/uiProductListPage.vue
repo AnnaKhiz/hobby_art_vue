@@ -1,5 +1,5 @@
 <template>
-  <div class="main__product-page-content">
+  <div v-if="productList.length" class="main__product-page-content">
     <div v-for="(item, index) in productList" :key="item._id" class="main__product-page-content-item">
       <ui-product-item-header />
       <div class="main__product-page-content-item-img">
@@ -8,7 +8,7 @@
         </a>
       </div>
       <div class="main__product-page-content-item-label">
-        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">{{ item.name }}</a>
+        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">{{ item.name }} </a>
       </div>
       <div class="main__product-page-content-item-color-variants" @click.stop="checkIsSelectedItemUsed($event, item._id, index)">
         <ui-colors-icon
@@ -32,6 +32,7 @@
       >
         В корзину
       </a>
+
     </div>
     <!--   dialogs -->
     <Transition name="fade">
