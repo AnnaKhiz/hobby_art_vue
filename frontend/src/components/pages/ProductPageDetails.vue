@@ -10,7 +10,8 @@
                 <img :src="require(`@/assets/${productItem.photo ? productItem.photo : 'img/image-full-info-1.png'}`)" alt="image">
               </div>
               <div class="main__product-details-about-item-image">
-                <ui-colors-icon :items="productItem.color" size="50" position="center"/>
+
+                <ui-colors-icon :item="productItem" size="50" position="center" details/>
               </div>
             </div>
             <div class="main__product-details-about-item right-item">
@@ -52,7 +53,7 @@
                 <div class="main__product-details-about-item-basket-flex">
                   <span data-name="count" class="bl-hidden"></span>
                   <p class="main__product-details-about-item-basket-flex-price" data-price="basket-item-price">
-                    {{ countFinalPrice() }} ₽
+                    {{ countFinalPrice() }} грн
                   </p>
                   <ui-quantity-counter @input="order.quantity = $event"/>
                   <a @click.prevent="addToBasket" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn" style="cursor: pointer">
@@ -171,7 +172,7 @@
               </a>
 
               <p class="main__product-details-recommend-flex-price">
-                1053 ₽
+                1053 грн
               </p>
               <a href="" class="main__product-details-recommend-flex-btn">
                 В корзину
@@ -196,7 +197,7 @@
               </a>
 
               <p class="main__product-details-recommend-flex-price">
-                852 ₽
+                852 грн
               </p>
               <a href="" class="main__product-details-recommend-flex-btn">
                 В корзину
@@ -219,13 +220,13 @@
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import {mapGetters, mapMutations} from "vuex";
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
-import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
+import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
 
 export default {
   name: "ProductPageDetails",
-  components: {UiNotifyDialog, UiColorsIcon, UiProductItemHeader, UiBreadcrumbs, UiQuantityCounter},
+  components: {UiColorsIcon, UiNotifyDialog, UiProductItemHeader, UiBreadcrumbs, UiQuantityCounter},
 
   props: {
     id: {
@@ -282,8 +283,9 @@ export default {
           credentials: 'include'
         })
         const data = await result.json();
-        this.productItem = data.item;
-        console.log('productList', this.productItem)
+
+        this.productItem = await data.item;
+        console.log('productList !!!!!!!', this.productItem)
       } catch (e) {
         console.log(e)
       }

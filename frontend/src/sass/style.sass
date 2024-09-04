@@ -834,11 +834,13 @@ body.bg-white .header__menu-search input
       column-gap: 30px
       row-gap: 30px
       flex-wrap: wrap
-      align-items: center
+      align-items: stretch
       justify-content: flex-start
       width: 100%
       flex-wrap: wrap
       &-item
+        display: flex
+        flex-direction: column
         min-width: 245px
         max-width: 300px
         flex: 0 0 18%
@@ -885,7 +887,8 @@ body.bg-white .header__menu-search input
           & a
             @include textSmall (1rem, 1.0625rem, $colorTextMain)
         &-color-variants
-          margin-bottom: 18px
+          flex-grow: 1
+          margin-bottom: 10px
           cursor: pointer
         &-price
           display: block
@@ -1753,7 +1756,7 @@ body.bg-white .header__menu-search input
             max-height: 50px
             &.admin-order-view
               font-size: 0.8rem
-              width: 600px
+              width: 400px
               overflow: hidden
               text-overflow: ellipsis
               white-space: nowrap

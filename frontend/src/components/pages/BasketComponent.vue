@@ -144,16 +144,20 @@
             </h2>
 
             <div v-if="orders.items.length" class="main__basket-info-item-product-count">
+
               <div v-for="(item, index) in orders.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
                 <div class="main__basket-info-item-product-img">
                   <img :src="require(`@/assets/${item.item.photo ? item.item.photo : 'img/image-card-item7.png'}`)" alt="product image">
                 </div>
                 <p class="main__basket-info-item-product-name">
-                  {{ item.name }}
+                  {{ item.item.name }}
+                </p>
+                <p class="main__basket-info-item-product-name" style="font-size: 0.8rem; font-weight: 400">
+                  ({{ parseCheckedColors(item.checkedColor, item.item._id) }})
                 </p>
                 <ui-quantity-counter @input="countPrice(index, $event)" :order-count="item.quantity"/>
                 <p class="main__basket-info-item-product-price" data-price="basket-item-price">
-                  {{ item.price }} ₽
+                  {{ item.price }} грн
                 </p>
                 <ui-delete-icon @remove="deleteItemFromBasket(index)"/>
               </div>
@@ -193,7 +197,7 @@
                     Доставка
                   </p>
                   <p class="main__basket-info-item-order-total-item-sum" id="delivery-price">
-                    {{ deliveryPrice !== 0 ? `${deliveryPrice} ₽` : "Бесплатно" }}
+                    {{ deliveryPrice !== 0 ? `${deliveryPrice} грн` : "Бесплатно" }}
                   </p>
                 </div>
                 <div class="main__basket-info-item-order-total-item">
@@ -201,7 +205,7 @@
                     Списание бонусов
                   </p>
                   <p class="main__basket-info-item-order-total-item-sum" id="discount">
-                    -25 ₽
+                    -25 грн
                   </p>
                 </div>
                 <div class="main__basket-info-item-order-total-item total">
@@ -210,7 +214,7 @@
                     <span class="basket-bonuses">51 бонус</span>
                   </p>
                   <p class="main__basket-info-item-order-total-item-final" id="total-sum-discount">
-                    {{ $store.state.order.order.totalPrice + (deliveryPrice !== 0 && orders.items.length ? deliveryPrice - 25 : 0) }} ₽
+                    {{ $store.state.order.order.totalPrice + (deliveryPrice !== 0 && orders.items.length ? deliveryPrice - 25 : 0) }} грн
                   </p>
                 </div>
               </div>
@@ -309,6 +313,15 @@ export default {
   },
   methods: {
     ...mapMutations('order', ['updateOrders', 'updateTotalQuantity', 'updateTotalPrice', 'clearOrder']),
+    parseCheckedColors(color, itemId) {
+      const currentItem = this.orders.items.find(el => el.item._id === itemId);
+
+      const colorObject = currentItem.item.color.find(el => el.value === color);
+      if (!colorObject) return;
+
+      return colorObject.text
+    },
+
     async sendOrder() {
       this.deliveryInfo.receiver.fullName = this.fullName;
       this.deliveryInfo.fullAddress = this.address;

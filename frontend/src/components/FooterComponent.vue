@@ -58,8 +58,8 @@ export default {
   data() {
     return {
       contacts: [
-        { text: '+7 (924) 765 28 20', value: 'phone', href: 'tel:+79247652820', isLink: true },
-        { text: 'г. Якутск, ул. Петра Алексеева, д. 6, ТЦ “Олонхо”', value: 'address', isLink: false },
+        { text: '+38 (044) 123 45 67', value: 'phone', href: 'tel:+380441234567', isLink: true },
+        { text: 'г. Киев, ул. Шевченко, д. 6', value: 'address', isLink: false },
         { text: 'Ежедневно с 10:00 до 19:00', value: 'schedule', isLink: false },
         { text: '@hobbyart_dv', value: 'mail', href: 'mailto:@hobbyart_dv', isLink: true },
       ],
