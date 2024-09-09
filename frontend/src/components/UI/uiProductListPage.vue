@@ -21,7 +21,8 @@
       <p style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
         <span v-if="item.isSelectedItem && savedIndex === item._id" >
           <span style="font-weight: 600; line-height: 1.2rem">Выбранные цвета:</span> {{ parseCheckedColors(item._id) }}
-        </span></p>
+        </span>
+      </p>
       <div class="main__product-page-content-item-price">
         {{ item.price }} грн
       </div>

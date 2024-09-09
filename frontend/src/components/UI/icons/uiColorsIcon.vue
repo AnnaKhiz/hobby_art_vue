@@ -6,7 +6,7 @@
       ref="colors"
       :style="`background-color: ${color.value}; border: 1px solid ${color.value === 'white' ? 'lightgray' : 'none'}; width: ${size}px; height: ${size}px; margin-right: 5px`"
       class="render-colors"
-      @click.prevent="this.$emit('check', color.value)"
+      @click.prevent="$emit('check', color.value)"
     ></p>
     <span v-if="!details" @click="isFull = !isFull">{{ !isFull ? colorItemsShowMore(item.color) : 'Hide'}}</span>
   </div>
