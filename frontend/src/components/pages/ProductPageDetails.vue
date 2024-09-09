@@ -283,9 +283,8 @@ export default {
           credentials: 'include'
         })
         const data = await result.json();
-
         this.productItem = await data.item;
-        console.log('productList !!!!!!!', this.productItem)
+
       } catch (e) {
         console.log(e)
       }

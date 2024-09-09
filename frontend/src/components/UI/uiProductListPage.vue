@@ -112,7 +112,9 @@ export default {
         this.addToOrder(orderItem);
         this.checkedColor = [];
       })
+
       this.display = true;
+      this.savedIndex = null
 
     },
     async getProductList() {
@@ -124,9 +126,7 @@ export default {
         const data = await result.json();
 
         this.productList = data.items.map(el => ({...el, isSelectedItem: false }));
-        console.log('productList', this.productList)
         this.$emit('itemsList', this.productList)
-        console.log('productList', this.productList)
       } catch (e) {
         console.log(e)
       }
