@@ -1,5 +1,6 @@
 const protectedRoute = (allowedRoles = [], redirectTo = 'http://localhost:8080/admin/login') => function (req, res, next) {
   const { role = 'unsigned' } = req._auth || {};
+  console.log('role', role)
 
   if (!allowedRoles.includes(role)) {
 

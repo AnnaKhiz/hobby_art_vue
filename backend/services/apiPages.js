@@ -118,7 +118,6 @@ async function updateUserInfo(req, res, next) {
 }
 
 // admin
-
 async function uploadAdminPage(req,res) {
   const { role } = req._auth;
 
@@ -154,7 +153,7 @@ async function logInToAdminPanel(req, res, next) {
     sameSite: "Lax",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     path: "/admin"
-  } )
+  })
 
   res.send({ id: admin._id.toString(), role: "admin" });
 }
@@ -165,11 +164,9 @@ async function logoutFromAdminPanel(req, res, next) {
     secure: false,
     sameSite: "Lax",
     path: "/admin",
-
   });
-  console.log(res)
-  res.send({ "result": true });
 
+  res.send({ "result": true });
   next();
 }
 
