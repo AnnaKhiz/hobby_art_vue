@@ -1,7 +1,7 @@
 <template>
 
     <div class="notify-content" :style="`width: ${width}px; height: ${height}px; background: ${background}`">
-      <h3 :style="`color: ${textColor}; font-weight: 900`">{{ text }}</h3>
+      <h3 :style="`color: ${textColor}`">{{ text }}</h3>
     </div>
 </template>
 

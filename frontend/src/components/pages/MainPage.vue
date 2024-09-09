@@ -194,7 +194,7 @@ export default defineComponent({
     }
   },
   mounted() {
-    console.log(this.getCheckedHeaderLink)
+    // console.log(this.getCheckedHeaderLink)
 
     // await this.getAdmin()
   },

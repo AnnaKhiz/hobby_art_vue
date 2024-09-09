@@ -11,7 +11,13 @@
               </div>
               <div class="main__product-details-about-item-image">
 
-                <ui-colors-icon :item="productItem" size="50" position="center" details/>
+
+                <ui-colors-icon :item="productItem" size="50" position="center" @check="addCheckedColor($event)" details/>
+                <p v-if="order.checkedColor.length" style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
+                  <span>
+                    <span style="font-weight: 600; line-height: 1.2rem">Выбранные цвета:</span> {{ parseCheckedColors || '' }}
+                  </span>
+                </p>
               </div>
             </div>
             <div class="main__product-details-about-item right-item">
@@ -56,7 +62,7 @@
                     {{ countFinalPrice() }} грн
                   </p>
                   <ui-quantity-counter @input="order.quantity = $event"/>
-                  <a @click.prevent="addToBasket" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn" style="cursor: pointer">
+                  <a @click.prevent="order.checkedColor.length ? addToBasket() : showNotifyError = true" class="main__product-details-about-item-basket-flex-btn" id="add-to-basket-btn" style="cursor: pointer">
                     Добавить в корзину
                   </a>
                 </div>
@@ -213,6 +219,10 @@
       <ui-notify-dialog v-if="display" />
     </Transition>
 
+    <Transition name="fade">
+      <ui-notify-dialog v-if="showNotifyError && !order.checkedColor.length" text="Выберите цвет!" background="#ff0000" textColor="white"/>
+    </Transition>
+
   </main>
 </template>
 <script>
@@ -236,9 +246,11 @@ export default {
   },
   data() {
     return {
+      showNotifyError: false,
       display: false,
       productItem: {},
       order: {
+        checkedColor: [],
         quantity: 1,
         price: 0,
         item: {}
@@ -249,15 +261,44 @@ export default {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
+    parseCheckedColors() {
+
+      if (!this.order.checkedColor.length) {
+        return ''
+      }
+      const colorObjects = this.order.item.color.filter(el => this.order.checkedColor.includes(el.value));
+
+      if (!colorObjects) return;
+
+      return colorObjects.map(el => (el.text)).join(', ')
+    },
 
   },
   methods: {
     ...mapMutations('order', ['addToOrder']),
+    addCheckedColor(value) {
+      if (this.order.checkedColor.includes(value)) {
+        const index = this.order.checkedColor.findIndex(el => el === value)
+
+        if (index === -1) return false;
+
+        this.order.checkedColor.splice(index, 1)
+      } else {
+        this.order.checkedColor.push(value)
+      }
+    },
+
     addToBasket() {
-      this.addToOrder(this.order);
+      this.order.checkedColor.forEach(el => {
+        const orderItem = { ...this.order, checkedColor: el }
+        this.addToOrder(orderItem);
+      })
+
       this.display = true;
+      this.showNotifyError = false;
 
       this.order = {
+        checkedColor: [],
         quantity: 1,
         price: 0,
         item: {...this.productItem}
@@ -265,15 +306,6 @@ export default {
     },
     countFinalPrice() {
       return this.order.price = this.productItem.price * this.order.quantity
-    },
-    removeItem() {
-      if (this.order.quantity === 1) {
-        return false
-      }
-      return this.order.quantity -= 1
-    },
-    addItem() {
-      return this.order.quantity += 1
     },
 
     async getProductList() {
@@ -283,9 +315,8 @@ export default {
           credentials: 'include'
         })
         const data = await result.json();
-
         this.productItem = await data.item;
-        console.log('productList !!!!!!!', this.productItem)
+
       } catch (e) {
         console.log(e)
       }
@@ -295,6 +326,9 @@ export default {
     await this.getProductList()
     this.order.price = this.productItem.price
     this.order.item = {...this.productItem}
+
+    const checkedColorsFromQuery = this.$route.query.colors.split(',');
+    checkedColorsFromQuery.forEach(color =>  this.order.checkedColor.push(color));
   },
   beforeUnmount() {
     this.order = {}

@@ -8,7 +8,7 @@
         </a>
       </div>
       <div class="main__product-page-content-item-label">
-        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">{{ item.name }} </a>
+        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}?colors=${checkedColor}` )" style="cursor: pointer">{{ item.name }} </a>
       </div>
       <div class="main__product-page-content-item-color-variants" @click.stop="checkIsSelectedItemUsed($event, item._id, index)">
         <ui-colors-icon
@@ -21,7 +21,8 @@
       <p style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
         <span v-if="item.isSelectedItem && savedIndex === item._id" >
           <span style="font-weight: 600; line-height: 1.2rem">Выбранные цвета:</span> {{ parseCheckedColors(item._id) }}
-        </span></p>
+        </span>
+      </p>
       <div class="main__product-page-content-item-price">
         {{ item.price }} грн
       </div>
@@ -112,7 +113,9 @@ export default {
         this.addToOrder(orderItem);
         this.checkedColor = [];
       })
+
       this.display = true;
+      this.savedIndex = null
 
     },
     async getProductList() {
@@ -124,9 +127,7 @@ export default {
         const data = await result.json();
 
         this.productList = data.items.map(el => ({...el, isSelectedItem: false }));
-        console.log('productList', this.productList)
         this.$emit('itemsList', this.productList)
-        console.log('productList', this.productList)
       } catch (e) {
         console.log(e)
       }
