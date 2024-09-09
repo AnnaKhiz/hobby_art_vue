@@ -19,8 +19,8 @@
           </div>
         </section>
         <section class="main__product-page-container">
-          <ui-filter-sidebar />
-          <ui-product-list-page @items-list="itemsList = $event" />
+          <ui-filter-sidebar @search="searchFilters = $event"/>
+          <ui-product-list-page @items-list="itemsList = $event" :search-filters="searchFilters"/>
         </section>
       </div>
     </section>
@@ -39,7 +39,8 @@ export default {
   components: {UiBreadcrumbs, UiFilterSidebar, UiMainBanner, UiProductListPage},
   data() {
     return {
-      itemsList: []
+      itemsList: [],
+      searchFilters: {}
     }
   },
   computed: {

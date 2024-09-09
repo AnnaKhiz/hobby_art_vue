@@ -116,8 +116,22 @@
     </div>
 
     <div class="main__product-page-sidebar-buttons">
-      <button type="button" id="search-results" class="main__product-page-sidebar-button-style-color">Показать</button>
-      <button type="reset" id="search-reset" class="main__product-page-sidebar-button">Очистить</button>
+      <button
+        type="button"
+        id="search-results"
+        class="main__product-page-sidebar-button-style-color"
+        @click.prevent="saveFilters"
+      >
+        Показать
+      </button>
+      <button
+        type="reset"
+        id="search-reset"
+        class="main__product-page-sidebar-button"
+        @click.prevent="resetForm"
+      >
+        Очистить
+      </button>
       <div class="main__product-page-sidebar-message" id="search-result-message">
         Подобрано 6 товаров
       </div>
@@ -132,6 +146,20 @@ export default {
   data() {
     return {
       search: {
+        type: [],
+        composition: [],
+        width: [],
+        brand: []
+      }
+    }
+  },
+  emits: ['search'],
+  methods: {
+    saveFilters() {
+      this.$emit('search', this.search);
+    },
+    resetForm() {
+      this.search = {
         type: [],
         composition: [],
         width: [],

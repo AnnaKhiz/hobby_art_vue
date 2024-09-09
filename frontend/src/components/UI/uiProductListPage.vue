@@ -56,6 +56,12 @@ import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 export default {
   name: "uiProductListPage.vue",
   components: {UiNotifyDialog, UiColorsIcon, UiProductItemHeader},
+  props: {
+    searchFilters: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
       isCheckedColorNotify: false,
@@ -118,6 +124,25 @@ export default {
       this.savedIndex = null
 
     },
+
+    filterBySearchConditions() {
+      const { brand, composition, type, width } = this.searchFilters;
+
+      console.log(composition, type, width)
+
+      const list = [...this.productList]
+
+      if (!type.length) {
+        return this.productList
+      }
+      this.productList = list.filter(el => type.includes(el.type))
+
+      if (!brand.length) {
+        return this.productList
+      }
+      this.productList = list.filter(el => brand.includes(el.brand))
+    },
+
     async getProductList() {
       try {
         const result = await fetch('http://localhost:3000/api/items', {
@@ -152,6 +177,14 @@ export default {
         }, 2000)
       }
     },
+    searchFilters: {
+      handler(val) {
+        console.log(val)
+        console.log(this.productList)
+        this.filterBySearchConditions()
+      },
+      deep: true
+    }
   },
 
 

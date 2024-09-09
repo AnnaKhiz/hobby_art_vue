@@ -35,6 +35,13 @@
       type="text"
     >
 
+    <label for="type" class="form-label">Тип изделия</label>
+    <input
+      v-model="form.type"
+      id="type"
+      type="text"
+    >
+
     <label for="composition" class="form-label">Состав</label>
     <input
       v-model="form.composition"

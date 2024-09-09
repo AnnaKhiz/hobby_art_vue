@@ -59,6 +59,7 @@ const ItemSchema = new mongoose.Schema({
   brand: { type: String },
   composition: { type: String },
   width: { type: Number },
+  type: { type: String },
   isSold: { type: Boolean },
   isDiscount: { type: Boolean },
   discountPercentage: { type: Number },
