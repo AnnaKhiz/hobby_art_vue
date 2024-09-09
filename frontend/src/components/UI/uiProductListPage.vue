@@ -1,6 +1,6 @@
 <template>
-  <div v-if="productList.length" class="main__product-page-content">
-    <div v-for="(item, index) in productList" :key="item._id" class="main__product-page-content-item">
+  <div v-if="filteredItems.length" class="main__product-page-content">
+    <div v-for="(item, index) in filteredItems" :key="item._id" class="main__product-page-content-item">
       <ui-product-item-header />
       <div class="main__product-page-content-item-img">
         <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">
@@ -72,10 +72,43 @@ export default {
     }
   },
   emits: ['itemsList'],
+  computed: {
+    filteredItems() {
+      const { brand, composition, type, width } = this.searchFilters;
+
+      if (!brand && !composition && !type && !width) {
+        console.log('no filters!!!!!!', this.searchFilters)
+        return this.productList
+      }
+
+      if (!brand.length && !composition.length && !type.length && !width.length) {
+        console.log('empty arrays!!!!!!', this.searchFilters)
+        return this.productList
+      }
+
+      const list = [...this.productList]
+      // конвертация текста в value, фильтр по кнопке показать
+
+      return list.filter(el => type.includes(el.type) && width.includes(el.width))
+
+
+    },
+
+
+
+  },
 
   methods: {
     ...mapMutations('order', ['addToOrder']),
+    filterByFields(field) {
+      const list = [...this.productList]
 
+      if (![field].length) {
+        return this.getProductList()
+      }
+
+      return list.filter(el => [field].includes(el[field]))
+    },
     checkIsSelectedItemUsed(event, id, index) {
       if (event.target.parentElement.id === id) {
         this.savedIndex = id
@@ -125,23 +158,6 @@ export default {
 
     },
 
-    filterBySearchConditions() {
-      const { brand, composition, type, width } = this.searchFilters;
-
-      console.log(composition, type, width)
-
-      const list = [...this.productList]
-
-      if (!type.length) {
-        return this.productList
-      }
-      this.productList = list.filter(el => type.includes(el.type))
-
-      if (!brand.length) {
-        return this.productList
-      }
-      this.productList = list.filter(el => brand.includes(el.brand))
-    },
 
     async getProductList() {
       try {
@@ -170,6 +186,12 @@ export default {
         }, 2000)
       }
     },
+    productList: {
+      handler(val) {
+        this.productList = val
+      },
+      deep: true
+    },
     isCheckedColorNotify(val) {
       if (val) {
         setTimeout(() => {
@@ -180,8 +202,8 @@ export default {
     searchFilters: {
       handler(val) {
         console.log(val)
-        console.log(this.productList)
-        this.filterBySearchConditions()
+        // console.log(this.productList)
+        // this.filterBySearchConditions()
       },
       deep: true
     }

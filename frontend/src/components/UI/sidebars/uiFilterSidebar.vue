@@ -155,9 +155,9 @@ export default {
   },
   emits: ['search'],
   methods: {
-    saveFilters() {
-      this.$emit('search', this.search);
-    },
+    // saveFilters() {
+    //   this.$emit('search', this.search);
+    // },
     resetForm() {
       this.search = {
         type: [],
@@ -165,6 +165,14 @@ export default {
         width: [],
         brand: []
       }
+    }
+  },
+  watch: {
+    search: {
+      handler(val) {
+        this.$emit('search', val);
+      },
+      deep: true
     }
   }
 }
