@@ -8,7 +8,7 @@
         </a>
       </div>
       <div class="main__product-page-content-item-label">
-        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">{{ item.name }} </a>
+        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}?colors=${checkedColor}` )" style="cursor: pointer">{{ item.name }} </a>
       </div>
       <div class="main__product-page-content-item-color-variants" @click.stop="checkIsSelectedItemUsed($event, item._id, index)">
         <ui-colors-icon

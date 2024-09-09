@@ -11,6 +11,7 @@
               </div>
               <div class="main__product-details-about-item-image">
 
+
                 <ui-colors-icon :item="productItem" size="50" position="center" @check="addCheckedColor($event)" details/>
                 <p v-if="order.checkedColor.length" style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
                   <span>
@@ -262,11 +263,11 @@ export default {
     }),
     parseCheckedColors() {
 
-      if (!this.order.item.color.length) {
+      if (!this.order.checkedColor.length) {
         return ''
       }
-
       const colorObjects = this.order.item.color.filter(el => this.order.checkedColor.includes(el.value));
+
       if (!colorObjects) return;
 
       return colorObjects.map(el => (el.text)).join(', ')
@@ -325,6 +326,9 @@ export default {
     await this.getProductList()
     this.order.price = this.productItem.price
     this.order.item = {...this.productItem}
+
+    const checkedColorsFromQuery = this.$route.query.colors.split(',');
+    checkedColorsFromQuery.forEach(color =>  this.order.checkedColor.push(color));
   },
   beforeUnmount() {
     this.order = {}
