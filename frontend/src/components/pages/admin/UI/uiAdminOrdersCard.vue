@@ -53,8 +53,8 @@
           <p class="main__basket-info-item-product-name admin-order-view" >
             {{ item._id.name }}
           </p>
-          <p class="main__basket-info-item-product-name admin-order-view" >
-            {{ item }}
+          <p class="main__basket-info-item-product-name admin-order-view" style="font-weight: 400">
+            ( {{ parseCheckedColors(item.checkedColor, index)}} )
           </p>
         </div>
 
@@ -76,7 +76,6 @@
     <!--  DIALOG add products to order  -->
     <ui-modal-template :value="isDisplayDialog" @input="isDisplayDialog = $event" width="80%" height="fit-content">
       <template #tableData>
-          <code>{{checkedColor}}</code>
           <table class="order-items-table">
             <tr>
               <td v-for="header in headers" :key="header.value">{{header.text}}</td>
@@ -182,6 +181,13 @@ export default {
     },
   },
   methods: {
+    // filteredColors(id, index) {
+    //   console.log('checked color', checkedColor)
+    //   console.log('jkjklkjkl', this.selectedOrder.items[index])
+    //   console.log('filter', this.selectedOrder.items[index]._id.color.filter(elem => elem.value !== checkedColor))
+    //   return this.selectedOrder.items[index]._id.color.filter(elem => elem.value !== checkedColor)
+    // },
+
     notify(text) {
       this.message = text;
     },
@@ -227,6 +233,15 @@ export default {
       return paymentObject.text
     },
 
+    parseCheckedColors(color, itemId) {
+      const currentItem = this.selectedOrder.items[itemId];
+
+      const colorObject = currentItem._id.color.find(el => el.value === color);
+      if (!colorObject) return '';
+
+      return colorObject.text
+    },
+
 
     addItemToOrder(item) {
       console.log(item)
@@ -240,18 +255,28 @@ export default {
       try {
         const result = await fetch('http://localhost:3000/api/items')
         const data = await result.json();
-        if(!data.result) return
+        if (!data.result) return
 
-        const list = this.selectedOrder.items.map(el => el._id._id)
-        this.itemsList = data.items.filter(el => !list.includes(el._id))
+        const list = this.selectedOrder.items.map(el => ({_id: el._id._id, checkedColor: el.checkedColor}))
 
+        this.itemsList = data.items;
+
+        list.forEach(element => {
+          this.itemsList = this.itemsList
+            .map(el => (
+              el._id === element._id
+                ? {...el, color: el.color.filter(color => color.value !== element.checkedColor)}
+                : el
+            ))
+            .filter(el => el.color.length)
+        })
       } catch (error) {
         console.log(error)
       }
     },
     async updateItemsListInOrder(item) {
-      const updatedItemsList = [...this.selectedOrder.items, { price: item.price, _id: item }]
-
+      const updatedItemsList = [...this.selectedOrder.items, { price: item.price, quantity: 1, _id: item , checkedColor: item.checkedColor}]
+      console.log(updatedItemsList)
       try {
         const result = await fetch(`http://localhost:3000/api/orders/update/${this.selectedOrder._id}`, {
           method: 'PATCH',
@@ -264,7 +289,7 @@ export default {
         const data = await result.json();
         console.log(data)
 
-        this.selectedOrder.items.push({ price: item.price, _id: item })
+        this.selectedOrder.items.push({ price: item.price, quantity: 1, _id: item , checkedColor: item.checkedColor })
         this.isDisplayDialog = false;
 
       } catch (error) {

@@ -331,7 +331,7 @@ export default {
       this.currentOrder.date = Date.now();
       this.currentOrder.totalPrice = this.$store.state.order.order.totalPrice;
       this.currentOrder.totalQuantity = this.$store.state.order.order.totalQuantity;
-      this.currentOrder.items = this.$store.state.order.order.items.map(el => ( { _id: el.item._id, price : el.price, quantity: el.quantity } ));
+      this.currentOrder.items = this.$store.state.order.order.items.map(el => ( { _id: el.item._id, price : el.price, quantity: el.quantity, checkedColor: el.checkedColor } ));
 
       console.log(this.currentOrder)
 
