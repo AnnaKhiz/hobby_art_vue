@@ -8,7 +8,7 @@
         </a>
       </div>
       <div class="main__product-page-content-item-label">
-        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}?colors=${checkedColor}` )" style="cursor: pointer">{{ item.name }} </a>
+        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}${params}` )" style="cursor: pointer">{{ item.name }} </a>
       </div>
       <div class="main__product-page-content-item-color-variants" @click.stop="checkIsSelectedItemUsed($event, item._id, index)">
         <ui-colors-icon
@@ -19,7 +19,7 @@
         />
       </div>
       <p style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
-        <span v-if="item.isSelectedItem && savedIndex === item._id" >
+        <span v-if="parseCheckedColors(item._id) && item.isSelectedItem && savedIndex === item._id" >
           <span style="font-weight: 600; line-height: 1.2rem">Выбранные цвета:</span> {{ parseCheckedColors(item._id) }}
         </span>
       </p>
@@ -73,6 +73,9 @@ export default {
   },
   emits: ['itemsList'],
   computed: {
+    params() {
+      return this.checkedColor.length ? '?colors=' + this.checkedColor : ''
+    },
     filteredItems() {
       const { brand, composition, type, width } = this.searchFilters;
 

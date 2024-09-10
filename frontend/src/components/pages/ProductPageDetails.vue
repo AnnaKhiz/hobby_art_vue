@@ -327,6 +327,10 @@ export default {
     this.order.price = this.productItem.price
     this.order.item = {...this.productItem}
 
+    if (!this.$route.query.colors) {
+      return this.order.checkedcolors = ''
+    }
+
     const checkedColorsFromQuery = this.$route.query.colors.split(',');
     checkedColorsFromQuery.forEach(color =>  this.order.checkedColor.push(color));
   },
