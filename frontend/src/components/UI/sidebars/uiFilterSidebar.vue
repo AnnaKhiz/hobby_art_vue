@@ -116,14 +116,13 @@
     </div>
 
     <div class="main__product-page-sidebar-buttons">
-      <button
-        type="button"
-        id="search-results"
-        class="main__product-page-sidebar-button-style-color"
-        @click.prevent="saveFilters"
-      >
-        Показать
-      </button>
+<!--      <button-->
+<!--        type="button"-->
+<!--        id="search-results"-->
+<!--        class="main__product-page-sidebar-button-style-color"-->
+<!--      >-->
+<!--        Показать-->
+<!--      </button>-->
       <button
         type="reset"
         id="search-reset"

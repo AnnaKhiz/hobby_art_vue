@@ -89,7 +89,7 @@ export default {
       const list = [...this.productList]
       // конвертация текста в value, фильтр по кнопке показать
 
-      return list.filter(el => type.includes(el.type) && width.includes(el.width))
+      return list.filter(el => width.includes(el.width) && type.includes(el.type))
 
 
     },
@@ -100,15 +100,15 @@ export default {
 
   methods: {
     ...mapMutations('order', ['addToOrder']),
-    filterByFields(field) {
-      const list = [...this.productList]
-
-      if (![field].length) {
-        return this.getProductList()
-      }
-
-      return list.filter(el => [field].includes(el[field]))
-    },
+    // filterByFields(field) {
+    //   const list = [...this.productList]
+    //
+    //   if (![field].length) {
+    //     return this.getProductList()
+    //   }
+    //
+    //   return list.filter(el => [field].includes(el[field]))
+    // },
     checkIsSelectedItemUsed(event, id, index) {
       if (event.target.parentElement.id === id) {
         this.savedIndex = id
@@ -201,7 +201,7 @@ export default {
     },
     searchFilters: {
       handler(val) {
-        console.log(val)
+        console.log('filters', val)
         // console.log(this.productList)
         // this.filterBySearchConditions()
       },
