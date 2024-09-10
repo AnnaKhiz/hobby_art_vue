@@ -1,5 +1,6 @@
 <template>
   <form class="modal__registration-form no_line">
+
     <label for="name" class="form-label">Название</label>
     <input
       v-model="form.name"
@@ -29,25 +30,37 @@
     >
 
     <label for="brand" class="form-label">Производитель</label>
-    <input
-      v-model="form.brand"
-      id="brand"
-      type="text"
-    >
+    <select class="select-list" v-model="form.brand" >
+      <option
+        v-for="brand in brandsList"
+        :key="brand.value"
+        :value="brand.value"
+      >
+        {{ brand.text }}
+      </option>
+    </select>
 
     <label for="type" class="form-label">Тип изделия</label>
-    <input
-      v-model="form.type"
-      id="type"
-      type="text"
-    >
+    <select class="select-list" v-model="form.type" >
+      <option
+        v-for="type in itemTypesList"
+        :key="type.value"
+        :value="type.value"
+      >
+        {{ type.text }}
+      </option>
+    </select>
 
     <label for="composition" class="form-label">Состав</label>
-    <input
-      v-model="form.composition"
-      id="composition"
-      type="text"
-    >
+    <select class="select-list" v-model="form.composition" >
+      <option
+        v-for="item in itemCompositionsList"
+        :key="item.value"
+        :value="item.value"
+      >
+        {{ item.text }}
+      </option>
+    </select>
 
     <label for="photo" class="form-label">Ссылка на изображение</label>
     <input
@@ -156,6 +169,22 @@ export default {
         { text: 'Желтый', value: 'yellow' },
         { text: 'Синий', value: 'blue' },
         { text: 'Белый', value: 'white' },
+      ],
+      brandsList: [
+        { text: 'Macrametr', value: 'macrametr' },
+        { text: 'Зефирка', value: 'zefirka' },
+        { text: 'Гамма', value: 'gamma' },
+        { text: 'Сибшнур', value: 'sibshnur' },
+      ],
+      itemTypesList: [
+        { text: 'Шпагат, шнуры, веревки', value: 'shpagat' },
+        { text: 'Кольца', value: 'kolca' },
+        { text: 'Джут', value: 'dzut' },
+      ],
+      itemCompositionsList: [
+        { text: 'Хлопок', value: 'cotton' },
+        { text: 'Синтетика', value: 'polyester' },
+        { text: 'С сердечником', value: 'serdechnik' },
       ]
     }
   },
@@ -163,7 +192,15 @@ export default {
   methods: {
     async addNewItem() {
       const checkedColors = this.colorsSelect.filter(el =>  this.form.color.includes(el.value));
+      const type = this.itemTypesList.filter(el => this.form.type === el.value);
+      const brand = this.brandsList.filter(el => this.form.brand === el.value);
+      const composition = this.itemCompositionsList.filter(el => this.form.composition === el.value);
+
       this.form.color = checkedColors;
+      this.form.type = type;
+      this.form.brand = brand;
+      this.form.composition = composition;
+
       try {
         const result = await fetch('http://localhost:3000/api/items/add', {
           method: 'POST',
@@ -240,4 +277,9 @@ export default {
   position: absolute
   bottom: 0
   left: 0
+.select-list
+  &:hover
+    color: black
+  &:focus
+    color: black
 </style>
