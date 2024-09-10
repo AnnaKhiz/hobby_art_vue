@@ -32,7 +32,7 @@
     <label for="brand" class="form-label">Производитель</label>
     <select class="select-list" v-model="form.brand" >
       <option
-        v-for="brand in brandsList"
+        v-for="brand in $store.state.filter.brandsList"
         :key="brand.value"
         :value="brand.value"
       >
@@ -43,7 +43,7 @@
     <label for="type" class="form-label">Тип изделия</label>
     <select class="select-list" v-model="form.type" >
       <option
-        v-for="type in itemTypesList"
+        v-for="type in $store.state.filter.itemTypesList"
         :key="type.value"
         :value="type.value"
       >
@@ -54,7 +54,7 @@
     <label for="composition" class="form-label">Состав</label>
     <select class="select-list" v-model="form.composition" >
       <option
-        v-for="item in itemCompositionsList"
+        v-for="item in $store.state.filter.itemCompositionsList"
         :key="item.value"
         :value="item.value"
       >
@@ -160,7 +160,7 @@ export default {
         color: [],
       },
       boolOptions: [
-        { text: 'В наличии', value: true },
+        { text: 'Есть', value: true },
         { text: 'Нет', value: false }
       ],
       colorsSelect: [
@@ -170,22 +170,6 @@ export default {
         { text: 'Синий', value: 'blue' },
         { text: 'Белый', value: 'white' },
       ],
-      brandsList: [
-        { text: 'Macrametr', value: 'macrametr' },
-        { text: 'Зефирка', value: 'zefirka' },
-        { text: 'Гамма', value: 'gamma' },
-        { text: 'Сибшнур', value: 'sibshnur' },
-      ],
-      itemTypesList: [
-        { text: 'Шпагат, шнуры, веревки', value: 'shpagat' },
-        { text: 'Кольца', value: 'kolca' },
-        { text: 'Джут', value: 'dzut' },
-      ],
-      itemCompositionsList: [
-        { text: 'Хлопок', value: 'cotton' },
-        { text: 'Синтетика', value: 'polyester' },
-        { text: 'С сердечником', value: 'serdechnik' },
-      ]
     }
   },
   emits: ['goBack', 'submitEdit'],
@@ -219,9 +203,9 @@ export default {
       return this.form = {
         ...this.form,
         color: this.colorsSelect.filter(el => this.form.color.includes(el.value)),
-        type: this.itemTypesList.find(el => this.form.type === el.value),
-        brand: this.brandsList.find(el => this.form.brand === el.value),
-        composition: this.itemCompositionsList.find(el => this.form.composition === el.value)
+        type: this.$store.state.filter.itemTypesList.find(el => this.form.type === el.value),
+        brand: this.$store.state.filter.brandsList.find(el => this.form.brand === el.value),
+        composition: this.$store.state.filter.itemCompositionsList.find(el => this.form.composition === el.value)
       }
     },
 
