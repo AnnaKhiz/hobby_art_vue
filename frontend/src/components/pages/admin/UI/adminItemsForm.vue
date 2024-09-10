@@ -191,15 +191,7 @@ export default {
   emits: ['goBack', 'submitEdit'],
   methods: {
     async addNewItem() {
-      const checkedColors = this.colorsSelect.filter(el =>  this.form.color.includes(el.value));
-      const type = this.itemTypesList.filter(el => this.form.type === el.value);
-      const brand = this.brandsList.filter(el => this.form.brand === el.value);
-      const composition = this.itemCompositionsList.filter(el => this.form.composition === el.value);
-
-      this.form.color = checkedColors;
-      this.form.type = type;
-      this.form.brand = brand;
-      this.form.composition = composition;
+      this.parseFormFields();
 
       try {
         const result = await fetch('http://localhost:3000/api/items/add', {
@@ -222,17 +214,39 @@ export default {
         console.log(error)
       }
     },
+
+    parseFormFields() {
+      return this.form = {
+        ...this.form,
+        color: this.colorsSelect.filter(el => this.form.color.includes(el.value)),
+        type: this.itemTypesList.find(el => this.form.type === el.value),
+        brand: this.brandsList.find(el => this.form.brand === el.value),
+        composition: this.itemCompositionsList.find(el => this.form.composition === el.value)
+      }
+    },
+
     sendEditedItem() {
       if (this.form.color.length) {
-        const colorsObject = this.colorsSelect.filter(el => this.form.color.includes(el.value))
-        this.form.color = colorsObject
+        this.parseFormFields();
+
+        this.message = "Товар обновлен успешно"
+
+        setTimeout(() => {
+          this.message = "";
+          this.$emit('submitEdit', this.form)
+        }, 1500)
       }
-      this.$emit('submitEdit', this.form)
     }
   },
   mounted() {
     if (Object.values(this.editFormData).length) {
-      this.form = this.editFormData
+      this.form = {
+        ...this.editFormData,
+        brand: this.editFormData.brand.value,
+        type: this.editFormData.type.value,
+        composition: this.editFormData.composition.value,
+        color: this.editFormData.color.map(el => el.value)
+      }
     } else {
       this.form = {
         color: [],

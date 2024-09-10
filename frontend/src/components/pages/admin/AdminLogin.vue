@@ -45,12 +45,6 @@ import UiAdminOrdersCard from "@/components/pages/admin/UI/uiAdminOrdersCard.vue
 export default {
   name: "AdminLogin",
   components: {UiAdminOrdersCard, UiAdminProductCard, AdminItemsForm},
-  // props: {
-  //   edit: {
-  //     type: Boolean,
-  //     default: false
-  //   }
-  // },
   data() {
     return {
       editFormData: {},
@@ -69,11 +63,8 @@ export default {
       this.editFormData = {}
     },
     openEditItem(item) {
-
       this.addItem = true
-
       this.editFormData = item
-      console.log('edit item' , item)
     },
     async editItem(item) {
 
@@ -88,9 +79,12 @@ export default {
 
         if (!data.result) return;
 
-        // this.$emit('update', id)
+        const index = this.itemsList.findIndex(element => element._id === item._id);
+        if (index === -1) return false;
 
-        console.log('edit result', data)
+        this.itemsList[index] = item;
+        this.addItem = false;
+
       } catch (error) {
         console.log(error)
       }
@@ -102,12 +96,9 @@ export default {
     },
 
     addProduct(item) {
-
       this.addItem = false;
       this.editFormData = {}
       this.itemsList.push(item)
-
-
     },
 
     removeProduct(id) {

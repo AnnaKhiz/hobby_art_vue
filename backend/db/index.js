@@ -56,16 +56,10 @@ const ItemSchema = new mongoose.Schema({
   price: { type: Number },
   restBalance: { type: Number },
   length: { type: Number },
-  brand: [
-    { text: String, value: String }
-  ],
-  composition: [
-    { text: String, value: String }
-  ],
+  brand: { text: String, value: String },
+  composition: { text: String, value: String },
   width: { type: Number },
-  type: [
-    { text: String, value: String }
-  ],
+  type: { text: String, value: String },
   isSold: { type: Boolean },
   isDiscount: { type: Boolean },
   discountPercentage: { type: Number },
