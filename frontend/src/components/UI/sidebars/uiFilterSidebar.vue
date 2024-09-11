@@ -6,7 +6,7 @@
       </h3>
       <ul class="main__product-page-sidebar-block list-filters" v-for="item in $store.getters[`filter/${header.value}`]" :key="item.value">
         <li>
-          <label for="shpagat">
+          <label :for="item.value">
             <input v-model="search[header.value]" type="checkbox" name="type" :value="item.value" :id="item.value">
             {{item.text}}
           </label>
@@ -15,13 +15,6 @@
     </div>
 
     <div class="main__product-page-sidebar-buttons">
-<!--      <button-->
-<!--        type="button"-->
-<!--        id="search-results"-->
-<!--        class="main__product-page-sidebar-button-style-color"-->
-<!--      >-->
-<!--        Показать-->
-<!--      </button>-->
       <button
         type="reset"
         id="search-reset"
@@ -31,7 +24,7 @@
         Очистить
       </button>
       <div class="main__product-page-sidebar-message" id="search-result-message">
-        Подобрано 6 товаров
+        Подобрано {{ filterItemsQuantity }} товаров
       </div>
     </div>
 
@@ -42,6 +35,12 @@
 
 export default {
   name: "uiFilterSidebar.vue",
+  props: {
+    filterItemsQuantity: {
+      type: Number,
+      default: null
+    }
+  },
   data() {
     return {
       search: {

@@ -181,13 +181,6 @@ export default {
     },
   },
   methods: {
-    // filteredColors(id, index) {
-    //   console.log('checked color', checkedColor)
-    //   console.log('jkjklkjkl', this.selectedOrder.items[index])
-    //   console.log('filter', this.selectedOrder.items[index]._id.color.filter(elem => elem.value !== checkedColor))
-    //   return this.selectedOrder.items[index]._id.color.filter(elem => elem.value !== checkedColor)
-    // },
-
     notify(text) {
       this.message = text;
     },
@@ -215,8 +208,6 @@ export default {
 
       this.updateOrder(updatedObject, itemId);
     },
-
-
 
     parseDeliveryValue(value) {
       const deliveryObject = this.deliveryMethods.find(el => el.value === value);

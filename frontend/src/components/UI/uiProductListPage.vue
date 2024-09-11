@@ -44,6 +44,9 @@
       <ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white"/>
     </Transition>
   </div>
+  <div v-else>
+    <p class="text-no-products">Нет товаров соответствующих критериям поиска</p>
+  </div>
 </template>
 
 <script>
@@ -80,38 +83,23 @@ export default {
       const { brand, composition, type, width } = this.searchFilters;
 
       if (!brand && !composition && !type && !width) {
-        console.log('no filters!!!!!!', this.searchFilters)
-        return this.productList
-      }
+          return this.productList;
+        }
 
-      if (!brand.length && !composition.length && !type.length && !width.length) {
-        console.log('empty arrays!!!!!!', this.searchFilters)
-        return this.productList
-      }
+      return this.productList.filter(product => {
+        const typeMatch = !type.length || type.includes(product.type.value) ;
+        const compositionMatch = !composition.length || composition.includes(product.composition.value);
+        const brandMatch = !brand.length || brand.includes(product.brand.value);
+        const widthMatch = !width.length || width.includes(product.width.toString());
 
-      const list = [...this.productList]
-      // конвертация текста в value, фильтр по кнопке показать
-
-      return list.filter(el => width.includes(el.width) && type.includes(el.type))
-
-
+        return typeMatch && compositionMatch && brandMatch && widthMatch
+      })
     },
-
-
 
   },
 
   methods: {
     ...mapMutations('order', ['addToOrder']),
-    // filterByFields(field) {
-    //   const list = [...this.productList]
-    //
-    //   if (![field].length) {
-    //     return this.getProductList()
-    //   }
-    //
-    //   return list.filter(el => [field].includes(el[field]))
-    // },
     checkIsSelectedItemUsed(event, id, index) {
       if (event.target.parentElement.id === id) {
         this.savedIndex = id
@@ -202,11 +190,9 @@ export default {
         }, 2000)
       }
     },
-    searchFilters: {
+    filteredItems: {
       handler(val) {
-        console.log('filters', val)
-        // console.log(this.productList)
-        // this.filterBySearchConditions()
+        this.$emit('change', val.length)
       },
       deep: true
     }
@@ -226,4 +212,8 @@ export default {
 .fade-enter-from,
 .fade-leave-to
   opacity: 0
+
+.text-no-products
+  font: 400 normal 1rem/1.3rem 'Montserrat'
+  color: var(--colorTextMain)
 </style>

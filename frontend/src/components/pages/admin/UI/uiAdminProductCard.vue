@@ -42,12 +42,9 @@ export default {
         })
 
         const data = await result.json();
-
         if (!data.result) return;
 
         this.$emit('update', id)
-
-        console.log('remove result', data)
       } catch (error) {
         console.log(error)
       }
