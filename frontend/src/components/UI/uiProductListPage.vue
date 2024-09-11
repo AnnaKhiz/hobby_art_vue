@@ -74,7 +74,7 @@ export default {
       savedIndex: null
     }
   },
-  emits: ['itemsList'],
+  emits: ['itemsList', 'change'],
   computed: {
     params() {
       return this.checkedColor.length ? '?colors=' + this.checkedColor : ''
