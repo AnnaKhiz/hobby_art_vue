@@ -143,10 +143,16 @@ export default {
     }, 10)
   },
   watch: {
-    order(val) {
-      this.basketQuantity = val.totalQuantity
+    order: {
+      handler(val) {
+        this.basketQuantity = val.totalQuantity
+      },
+      deep: true
     },
-    deep: true
+    basketQuantity(val) {
+      document.documentElement.style.setProperty('--basket-count', `"${ val || 0 }"`);
+    }
+
   }
 }
 </script>
