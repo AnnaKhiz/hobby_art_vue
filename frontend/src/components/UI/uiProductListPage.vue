@@ -1,6 +1,6 @@
 <template>
-  <div v-if="productList.length" class="main__product-page-content">
-    <div v-for="(item, index) in productList" :key="item._id" class="main__product-page-content-item">
+  <div v-if="filteredItems.length" class="main__product-page-content">
+    <div v-for="(item, index) in filteredItems" :key="item._id" class="main__product-page-content-item">
       <ui-product-item-header />
       <div class="main__product-page-content-item-img">
         <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">
@@ -8,7 +8,7 @@
         </a>
       </div>
       <div class="main__product-page-content-item-label">
-        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}?colors=${checkedColor}` )" style="cursor: pointer">{{ item.name }} </a>
+        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}${params}` )" style="cursor: pointer">{{ item.name }} </a>
       </div>
       <div class="main__product-page-content-item-color-variants" @click.stop="checkIsSelectedItemUsed($event, item._id, index)">
         <ui-colors-icon
@@ -19,7 +19,7 @@
         />
       </div>
       <p style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
-        <span v-if="item.isSelectedItem && savedIndex === item._id" >
+        <span v-if="parseCheckedColors(item._id) && item.isSelectedItem && savedIndex === item._id" >
           <span style="font-weight: 600; line-height: 1.2rem">Выбранные цвета:</span> {{ parseCheckedColors(item._id) }}
         </span>
       </p>
@@ -44,6 +44,9 @@
       <ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white"/>
     </Transition>
   </div>
+  <div v-else>
+    <p class="text-no-products">Нет товаров соответствующих критериям поиска</p>
+  </div>
 </template>
 
 <script>
@@ -56,6 +59,12 @@ import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 export default {
   name: "uiProductListPage.vue",
   components: {UiNotifyDialog, UiColorsIcon, UiProductItemHeader},
+  props: {
+    searchFilters: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
       isCheckedColorNotify: false,
@@ -65,11 +74,32 @@ export default {
       savedIndex: null
     }
   },
-  emits: ['itemsList'],
+  emits: ['itemsList', 'change'],
+  computed: {
+    params() {
+      return this.checkedColor.length ? '?colors=' + this.checkedColor : ''
+    },
+    filteredItems() {
+      const { brand, composition, type, width } = this.searchFilters;
+
+      if (!brand && !composition && !type && !width) {
+          return this.productList;
+        }
+
+      return this.productList.filter(product => {
+        const typeMatch = !type.length || type.includes(product.type.value) ;
+        const compositionMatch = !composition.length || composition.includes(product.composition.value);
+        const brandMatch = !brand.length || brand.includes(product.brand.value);
+        const widthMatch = !width.length || width.includes(product.width.toString());
+
+        return typeMatch && compositionMatch && brandMatch && widthMatch
+      })
+    },
+
+  },
 
   methods: {
     ...mapMutations('order', ['addToOrder']),
-
     checkIsSelectedItemUsed(event, id, index) {
       if (event.target.parentElement.id === id) {
         this.savedIndex = id
@@ -118,6 +148,8 @@ export default {
       this.savedIndex = null
 
     },
+
+
     async getProductList() {
       try {
         const result = await fetch('http://localhost:3000/api/items', {
@@ -145,6 +177,12 @@ export default {
         }, 2000)
       }
     },
+    productList: {
+      handler(val) {
+        this.productList = val
+      },
+      deep: true
+    },
     isCheckedColorNotify(val) {
       if (val) {
         setTimeout(() => {
@@ -152,6 +190,12 @@ export default {
         }, 2000)
       }
     },
+    filteredItems: {
+      handler(val) {
+        this.$emit('change', val.length)
+      },
+      deep: true
+    }
   },
 
 
@@ -168,4 +212,8 @@ export default {
 .fade-enter-from,
 .fade-leave-to
   opacity: 0
+
+.text-no-products
+  font: 400 normal 1rem/1.3rem 'Montserrat'
+  color: var(--colorTextMain)
 </style>

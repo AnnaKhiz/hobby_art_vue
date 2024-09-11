@@ -13,11 +13,19 @@ const OrderSchema = new mongoose.Schema({
   totalPrice: {type: Number},
   totalQuantity: {type: Number},
   deliveryInfo: {
-    fullAddress: {type: String},
+    address: {
+      city: {type: String},
+      street: {type: String},
+      house: {type: String},
+      apartment: {type: Number},
+      zipCode: {type: Number}
+    },
     deliveryMethod: {type: String},
     paymentMethod: {type: String},
     receiver: {
-      fullName: {type: String},
+      name: {type: String},
+      lastName: {type: String},
+      surName: {type: String},
       phone: {type: String},
       email: {type: String},
       isMailing: {type: Boolean}
@@ -56,9 +64,10 @@ const ItemSchema = new mongoose.Schema({
   price: { type: Number },
   restBalance: { type: Number },
   length: { type: Number },
-  brand: { type: String },
-  composition: { type: String },
+  brand: { text: String, value: String },
+  composition: { text: String, value: String },
   width: { type: Number },
+  type: { text: String, value: String },
   isSold: { type: Boolean },
   isDiscount: { type: Boolean },
   discountPercentage: { type: Number },

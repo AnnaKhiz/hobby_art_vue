@@ -26,9 +26,10 @@
               data-modal="callModal"
               @click.prevent="checkFunction"
             >
-							{{ userPageLabel()  }}
+							{{ userPageLabel() }}
 						</a>
-						<a href="" class="header__menu-favoriteButton elem-sub" id="favorite-header" data-modal="callModal">
+
+						<a v-if="userPageLabel() === 'Кабинет'" href="" class="header__menu-favoriteButton elem-sub" id="favorite-header" data-modal="callModal">
 							Избранное
 						</a>
 						<a class="header__menu-basketButton elem-sub basket-count" @click="$router.push('/basket')">
@@ -68,7 +69,7 @@ export default {
 		return {
       displayDialog: false,
       user: {},
-      basketQuantity: 0
+      basketQuantity: 0,
 		}
 	},
   emits: ['send-checked-link'],
@@ -80,7 +81,6 @@ export default {
       totalQuantity: 'order/totalQuantity'
     }),
 
-
   },
   methods: {
     ...mapMutations({
@@ -89,13 +89,12 @@ export default {
       setDisplayDialogState: 'dialog/setDisplayDialogState',
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
+
     userPageLabel() {
       return localStorage.getItem('auth') === 'true' ? 'Кабинет' : 'Войти'
     },
     checkFunction() {
-      // this.$router.push('/user_page/1')
-
-      return localStorage.getItem('auth') === 'true' ? this.getUser() : this.openDialog()
+      return this.authorized ? this.getUser() : this.openDialog()
     },
     openDialog() {
 
@@ -122,14 +121,15 @@ export default {
       });
 
       const data = await result.json()
-      console.log('get result', data)
+
 
       if (!data.result) {
-        console.log('no requested result')
+        // console.log('no requested result')
         this.$router.back()
         // await this.getAdmin()
       } else {
-        this.setIsAuthorizedInfo(true)
+        this.setIsAuthorizedInfo(true);
+
         this.user = await data.user[0]
         this.$router.push(`/user_page/${this.user._id}`);
         return this.user
@@ -143,15 +143,21 @@ export default {
     }, 10)
   },
   watch: {
-    order(val) {
-      this.basketQuantity = val.totalQuantity
+    order: {
+      handler(val) {
+        this.basketQuantity = val.totalQuantity
+      },
+      deep: true
     },
-    deep: true
+    basketQuantity(val) {
+      document.documentElement.style.setProperty('--basket-count', `"${ val || 0 }"`);
+    },
   }
 }
 </script>
 <style scoped lang="sass">
 .basket-count
+  cursor: pointer
   &:after
     content: var(--basket-count)
     position: absolute

@@ -2,6 +2,9 @@
   <div v-if="!orders.length">
     Пока нет заказов
   </div>
+  <div v-if="isShowDetails" style="position: absolute; top: -30px; left: 0; color: red">
+    {{ errorMessage }}
+  </div>
   <div
     v-else
     class="items-container__item"
@@ -15,7 +18,7 @@
     <div class="content">
       <p class="item-row"><span class="label">Стоимость: </span> {{order.totalPrice}} грн</p>
       <p class="item-row"><span class="label">Количество товаров: </span> {{order.totalQuantity}}</p>
-      <p class="item-row"><span class="label">Заказчик: </span> {{order.deliveryInfo.receiver.fullName}}</p>
+      <p class="item-row"><span class="label">Заказчик: </span> {{ order.deliveryInfo.fullName }}</p>
       <p class="item-row"><span class="label">Способ доставки: </span> {{ parseDeliveryValue(order.deliveryInfo.deliveryMethod) }}</p>
       <p class="item-row"><span class="label">Способ оплаты: </span> {{ parsePaymentValue(order.deliveryInfo.paymentMethod) }}</p>
       <p class="item-row"><span class="label">Комментарий пользователя: </span> {{order.deliveryInfo.userComment}}</p>
@@ -29,10 +32,12 @@
 
 
   <div v-if="isShowDetails" class="items-container__item" style="width: 100%; padding: 0">
+
     <ui-table-content
       :items="selectedOrder ? tableItems : []"
       :delivery-methods="deliveryMethods"
       :payment-method="paymentMethod"
+      @error="errorMessage = $event"
     >
       <template #deliveryMethod="{item}">
         {{ parseDeliveryValue(item.value) }}
@@ -74,7 +79,7 @@
 
 
     <!--  DIALOG add products to order  -->
-    <ui-modal-template :value="isDisplayDialog" @input="isDisplayDialog = $event" width="80%" height="fit-content">
+    <ui-modal-template :value="isDisplayDialog" @close="isDisplayDialog = $event" width="80%" height="fit-content">
       <template #tableData>
           <table class="order-items-table">
             <tr>
@@ -125,6 +130,7 @@ export default {
   components: {UiModalTemplate, UiDeleteIcon, UiQuantityCounter, UiTableContent},
   data() {
     return {
+      errorMessage: '',
       checkedColor: '',
       isDisplayDialog: false,
       itemsList: [],
@@ -169,10 +175,10 @@ export default {
     tableItems() {
       return [
         { text: 'Заказ №', value: this.selectedOrder.index || 0, name: 'title', id: this.selectedOrder._id},
-        { text: 'Получатель', value: this.selectedOrder.deliveryInfo.receiver.fullName, name: 'receiver' },
+        { text: 'Получатель', value: this.selectedOrder.deliveryInfo.receiver, name: 'receiver' },
+        { text: 'Адресс доставки', value: this.selectedOrder.deliveryInfo.address, name: 'address'  },
         { text: 'Телефон', value: this.selectedOrder.deliveryInfo.receiver.phone, name: 'phone' },
         { text: 'E-mail', value: this.selectedOrder.deliveryInfo.receiver.email, name: 'email'  },
-        { text: 'Адресс доставки', value: this.selectedOrder.deliveryInfo.fullAddress, name: 'address'  },
         { text: 'Комментарий', value: this.selectedOrder.deliveryInfo.userComment, name: 'comment'  },
         { text: 'Способ доставки', value: this.selectedOrder.deliveryInfo.deliveryMethod, name: 'deliveryMethod'  },
         { text: 'Способ оплаты', value: this.selectedOrder.deliveryInfo.paymentMethod, name: 'paymentMethod'  },
@@ -181,13 +187,6 @@ export default {
     },
   },
   methods: {
-    // filteredColors(id, index) {
-    //   console.log('checked color', checkedColor)
-    //   console.log('jkjklkjkl', this.selectedOrder.items[index])
-    //   console.log('filter', this.selectedOrder.items[index]._id.color.filter(elem => elem.value !== checkedColor))
-    //   return this.selectedOrder.items[index]._id.color.filter(elem => elem.value !== checkedColor)
-    // },
-
     notify(text) {
       this.message = text;
     },
@@ -215,8 +214,6 @@ export default {
 
       this.updateOrder(updatedObject, itemId);
     },
-
-
 
     parseDeliveryValue(value) {
       const deliveryObject = this.deliveryMethods.find(el => el.value === value);
@@ -338,6 +335,18 @@ export default {
         console.log('Update error', error)
       }
     },
+    // parseFullUserName() {
+    //   return this.orders.map(el => {
+    //     return {
+    //       ...el,
+    //       deliveryInfo: {
+    //         ...el.deliveryInfo,
+    //         fullName: `${el.deliveryInfo.receiver.lastName} ${el.deliveryInfo.receiver.name} ${el.deliveryInfo.receiver.surName}`,
+    //         fullAddress: `${el.deliveryInfo.address.city}, ${el.deliveryInfo.address.street}, ${el.deliveryInfo.address.house}, ${el.deliveryInfo.address.apartment} ${el.deliveryInfo.address.zipCode}`
+    //       }
+    //     }
+    //   })
+    // },
     async initPage() {
       try {
         const result = await fetch(`http://localhost:3000/api/orders`, {
@@ -349,6 +358,10 @@ export default {
         if (!data.result) return;
 
         this.orders = data.orders
+
+        // this.orders = this.parseFullUserName()
+
+        console.log('parsed', this.orders)
 
         // this.$emit('update', id)
 

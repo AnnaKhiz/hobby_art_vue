@@ -5,7 +5,7 @@
   >
     <ui-confirm-dialog @close="display = false" :width="width" :height="width">
       <template #content>
-       <slot name="tableData"></slot>
+       <slot name="tableData" ></slot>
       </template>
     </ui-confirm-dialog>
   </div>
@@ -39,7 +39,7 @@ export default {
   watch : {
     display() {
       if ( this.value !== this.display ) {
-        this.$emit('input' , this.display)
+        this.$emit('close' , this.display)
       }
     },
     value() {
@@ -48,6 +48,7 @@ export default {
       }
     }
   },
+
   mounted() {
     if ( this.value ) {
       this.display = this.value

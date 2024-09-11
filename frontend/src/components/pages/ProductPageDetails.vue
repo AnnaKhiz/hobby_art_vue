@@ -47,8 +47,8 @@
                   <div class="main__product-details-about-item-options-flex-item">
                     <ul class="main__product-details-about-item-options-flex-list column-right">
                       <li>{{ productItem.length }}</li>
-                      <li>{{ productItem.brand }}</li>
-                      <li>{{ productItem.composition }}</li>
+                      <li>{{ productItem.brand ? productItem.brand.text : '' }}</li>
+                      <li>{{ productItem.composition ? productItem.composition.text : '' }}</li>
                       <li>{{ productItem.width }}</li>
                     </ul>
                   </div>
@@ -326,6 +326,10 @@ export default {
     await this.getProductList()
     this.order.price = this.productItem.price
     this.order.item = {...this.productItem}
+
+    if (!this.$route.query.colors) {
+      return this.order.checkedcolors = ''
+    }
 
     const checkedColorsFromQuery = this.$route.query.colors.split(',');
     checkedColorsFromQuery.forEach(color =>  this.order.checkedColor.push(color));

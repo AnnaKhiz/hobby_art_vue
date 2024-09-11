@@ -43,7 +43,10 @@ export default {
       default: ''
     }
 
-  }
+  },
+  updated() {
+    console.log('UPDATED DIALOG')
+  },
 }
 </script>
 

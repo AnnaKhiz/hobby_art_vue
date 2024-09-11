@@ -1,5 +1,6 @@
 <template>
   <form class="modal__registration-form no_line">
+
     <label for="name" class="form-label">Название</label>
     <input
       v-model="form.name"
@@ -29,18 +30,37 @@
     >
 
     <label for="brand" class="form-label">Производитель</label>
-    <input
-      v-model="form.brand"
-      id="brand"
-      type="text"
-    >
+    <select class="select-list" v-model="form.brand" >
+      <option
+        v-for="brand in $store.state.filter.brandsList"
+        :key="brand.value"
+        :value="brand.value"
+      >
+        {{ brand.text }}
+      </option>
+    </select>
+
+    <label for="type" class="form-label">Тип изделия</label>
+    <select class="select-list" v-model="form.type" >
+      <option
+        v-for="type in $store.state.filter.itemTypesList"
+        :key="type.value"
+        :value="type.value"
+      >
+        {{ type.text }}
+      </option>
+    </select>
 
     <label for="composition" class="form-label">Состав</label>
-    <input
-      v-model="form.composition"
-      id="composition"
-      type="text"
-    >
+    <select class="select-list" v-model="form.composition" >
+      <option
+        v-for="item in $store.state.filter.itemCompositionsList"
+        :key="item.value"
+        :value="item.value"
+      >
+        {{ item.text }}
+      </option>
+    </select>
 
     <label for="photo" class="form-label">Ссылка на изображение</label>
     <input
@@ -140,7 +160,7 @@ export default {
         color: [],
       },
       boolOptions: [
-        { text: 'В наличии', value: true },
+        { text: 'Есть', value: true },
         { text: 'Нет', value: false }
       ],
       colorsSelect: [
@@ -149,14 +169,14 @@ export default {
         { text: 'Желтый', value: 'yellow' },
         { text: 'Синий', value: 'blue' },
         { text: 'Белый', value: 'white' },
-      ]
+      ],
     }
   },
   emits: ['goBack', 'submitEdit'],
   methods: {
     async addNewItem() {
-      const checkedColors = this.colorsSelect.filter(el =>  this.form.color.includes(el.value));
-      this.form.color = checkedColors;
+      this.parseFormFields();
+
       try {
         const result = await fetch('http://localhost:3000/api/items/add', {
           method: 'POST',
@@ -178,17 +198,39 @@ export default {
         console.log(error)
       }
     },
+
+    parseFormFields() {
+      return this.form = {
+        ...this.form,
+        color: this.colorsSelect.filter(el => this.form.color.includes(el.value)),
+        type: this.$store.state.filter.itemTypesList.find(el => this.form.type === el.value),
+        brand: this.$store.state.filter.brandsList.find(el => this.form.brand === el.value),
+        composition: this.$store.state.filter.itemCompositionsList.find(el => this.form.composition === el.value)
+      }
+    },
+
     sendEditedItem() {
       if (this.form.color.length) {
-        const colorsObject = this.colorsSelect.filter(el => this.form.color.includes(el.value))
-        this.form.color = colorsObject
+        this.parseFormFields();
+
+        this.message = "Товар обновлен успешно"
+
+        setTimeout(() => {
+          this.message = "";
+          this.$emit('submitEdit', this.form)
+        }, 1500)
       }
-      this.$emit('submitEdit', this.form)
     }
   },
   mounted() {
     if (Object.values(this.editFormData).length) {
-      this.form = this.editFormData
+      this.form = {
+        ...this.editFormData,
+        brand: this.editFormData.brand.value,
+        type: this.editFormData.type.value,
+        composition: this.editFormData.composition.value,
+        color: this.editFormData.color.map(el => el.value)
+      }
     } else {
       this.form = {
         color: [],
@@ -233,4 +275,9 @@ export default {
   position: absolute
   bottom: 0
   left: 0
+.select-list
+  &:hover
+    color: black
+  &:focus
+    color: black
 </style>
