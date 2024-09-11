@@ -21,7 +21,7 @@
           <admin-items-form v-else @goBack="addProduct" :editFormData="editFormData" @submitEdit="editItem"/>
         </div>
         <div v-else class="container__item content">
-          <div class="items-container">
+          <div class="items-container" >
             <ui-admin-orders-card />
           </div>
 

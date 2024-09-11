@@ -155,6 +155,7 @@ router.beforeEach((to, from, next) => {
     if (isAuthenticated === 'false' && to.name !== 'admin' ) {
       next('/');
     } else {
+
       next();
     }
   } else {

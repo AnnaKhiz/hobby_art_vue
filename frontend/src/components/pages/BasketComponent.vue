@@ -5,13 +5,14 @@
         <ui-breadcrumbs :link="getCheckedHeaderLink" />
         <section class="main__basket-info">
           <div class="main__basket-info-item user-info">
+            {{deliveryInfo}}
             <form action="#">
               <div class="main__basket-info-delivery">
                 <h2 class="main__basket-info-delivery-label">
                   Способ получения
                 </h2>
                 <input
-                  v-model="userAddress.city"
+                  v-model="deliveryInfo.address.city"
                   type="text"
                   placeholder="Город"
                   style="width: 100%"
@@ -29,25 +30,25 @@
                 </div>
                 <div class="main__basket-info-delivery-subflex">
                   <input
-                    v-model="userAddress.street"
+                    v-model="deliveryInfo.address.street"
                     type="text"
                     placeholder="Улица"
                     id="street"
                   >
                   <input
-                    v-model="userAddress.house"
+                    v-model="deliveryInfo.address.house"
                     type="text"
                     placeholder="Дом"
                     id="house"
                   >
                   <input
-                    v-model="userAddress.apartment"
+                    v-model="deliveryInfo.address.apartment"
                     type="number"
                     placeholder="Квартира"
                     id="apartment"
                   >
                   <input
-                    v-model="userAddress.postcode"
+                    v-model="deliveryInfo.address.zipCode"
                     type="number"
                     placeholder="Индекс"
                     id="postcode"
@@ -66,19 +67,19 @@
                 </h2>
                 <div class="main__basket-info-user-subflex">
                   <input
-                    v-model="user.lastname"
+                    v-model="deliveryInfo.receiver.lastName"
                     type="text"
                     placeholder="Фамилия"
                     id="del-lastname"
                   >
                   <input
-                    v-model="user.name"
+                    v-model="deliveryInfo.receiver.name"
                     type="text"
                     placeholder="Имя"
                     id="del-firstname"
                   >
                   <input
-                    v-model="user.surname"
+                    v-model="deliveryInfo.receiver.surName"
                     type="text"
                     placeholder="Отчество"
                     id="del-surname"
@@ -266,16 +267,19 @@ export default {
         dateCompleted:'',
         totalPrice: '',
         totalQuantity: '',
-        deliveryInfo: {},
+        deliveryInfo: {
+          address: {}
+        },
         isMailing: false
       },
       deliveryInfo: {
+        address: {},
         deliveryMethod: 'novapost',
         paymentMethod: 'cash',
         receiver: {},
       },
       user: {},
-      userAddress: {},
+      // userAddress: {},
       deliveryMethods: [
         { text: 'Новая почта', value: 'novapost', price: 250 },
         { text: 'Укрпочта', value: 'ukrpost', price: 150 },
@@ -299,16 +303,16 @@ export default {
 
       return deliveryObject.price
     },
-    address() {
-      const { city, street, house, apartment, postcode } = this.userAddress;
-      if (!city || !street || !house || !apartment || !postcode) return false;
-      return `Город: ${city}, ул. ${street}, дом ${house}, кв. ${apartment}. Индекс ${postcode}`
-    },
-    fullName() {
-      const { name, lastname, surname } = this.user;
-      if (!name || !lastname || !surname) return false;
-      return `${lastname} ${name} ${surname}`
-    }
+    // address() {
+    //   const { city, street, house, apartment, postcode } = this.userAddress;
+    //   if (!city || !street || !house || !apartment || !postcode) return false;
+    //   return `Город: ${city}, ул. ${street}, дом ${house}, кв. ${apartment}. Индекс ${postcode}`
+    // },
+    // fullName() {
+    //   const { name, lastname, surname } = this.user;
+    //   if (!name || !lastname || !surname) return false;
+    //   return `${lastname} ${name} ${surname}`
+    // }
 
   },
   methods: {
@@ -323,8 +327,8 @@ export default {
     },
 
     async sendOrder() {
-      this.deliveryInfo.receiver.fullName = this.fullName;
-      this.deliveryInfo.fullAddress = this.address;
+      // this.deliveryInfo.receiver.fullName = this.fullName;
+      // this.deliveryInfo.fullAddress = this.address;
 
       this.currentOrder.deliveryInfo = {...this.deliveryInfo};
 
@@ -333,7 +337,7 @@ export default {
       this.currentOrder.totalQuantity = this.$store.state.order.order.totalQuantity;
       this.currentOrder.items = this.$store.state.order.order.items.map(el => ( { _id: el.item._id, price : el.price, quantity: el.quantity, checkedColor: el.checkedColor } ));
 
-      console.log(this.currentOrder)
+      // console.log(this.currentOrder)
 
       await this.addNewOrder();
 
@@ -359,9 +363,10 @@ export default {
         deliveryMethod: 'novapost',
         paymentMethod: 'cash',
         receiver: {},
+        address: {}
       };
-      this.user = {};
-      this.userAddress = {};
+      // this.user = {};
+      // this.userAddress = {};
 
       localStorage.removeItem('order');
       this.clearOrder()
@@ -396,6 +401,26 @@ export default {
       this.updateTotalPrice();
 
       localStorage.setItem('order', JSON.stringify(this.$store.state.order.order))
+    },
+    async getUser() {
+      const result = await fetch(`http://localhost:3000/user`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      const data = await result.json()
+
+      if (!data.result) {
+        // console.log('no requested result')
+        // this.$router.back()
+        // await this.getAdmin()
+      } else {
+        // this.setIsAuthorizedInfo(true);
+
+        this.user = await data.user[0]
+        // this.$router.push(`/user_page/${this.user._id}`);
+        return this.user
+      }
     }
   },
  created() {
@@ -405,6 +430,11 @@ export default {
     }
   },
   mounted() {
+    // if (localStorage.getItem('auth') === 'true') {
+    //   await this.getUser()
+    //   console.log('user', this.user)
+    // }
+
     // if( localStorage.getItem('order') ) {
     //   this.orders = JSON.parse(localStorage.getItem('order'));
     //   this.updateOrders(this.orders)

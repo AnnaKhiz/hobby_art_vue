@@ -13,11 +13,19 @@ const OrderSchema = new mongoose.Schema({
   totalPrice: {type: Number},
   totalQuantity: {type: Number},
   deliveryInfo: {
-    fullAddress: {type: String},
+    address: {
+      city: {type: String},
+      street: {type: String},
+      house: {type: String},
+      apartment: {type: Number},
+      zipCode: {type: Number}
+    },
     deliveryMethod: {type: String},
     paymentMethod: {type: String},
     receiver: {
-      fullName: {type: String},
+      name: {type: String},
+      lastName: {type: String},
+      surName: {type: String},
       phone: {type: String},
       email: {type: String},
       isMailing: {type: Boolean}
