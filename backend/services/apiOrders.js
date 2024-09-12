@@ -9,6 +9,19 @@ async function gelAllOrders(req, res, next) {
     res.send({ "result": true, orders: orders });
   }
 }
+
+async function getOrderById(req, res, next) {
+  const { id } = req.params;
+
+  try {
+    const order = await Order.findById({_id: new ObjectId(id)})
+
+    res.status(200).send({result: true, data: order });
+  } catch (error) {
+    console.log(error)
+    res.status(404).send({result: false, data: `Error: ${error}`})
+  }
+}
 async function addNewOrder(req, res, next) {
   const { body: order } = req;
 
@@ -101,5 +114,6 @@ module.exports = {
   updateOrderData,
   updateOrderItemById,
   removeOrder,
-  removeOrderItemById
+  removeOrderItemById,
+  getOrderById
 }

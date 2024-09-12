@@ -3,7 +3,7 @@
     v-if="display"
     class="modal-message"
   >
-    <ui-confirm-dialog @close="display = false" :width="width" :height="width">
+    <ui-confirm-dialog :save="save" @close="display = false" :width="width" :height="height" @save="$emit('save')" :header="header">
       <template #content>
        <slot name="tableData" ></slot>
       </template>
@@ -18,6 +18,14 @@ export default {
   name: "uiModalTemplate.vue",
   components: {UiConfirmDialog},
   props: {
+    header: {
+      type: String,
+      default: ''
+    },
+    save: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: Boolean,
       default: true

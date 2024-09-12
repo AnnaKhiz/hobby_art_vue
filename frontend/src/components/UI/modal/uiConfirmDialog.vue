@@ -1,8 +1,8 @@
 <template>
 
   <div class="dialog-content scrollable" :style="`width: ${width}; height: ${height}`">
-    <div class="dialog-header">
-      <h3>{{ header }}</h3>
+    <div class="dialog-header" :style="save && header ? 'width: 100%' : 'width: fit-content'">
+      <h3 :class="{ 'big-header' : save && header }">{{ header }}</h3>
       <ui-close-icon @close="$emit('close')" style="position: static;"/>
     </div>
     <div class="dialog-body-text">
@@ -11,6 +11,9 @@
       </slot>
     </div>
     <div>
+      <button v-if="save" class="dialog-action" @click="$emit('save')" style="margin-right: 15px">
+        Сохранить
+      </button>
       <button class="dialog-action" @click="$emit('close')">
         Закрыть
       </button>
@@ -26,6 +29,10 @@ export default {
   name: "uiConfirmDialog",
   components: { UiCloseIcon },
   props: {
+    save: {
+      type: Boolean,
+      default: false
+    },
     header: {
       type: String,
       default: ''
@@ -44,14 +51,14 @@ export default {
     }
 
   },
-  updated() {
-    console.log('UPDATED DIALOG')
-  },
 }
 </script>
 
 <style scoped lang="sass">
-
+.big-header
+  text-align: center
+  width: 100%
+  font-size: 1.5rem
 
 .dialog
   &-content
