@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div v-for="(order, index) in userOrdersList" :key="order._id" class="main__user-page-content-story-container">
+  <div v-if="userOrdersList.length">
+    <div v-for="(order, index) in userOrdersList" :key="order._id" class="main__user-page-content-story-container" >
       <div>
         <div class="main__user-page-content-story-container-flex">
           <div class="main__user-page-content-story-block">
@@ -17,10 +17,9 @@
           <div class="main__user-page-content-story-block block-right">
             <p class="main__user-page-content-story-desc right-block">
               <span>Статус:</span>
-
                 {{ order.dateCompleted !== '' ? order.dateCompleted : 'В работе' }}
-
             </p>
+
             <a href="" class="main__user-page-content-story-repeat-link" @click.prevent="addNewOrder(index)">
               Повторить заказ
             </a>
@@ -32,16 +31,16 @@
           <!--      order items block -->
           <div class="main__user-page-content-story-container-items "  >
             <div class="main__user-page-content-story-container-items-flex">
-              <div class="main__user-page-content-story-container-items-block left-block">
-                <div class="main__user-page-content-story-container-items-img">
+              <div class="main__user-page-content-story-container-items-block left-block" style="width: 100%">
+                <div class="main__user-page-content-story-container-items-img" style="width: 100px; object-fit: contain; aspect-ratio: 1/1">
                   <img :src="require(`@/assets/${item._id.photo}`)" alt="image card">
                 </div>
-                <p class="main__user-page-content-story-container-items-name">
-                  {{ item._id.name }}
+                <p class="main__user-page-content-story-container-items-name" style="width: 100%">
+                  {{ item._id.name }} <span style="font-size: 0.8rem; font-weight: 400">( {{ parseCheckedColors(item.checkedColor, item) }} )</span>
                 </p>
               </div>
-              <div class="main__user-page-content-story-container-items-block right-block">
-                <p class="main__user-page-content-story-container-items-sum">
+              <div class="main__user-page-content-story-container-items-block right-block" style="column-gap: 50px">
+                <p class="main__user-page-content-story-container-items-sum" style="min-width: fit-content">
                   {{ item.quantity }} шт
                 </p>
                 <p class="main__user-page-content-story-container-items-price">
@@ -55,13 +54,24 @@
       </div>
 
     </div>
+
+    <!--  dialog notify -->
+    <Transition name="fade">
+      <ui-notify-dialog v-if="showNotify" text="Копия заказа создана!"/>
+    </Transition>
+  </div>
+  <div v-else>
+    <h3 style="font-family: 'Montserrat'">У вас еще нет ни одного заказа.</h3>
   </div>
 
 </template>
 
 <script>
+import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
+
 export default {
   name: "userPageHistory",
+  components: {UiNotifyDialog},
   props: {
     user: {
       type: Object,
@@ -70,34 +80,32 @@ export default {
   },
   data() {
     return {
+      showNotify: false,
       show: false,
-      userOrdersList: []
+      userOrdersList: [],
+      date: ''
     }
   },
   methods: {
+    parseCheckedColors(color, item) {
+      const colorObject = item._id.color.find(el => el.value === color);
+      if (!colorObject) return '';
+
+      return colorObject.text;
+    },
+
     expandOrder(index) {
       this.userOrdersList[index].show = !this.userOrdersList[index].show
-      // this.show = !this.show
     },
+
     async addNewOrder(index) {
       const now = new Date(Date.now());
+      const options = { timeZone: 'Europe/Kiev', hour12: false };
+      this.date = now.toLocaleString('en-GB', options).replaceAll('/', '-');
 
-      const formattedTime = now.toISOString();
-      console.log(formattedTime);
-      // const date = new Date();
-      // const options = { timeZone: 'Europe/Kiev', hour12: false };
-      // console.log(date.toLocaleString('en-GB', options));
-
-      let newOrderCopy = {...this.userOrdersList[index], date: formattedTime}
+      let newOrderCopy = { ...this.userOrdersList[index], date: this.date };
 
       delete newOrderCopy._id;
-
-      // newOrderCopy.date = Date.now();
-
-
-
-      console.log('newOrderCopy', newOrderCopy)
-      // const newOrderCopy = {...this.userOrdersList[index]}
 
       const result = await fetch('http://localhost:3000/api/orders/add', {
         method: 'POST',
@@ -108,20 +116,22 @@ export default {
 
       const response = await result.json();
 
-      this.userOrdersList.push(...response.data)
+      this.showNotify = true;
+      setTimeout(() => {
+        this.showNotify = false;
+      }, 1500);
 
-      console.log('response', response)
+      this.userOrdersList.push(response.data);
     },
-
 
     parseDate(date) {
-     const data = date.split('T');
+     const data = date.split(',');
      return data[0]
     },
-    parseTime(date) {
-      const time = date.split('T');
 
-      return time[1].split('.')[0]
+    parseTime(date) {
+      const time = date.split(',');
+      return time[1]
     },
 
     async initPage() {
@@ -132,15 +142,20 @@ export default {
         });
       const data = await result.json()
       this.userOrdersList = data.data.map(el => ({...el, show: false}));
-      console.log(this.userOrdersList)
     },
   },
-  mounted() {
-    this.initPage()
+  async mounted() {
+    await this.initPage();
   }
 }
 </script>
 
 <style scoped lang="sass">
+.fade-enter-active,
+.fade-leave-active
+  transition: opacity 0.8s ease
 
+.fade-enter-from,
+.fade-leave-to
+  opacity: 0
 </style>
