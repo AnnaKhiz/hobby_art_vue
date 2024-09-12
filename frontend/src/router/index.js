@@ -153,9 +153,10 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
     if (isAuthenticated === 'false' && to.name !== 'admin' ) {
+      console.log('Auth false')
       next('/');
     } else {
-
+      console.log('Auth true')
       next();
     }
   } else {

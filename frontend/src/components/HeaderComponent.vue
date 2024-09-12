@@ -94,7 +94,7 @@ export default {
       return localStorage.getItem('auth') === 'true' ? 'Кабинет' : 'Войти'
     },
     checkFunction() {
-      return this.authorized ? this.getUser() : this.openDialog()
+      return localStorage.getItem('auth') === 'true' ? this.getUser() : this.openDialog()
     },
     openDialog() {
 

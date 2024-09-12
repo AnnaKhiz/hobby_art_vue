@@ -19,7 +19,7 @@ async function registerNewUser(req, res) {
     const userInfo = {
       ...user,
       birthDate: '',
-      address: '',
+      address: {},
       bonuses: 0,
       favorites: [],
       orders: [],
@@ -110,7 +110,7 @@ async function updateUserInfo(req, res, next) {
   }
 
   try {
-    const updatedUser = await User.findOneAndUpdate({ _id: new ObjectId(id)}, newUser, { new: true })
+    const updatedUser = await User.findByIdAndUpdate({ _id: new ObjectId(id)}, { $set: newUser }, { new: true, runValidators: true} )
     res.send({ "result": updatedUser })
   } catch (error) {
     console.log('update user error', error)
