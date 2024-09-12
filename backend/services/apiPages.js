@@ -44,7 +44,7 @@ async function registerNewUser(req, res) {
         secure: false,
         sameSite: "Lax",
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        path: "/"
+        path: "*"
       })
       .send({"result" : "New user added", "id": result._id.toString()})
 
@@ -78,7 +78,7 @@ async function logInUserPage(req, res, next) {
     secure: false,
     sameSite: "Lax",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    path: "/"
+    path: "*"
   });
 
   res.send({ result: true, id: user._id.toString(), role: "user", status: 200 });
@@ -89,7 +89,7 @@ async function logoutUserPage( req, res, next ) {
     httpOnly: true,
     secure: false,
     sameSite: "Lax",
-    path: "/",
+    path: "*",
   });
 
   res.send({ "result": "successful" });
