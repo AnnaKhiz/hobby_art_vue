@@ -13,7 +13,7 @@
     :key="order._id"
   >
     <div class="title">
-      <h3  class="item-row"><span class="label">Заказ №: </span> {{index + 1}}</h3>
+      <h3  class="item-row"><span class="label">Заказ №: </span> {{ order._id }}</h3>
     </div>
     <div class="content">
       <p class="item-row"><span class="label">Стоимость: </span> {{order.totalPrice}} грн</p>
@@ -34,7 +34,7 @@
   <div v-if="isShowDetails" class="items-container__item" style="width: 100%; padding: 0">
 
     <ui-table-content
-      :items="selectedOrder ? tableItems : []"
+      :orderId="selectedOrder._id"
       :delivery-methods="deliveryMethods"
       :payment-method="paymentMethod"
       @error="errorMessage = $event"
@@ -172,19 +172,19 @@ export default {
     }
   },
   computed: {
-    tableItems() {
-      return [
-        { text: 'Заказ №', value: this.selectedOrder.index || 0, name: 'title', id: this.selectedOrder._id},
-        { text: 'Получатель', value: this.selectedOrder.deliveryInfo.receiver, name: 'receiver' },
-        { text: 'Адресс доставки', value: this.selectedOrder.deliveryInfo.address, name: 'address'  },
-        { text: 'Телефон', value: this.selectedOrder.deliveryInfo.receiver.phone, name: 'phone' },
-        { text: 'E-mail', value: this.selectedOrder.deliveryInfo.receiver.email, name: 'email'  },
-        { text: 'Комментарий', value: this.selectedOrder.deliveryInfo.userComment, name: 'comment'  },
-        { text: 'Способ доставки', value: this.selectedOrder.deliveryInfo.deliveryMethod, name: 'deliveryMethod'  },
-        { text: 'Способ оплаты', value: this.selectedOrder.deliveryInfo.paymentMethod, name: 'paymentMethod'  },
-
-      ]
-    },
+    // tableItems() {
+    //   return [
+    //     { text: 'Заказ №', value: this.selectedOrder.index || 0, name: 'title', id: this.selectedOrder._id},
+    //     { text: 'Получатель', value: this.selectedOrder.deliveryInfo.receiver, name: 'receiver' },
+    //     { text: 'Адресс доставки', value: this.selectedOrder.deliveryInfo.address, name: 'address'  },
+    //     { text: 'Телефон', value: this.selectedOrder.deliveryInfo.receiver.phone, name: 'phone' },
+    //     { text: 'E-mail', value: this.selectedOrder.deliveryInfo.receiver.email, name: 'email'  },
+    //     { text: 'Комментарий', value: this.selectedOrder.deliveryInfo.userComment, name: 'comment'  },
+    //     { text: 'Способ доставки', value: this.selectedOrder.deliveryInfo.deliveryMethod, name: 'deliveryMethod'  },
+    //     { text: 'Способ оплаты', value: this.selectedOrder.deliveryInfo.paymentMethod, name: 'paymentMethod'  },
+    //
+    //   ]
+    // },
   },
   methods: {
     notify(text) {

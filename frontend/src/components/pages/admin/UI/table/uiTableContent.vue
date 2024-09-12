@@ -69,56 +69,36 @@
     </table>
 
     <!--    USER NAME / ADDRESS CHANGE DATA DIALOG -->
-
-    <ui-modal-template v-if="isDisplayDialog !== ''" :value="isDisplayDialog !== ''" @close="isDisplayDialog = ''" width="50%" height="fit-content">
+      <ui-modal-template
+        save
+        v-if="isDisplayDialog"
+        :value="isDisplayDialog !== ''"
+        @close="isDisplayDialog = ''"
+        @save="saveEditedDataFromDialog(isDisplayDialog)"
+        width="50%"
+        height="fit-content"
+        :header="isDisplayDialog === 'receiver' ? 'Редактировать данные получателя' : 'Редактировать адрес доставки'"
+      >
         <template #tableData >
-          <code>{{dialogEditItemsList}}</code>
-
-          <table class="change-data-table" style="width: 100%; margin-bottom: 20px;" @mouseover="hover = true" @mouseleave="hover = false">
-            <tr v-for="(item, index) in dialogEditItemsList" :key="item.value + item.text">
+          <table class="change-data-table" style="width: 100%; margin-bottom: 20px;" >
+            <tr
+              v-for="item in dialogEditItemsList"
+              :key="item.value + item.text"
+            >
               <td style="width: 20%">{{item.text }}</td>
-              <td style="width: 50px; border-right: none">
+              <td style="width: 50px; border-right: none" >
                 <input
                   type="text"
-                  v-model="item.value"
-                  :style="`
-                    ${!item.isReadable
-                        ? 'background-color: transparent; padding: 0'
-                        : 'background-color: white; padding: 10px 15px; box-shadow: 1px -1px 6px inset rgba(94, 92, 90, 0.58)'
-                     };
-                    font-size: 1rem; border-radius: 12px; width: 100%`"
+                  v-model="entityDataEditFromDialog[item.name]"
+                  style="background-color: white; padding: 10px 15px; box-shadow: 1px -1px 6px inset rgba(94, 92, 90, 0.58); font-size: 1rem; border-radius: 12px; width: 100%"
                 />
-              </td>
-              <td class="column-edit" style="border-left: none">
-                <div class="controls-content">
-                  <img
-                    v-if="!item.isReadable"
-                    src="@/assets/img/edit.svg"
-                    alt="edit icon"
-                    class="edit-pencil-style"
-                    @click.prevent="editDataFromDialogs(item, index)"
-                  >
-                  <div v-else class="controls-content">
-                    <img
-                      src="@/assets/img/confirm-48.png"
-                      alt="edit icon"
-                      class="edit-pencil-style confirm"
-                      @click.prevent="confirmEditedElement(item, index)"
-                    >
-                    <img
-                      src="@/assets/img/close-30.png"
-                      alt="edit icon"
-                      class="edit-pencil-style close"
-                      @click.prevent="closeEditDialogElement(item, index)"
-                    >
-                  </div>
-                </div>
-
               </td>
             </tr>
           </table>
+
         </template>
       </ui-modal-template>
+
 
   </div>
 
@@ -134,9 +114,9 @@ export default {
   name: "uiTableContent.vue",
   components: { UiModalTemplate },
   props: {
-    items: {
-      type: Array,
-      default: () => []
+    orderId: {
+      type: String,
+      default: ''
     },
     deliveryMethods: {
       type: Array,
@@ -149,50 +129,66 @@ export default {
   },
   data() {
     return {
+      entityDataEditFromDialog: {},
       dialogEditItemsList: [],
       isDisplayDialog: '',
       entityDataField: '',
       tableItemsList: [],
       hover: false,
       isReadable: true,
+      currentOrder: {}
     }
   },
   emits: ['error'],
+  computed: {
+    tableItems() {
+      return [
+        { text: 'Заказ №', value: this.currentOrder._id, name: 'title', id: this.currentOrder._id},
+        { text: 'Получатель', value: this.currentOrder.deliveryInfo.receiver, name: 'receiver' },
+        { text: 'Адресс доставки', value: this.currentOrder.deliveryInfo.address, name: 'address'  },
+        { text: 'Телефон', value: this.currentOrder.deliveryInfo.receiver.phone, name: 'phone' },
+        { text: 'E-mail', value: this.currentOrder.deliveryInfo.receiver.email, name: 'email'  },
+        { text: 'Комментарий', value: this.currentOrder.deliveryInfo.userComment, name: 'comment'  },
+        { text: 'Способ доставки', value: this.currentOrder.deliveryInfo.deliveryMethod, name: 'deliveryMethod'  },
+        { text: 'Способ оплаты', value: this.currentOrder.deliveryInfo.paymentMethod, name: 'paymentMethod'  },
+
+      ]
+    },
+  },
   methods: {
-    openDialogForEditing(item) {
-      this.isDisplayDialog = item.name;
-      const element = {...item}
-      if (element.name === 'receiver') {
+    saveEditedDataFromDialog(value) {
+      const parsedObjectForEditing = { name: value, value: this.entityDataEditFromDialog };
 
-        this.dialogEditItemsList = [
-          { text: 'Фамилия', value: element.value.lastName, isReadable: false },
-          { text: 'Имя', value: element.value.name, isReadable: false },
-          { text: 'Отчество', value: element.value.surName, isReadable: false },
-        ]
-      }
-      if (element.name === 'address') {
+      const index = this.tableItemsList.findIndex(el => el.name === value);
+      if (index === -1) return;
 
-        this.dialogEditItemsList = [
-          { text: 'Город', value: element.value.city, isReadable: false },
-          { text: 'Улица', value: element.value.street, isReadable: false },
-          { text: 'Номер дома', value: element.value.house, isReadable: false },
-          { text: 'Квартира', value: element.value.apartment, isReadable: false },
-          { text: 'Индекс', value: element.value.zipCode, isReadable: false },
-        ]
-      }
+      this.confirmEditedElement(parsedObjectForEditing, index);
+      this.isDisplayDialog = '';
+      this.dialogEditItemsList = [];
     },
 
-    editDataFromDialogs(item, index) {
-      this.entityDataField = item.value;
+    openDialogForEditing(item) {
+      this.entityDataEditFromDialog = { ...item.value };
+      this.isDisplayDialog = item.name;
+      const element = { ...item };
 
-      console.log('!!!!!!!', this.dialogEditItemsList)
-      this.dialogEditItemsList.forEach(el => el.isReadable = false);
-      this.dialogEditItemsList[index].isReadable = !this.dialogEditItemsList[index].isReadable;
-      console.log(index)
+      if (element.name === 'receiver') {
+        this.dialogEditItemsList = [
+          { text: 'Фамилия', value: element.value.lastName, name: 'lastName'},
+          { text: 'Имя', value: element.value.name, name: 'name' },
+          { text: 'Отчество', value: element.value.surName, name: 'surName' },
+        ]
+      }
 
-      // this.$refs.editInputs[index].focus()
-      // console.log(this.$refs.editInputs)
-
+      if (element.name === 'address') {
+        this.dialogEditItemsList = [
+          { text: 'Город', value: element.value.city, name: 'city' },
+          { text: 'Улица', value: element.value.street, name: 'street' },
+          { text: 'Номер дома', value: element.value.house, name: 'house' },
+          { text: 'Квартира', value: element.value.apartment, name: 'apartment' },
+          { text: 'Индекс', value: element.value.zipCode, name: 'zipCode' },
+        ]
+      }
     },
 
     editElement(item, index) {
@@ -202,93 +198,18 @@ export default {
       this.changeReadableStatus(index);
 
       if (item.name !== 'deliveryMethod' && item.name !== 'paymentMethod' ) {
-        this.$refs.inputs[index-3].focus()
-        console.log(this.$refs.inputs)
+        this.$refs.inputs[index-3].focus();
       }
-
     },
+
     changeReadableStatus(index) {
       this.tableItemsList[index].isReadable = !this.tableItemsList[index].isReadable;
     },
-    parseFullNameReverse(fullName) {
-      if (!fullName) {
-        this.$emit('error', 'Имя получателя не может быть пустым!')
-        return false;
-      }
-
-      this.$emit('error', '')
-      const nameArray = fullName.split(' ');
-
-      return {
-        name: nameArray[1] || '',
-        lastName: nameArray[0] || '',
-        surName: nameArray[2] || ''
-      }
-    },
-    parseFullAddressReverse(fullAddress) {
-      if (!fullAddress) {
-        this.$emit('error', 'Поле Адрес не может быть пустым!')
-        return false;
-      }
-
-      this.$emit('error', '')
-      const addressArray = fullAddress.split(' ');
-
-      return {
-        city: addressArray[1] || '',
-        street: addressArray[0] || '',
-        house: addressArray[2] || null,
-        apartment: addressArray[3] || null,
-        zipCode: addressArray[4] || null,
-      }
-    },
-
 
     confirmEditedElement(item, index) {
-      let fieldMap;
-
-      if (item.name === 'receiver') {
-        const { name, lastName, surName } = this.parseFullNameReverse(item.value);
-
-        if (!name || !lastName || !surName) {
-          return
-        }
-
-        fieldMap = {
-          ...fieldMap,
-          receiver: () => (
-            {
-              "deliveryInfo.receiver.name": name,
-              "deliveryInfo.receiver.lastName": lastName,
-              "deliveryInfo.receiver.surName": surName,
-            }),
-        }
-
-      }
-
-      if (item.name === 'address') {
-        const { city, street, house, apartment, zipCode } = this.parseFullAddressReverse(item.value)
-
-        if ( !city || !street || !house || !apartment || zipCode ) {
-          return
-        }
-
-        fieldMap = {
-          ...fieldMap,
-          address: () => (
-            {
-              "deliveryInfo.address.city": city,
-              "deliveryInfo.address.street": street,
-              "deliveryInfo.address.house": house,
-              "deliveryInfo.address.apartment": apartment,
-              "deliveryInfo.address.zipCode": zipCode,
-            }),
-        }
-      }
-
-
-      fieldMap = {
-        ...fieldMap,
+      const fieldMap = {
+        receiver: () => ({"deliveryInfo.receiver": item.value }),
+        address: () => ({ "deliveryInfo.address": item.value }),
         phone: () => ({ "deliveryInfo.receiver.phone": item.value }),
         email: () => ({ "deliveryInfo.receiver.email": item.value }),
         deliveryMethod: () => ({ "deliveryInfo.deliveryMethod": item.value }),
@@ -296,17 +217,16 @@ export default {
         comment: () => ({ "deliveryInfo.userComment": item.value })
       };
 
-      console.log(fieldMap)
-
       const dataField = fieldMap[item.name]();
-      this.changeReadableStatus(index);
-      this.$emit('error', '');
-      this.updateOrder(dataField)
-    },
 
-    closeEditDialogElement(item, index) {
-      this.dialogEditItemsList[index].isReadable = !this.dialogEditItemsList[index].isReadable;
-      this.dialogEditItemsList[index].value = this.entityDataField
+      if (item.name !== 'receiver' && item.name !== 'address') {
+        this.changeReadableStatus(index);
+      }
+
+      this.updateOrder(dataField);
+
+      this.tableItemsList[index].value = item.value;
+      this.entityDataEditFromDialog = {};
     },
 
     closeEditElement(item, index) {
@@ -326,18 +246,25 @@ export default {
           headers: {'Content-Type': 'application/json'}
         })
         const data = await result.json();
-        console.log(data)
+        console.log(data);
       } catch (error) {
         console.log('Update error', error)
       }
+    },
+
+    async initPage() {
+      try {
+        const result = await fetch(`http://localhost:3000/api/orders/${this.orderId}`)
+        const data = await result.json();
+        this.currentOrder = data.data;
+        this.tableItemsList = this.tableItems.map(el => ({ ...el, isReadable: false }));
+      } catch (error) {
+        console.log('Get order error', error)
+      }
     }
   },
-  updated() {
-    console.log('rerender!!!!!')
-  },
-  mounted() {
-    this.tableItemsList = this.items.map(el => ({ ...el, isReadable: false }))
-
+  async mounted() {
+    await this.initPage();
   }
 }
 </script>

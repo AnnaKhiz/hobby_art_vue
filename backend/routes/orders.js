@@ -7,10 +7,12 @@ const {
   updateOrderData,
   updateOrderItemById,
   removeOrder,
-  removeOrderItemById
+  removeOrderItemById,
+  getOrderById
   } = require('../services/apiOrders');
 
 router.get('/', gelAllOrders );
+router.get('/:id', getOrderById);
 
 router.post('/add',  parserJwt, addNewOrder );
 
