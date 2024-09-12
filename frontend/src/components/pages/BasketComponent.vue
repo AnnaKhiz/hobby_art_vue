@@ -5,7 +5,7 @@
         <ui-breadcrumbs :link="getCheckedHeaderLink" />
         <section class="main__basket-info">
           <div class="main__basket-info-item user-info">
-            {{deliveryInfo}}
+
             <form action="#">
               <div class="main__basket-info-delivery">
                 <h2 class="main__basket-info-delivery-label">
@@ -356,7 +356,8 @@ export default {
         totalPrice: '',
         totalQuantity: '',
         deliveryInfo: {},
-        isMailing: false
+        isMailing: false,
+        users: ''
       };
 
       this.deliveryInfo = {
@@ -429,16 +430,14 @@ export default {
       this.updateOrders(this.orders)
     }
   },
-  mounted() {
-    // if (localStorage.getItem('auth') === 'true') {
-    //   await this.getUser()
-    //   console.log('user', this.user)
-    // }
-
-    // if( localStorage.getItem('order') ) {
-    //   this.orders = JSON.parse(localStorage.getItem('order'));
-    //   this.updateOrders(this.orders)
-    // }
+  async mounted() {
+    if (localStorage.getItem('auth') === 'true') {
+      await this.getUser()
+      this.deliveryInfo.address = this.user.address
+      this.deliveryInfo.receiver = this.user
+      this.currentOrder.isMailing = this.user.mailing
+      this.currentOrder.users = this.user._id
+    }
   },
   watch: {
     display(val) {
