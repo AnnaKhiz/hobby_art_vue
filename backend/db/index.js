@@ -88,7 +88,13 @@ const UserSchema = new mongoose.Schema({
   birthDate: { type: String },
   phone: { type: String },
   email: { type: String, unique: true },
-  address: { type: String },
+  address: {
+    city: {type: String},
+    street: {type: String},
+    house: {type: String},
+    apartment: {type: Number},
+    zipCode: {type: Number}
+  },
   bonuses: { type: Number },
   mailing: { type: Boolean },
   password: { type: String },
