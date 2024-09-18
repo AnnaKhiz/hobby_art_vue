@@ -9,22 +9,7 @@
           @add-new="isNewFormData = true"
           @menu="checkedMenu = $event"
         />
-        <div class="container__item content">
-          <router-view>
-<!--            <div v-if="checkedMenu === 'items'" >-->
-<!--              <div class="items-container">-->
-<!--                <ui-admin-product-card :is-new-form-data="isNewFormData"/>-->
-<!--              </div>-->
-<!--              &lt;!&ndash;          <admin-items-form v-else @goBack="addProduct" :editFormData="editFormData" @submitEdit="editItem"/>&ndash;&gt;-->
-<!--            </div>-->
-<!--            <div v-if="checkedMenu === 'orders'" >-->
-<!--              <div class="items-container" >-->
-<!--                <ui-admin-orders-card />-->
-<!--              </div>-->
-<!--            </div>-->
-          </router-view>
-        </div>
-
+        <router-view></router-view>
 
       </div>
     </div>
@@ -32,14 +17,7 @@
 </template>
 
 <script>
-
-
-
-
-// import AdminItemsForm from "@/components/pages/admin/UI/adminItemsForm.vue"
 import {mapMutations} from "vuex";
-// import UiAdminProductCard from "@/components/pages/admin/pages/AdminProductPage.vue"
-// import UiAdminOrdersCard from "@/components/pages/admin/pages/AdminOrdersPage.vue"
 import AsideMenu from "@/components/pages/admin/UI/AsideMenu.vue"
 
 
@@ -53,7 +31,6 @@ export default {
       form: {},
       checkedMenu: '',
       isNewFormData: false
-      // addItem: false
     }
   },
   methods: {
@@ -153,6 +130,9 @@ export default {
       @media screen and (max-width: 1200px)
         padding: 10px
     &.content
+      display: flex
+      gap: 15px
+      flex-wrap: wrap
       padding: 50px
       text-align: start
       background: rgba(255, 253, 253, 0.47)

@@ -387,6 +387,7 @@ export default
     background: #E8E8E8
     border-radius: 12px
     width: 30%
+    height: fit-content
     padding: 15px
     display: flex
     flex-direction: column

@@ -1,17 +1,17 @@
 <template>
   <div class="container__item aside">
-    <button @click="goToPage('items')" class="modal__registration-form-button block">Товары</button>
+    <button @click="goToPage('items', null)" class="modal__registration-form-button block">Товары</button>
     <div v-if="checkedMenu === 'items'" class="sidebar">
-      <a href="#" class="sidebar__submenu" @click.prevent="$emit('getAll')">Все товары</a>
-      <a href="#" class="sidebar__submenu"  @click.prevent="$emit('addNew')" >Добавить товар</a>
+      <a href="#" class="sidebar__submenu" @click.prevent="goToPage('items', null)">Все товары</a>
+      <a href="#" class="sidebar__submenu"  @click.prevent="goToPage('items', 'add')" >Добавить товар</a>
     </div>
     <button @click="goToPage('orders')" class="modal__registration-form-button block">Заказы</button>
     <div v-if="checkedMenu === 'orders'" class="sidebar" >
-      <a href="#" class="sidebar__submenu" @click.prevent="$emit('getAll')">Все заказы</a>
-      <a href="#" class="sidebar__submenu"  @click.prevent="$emit('addNew')" >Добавить заказ</a>
+      <a href="#" class="sidebar__submenu" @click.prevent="goToPage('orders', null)">Все заказы</a>
+      <a href="#" class="sidebar__submenu"  @click.prevent="goToPage('orders', 'add')" >Добавить заказ</a>
     </div>
-    <button @click="goToPage('users')" class="modal__registration-form-button block">Пользователи</button>
-    <button @click="goToPage('comments')" class="modal__registration-form-button block">Комментарии</button>
+    <button @click="goToPage('users', null)" class="modal__registration-form-button block">Пользователи</button>
+    <button @click="goToPage('comments', null)" class="modal__registration-form-button block">Комментарии</button>
     <button @click="logOut" class="modal__registration-form-button block exit">Выход</button>
   </div>
 </template>
@@ -33,9 +33,16 @@ export default {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
-    goToPage(value) {
-      this.$router.push(`/admin/${value}`)
-      this.$emit('menu', value)
+    goToPage(value, children) {
+      this.$emit('menu', value);
+
+      if (!children) {
+        this.$router.push(`/admin/${value}`)
+      } else {
+        this.$router.push(`/admin/${value}/${children}`)
+      }
+
+
     },
     async logOut() {
       this.setIsAuthorizedInfo(false)

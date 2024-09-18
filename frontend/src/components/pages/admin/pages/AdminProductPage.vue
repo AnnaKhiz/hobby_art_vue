@@ -1,19 +1,25 @@
 <template>
-  <div v-for="(item, index) in itemsList" :key="item._id" class="items-container__item">
-    <h3 class="item-row"><span class="label">Название:</span> {{item.name}}</h3>
-    <p class="item-row"><span class="label">Описание:</span> {{item.description}}</p>
-    <p class="item-row"><span class="label">Цена:</span> {{item.price}}</p>
-    <p class="item-row"><span class="label">Остатки (количество):</span> {{item.restBalance}}</p>
-    <p class="item-row"><span class="label">Наличие на складе:</span> {{item.isSold}}</p>
-    <p class="item-row"><span class="label">Наличие скидки:</span> {{item.isDiscount}}</p>
-    <p class="item-row"><span class="label">Размер скидки:</span> {{item.discountPercentage}}%</p>
-    <p class="item-row"><span class="label">Цвета:</span> {{ renderColorsArray(item.color)}}</p>
-    <p class="item-row"><span class="label">Рейтинг:</span> {{item.rating}}</p>
-    <div class="actions">
-      <button class="button" @click.prevent="editItem(item, index)">Редактировать</button>
-      <button class="button" @click.prevent="removeItem(item._id)">Удалить</button>
+  <div class="container__item content">
+    <router-view v-if="$route.path.includes('add') || $route.path.includes('edit')" @updated-item="updateItemData"></router-view>
+    <div v-else v-for="(item, index) in itemsList" :key="item._id" class="items-container__item">
+      <div class="info">
+        <h3 class="item-row"><span class="label">Название:</span> {{item.name}}</h3>
+        <p class="item-row"><span class="label">Описание:</span> {{item.description}}</p>
+        <p class="item-row"><span class="label">Цена:</span> {{item.price}}</p>
+        <p class="item-row"><span class="label">Остатки (количество):</span> {{item.restBalance}}</p>
+        <p class="item-row"><span class="label">Наличие на складе:</span> {{item.isSold}}</p>
+        <p class="item-row"><span class="label">Наличие скидки:</span> {{item.isDiscount}}</p>
+        <p class="item-row"><span class="label">Размер скидки:</span> {{item.discountPercentage}}%</p>
+        <p class="item-row"><span class="label">Цвета:</span> {{ renderColorsArray(item.color)}}</p>
+        <p class="item-row"><span class="label">Рейтинг:</span> {{item.rating}}</p>
+      </div>
+      <div class="actions">
+        <button class="button" @click.prevent="editItem(item, index)">Редактировать</button>
+        <button class="button" @click.prevent="removeItem(item._id)">Удалить</button>
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -28,12 +34,16 @@ export default {
   data() {
     return {
       itemsList: [],
-      // isNewFormData:  false,
       editFormData: {}
     }
   },
   emits: ['updateIsNewFormData', 'editItem', 'update'],
   methods: {
+    updateItemData(item) {
+      const index = this.itemsList.findIndex(el => el._id === item._id);
+      if (index === -1) return false;
+      this.itemsList[index] = item;
+    },
     openAddProduct() {
       this.$emit('updateIsNewFormData', true)
       // this.isNewFormData = true;
@@ -82,25 +92,8 @@ export default {
         console.log(error)
       }
     },
-    async editItem(item, index) {
-
-      try {
-        const result = await fetch(`http://localhost:3000/api/items/update/${item._id}`, {
-          method: 'PATCH',
-          body: JSON.stringify(item),
-          headers: { "Content-Type": "application/json" }
-        })
-
-        const data = await result.json();
-
-        if (!data.result) return;
-
-        this.itemsList[index] = item;
-        this.$emit('updateIsNewFormData', false)
-
-      } catch (error) {
-        console.log(error)
-      }
+    editItem(item) {
+      this.$router.push({name: 'item-edit', params: { itemId: item._id }})
     },
     async getItemsList() {
       this.$emit('updateIsNewFormData', false)
@@ -126,11 +119,14 @@ export default {
 <style scoped lang="sass">
 .items-container
   &__item
+    display: flex
+    flex-direction: column
     background: #E8E8E8
     border-radius: 12px
     width: 30%
     padding: 15px
-    flex-grow: 1
+    & .info
+      flex-grow: 1
     & > .actions
       display: flex
       align-items: center

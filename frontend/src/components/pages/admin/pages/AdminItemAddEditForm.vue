@@ -1,6 +1,5 @@
 <template>
   <form class="modal__registration-form no_line">
-
     <label for="name" class="form-label">Название</label>
     <input
       v-model="form.name"
@@ -134,9 +133,9 @@
     <button
       class="modal__registration-form-button"
       style="text-align: center"
-      @click.prevent="!Object.values(this.editFormData).length ? addNewItem() : sendEditedItem()"
+      @click.prevent="!itemId ? addNewItem() : sendEditedItem()"
     >
-      {{ Object.values(this.editFormData).length ? 'Сохранить изменения' : 'Добавить' }}
+      {{ itemId ? 'Сохранить изменения' : 'Добавить' }}
     </button>
     <p class="info-message">{{message}}</p>
   </form>
@@ -148,13 +147,14 @@
 export default {
   name: "adminItemsForm",
   props: {
-    editFormData: {
-      type: Object,
-      default: () => {}
+    itemId: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
+      editFormData: {},
       message: '',
       form: {
         color: [],
@@ -172,7 +172,7 @@ export default {
       ],
     }
   },
-  emits: ['goBack', 'submitEdit'],
+  emits: ['goBack', 'submitEdit', 'updatedItem'],
   methods: {
     async addNewItem() {
       this.parseFormFields();
@@ -213,17 +213,54 @@ export default {
       if (this.form.color.length) {
         this.parseFormFields();
 
-        this.message = "Товар обновлен успешно"
+        this.message = "Товар обновлен успешно";
 
-        setTimeout(() => {
+        setTimeout(async () => {
           this.message = "";
-          this.$emit('submitEdit', this.form)
+          await this.editItemRequest();
+          this.$router.push({name: 'admin-items'})
         }, 1500)
+      }
+    },
+
+    async editItemRequest() {
+      try {
+        const result = await fetch(`http://localhost:3000/api/items/update/${this.itemId}`, {
+          method: 'PATCH',
+          body: JSON.stringify(this.form),
+          headers: { "Content-Type": "application/json" }
+        })
+
+        const data = await result.json();
+        if (!data.result) return;
+
+        this.$emit('updatedItem', this.form);
+
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async initPage() {
+      try {
+        const result = await fetch(`http://localhost:3000/api/items/${this.itemId}`, {
+          method: 'GET',
+          credentials: 'include'
+        })
+        const data = await result.json();
+        this.editFormData = await data.item;
+
+      } catch (e) {
+        console.log(e)
       }
     }
   },
-  mounted() {
-    if (Object.values(this.editFormData).length) {
+  async mounted() {
+    console.log('this.editFormData' , this.editFormData)
+
+    if (this.itemId) {
+      await this.initPage();
+
       this.form = {
         ...this.editFormData,
         brand: this.editFormData.brand.value,

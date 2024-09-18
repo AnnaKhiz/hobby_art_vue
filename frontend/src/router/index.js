@@ -14,6 +14,7 @@ import AdminProductPage from "@/components/pages/admin/pages/AdminProductPage.vu
 import AdminOrdersPage from "@/components/pages/admin/pages/AdminOrdersPage.vue";
 import AdminUsersPage from "@/components/pages/admin/pages/AdminUsersPage.vue";
 import AdminCommentsPage from "@/components/pages/admin/pages/AdminCommentsPage.vue";
+import AdminItemAddEditForm from "@/components/pages/admin/pages/AdminItemAddEditForm.vue";
 
 
 
@@ -121,12 +122,39 @@ const routes = [
     children: [
       {
         path: 'items',
+        name: 'admin-items',
         component: AdminProductPage,
+        props: true,
+        children: [
+          {
+            path: 'add',
+            name: 'item-add',
+            component: AdminItemAddEditForm,
+            props: true,
+          },
+          {
+            path: 'edit/:itemId',
+            name: 'item-edit',
+            component: AdminItemAddEditForm,
+            props: true,
+          },
+        ]
       },
+
       {
         path: 'orders',
         component: AdminOrdersPage,
+        props: true,
+        children: [
+          {
+            path: 'add',
+            name: 'orders-add',
+            component: AdminOrdersPage,
+            props: true
+          },
+        ]
       },
+
       {
         path: 'users',
         component: AdminUsersPage,
