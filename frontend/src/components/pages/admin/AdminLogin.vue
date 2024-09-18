@@ -3,29 +3,29 @@
     <div class="container">
       <h2 class="container__label">Добро пожаловать в Админ панель!</h2>
       <div class="container__flex">
-        <div class="container__item aside">
-          <button @click="openMenu('items')" class="modal__registration-form-button block">Товары</button>
-          <div v-if="checkedMenu === 'items'" class="sidebar">
-            <a href="#" class="sidebar__submenu" @click.prevent="getItemsList">Все товары</a>
-            <a href="#" class="sidebar__submenu"  @click.prevent="openAddProduct" >Добавить товар</a>
-          </div>
-          <button @click="openMenu('orders')" class="modal__registration-form-button block">Заказы</button>
-          <button @click="openMenu('users')" class="modal__registration-form-button block">Пользователи</button>
-          <button @click="openMenu('comments')" class="modal__registration-form-button block">Комментарии</button>
-          <button @click="logOut" class="modal__registration-form-button block exit">Выход</button>
+        <aside-menu
+          :checked-menu="checkedMenu"
+          @get-all="isNewFormData = false"
+          @add-new="isNewFormData = true"
+          @menu="checkedMenu = $event"
+        />
+        <div class="container__item content">
+          <router-view>
+<!--            <div v-if="checkedMenu === 'items'" >-->
+<!--              <div class="items-container">-->
+<!--                <ui-admin-product-card :is-new-form-data="isNewFormData"/>-->
+<!--              </div>-->
+<!--              &lt;!&ndash;          <admin-items-form v-else @goBack="addProduct" :editFormData="editFormData" @submitEdit="editItem"/>&ndash;&gt;-->
+<!--            </div>-->
+<!--            <div v-if="checkedMenu === 'orders'" >-->
+<!--              <div class="items-container" >-->
+<!--                <ui-admin-orders-card />-->
+<!--              </div>-->
+<!--            </div>-->
+          </router-view>
         </div>
-        <div v-if="checkedMenu === 'items'" class="container__item content">
-          <div v-if="!addItem" class="items-container">
-            <ui-admin-product-card  :itemsList="itemsList" @update="removeProduct" @editItem="openEditItem"/>
-          </div>
-          <admin-items-form v-else @goBack="addProduct" :editFormData="editFormData" @submitEdit="editItem"/>
-        </div>
-        <div v-else class="container__item content">
-          <div class="items-container" >
-            <ui-admin-orders-card />
-          </div>
 
-        </div>
+
       </div>
     </div>
   </main>
@@ -36,93 +36,61 @@
 
 
 
-import AdminItemsForm from "@/components/pages/admin/UI/adminItemsForm.vue"
+// import AdminItemsForm from "@/components/pages/admin/UI/adminItemsForm.vue"
 import {mapMutations} from "vuex";
-import UiAdminProductCard from "@/components/pages/admin/UI/uiAdminProductCard.vue"
-import UiAdminOrdersCard from "@/components/pages/admin/UI/uiAdminOrdersCard.vue"
+// import UiAdminProductCard from "@/components/pages/admin/pages/AdminProductPage.vue"
+// import UiAdminOrdersCard from "@/components/pages/admin/pages/AdminOrdersPage.vue"
+import AsideMenu from "@/components/pages/admin/UI/AsideMenu.vue"
 
 
 export default {
   name: "AdminLogin",
-  components: {UiAdminOrdersCard, UiAdminProductCard, AdminItemsForm},
+  components: {AsideMenu},
   data() {
     return {
       editFormData: {},
       itemsList: [],
       form: {},
       checkedMenu: '',
-      addItem: false
+      isNewFormData: false
+      // addItem: false
     }
   },
   methods: {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
-    openAddProduct() {
-      this.addItem = true;
-      this.editFormData = {}
-    },
-    openEditItem(item) {
-      this.addItem = true
-      this.editFormData = item
-    },
-    async editItem(item) {
+    // openAddProduct() {
+    //   this.addItem = true;
+    //   this.editFormData = {}
+    // },
+    // openEditItem(item) {
+    //   this.addItem = true
+    //   this.editFormData = item
+    // },
 
-      try {
-        const result = await fetch(`http://localhost:3000/api/items/update/${item._id}`, {
-          method: 'PATCH',
-          body: JSON.stringify(item),
-          headers: { "Content-Type": "application/json" }
-        })
 
-        const data = await result.json();
+    // openMenu(name) {
+    //   this.checkedMenu = name
+    //   name === 'items' ? this.getItemsList() : ''
+    // },
 
-        if (!data.result) return;
+    // addProduct(item) {
+    //   this.addItem = false;
+    //   this.editFormData = {}
+    //   this.itemsList.push(item)
+    // },
+    //
+    // removeProduct(id) {
+    //   const index = this.itemsList.findIndex(el => el._id === id)
+    //
+    //   console.log(index)
+    //
+    //   if (index === -1) return;
+    //
+    //   this.itemsList.splice(index, 1)
+    // },
 
-        const index = this.itemsList.findIndex(element => element._id === item._id);
-        if (index === -1) return false;
-
-        this.itemsList[index] = item;
-        this.addItem = false;
-
-      } catch (error) {
-        console.log(error)
-      }
-    },
-
-    openMenu(name) {
-      this.checkedMenu = name
-      name === 'items' ? this.getItemsList() : ''
-    },
-
-    addProduct(item) {
-      this.addItem = false;
-      this.editFormData = {}
-      this.itemsList.push(item)
-    },
-
-    removeProduct(id) {
-      const index = this.itemsList.findIndex(el => el._id === id)
-
-      console.log(index)
-
-      if (index === -1) return;
-
-      this.itemsList.splice(index, 1)
-    },
-    async getItemsList() {
-      this.addItem = false
-      this.editFormData = {}
-      try {
-        const result = await fetch('http://localhost:3000/api/items')
-        const data = await result.json();
-        if(!data.result) return
-        this.itemsList = data.items
-
-      } catch (error) {
-        console.log(error)
-      }
-    },
     async initPage() {
       const result = await fetch('http://localhost:3000/admin', {
         method: 'GET',
@@ -131,24 +99,29 @@ export default {
       const data = await result.json()
       console.log(data)
 
+      console.log('data result', data.result)
+
       if (!data.result) {
         this.$router.push('/admin/login')
       }
 
-      await this.getItemsList()
+
+      this.$router.push('/admin/items')
+
+      // await this.getItemsList()
     },
-    async logOut() {
-      this.setIsAuthorizedInfo(false)
-      localStorage.setItem('auth', 'false');
-
-      const result = await fetch('http://localhost:3000/admin/logout', {
-        method: 'GET',
-        credentials: 'include'
-      });
-
-      console.log(result)
-      this.$router.push('/')
-    }
+    // async logOut() {
+    //   this.setIsAuthorizedInfo(false)
+    //   localStorage.setItem('auth', 'false');
+    //
+    //   const result = await fetch('http://localhost:3000/admin/logout', {
+    //     method: 'GET',
+    //     credentials: 'include'
+    //   });
+    //
+    //   console.log(result)
+    //   this.$router.push('/')
+    // }
   },
   async mounted() {
     await this.initPage()

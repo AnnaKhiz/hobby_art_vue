@@ -5,8 +5,7 @@
         <h2 class="modal__registration-form-label login">
           Войти в личный кабинет
         </h2>
-        <div class="modal__registration-form-error-block" id="enter-error-block" >
-        </div>
+        <div class="modal__registration-form-error-block" id="enter-error-block" > {{ errorMessage }} </div>
         <input
           v-model="entityData.login"
           type="text"
@@ -33,13 +32,13 @@
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
-// import axios from "axios";
 
 export default {
   name: "AdminAuth",
   data() {
     return {
-      entityData: {}
+      entityData: {},
+      errorMessage: ''
     }
   },
   computed: {
@@ -54,17 +53,6 @@ export default {
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
       setUserInfo: 'user/setUserInfo'
     }),
-    async initPage() {
-      const result = await fetch('http://localhost:3000/admin/login', {
-        method: 'GET',
-        credentials: 'include'
-      })
-      const data = await result.json()
-      console.log(data)
-      if (data.result) {
-        this.$router.push('/admin/login')
-      }
-    },
 
     async logIn() {
 
@@ -76,27 +64,22 @@ export default {
       });
 
       const data = await result.json()
+
       if (!data.result) {
-        console.log('no requested result')
+        this.errorMessage = 'Не верный логин или пароль!';
+        return
       }
-      // localStorage.setItem('auth', 'true')
-      // this.user = data.result
-      // this.setUserInfo = this.user
-      if (result.role === 'admin') {
-        this.$router.push(`/admin`)
-      } else {
+
+      if (data.role !== 'admin') {
         this.$router.back()
       }
 
-      // this.setIsRegisteredInfo(true)
-      // this.setIsAuthorizedInfo(true)
+      localStorage.setItem('auth', 'true');
       this.setDisplayDialogState(false)
-      console.log(this.user)
+
+      this.$router.push('/admin')
     }
   },
-  mounted() {
-    // await this.initPage()
-  }
 }
 </script>
 

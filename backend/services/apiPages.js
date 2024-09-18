@@ -134,13 +134,14 @@ async function uploadAdminPage(req,res) {
 }
 async function logInToAdminPanel(req, res, next) {
   const { login, password } = req.body;
+  console.log(login, password)
 
   const admin = await Admin.findOne( { login });
 
   const result = await checkPass(password, admin.password);
 
   if (!result) {
-    return res.send({ "result": false})
+    return res.send({ result: false})
   }
 
   req._auth = { role: 'user', id: admin._id.toString() };
@@ -155,7 +156,7 @@ async function logInToAdminPanel(req, res, next) {
     path: "/admin"
   })
 
-  res.send({ id: admin._id.toString(), role: "admin" });
+  res.send({ result: true, id: admin._id.toString(), role: "admin" });
 }
 
 async function logoutFromAdminPanel(req, res, next) {

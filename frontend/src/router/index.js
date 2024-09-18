@@ -10,6 +10,10 @@ import BasketComponent from "@/components/pages/BasketComponent.vue";
 import ProductPageComponent from "@/components/pages/ProductPageComponent.vue";
 import ProductPageDetails from "@/components/pages/ProductPageDetails.vue";
 import store from "@/store";
+import AdminProductPage from "@/components/pages/admin/pages/AdminProductPage.vue";
+import AdminOrdersPage from "@/components/pages/admin/pages/AdminOrdersPage.vue";
+import AdminUsersPage from "@/components/pages/admin/pages/AdminUsersPage.vue";
+import AdminCommentsPage from "@/components/pages/admin/pages/AdminCommentsPage.vue";
 
 
 
@@ -112,9 +116,29 @@ const routes = [
     meta: {
       title: 'Админ',
       favicon: '',
-      requiresAuth: false
+      requiresAuth: true
     },
+    children: [
+      {
+        path: 'items',
+        component: AdminProductPage,
+      },
+      {
+        path: 'orders',
+        component: AdminOrdersPage,
+      },
+      {
+        path: 'users',
+        component: AdminUsersPage,
+      },
+      {
+        path: 'comments',
+        component: AdminCommentsPage,
+      }
+    ],
+
   },
+
   // {
   //   path: '/admin/item/:id',
   //   name: 'admin-item',
@@ -152,9 +176,10 @@ router.beforeEach((to, from, next) => {
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
-    if (isAuthenticated === 'false' && to.name !== 'admin' ) {
+
+    if (isAuthenticated === 'false') {
       console.log('Auth false')
-      next('/');
+      next('/admin/login');
     } else {
       console.log('Auth true')
       next();

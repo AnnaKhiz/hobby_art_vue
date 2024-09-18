@@ -108,7 +108,7 @@
                 <p style="color: var(--errorText)">{{ item.discountPercentage > 0 ? `${item.price - (item.price * item.discountPercentage) / 100} грн` : '' }} </p>
               </td>
               <td>
-                <img src="@/assets/img/add-30.png" alt="add icon" style="cursor: pointer" @click="updateItemsListInOrder(item)">
+                <img src="../../../../assets/img/add-30.png" alt="add icon" style="cursor: pointer" @click="updateItemsListInOrder(item)">
               </td>
             </tr>
           </table>
@@ -125,7 +125,8 @@ import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
 import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
 
 
-export default {
+export default
+{
   name: "uiAdminOrdersCard.vue",
   components: {UiModalTemplate, UiDeleteIcon, UiQuantityCounter, UiTableContent},
   data() {

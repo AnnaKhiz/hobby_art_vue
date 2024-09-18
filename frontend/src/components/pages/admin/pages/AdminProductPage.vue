@@ -1,5 +1,5 @@
 <template>
-  <div v-for="item in itemsList" :key="item._id" class="items-container__item">
+  <div v-for="(item, index) in itemsList" :key="item._id" class="items-container__item">
     <h3 class="item-row"><span class="label">Название:</span> {{item.name}}</h3>
     <p class="item-row"><span class="label">Описание:</span> {{item.description}}</p>
     <p class="item-row"><span class="label">Цена:</span> {{item.price}}</p>
@@ -10,7 +10,7 @@
     <p class="item-row"><span class="label">Цвета:</span> {{ renderColorsArray(item.color)}}</p>
     <p class="item-row"><span class="label">Рейтинг:</span> {{item.rating}}</p>
     <div class="actions">
-      <button class="button" @click.prevent="$emit('editItem', item)">Редактировать</button>
+      <button class="button" @click.prevent="editItem(item, index)">Редактировать</button>
       <button class="button" @click.prevent="removeItem(item._id)">Удалить</button>
     </div>
   </div>
@@ -20,13 +20,46 @@
 export default {
   name: "uiAdminProductCard",
   props: {
-    itemsList: {
-      type: Array,
-      default: () => []
+    isNewFormData: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['update', 'editItem'],
+  data() {
+    return {
+      itemsList: [],
+      // isNewFormData:  false,
+      editFormData: {}
+    }
+  },
+  emits: ['updateIsNewFormData', 'editItem', 'update'],
   methods: {
+    openAddProduct() {
+      this.$emit('updateIsNewFormData', true)
+      // this.isNewFormData = true;
+      this.editFormData = {}
+    },
+    openEditItem(item) {
+      this.$emit('updateIsNewFormData', true)
+      // this.isNewFormData = true
+      this.editFormData = item
+    },
+    addProduct(item) {
+      this.$emit('updateIsNewFormData', false)
+      // this.isNewFormData = false;
+      this.editFormData = {}
+      this.itemsList.push(item)
+    },
+
+    removeProduct(id) {
+      const index = this.itemsList.findIndex(el => el._id === id)
+
+      console.log(index)
+
+      if (index === -1) return;
+
+      this.itemsList.splice(index, 1)
+    },
     renderColorsArray(item){
       if (!item) return
       let items = ''
@@ -48,7 +81,43 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+    async editItem(item, index) {
+
+      try {
+        const result = await fetch(`http://localhost:3000/api/items/update/${item._id}`, {
+          method: 'PATCH',
+          body: JSON.stringify(item),
+          headers: { "Content-Type": "application/json" }
+        })
+
+        const data = await result.json();
+
+        if (!data.result) return;
+
+        this.itemsList[index] = item;
+        this.$emit('updateIsNewFormData', false)
+
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getItemsList() {
+      this.$emit('updateIsNewFormData', false)
+      this.editFormData = {}
+      try {
+        const result = await fetch('http://localhost:3000/api/items')
+        const data = await result.json();
+        if(!data.result) return
+        this.itemsList = data.items
+
+      } catch (error) {
+        console.log(error)
+      }
+    },
+  },
+  mounted() {
+    this.getItemsList()
   }
 }
 </script>

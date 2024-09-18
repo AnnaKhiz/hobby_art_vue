@@ -1,11 +1,11 @@
 <template>
   <div :class=" [{ fixed: getDisplayDialogState}, { 'bg-white' : ($router.currentRoute.value.name === 'product-page-details' || $router.currentRoute.value.name === 'basket')}] ">
     <header-component
-      v-if="$router.currentRoute.value.href !== '/admin' && $router.currentRoute.value.href !== '/admin/login'"
+      v-if="!$route.path.match(/^\/admin($|\/.*)/)"
     />
     <router-view />
     <footer-component
-      v-if="$router.currentRoute.value.href !== '/admin' && $router.currentRoute.value.href !== '/admin/login'"
+      v-if="!$route.path.match(/^\/admin($|\/.*)/)"
     />
   </div>
 
