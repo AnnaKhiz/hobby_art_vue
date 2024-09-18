@@ -91,7 +91,7 @@ import UiTableContent from "@/components/pages/admin/UI/table/uiTableContent.vue
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
-import {mapMutations} from "vuex";
+import {mapGetters} from "vuex";
 
 export default {
   name: "AdminOrderViewDetails.vue",
@@ -139,11 +139,14 @@ export default {
    }
   },
   emits: ['updateShowDetails'],
-  methods: {
-    ...mapMutations({
+  computed: {
+    ...mapGetters({
       parseDeliveryValue: 'delivery/parseDeliveryValue',
       parsePaymentValue: 'delivery/parsePaymentValue'
     }),
+  },
+  methods: {
+
     notify(text) {
       this.message = text;
     },

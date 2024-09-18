@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import {mapMutations} from "vuex";
+import {mapGetters} from "vuex";
 
 export default
 {
@@ -63,14 +63,14 @@ export default
     }
   },
   computed: {
-
-
-  },
-  methods: {
-    ...mapMutations({
+    ...mapGetters({
       parseDeliveryValue: 'delivery/parseDeliveryValue',
       parsePaymentValue: 'delivery/parsePaymentValue'
     }),
+
+  },
+  methods: {
+
     showOrderDetails(order, index) {
       this.$router.push({name: 'admin-orders-edit', params: { orderId: order._id } })
       this.message = ''
