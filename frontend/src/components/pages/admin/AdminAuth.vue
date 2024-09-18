@@ -74,6 +74,7 @@ export default {
         this.$router.back()
       }
 
+
       localStorage.setItem('auth', 'true');
       this.setDisplayDialogState(false)
 

@@ -15,6 +15,8 @@ import AdminOrdersPage from "@/components/pages/admin/pages/AdminOrdersPage.vue"
 import AdminUsersPage from "@/components/pages/admin/pages/AdminUsersPage.vue";
 import AdminCommentsPage from "@/components/pages/admin/pages/AdminCommentsPage.vue";
 import AdminItemAddEditForm from "@/components/pages/admin/pages/AdminItemAddEditForm.vue";
+import AdminOrderViewDetails from "@/components/pages/admin/pages/AdminOrderViewDetails.vue";
+import AdminOrdersAddNew from "@/components/pages/admin/pages/AdminOrdersAddNew.vue";
 
 
 
@@ -150,7 +152,13 @@ const routes = [
           {
             path: 'add',
             name: 'admin-orders-add',
-            component: AdminOrdersPage,
+            component: AdminOrdersAddNew,
+            props: true
+          },
+          {
+            path: 'edit/:orderId',
+            name: 'admin-orders-edit',
+            component: AdminOrderViewDetails,
             props: true
           },
         ]

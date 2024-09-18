@@ -130,6 +130,7 @@ async function uploadAdminPage(req,res) {
   const comments = await Comment.find().populate('users').populate('items');
   const orders = await Order.find().populate('users').populate('items._id')
 
+
   res.send({"result": true, role: role, data: [users, orders, items]})
 }
 async function logInToAdminPanel(req, res, next) {

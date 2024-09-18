@@ -10,7 +10,7 @@
           @menu="checkedMenu = $event"
         />
         <div class="container__item content">
-          <router-view></router-view>
+          <router-view :key="$route.fullPath"></router-view>
         </div>
       </div>
     </div>
@@ -45,6 +45,8 @@ export default {
         credentials: 'include'
       })
       const data = await result.json();
+
+      console.log(data.data)
 
       if (!data.result) {
         this.$router.push('/admin/login');

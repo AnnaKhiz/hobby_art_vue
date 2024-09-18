@@ -15,7 +15,7 @@ async function getOrderById(req, res, next) {
   const { id } = req.params;
 
   try {
-    const order = await Order.findById({_id: new ObjectId(id)})
+    const order = await Order.findOne({ _id: new ObjectId(id) }).populate('items._id')
 
     res.status(200).send({result: true, data: order });
   } catch (error) {
