@@ -6,8 +6,6 @@
 
     <ui-table-content
       :orderId="orderId"
-      :delivery-methods="deliveryMethods"
-      :payment-method="paymentMethod"
       @error="errorMessage = $event"
     >
       <template #deliveryMethod="{item}">
@@ -93,6 +91,7 @@ import UiTableContent from "@/components/pages/admin/UI/table/uiTableContent.vue
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
+import {mapMutations} from "vuex";
 
 export default {
   name: "AdminOrderViewDetails.vue",
@@ -126,15 +125,7 @@ export default {
      },
      message: '',
      errorMessage: '',
-     deliveryMethods: [
-       { text: 'Новая почта', value: 'novapost', price: 250 },
-       { text: 'Укрпочта', value: 'ukrpost', price: 150 },
-       { text: 'Самовывоз', value: 'pickup', price: 0 },
-     ],
-     paymentMethod: [
-       { text: 'Оплата при получении наличными или картой', value: 'cash' },
-       { text: 'Оплата банковской картой онлайн', value: 'online' },
-     ],
+
      headers: [
        { text: "№", value: 'count' },
        { text: "Артикул", value: 'id' },
@@ -149,23 +140,14 @@ export default {
   },
   emits: ['updateShowDetails'],
   methods: {
+    ...mapMutations({
+      parseDeliveryValue: 'delivery/parseDeliveryValue',
+      parsePaymentValue: 'delivery/parsePaymentValue'
+    }),
     notify(text) {
       this.message = text;
     },
-    parseDeliveryValue(value) {
-      const deliveryObject = this.deliveryMethods.find(el => el.value === value);
 
-      if (!deliveryObject) return;
-
-      return deliveryObject.text
-    },
-    parsePaymentValue(value) {
-      const paymentObject = this.paymentMethod.find(el => el.value === value);
-
-      if (!paymentObject) return;
-
-      return paymentObject.text
-    },
     parseCheckedColors(color, itemId) {
       const currentItem = this.selectedOrder.items[itemId];
 

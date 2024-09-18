@@ -4,6 +4,7 @@ import { userModule } from "@/store/userModule"
 import {dialogModule} from "@/store/dialogModule";
 import {ordersModule} from "@/store/ordersModule";
 import {filterParamsModule} from "@/store/filterParamsModule";
+import {deliveryPaymentModule} from "@/store/deliveryPaymentModule";
 
 
 
@@ -13,7 +14,8 @@ export default createStore({
     links: linksModule,
     user: userModule,
     order: ordersModule,
-    filter: filterParamsModule
+    filter: filterParamsModule,
+    delivery: deliveryPaymentModule
   }
 })
 
