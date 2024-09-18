@@ -9,8 +9,9 @@
           @add-new="isNewFormData = true"
           @menu="checkedMenu = $event"
         />
-        <router-view></router-view>
-
+        <div class="container__item content">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
   </main>
@@ -37,68 +38,19 @@ export default {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
-    // openAddProduct() {
-    //   this.addItem = true;
-    //   this.editFormData = {}
-    // },
-    // openEditItem(item) {
-    //   this.addItem = true
-    //   this.editFormData = item
-    // },
-
-
-    // openMenu(name) {
-    //   this.checkedMenu = name
-    //   name === 'items' ? this.getItemsList() : ''
-    // },
-
-    // addProduct(item) {
-    //   this.addItem = false;
-    //   this.editFormData = {}
-    //   this.itemsList.push(item)
-    // },
-    //
-    // removeProduct(id) {
-    //   const index = this.itemsList.findIndex(el => el._id === id)
-    //
-    //   console.log(index)
-    //
-    //   if (index === -1) return;
-    //
-    //   this.itemsList.splice(index, 1)
-    // },
 
     async initPage() {
       const result = await fetch('http://localhost:3000/admin', {
         method: 'GET',
         credentials: 'include'
       })
-      const data = await result.json()
-      console.log(data)
-
-      console.log('data result', data.result)
+      const data = await result.json();
 
       if (!data.result) {
-        this.$router.push('/admin/login')
+        this.$router.push('/admin/login');
       }
-
-
-      this.$router.push('/admin/items')
-
-      // await this.getItemsList()
+      this.$router.push('/admin/items');
     },
-    // async logOut() {
-    //   this.setIsAuthorizedInfo(false)
-    //   localStorage.setItem('auth', 'false');
-    //
-    //   const result = await fetch('http://localhost:3000/admin/logout', {
-    //     method: 'GET',
-    //     credentials: 'include'
-    //   });
-    //
-    //   console.log(result)
-    //   this.$router.push('/')
-    // }
   },
   async mounted() {
     await this.initPage()
@@ -119,10 +71,11 @@ export default {
   &__flex
     display: flex
     gap: 20px
-    height: 100%
     flex-grow: 1
+    height: 100%
   &__item
     border-radius: 24px
+    background: rgba(255, 253, 253, 0.47)
     &.aside
       width: 30%
       background: rgba(199, 193, 187, 0.52)
@@ -135,7 +88,6 @@ export default {
       flex-wrap: wrap
       padding: 50px
       text-align: start
-      background: rgba(255, 253, 253, 0.47)
       width: 80%
       @media screen and (max-width: 1200px)
         padding: 50px

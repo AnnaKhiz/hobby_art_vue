@@ -128,13 +128,13 @@ const routes = [
         children: [
           {
             path: 'add',
-            name: 'item-add',
+            name: 'admin-items-add',
             component: AdminItemAddEditForm,
             props: true,
           },
           {
             path: 'edit/:itemId',
-            name: 'item-edit',
+            name: 'admin-items-edit',
             component: AdminItemAddEditForm,
             props: true,
           },
@@ -143,12 +143,13 @@ const routes = [
 
       {
         path: 'orders',
+        name: 'admin-orders',
         component: AdminOrdersPage,
         props: true,
         children: [
           {
             path: 'add',
-            name: 'orders-add',
+            name: 'admin-orders-add',
             component: AdminOrdersPage,
             props: true
           },
@@ -157,10 +158,12 @@ const routes = [
 
       {
         path: 'users',
+        name: 'admin-users',
         component: AdminUsersPage,
       },
       {
         path: 'comments',
+        name: 'admin-comments',
         component: AdminCommentsPage,
       }
     ],

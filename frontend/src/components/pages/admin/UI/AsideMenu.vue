@@ -37,9 +37,9 @@ export default {
       this.$emit('menu', value);
 
       if (!children) {
-        this.$router.push(`/admin/${value}`)
+        this.$router.push({name: `admin-${value}`})
       } else {
-        this.$router.push(`/admin/${value}/${children}`)
+        this.$router.push({name: `admin-${value}-${children}`})
       }
 
 

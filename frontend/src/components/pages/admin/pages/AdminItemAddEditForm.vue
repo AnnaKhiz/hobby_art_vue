@@ -256,8 +256,6 @@ export default {
     }
   },
   async mounted() {
-    console.log('this.editFormData' , this.editFormData)
-
     if (this.itemId) {
       await this.initPage();
 
