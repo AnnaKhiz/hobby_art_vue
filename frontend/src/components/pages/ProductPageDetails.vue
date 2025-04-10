@@ -261,7 +261,7 @@ export default {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
-		...mapState('items', ['orderItemsList']),
+		...mapState('items', ['item']),
     parseCheckedColors() {
 
       if (!this.order.checkedColor.length) {
@@ -277,7 +277,7 @@ export default {
   },
   methods: {
     ...mapMutations('order', ['addToOrder']),
-		...mapActions('items', ['fetchOrderItems']),
+		...mapActions('items', ['fetchItemById']),
     addCheckedColor(value) {
       if (this.order.checkedColor.includes(value)) {
         const index = this.order.checkedColor.findIndex(el => el === value)
@@ -311,8 +311,8 @@ export default {
     },
   },
   async mounted() {
-		await this.fetchOrderItems(this.id);
-		this.productItem = this.orderItemsList;
+		await this.fetchItemById(this.id);
+		this.productItem = this.item;
     this.order.price = this.productItem.price;
     this.order.item = { ...this.productItem };
 

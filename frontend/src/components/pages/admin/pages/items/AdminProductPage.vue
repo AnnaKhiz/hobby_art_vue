@@ -66,7 +66,8 @@ export default {
 
     async removeProduct(id) {
 			await this.removeItem(id);
-			this.$emit('update', id);
+			this.productList = this.itemsList;
+			// this.$emit('update', id);
     },
     renderColorsArray(item){
       if (!item) return

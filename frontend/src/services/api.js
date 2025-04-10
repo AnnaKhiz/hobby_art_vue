@@ -10,6 +10,7 @@ export async function fetchData(url, method = 'GET', pathParams = {}, body = nul
 		const result = await fetch(`${apiBaseUrl}/api/${processedUrl}`, {
 			method,
 			credentials: 'include',
+			headers: { "Content-Type": "application/json"},
 			...(body && method !== 'GET' && { body: JSON.stringify(body) }),
 		})
 		data = await result.json();

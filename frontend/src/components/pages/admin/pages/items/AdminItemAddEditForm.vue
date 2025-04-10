@@ -143,6 +143,7 @@
 
 <script>
 // import axios from "axios";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: "adminItemsForm",
@@ -154,7 +155,6 @@ export default {
   },
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       editFormData: {},
       message: '',
       form: {
@@ -173,31 +173,24 @@ export default {
       ],
     }
   },
-  emits: ['goBack', 'submitEdit', 'updatedItem'],
+  emits: ['submitEdit', 'updatedItem'],
+	computed: {
+		...mapState('items', ['item']),
+	},
   methods: {
+		...mapActions('items', ['fetchItemById', 'addItem', 'updateItem']),
     async addNewItem() {
       this.parseFormFields();
 
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/items/add`, {
-          method: 'POST',
-          body: JSON.stringify(this.form),
-          headers: { "Content-Type": "application/json"}
-        });
-        const data = await  result.json();
+			await this.addItem(this.form);
 
-        if (!data.result) return;
+			this.message = "Товар добавлен в базу данных";
 
-        this.message = "Товар добавлен в базу данных"
+			setTimeout(() => {
+				this.message = "";
+				this.$router.push({name: 'admin-items'});
+			}, 1000)
 
-        setTimeout(() => {
-          this.message = "";
-          this.$emit('goBack', data.data)
-        }, 1500)
-
-      } catch (error) {
-        console.log(error)
-      }
     },
 
     parseFormFields() {
@@ -218,47 +211,17 @@ export default {
 
         setTimeout(async () => {
           this.message = "";
-          await this.editItemRequest();
+					await this.updateItem({ body: this.form, id: this.itemId } );
+					this.$emit('updatedItem', this.form);
           this.$router.push({name: 'admin-items'})
         }, 1500)
       }
     },
-
-    async editItemRequest() {
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/items/update/${this.itemId}`, {
-          method: 'PATCH',
-          body: JSON.stringify(this.form),
-          headers: { "Content-Type": "application/json" }
-        })
-
-        const data = await result.json();
-        if (!data.result) return;
-
-        this.$emit('updatedItem', this.form);
-
-      } catch (error) {
-        console.log(error)
-      }
-    },
-
-    async initPage() {
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/items/${this.itemId}`, {
-          method: 'GET',
-          credentials: 'include'
-        })
-        const data = await result.json();
-        this.editFormData = await data.item;
-
-      } catch (e) {
-        console.log(e)
-      }
-    }
   },
   async mounted() {
     if (this.itemId) {
-      await this.initPage();
+      await this.fetchItemById(this.itemId);
+			this.editFormData = this.item;
 
       this.form = {
         ...this.editFormData,
