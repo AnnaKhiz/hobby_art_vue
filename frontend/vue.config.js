@@ -6,7 +6,6 @@ module.exports = defineConfig({
   // publicPath: process.env.NODE_ENV === 'production'
   //   ? 'https://anna-khizhniak.site/portfolio/hobby-art-new/'
   //   : '/',
-
   devServer: {
     proxy: {
       '/api': {
