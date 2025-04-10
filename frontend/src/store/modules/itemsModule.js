@@ -50,7 +50,6 @@ export const itemsModule = {
 			try {
 				const result = await fetchData('items/:id', 'GET', { id });
 				commit('setItem', result.items || result.item);
-				console.log('result', result)
 			} catch (error) {
 				console.error('Error fetching item:', error);
 			}
@@ -60,7 +59,6 @@ export const itemsModule = {
 			let result = {};
 			try {
 				result = await fetchData('items/add', 'POST', {}, body);
-				console.log('add', result)
 				commit('addNewItem', result.data)
 			} catch (error) {
 				console.error('Error adding items:', error);
@@ -81,7 +79,6 @@ export const itemsModule = {
 			console.log('removed id', id)
 			try {
 				const result = await fetchData('items/remove/:id', 'DELETE', { id })
-				console.log(result)
 				commit('removeItems', result.data._id);
 			} catch (error) {
 				console.log('Error removing items:', error)

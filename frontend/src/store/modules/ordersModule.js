@@ -1,3 +1,5 @@
+import {fetchData} from "@/services/api";
+
 export const ordersModule = {
   namespaced: true,
   state: () => ({
@@ -15,6 +17,9 @@ export const ordersModule = {
     updateOrders(state, payload) {
       state.order = payload
     },
+		updateItemsInOrder(state, payload) {
+			state.order.items = payload;
+		},
 
     addToOrder(state, payload) {
       if (state.order.items.length) {
@@ -49,9 +54,25 @@ export const ordersModule = {
       }
     }
   },
+	actions: {
+		async fetchOrders({ commit }, id) {
+			try {
+				const result = await fetchData('orders/:id', 'GET', { id });
+				commit('updateOrders', result.data);
+			} catch (error) {
+				console.error('Error fetching orders:', error);
+			}
+		},
 
-
-
+		async updateOrders({commit}, { id, body }) {
+			try {
+				await fetchData('orders/update/:id', 'PATCH', { id }, body);
+				commit('updateItemsInOrder', body);
+			} catch (error) {
+				console.error('Error updating order items:', error);
+			}
+		}
+	}
 }
 
 function countTotal(state, storeFieldName, objectFieldName) {

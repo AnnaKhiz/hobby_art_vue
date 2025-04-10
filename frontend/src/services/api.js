@@ -1,4 +1,3 @@
-
 const apiBaseUrl = process.env.VUE_APP_API_URL;
 export async function fetchData(url, method = 'GET', pathParams = {}, body = null) {
 	let data = null;
