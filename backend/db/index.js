@@ -8,7 +8,7 @@ const AdminSchema = new mongoose.Schema({
 });
 
 const OrderSchema = new mongoose.Schema({
-  date: {type: Date},
+  date: {type: String},
   dateCompleted: {type: String},
   totalPrice: {type: Number},
   totalQuantity: {type: Number},

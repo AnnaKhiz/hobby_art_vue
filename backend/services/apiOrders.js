@@ -1,6 +1,7 @@
 const {Order, ObjectId} = require("../db");
 
 async function gelAllOrders(req, res, next) {
+
   const orders = await Order.find().populate('items._id')
 
   if (!orders) {
@@ -14,12 +15,27 @@ async function getOrderById(req, res, next) {
   const { id } = req.params;
 
   try {
-    const order = await Order.findById({_id: new ObjectId(id)})
+    const order = await Order.findOne({ _id: new ObjectId(id) }).populate('items._id')
 
     res.status(200).send({result: true, data: order });
   } catch (error) {
     console.log(error)
     res.status(404).send({result: false, data: `Error: ${error}`})
+  }
+}
+
+
+async function getUserOrdersById(req, res, next) {
+  console.log('req auth', req._auth)
+  const { id } = req._auth;
+  console.log(id)
+
+  try {
+    const orders = await Order.find({ users: new ObjectId(id)}).populate('items._id')
+    console.log(orders)
+    res.send({ result: true, data: orders })
+  } catch (error) {
+    res.send({ result: false, data: [] })
   }
 }
 async function addNewOrder(req, res, next) {
@@ -36,8 +52,9 @@ async function addNewOrder(req, res, next) {
   try {
     const newOrder = await new Order(order);
     const result = await newOrder.save();
+    const data = await Order.findOne({ _id: new ObjectId(result._id)}).populate('items._id')
 
-    res.send({ "result" : true, data: result });
+    res.send({ "result" : true, data: data });
   } catch (error) {
     res.send({ "result" : false, data: error });
   }
@@ -115,5 +132,6 @@ module.exports = {
   updateOrderItemById,
   removeOrder,
   removeOrderItemById,
-  getOrderById
+  getUserOrdersById,
+  getOrderById,
 }

@@ -14,7 +14,7 @@
             v-model="item.value"
           >
             <option
-              v-for="option in (item.name === 'deliveryMethod' ? deliveryMethods : paymentMethod)"
+              v-for="option in (item.name === 'deliveryMethod' ? $store.state.delivery.deliveryMethods : $store.state.delivery.paymentMethod)"
               :key="option.value"
               :value="option.value"
             >
@@ -117,14 +117,6 @@ export default {
     orderId: {
       type: String,
       default: ''
-    },
-    deliveryMethods: {
-      type: Array,
-      default: () => []
-    },
-    paymentMethod: {
-      type: Array,
-      default: () => []
     },
   },
   data() {

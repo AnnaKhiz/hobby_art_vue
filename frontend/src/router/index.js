@@ -10,6 +10,13 @@ import BasketComponent from "@/components/pages/BasketComponent.vue";
 import ProductPageComponent from "@/components/pages/ProductPageComponent.vue";
 import ProductPageDetails from "@/components/pages/ProductPageDetails.vue";
 import store from "@/store";
+import AdminProductPage from "@/components/pages/admin/pages/AdminProductPage.vue";
+import AdminOrdersPage from "@/components/pages/admin/pages/AdminOrdersPage.vue";
+import AdminUsersPage from "@/components/pages/admin/pages/AdminUsersPage.vue";
+import AdminCommentsPage from "@/components/pages/admin/pages/AdminCommentsPage.vue";
+import AdminItemAddEditForm from "@/components/pages/admin/pages/AdminItemAddEditForm.vue";
+import AdminOrderViewDetails from "@/components/pages/admin/pages/AdminOrderViewDetails.vue";
+import AdminOrdersAddNew from "@/components/pages/admin/pages/AdminOrdersAddNew.vue";
 
 
 
@@ -112,9 +119,65 @@ const routes = [
     meta: {
       title: 'Админ',
       favicon: '',
-      requiresAuth: false
+      requiresAuth: true
     },
+    children: [
+      {
+        path: 'items',
+        name: 'admin-items',
+        component: AdminProductPage,
+        props: true,
+        children: [
+          {
+            path: 'add',
+            name: 'admin-items-add',
+            component: AdminItemAddEditForm,
+            props: true,
+          },
+          {
+            path: 'edit/:itemId',
+            name: 'admin-items-edit',
+            component: AdminItemAddEditForm,
+            props: true,
+          },
+        ]
+      },
+
+      {
+        path: 'orders',
+        name: 'admin-orders',
+        component: AdminOrdersPage,
+        props: true,
+        children: [
+          {
+            path: 'add',
+            name: 'admin-orders-add',
+            component: AdminOrdersAddNew,
+            props: true
+          },
+          {
+            path: 'edit/:orderId',
+            name: 'admin-orders-edit',
+            component: AdminOrderViewDetails,
+            props: true
+          },
+        ]
+      },
+
+      {
+        path: 'users',
+        name: 'admin-users',
+        component: AdminUsersPage,
+      },
+      {
+        path: 'comments',
+        name: 'admin-comments',
+        component: AdminCommentsPage,
+      }
+    ],
+
   },
+
   // {
   //   path: '/admin/item/:id',
   //   name: 'admin-item',
@@ -152,9 +215,10 @@ router.beforeEach((to, from, next) => {
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
-    if (isAuthenticated === 'false' && to.name !== 'admin' ) {
+
+    if (isAuthenticated === 'false') {
       console.log('Auth false')
-      next('/');
+      next('/admin/login');
     } else {
       console.log('Auth true')
       next();

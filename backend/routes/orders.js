@@ -8,13 +8,16 @@ const {
   updateOrderItemById,
   removeOrder,
   removeOrderItemById,
-  getOrderById
+  getOrderById,
+  getUserOrdersById
   } = require('../services/apiOrders');
+const {Order, ObjectId} = require("../db");
 
 router.get('/', gelAllOrders );
+router.get('/user-orders', parserJwt, getUserOrdersById );
 router.get('/:id', getOrderById);
 
-router.post('/add',  parserJwt, addNewOrder );
+router.post('/add', parserJwt, addNewOrder );
 
 router.patch('/update/:id',updateOrderData );
 router.patch('/update/:orderId/:itemId', updateOrderItemById );

@@ -327,12 +327,12 @@ export default {
     },
 
     async sendOrder() {
-      // this.deliveryInfo.receiver.fullName = this.fullName;
-      // this.deliveryInfo.fullAddress = this.address;
-
       this.currentOrder.deliveryInfo = {...this.deliveryInfo};
+      const now = new Date(Date.now());
+      const options = { timeZone: 'Europe/Kiev', hour12: false };
+      const date = now.toLocaleString('en-GB', options).replaceAll('/', '-')
 
-      this.currentOrder.date = Date.now();
+      this.currentOrder.date = date;
       this.currentOrder.totalPrice = this.$store.state.order.order.totalPrice;
       this.currentOrder.totalQuantity = this.$store.state.order.order.totalQuantity;
       this.currentOrder.items = this.$store.state.order.order.items.map(el => ( { _id: el.item._id, price : el.price, quantity: el.quantity, checkedColor: el.checkedColor } ));

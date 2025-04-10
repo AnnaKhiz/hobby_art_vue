@@ -44,7 +44,7 @@ async function registerNewUser(req, res) {
         secure: false,
         sameSite: "Lax",
         expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-        path: "/"
+        path: "*"
       })
       .send({"result" : "New user added", "id": result._id.toString()})
 
@@ -78,7 +78,7 @@ async function logInUserPage(req, res, next) {
     secure: false,
     sameSite: "Lax",
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    path: "/"
+    path: "*"
   });
 
   res.send({ result: true, id: user._id.toString(), role: "user", status: 200 });
@@ -89,7 +89,7 @@ async function logoutUserPage( req, res, next ) {
     httpOnly: true,
     secure: false,
     sameSite: "Lax",
-    path: "/",
+    path: "*",
   });
 
   res.send({ "result": "successful" });
@@ -130,17 +130,19 @@ async function uploadAdminPage(req,res) {
   const comments = await Comment.find().populate('users').populate('items');
   const orders = await Order.find().populate('users').populate('items._id')
 
+
   res.send({"result": true, role: role, data: [users, orders, items]})
 }
 async function logInToAdminPanel(req, res, next) {
   const { login, password } = req.body;
+  console.log(login, password)
 
   const admin = await Admin.findOne( { login });
 
   const result = await checkPass(password, admin.password);
 
   if (!result) {
-    return res.send({ "result": false})
+    return res.send({ result: false})
   }
 
   req._auth = { role: 'user', id: admin._id.toString() };
@@ -155,7 +157,7 @@ async function logInToAdminPanel(req, res, next) {
     path: "/admin"
   })
 
-  res.send({ id: admin._id.toString(), role: "admin" });
+  res.send({ result: true, id: admin._id.toString(), role: "admin" });
 }
 
 async function logoutFromAdminPanel(req, res, next) {
