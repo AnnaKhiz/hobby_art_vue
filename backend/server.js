@@ -15,7 +15,13 @@ const allowedOrigins = ['http://localhost:8080', 'https://hobby-art-vue.vercel.a
 
 server.use(cors(
   {
-    origin: allowedOrigins,
+    origin: function(origin, callback) {
+			if (allowedOrigins.indexOf(origin) !== -1) {
+				callback(null, true);
+			} else {
+				callback(new Error('Not allowed by CORS'));
+			}
+		},
     credentials: true,
   }
 ));
