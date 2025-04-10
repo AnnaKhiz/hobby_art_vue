@@ -164,7 +164,7 @@ const Admin = mongoose.model('admins', AdminSchema)
 
 async function init() {
   try {
-    await mongoose.connect('mongodb://localhost:27017', { dbName: 'hobby-art' });
+    await mongoose.connect(dbUrl, { dbName: 'hobby-art' });
     console.log('Mongo DB connected');
   } catch (error) {
     console.log('Mongo DB did not connected');
