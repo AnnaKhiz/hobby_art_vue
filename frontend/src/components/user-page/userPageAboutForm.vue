@@ -95,7 +95,7 @@ export default {
 
       const data = await result.json()
 
-      console.log('edited user', data)
+      console.log('edited user: ', data)
 
       if (!data.result) return;
 
