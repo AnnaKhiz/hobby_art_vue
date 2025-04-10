@@ -11,17 +11,16 @@ const path = require('path')
 
 const express = require('express');
 const server = express();
-const allowedOrigins = ['http://localhost:8080', 'https://hobby-art-vue.vercel.app'];
 
+// server.use(cors(
+//   {
+//     origin: 'http://localhost:8080',
+//     credentials: true,
+//   }
+// ));
 server.use(cors(
   {
-    origin: function(origin, callback) {
-			if (allowedOrigins.indexOf(origin) !== -1) {
-				callback(null, true);
-			} else {
-				callback(new Error('Not allowed by CORS'));
-			}
-		},
+    origin: 'https://hobby-art-vue.vercel.app',
     credentials: true,
   }
 ));
