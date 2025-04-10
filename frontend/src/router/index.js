@@ -10,13 +10,13 @@ import BasketComponent from "@/components/pages/BasketComponent.vue";
 import ProductPageComponent from "@/components/pages/ProductPageComponent.vue";
 import ProductPageDetails from "@/components/pages/ProductPageDetails.vue";
 import store from "@/store";
-import AdminProductPage from "@/components/pages/admin/pages/AdminProductPage.vue";
-import AdminOrdersPage from "@/components/pages/admin/pages/AdminOrdersPage.vue";
+import AdminProductPage from "@/components/pages/admin/pages/items/AdminProductPage.vue";
+import AdminOrdersPage from "@/components/pages/admin/pages/orders/AdminOrdersPage.vue";
 import AdminUsersPage from "@/components/pages/admin/pages/AdminUsersPage.vue";
 import AdminCommentsPage from "@/components/pages/admin/pages/AdminCommentsPage.vue";
-import AdminItemAddEditForm from "@/components/pages/admin/pages/AdminItemAddEditForm.vue";
-import AdminOrderViewDetails from "@/components/pages/admin/pages/AdminOrderViewDetails.vue";
-import AdminOrdersAddNew from "@/components/pages/admin/pages/AdminOrdersAddNew.vue";
+import AdminItemAddEditForm from "@/components/pages/admin/pages/items/AdminItemAddEditForm.vue";
+import AdminOrderViewDetails from "@/components/pages/admin/pages/orders/AdminOrderViewDetails.vue";
+import AdminOrdersAddNew from "@/components/pages/admin/pages/orders/AdminOrdersAddNew.vue";
 
 
 

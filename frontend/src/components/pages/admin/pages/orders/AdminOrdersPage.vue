@@ -158,35 +158,6 @@ export default
     transition: color 0.3s ease-in-out 0s
     color: #5E5C5A
     text-decoration: underline
-.button-container
-  padding: 20px
-  display: flex
-  align-items: center
-  justify-content: space-between
-  width: 100%
 .hidden
   display: none
-.notify-message
-  color: var(--errorText)
-table.order-items-table, th, td
-  border: 1px solid var(--grayLinkColor)
-  border-collapse: collapse
-  & tr
-    transition: all 0.3s ease-in-out 0s
-    &:hover
-      background: var(--colorLineBasket)
-  & td
-    padding: 10px
-.discount-style
-  width: 100px
-  text-decoration: line-through
-  color: var(--colorCounter)
-.select-list
-  padding: 8px 11px
-  width: 100%
-  background-color: var(--colorTextButton)
-  font-size: 1rem
-  font-family: inherit
-  border-radius: 12px
-  box-shadow: 1px -1px 6px inset rgba(94, 92, 90, 0.58)
 </style>

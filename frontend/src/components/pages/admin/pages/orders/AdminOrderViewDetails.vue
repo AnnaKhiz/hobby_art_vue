@@ -77,7 +77,7 @@
               <p style="color: var(--errorText)">{{ item.discountPercentage > 0 ? `${item.price - (item.price * item.discountPercentage) / 100} грн` : '' }} </p>
             </td>
             <td>
-              <img src="../../../../assets/img/add-30.png" alt="add icon" style="cursor: pointer" @click="updateItemsListInOrder(item)">
+              <img src="../../../../../assets/img/add-30.png" alt="add icon" style="cursor: pointer" @click="updateItemsListInOrder(item)">
             </td>
           </tr>
         </table>
@@ -318,8 +318,6 @@ export default {
   align-items: center
   justify-content: space-between
   width: 100%
-.hidden
-  display: none
 .notify-message
   color: var(--errorText)
 table.order-items-table, th, td

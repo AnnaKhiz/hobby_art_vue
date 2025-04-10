@@ -11,7 +11,6 @@
       <ul class="main__user-page-content-user-data">
         <li v-for="(item, index) in userData" :key="index">
           <label :for="item.idLabel" class="form-label">{{item.text}}</label>
-
           <input
             v-if="item.value.includes('address')"
             v-model="entityDataUser.address[(item.value).slice(8)]"
@@ -55,7 +54,15 @@ export default {
     return {
       message: '',
       entityDataResult: {},
-      entityDataUser: {address:{}},
+      entityDataUser: {
+				address: {
+					city: '',
+					street: '',
+					house: '',
+					apartment: null,
+					zipCode: null,
+				}
+			},
       userData: [
           { text: 'Имя:', value: 'name', idLabel: 'user-name', isReadable: false },
           { text: 'Фамилия:', value: 'lastName', idLabel: 'user-surname', isReadable: false},
@@ -103,7 +110,10 @@ export default {
   },
 
   mounted() {
-    this.entityDataUser = this.user
+    this.entityDataUser = {
+			...this.entityDataUser,
+			...this.user,
+		}
     console.log('mounted', this.entityDataUser)
   }
 }

@@ -261,7 +261,6 @@ export default {
       orders: {
         items: [],
       },
-
       currentOrder: {
         date: '',
         dateCompleted:'',
@@ -372,7 +371,18 @@ export default {
       localStorage.removeItem('order');
       this.clearOrder()
     },
-
+		addEmptyAddress() {
+			this.deliveryInfo.address = {
+				city: '',
+				street: '',
+				house: '',
+				apartment: null,
+				zipCode: null,
+			};
+			this.deliveryInfo.receiver = '';
+			this.currentOrder.isMailing = false;
+			this.currentOrder.users = '';
+		},
     async addNewOrder() {
       const result = await fetch('http://localhost:3000/api/orders/add', {
         method: 'POST',
@@ -420,7 +430,7 @@ export default {
 
         this.user = await data.user[0]
         // this.$router.push(`/user_page/${this.user._id}`);
-        return this.user
+        return { user: this.user }
       }
     }
   },
@@ -432,12 +442,21 @@ export default {
   },
   async mounted() {
     if (localStorage.getItem('auth') === 'true') {
-      await this.getUser()
-      this.deliveryInfo.address = this.user.address
-      this.deliveryInfo.receiver = this.user
-      this.currentOrder.isMailing = this.user.mailing
-      this.currentOrder.users = this.user._id
-    }
+      try {
+				const { user } = await this.getUser();
+				this.deliveryInfo.address = user.address || '';
+				this.deliveryInfo.receiver = user || {};
+				this.currentOrder.isMailing = user.mailing || false;
+				this.currentOrder.users = user._id || '';
+
+			} catch (error) {
+				console.error('Error in getting user (basket):', error);
+				this.addEmptyAddress();
+			}
+
+    } else {
+			this.addEmptyAddress();
+		}
   },
   watch: {
     display(val) {
