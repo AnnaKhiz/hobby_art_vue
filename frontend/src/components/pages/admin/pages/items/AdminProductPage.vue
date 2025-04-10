@@ -1,6 +1,6 @@
 <template>
     <router-view v-if="$route.path.includes('add') || $route.path.includes('edit')" @updated-item="updateItemData"></router-view>
-    <div v-else v-for="(item, index) in itemsList" :key="item._id" class="items-container__item">
+    <div v-else v-for="(item, index) in productList" :key="item._id" class="items-container__item">
       <div class="info">
         <h3 class="item-row"><span class="label">Название:</span> {{item.name}}</h3>
         <p class="item-row"><span class="label">Описание:</span> {{item.description}}</p>
@@ -14,12 +14,14 @@
       </div>
       <div class="actions">
         <button class="button" @click.prevent="editItem(item, index)">Редактировать</button>
-        <button class="button" @click.prevent="removeItem(item._id, index)">Удалить</button>
+        <button class="button" @click.prevent="removeProduct(item._id)">Удалить</button>
       </div>
     </div>
 </template>
 
 <script>
+import {mapActions, mapState} from "vuex";
+
 export default {
   name: "uiAdminProductCard",
   props: {
@@ -30,17 +32,20 @@ export default {
   },
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
-      itemsList: [],
+      productList: [],
       editFormData: {}
     }
   },
   emits: ['updateIsNewFormData', 'editItem', 'update'],
+	computed: {
+		...mapState('items', ['itemsList']),
+	},
   methods: {
+		...mapActions('items', ['fetchItems', 'removeItem']),
     updateItemData(item) {
-      const index = this.itemsList.findIndex(el => el._id === item._id);
+      const index = this.productList.findIndex(el => el._id === item._id);
       if (index === -1) return false;
-      this.itemsList[index] = item;
+      this.productList[index] = item;
     },
     openAddProduct() {
       this.$emit('updateIsNewFormData', true)
@@ -56,17 +61,12 @@ export default {
       this.$emit('updateIsNewFormData', false)
       // this.isNewFormData = false;
       this.editFormData = {}
-      this.itemsList.push(item)
+      this.productList.push(item)
     },
 
-    removeProduct(id) {
-      const index = this.itemsList.findIndex(el => el._id === id)
-
-      console.log(index)
-
-      if (index === -1) return;
-
-      this.itemsList.splice(index, 1)
+    async removeProduct(id) {
+			await this.removeItem(id);
+			this.$emit('update', id);
     },
     renderColorsArray(item){
       if (!item) return
@@ -75,42 +75,18 @@ export default {
       return items.slice(0, -2)
     },
 
-    async removeItem(id, index) {
-      // console.log(id)
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/items/remove/${id}`, {
-          method: 'DELETE'
-        })
-
-        const data = await result.json();
-        if (!data.result) return;
-
-        this.itemsList.split(index, 1);
-
-        // this.$emit('update', id)
-      } catch (error) {
-        console.log(error)
-      }
-    },
     editItem(item) {
       this.$router.push({name: 'admin-items-edit', params: { itemId: item._id }})
     },
-    async getItemsList() {
-      this.$emit('updateIsNewFormData', false)
-      this.editFormData = {}
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/items`)
-        const data = await result.json();
-        if(!data.result) return
-        this.itemsList = data.items
-
-      } catch (error) {
-        console.log(error)
-      }
+    updateFormData() {
+      this.$emit('updateIsNewFormData', false);
+      this.editFormData = {};
     },
   },
-  mounted() {
-    this.getItemsList()
+  async mounted() {
+		this.updateFormData();
+		await this.fetchItems();
+		this.productList = this.itemsList;
   }
 }
 </script>

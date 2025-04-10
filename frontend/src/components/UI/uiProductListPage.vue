@@ -52,7 +52,7 @@
 <script>
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue"
-import {mapMutations} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 
 
@@ -67,18 +67,18 @@ export default {
   },
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       isCheckedColorNotify: false,
       checkedColor: [],
       display: false,
       productList: [],
-      savedIndex: null
+      savedIndex: null,
     }
   },
   emits: ['itemsList', 'change'],
   computed: {
+		...mapState('items', ['itemsList']),
     params() {
-      return this.checkedColor.length ? '?colors=' + this.checkedColor : ''
+      return this.checkedColor.length ? '?colors=' + this.checkedColor : '';
     },
     filteredItems() {
       const { brand, composition, type, width } = this.searchFilters;
@@ -96,11 +96,11 @@ export default {
         return typeMatch && compositionMatch && brandMatch && widthMatch
       })
     },
-
   },
 
   methods: {
     ...mapMutations('order', ['addToOrder']),
+		...mapActions('items', ['fetchItems']),
     checkIsSelectedItemUsed(event, id, index) {
       if (event.target.parentElement.id === id) {
         this.savedIndex = id
@@ -108,7 +108,7 @@ export default {
 
       } else {
         this.savedIndex = ''
-        this.productList[index].isSelectedItem = false
+        this.productList[index].isSelectedItem = false;
       }
     },
     addCheckedColor(value, item) {
@@ -118,13 +118,13 @@ export default {
       } else {
 
         if(this.checkedColor.includes(value)) {
-          const index = this.checkedColor.findIndex(el => el === value)
+          const index = this.checkedColor.findIndex(el => el === value);
 
           if (index === -1) return false;
 
-          this.checkedColor.splice(index, 1)
+          this.checkedColor.splice(index, 1);
         } else {
-          this.checkedColor.push(value)
+          this.checkedColor.push(value);
         }
       }
     },
@@ -146,29 +146,17 @@ export default {
       })
 
       this.display = true;
-      this.savedIndex = null
-
+      this.savedIndex = null;
     },
 
-
-    async getProductList() {
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/items`, {
-          method: 'GET',
-          credentials: 'include'
-        })
-        const data = await result.json();
-
-        this.productList = data.items.map(el => ({...el, isSelectedItem: false }));
-        this.$emit('itemsList', this.productList)
-      } catch (e) {
-        console.log(e)
-      }
-    }
   },
 
   async mounted() {
-    await this.getProductList()
+		await this.fetchItems();
+
+		this.productList = this.itemsList;
+		this.$emit('itemsList', this.productList)
+		console.log(this.productList)
   },
   watch: {
     display(val) {

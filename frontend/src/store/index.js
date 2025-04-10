@@ -1,11 +1,11 @@
 import { createStore } from "vuex";
-import { linksModule } from "@/store/linksModule"
-import { userModule } from "@/store/userModule"
-import {dialogModule} from "@/store/dialogModule";
-import {ordersModule} from "@/store/ordersModule";
-import {filterParamsModule} from "@/store/filterParamsModule";
-import {deliveryPaymentModule} from "@/store/deliveryPaymentModule";
-
+import { linksModule } from "@/store/modules/linksModule"
+import { userModule } from "@/store/modules/userModule"
+import { dialogModule } from "@/store/modules/dialogModule";
+import { ordersModule } from "@/store/modules/ordersModule";
+import { filterParamsModule } from "@/store/modules/filterParamsModule";
+import { deliveryPaymentModule } from "@/store/modules/deliveryPaymentModule";
+import { itemsModule } from "@/store/modules/itemsModule";
 
 
 export default createStore({
@@ -15,7 +15,8 @@ export default createStore({
     user: userModule,
     order: ordersModule,
     filter: filterParamsModule,
-    delivery: deliveryPaymentModule
+    delivery: deliveryPaymentModule,
+		items: itemsModule,
   }
 })
 

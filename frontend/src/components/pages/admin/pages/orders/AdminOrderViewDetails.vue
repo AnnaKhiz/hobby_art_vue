@@ -54,7 +54,7 @@
           <tr>
             <td v-for="header in headers" :key="header.value">{{header.text}}</td>
           </tr>
-          <tr v-for="(item, index) in itemsList" :key="item._id">
+          <tr v-for="(item, index) in productList" :key="item._id">
             <td style="width: 50px">{{ index + 1 }}</td>
             <td>{{item._id}}</td>
             <td>{{item.name}}</td>
@@ -91,7 +91,7 @@ import UiTableContent from "@/components/pages/admin/UI/table/uiTableContent.vue
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 export default {
   name: "AdminOrderViewDetails.vue",
@@ -109,7 +109,7 @@ export default {
   data() {
 		return {
 			apiBaseUrl: process.env.VUE_APP_API_URL,
-			itemsList: [],
+			productList: [],
 			isDisplayDialog: false,
 			selectedOrder: {
 				deliveryInfo: {
@@ -145,9 +145,10 @@ export default {
       parseDeliveryValue: 'delivery/parseDeliveryValue',
       parsePaymentValue: 'delivery/parsePaymentValue'
     }),
+		...mapState('items', ['itemsList']),
   },
   methods: {
-
+		...mapActions('items', ['fetchItems']),
     notify(text) {
       this.message = text;
     },
@@ -207,28 +208,22 @@ export default {
       }
     },
     async getItemsList() {
-      this.isDisplayDialog = true
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/items`)
-        const data = await result.json();
-        if (!data.result) return
+      this.isDisplayDialog = true;
 
-        const list = this.selectedOrder.items.map(el => ({_id: el._id._id, checkedColor: el.checkedColor}))
+			await this.fetchItems();
+			this.productList = this.itemsList;
 
-        this.itemsList = data.items;
+			const list = this.selectedOrder.items.map(el => ({_id: el._id._id, checkedColor: el.checkedColor}));
 
-        list.forEach(element => {
-          this.itemsList = this.itemsList
-            .map(el => (
-              el._id === element._id
-                ? {...el, color: el.color.filter(color => color.value !== element.checkedColor)}
-                : el
-            ))
-            .filter(el => el.color.length)
-        })
-      } catch (error) {
-        console.log(error)
-      }
+			list.forEach(element => {
+				this.productList = this.productList
+					.map(el => (
+						el._id === element._id
+							? {...el, color: el.color.filter(color => color.value !== element.checkedColor)}
+							: el
+					))
+					.filter(el => el.color.length)
+			})
     },
     async updateItemsListInOrder(item) {
       const updatedItemsList = [...this.selectedOrder.items, { price: item.price, quantity: 1, _id: item , checkedColor: item.checkedColor}]

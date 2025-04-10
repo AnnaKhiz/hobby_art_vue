@@ -228,7 +228,7 @@
 <script>
 
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
-import {mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
@@ -246,7 +246,6 @@ export default {
   },
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       showNotifyError: false,
       display: false,
       productItem: {},
@@ -262,6 +261,7 @@ export default {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
+		...mapState('items', ['orderItemsList']),
     parseCheckedColors() {
 
       if (!this.order.checkedColor.length) {
@@ -277,6 +277,7 @@ export default {
   },
   methods: {
     ...mapMutations('order', ['addToOrder']),
+		...mapActions('items', ['fetchOrderItems']),
     addCheckedColor(value) {
       if (this.order.checkedColor.includes(value)) {
         const index = this.order.checkedColor.findIndex(el => el === value)
@@ -308,28 +309,15 @@ export default {
     countFinalPrice() {
       return this.order.price = this.productItem.price * this.order.quantity
     },
-
-    async getProductList() {
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/items/${this.id}`, {
-          method: 'GET',
-          credentials: 'include'
-        })
-        const data = await result.json();
-        this.productItem = await data.item;
-
-      } catch (e) {
-        console.log(e)
-      }
-    }
   },
   async mounted() {
-    await this.getProductList()
-    this.order.price = this.productItem.price
-    this.order.item = {...this.productItem}
+		await this.fetchOrderItems(this.id);
+		this.productItem = this.orderItemsList;
+    this.order.price = this.productItem.price;
+    this.order.item = { ...this.productItem };
 
     if (!this.$route.query.colors) {
-      return this.order.checkedcolors = ''
+      return this.order.checkedcolors = '';
     }
 
     const checkedColorsFromQuery = this.$route.query.colors.split(',');
