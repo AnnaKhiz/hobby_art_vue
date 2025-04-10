@@ -90,18 +90,18 @@ export default {
         credentials: 'include'
       });
 
-      const data = await result.json()
-      console.log('get result', data)
+      const data = await result.json();
+      console.log('get result', data);
 
       if (!data.result) {
-        console.log('no requested result')
-        this.$router.back()
+        console.log('no requested result');
+        this.$router.back();
         // await this.getAdmin()
       } else {
-        this.setIsAuthorizedInfo(true)
-        this.user = await data.user[0]
+        this.setIsAuthorizedInfo(true);
+        this.user = await data.user[0];
         this.$router.push(`/user_page/${this.user._id}`);
-        return this.user
+        return this.user;
       }
 
 
