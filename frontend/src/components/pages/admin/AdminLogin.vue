@@ -27,6 +27,7 @@ export default {
   components: {AsideMenu},
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       editFormData: {},
       itemsList: [],
       form: {},
@@ -40,7 +41,7 @@ export default {
     }),
 
     async initPage() {
-      const result = await fetch('http://localhost:3000/admin', {
+      const result = await fetch(`${this.apiBaseUrl}/admin`, {
         method: 'GET',
         credentials: 'include'
       })

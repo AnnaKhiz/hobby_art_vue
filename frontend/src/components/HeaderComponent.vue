@@ -67,6 +67,7 @@ export default {
   },
 	data() {
 		return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       displayDialog: false,
       user: {},
       basketQuantity: 0,
@@ -115,7 +116,7 @@ export default {
       this.setCheckedHeaderLink(value)
     },
     async getUser() {
-      const result = await fetch(`http://localhost:3000/user`, {
+      const result = await fetch(`${this.apiBaseUrl}/user`, {
         method: 'GET',
         credentials: 'include'
       });

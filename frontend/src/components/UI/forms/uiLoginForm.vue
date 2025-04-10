@@ -58,6 +58,7 @@ export default {
   components: {UiRegistForm},
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       entityData: {},
       message: ''
     }
@@ -77,7 +78,7 @@ export default {
 
 		async logIn() {
 
-			const result = await fetch(`http://localhost:3000/user/login`, {
+			const result = await fetch(`${this.apiBaseUrl}/user/login`, {
         method: 'POST',
         body: JSON.stringify(this.entityData),
         headers: { "Content-Type": "application/json" },

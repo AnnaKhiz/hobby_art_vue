@@ -52,6 +52,7 @@ export default {
   },
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       message: '',
       entityDataResult: {},
       entityDataUser: {
@@ -86,7 +87,7 @@ export default {
     },
     async saveChanges() {
 
-      const result = await fetch('http://localhost:3000/user/edit', {
+      const result = await fetch(`${this.apiBaseUrl}/user/edit`, {
         method: 'PATCH',
         body: JSON.stringify(this.entityDataResult),
         headers: { "Content-Type": "application/json" },

@@ -9,6 +9,8 @@
 .env.*.local
 /backend/.env
 /backend/.env.local
+/frontend/.env.development
+/frontend/.env.production
 
 # Log files
 npm-debug.log*

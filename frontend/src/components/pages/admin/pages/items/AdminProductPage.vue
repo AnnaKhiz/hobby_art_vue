@@ -30,6 +30,7 @@ export default {
   },
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       itemsList: [],
       editFormData: {}
     }
@@ -77,7 +78,7 @@ export default {
     async removeItem(id, index) {
       // console.log(id)
       try {
-        const result = await fetch(`http://localhost:3000/api/items/remove/${id}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/items/remove/${id}`, {
           method: 'DELETE'
         })
 
@@ -98,7 +99,7 @@ export default {
       this.$emit('updateIsNewFormData', false)
       this.editFormData = {}
       try {
-        const result = await fetch('http://localhost:3000/api/items')
+        const result = await fetch(`${this.apiBaseUrl}/api/items`)
         const data = await result.json();
         if(!data.result) return
         this.itemsList = data.items

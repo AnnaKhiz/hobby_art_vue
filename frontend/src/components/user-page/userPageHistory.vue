@@ -80,6 +80,7 @@ export default {
   },
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       showNotify: false,
       show: false,
       userOrdersList: [],
@@ -107,7 +108,7 @@ export default {
 
       delete newOrderCopy._id;
 
-      const result = await fetch('http://localhost:3000/api/orders/add', {
+      const result = await fetch(`h${this.apiBaseUrl}/api/orders/add`, {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(newOrderCopy),
@@ -135,7 +136,7 @@ export default {
     },
 
     async initPage() {
-      const result = await fetch(`http://localhost:3000/api/orders/user-orders`,
+      const result = await fetch(`${this.apiBaseUrl}/api/orders/user-orders`,
         {
           method: 'GET',
           credentials: "include"

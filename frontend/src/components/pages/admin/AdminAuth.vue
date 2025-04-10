@@ -37,6 +37,7 @@ export default {
   name: "AdminAuth",
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       entityData: {},
       errorMessage: ''
     }
@@ -56,7 +57,7 @@ export default {
 
     async logIn() {
 
-      const result = await fetch(`http://localhost:3000/admin/login`, {
+      const result = await fetch(`${this.apiBaseUrl}/admin/login`, {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(this.entityData),

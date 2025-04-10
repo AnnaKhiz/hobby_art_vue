@@ -107,36 +107,37 @@ export default {
     }
   },
   data() {
-   return {
-     itemsList: [],
-     isDisplayDialog: false,
-     selectedOrder: {
-       deliveryInfo: {
-         receiver: {
-           fullName: '',
-           phone: '',
-           email: '',
-         },
-         fullAddress: '',
-         deliveryMethod: '',
-         paymentMethod: '',
-         userComment: ''
-       }
-     },
-     message: '',
-     errorMessage: '',
+		return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
+			itemsList: [],
+			isDisplayDialog: false,
+			selectedOrder: {
+				deliveryInfo: {
+					receiver: {
+						fullName: '',
+						phone: '',
+						email: '',
+				},
+				fullAddress: '',
+				deliveryMethod: '',
+				paymentMethod: '',
+				userComment: ''
+				}
+			},
+			message: '',
+			errorMessage: '',
 
-     headers: [
-       { text: "№", value: 'count' },
-       { text: "Артикул", value: 'id' },
-       { text: "Название", value: 'name' },
-       { text: "Цвет", value: 'color' },
-       { text: "Остаток", value: 'restBalance' },
-       { text: "Скидка", value: 'discountPercentage' },
-       { text: "Цена", value: 'price' },
-       { text: "Добавить", value: 'add' },
-     ]
-   }
+			headers: [
+				{ text: "№", value: 'count' },
+				{ text: "Артикул", value: 'id' },
+				{ text: "Название", value: 'name' },
+				{ text: "Цвет", value: 'color' },
+				{ text: "Остаток", value: 'restBalance' },
+				{ text: "Скидка", value: 'discountPercentage' },
+				{ text: "Цена", value: 'price' },
+				{ text: "Добавить", value: 'add' },
+			]
+			}
   },
   emits: ['updateShowDetails'],
   computed: {
@@ -179,7 +180,7 @@ export default {
     async updateOrder(dataField, itemId) {
 
       try {
-        const result = await fetch(`http://localhost:3000/api/orders/update/${this.selectedOrder._id}/${itemId}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/orders/update/${this.selectedOrder._id}/${itemId}`, {
           method: 'PATCH',
           credentials: 'include',
           body: JSON.stringify(dataField),
@@ -194,7 +195,7 @@ export default {
     async deleteItemFromBasket(item, index) {
       this.message = '';
       try {
-        const result = await fetch(`http://localhost:3000/api/orders/remove/${this.selectedOrder._id}/${item._id._id}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/orders/remove/${this.selectedOrder._id}/${item._id._id}`, {
           method: 'DELETE',
           credentials: 'include',
         })
@@ -208,7 +209,7 @@ export default {
     async getItemsList() {
       this.isDisplayDialog = true
       try {
-        const result = await fetch('http://localhost:3000/api/items')
+        const result = await fetch(`${this.apiBaseUrl}/api/items`)
         const data = await result.json();
         if (!data.result) return
 
@@ -233,7 +234,7 @@ export default {
       const updatedItemsList = [...this.selectedOrder.items, { price: item.price, quantity: 1, _id: item , checkedColor: item.checkedColor}]
       console.log(updatedItemsList)
       try {
-        const result = await fetch(`http://localhost:3000/api/orders/update/${this.selectedOrder._id}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/orders/update/${this.selectedOrder._id}`, {
           method: 'PATCH',
           credentials: 'include',
           body: JSON.stringify({
@@ -253,7 +254,7 @@ export default {
     },
     async initPage() {
       try {
-        const result = await fetch(`http://localhost:3000/api/orders/${this.orderId}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/orders/${this.orderId}`, {
           method: 'GET',
           credentials: 'include',
         })

@@ -74,6 +74,7 @@ export default {
   },
 	data() {
 		return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       show: false,
 			user: {},
       currentLink: ''
@@ -85,7 +86,7 @@ export default {
     }),
 
     async getUser() {
-      const result = await fetch(`http://localhost:3000/user`, {
+      const result = await fetch(`${this.apiBaseUrl}/user`, {
         method: 'GET',
         credentials: 'include'
       });

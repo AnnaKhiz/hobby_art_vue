@@ -80,6 +80,7 @@ export default {
   name: "uiRegistForm",
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       entityData: {
         mailing: false
       },
@@ -104,7 +105,7 @@ export default {
     registerOne: async function () {
       console.log(this.entityData)
 
-      const result = await fetch('http://localhost:3000/register', {
+      const result = await fetch(`${this.apiBaseUrl}/register`, {
         method: 'POST',
         body: JSON.stringify(
           {

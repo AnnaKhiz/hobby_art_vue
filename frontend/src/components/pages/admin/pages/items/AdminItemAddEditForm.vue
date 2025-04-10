@@ -154,6 +154,7 @@ export default {
   },
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       editFormData: {},
       message: '',
       form: {
@@ -178,7 +179,7 @@ export default {
       this.parseFormFields();
 
       try {
-        const result = await fetch('http://localhost:3000/api/items/add', {
+        const result = await fetch(`${this.apiBaseUrl}/api/items/add`, {
           method: 'POST',
           body: JSON.stringify(this.form),
           headers: { "Content-Type": "application/json"}
@@ -225,7 +226,7 @@ export default {
 
     async editItemRequest() {
       try {
-        const result = await fetch(`http://localhost:3000/api/items/update/${this.itemId}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/items/update/${this.itemId}`, {
           method: 'PATCH',
           body: JSON.stringify(this.form),
           headers: { "Content-Type": "application/json" }
@@ -243,7 +244,7 @@ export default {
 
     async initPage() {
       try {
-        const result = await fetch(`http://localhost:3000/api/items/${this.itemId}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/items/${this.itemId}`, {
           method: 'GET',
           credentials: 'include'
         })

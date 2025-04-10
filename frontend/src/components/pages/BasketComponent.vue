@@ -257,6 +257,7 @@ export default {
   components: {UiNotifyDialog, UiQuantityCounter, UiDeleteIcon, UiBreadcrumbs},
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       display: false,
       orders: {
         items: [],
@@ -384,7 +385,7 @@ export default {
 			this.currentOrder.users = '';
 		},
     async addNewOrder() {
-      const result = await fetch('http://localhost:3000/api/orders/add', {
+      const result = await fetch(`${this.apiBaseUrl}/api/orders/add`, {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(this.currentOrder),
@@ -414,7 +415,7 @@ export default {
       localStorage.setItem('order', JSON.stringify(this.$store.state.order.order))
     },
     async getUser() {
-      const result = await fetch(`http://localhost:3000/user`, {
+      const result = await fetch(`${this.apiBaseUrl}/user`, {
         method: 'GET',
         credentials: 'include'
       });

@@ -28,6 +28,11 @@ export default {
       default: 'items'
     }
   },
+	data() {
+		return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
+		}
+	},
   emits: ['addNew', 'getAll', 'add-item', 'add-order', 'menu'],
   methods: {
     ...mapMutations({
@@ -48,7 +53,7 @@ export default {
       this.setIsAuthorizedInfo(false)
       localStorage.setItem('auth', 'false');
 
-      const result = await fetch('http://localhost:3000/admin/logout', {
+      const result = await fetch(`${this.apiBaseUrl}/admin/logout`, {
         method: 'GET',
         credentials: 'include'
       });

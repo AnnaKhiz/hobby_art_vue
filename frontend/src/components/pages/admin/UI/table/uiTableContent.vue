@@ -121,6 +121,7 @@ export default {
   },
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       entityDataEditFromDialog: {},
       dialogEditItemsList: [],
       isDisplayDialog: '',
@@ -231,7 +232,7 @@ export default {
       if (!order) return false;
 
       try {
-        const result = await fetch(`http://localhost:3000/api/orders/update/${order.id}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/orders/update/${order.id}`, {
           method: 'PATCH',
           credentials: 'include',
           body: JSON.stringify(dataField),
@@ -246,7 +247,7 @@ export default {
 
     async initPage() {
       try {
-        const result = await fetch(`http://localhost:3000/api/orders/${this.orderId}`)
+        const result = await fetch(`${this.apiBaseUrl}/api/orders/${this.orderId}`)
         const data = await result.json();
         this.currentOrder = data.data;
         this.tableItemsList = this.tableItems.map(el => ({ ...el, isReadable: false }));

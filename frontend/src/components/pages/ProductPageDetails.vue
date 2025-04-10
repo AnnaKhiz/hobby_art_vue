@@ -246,6 +246,7 @@ export default {
   },
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       showNotifyError: false,
       display: false,
       productItem: {},
@@ -310,7 +311,7 @@ export default {
 
     async getProductList() {
       try {
-        const result = await fetch(`http://localhost:3000/api/items/${this.id}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/items/${this.id}`, {
           method: 'GET',
           credentials: 'include'
         })

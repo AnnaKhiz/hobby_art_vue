@@ -44,6 +44,7 @@ export default {
 	},
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       userData: {},
       userSidebarItems: [
         { text: 'Мои данные', value: 'general', url: '' },
@@ -68,7 +69,7 @@ export default {
       this.setIsAuthorizedInfo(false)
       localStorage.setItem('auth', 'false');
 
-      const result = await fetch('http://localhost:3000/user/logout', {
+      const result = await fetch(`${this.apiBaseUrl}/user/logout`, {
         method: 'GET',
         credentials: 'include'
       });

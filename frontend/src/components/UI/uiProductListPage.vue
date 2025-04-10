@@ -67,6 +67,7 @@ export default {
   },
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       isCheckedColorNotify: false,
       checkedColor: [],
       display: false,
@@ -152,7 +153,7 @@ export default {
 
     async getProductList() {
       try {
-        const result = await fetch('http://localhost:3000/api/items', {
+        const result = await fetch(`${this.apiBaseUrl}/api/items`, {
           method: 'GET',
           credentials: 'include'
         })

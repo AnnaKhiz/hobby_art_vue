@@ -40,6 +40,7 @@ export default
   components: {},
   data() {
     return {
+			apiBaseUrl: process.env.VUE_APP_API_URL,
       errorMessage: '',
       checkedColor: '',
       isDisplayDialog: false,
@@ -81,7 +82,7 @@ export default
 
     async removeOrder(orderId, index) {
       try {
-        const result = await fetch(`http://localhost:3000/api/orders/remove/${orderId}`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/orders/remove/${orderId}`, {
           method: 'DELETE',
           credentials: 'include',
         })
@@ -95,7 +96,7 @@ export default
 
     async initPage() {
       try {
-        const result = await fetch(`http://localhost:3000/api/orders`, {
+        const result = await fetch(`${this.apiBaseUrl}/api/orders`, {
           method: 'GET',
           credentials: 'include'
         })
