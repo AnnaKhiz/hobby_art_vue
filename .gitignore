@@ -9,6 +9,9 @@
 .env.*.local
 /backend/.env
 /backend/.env.local
+
+/frontend/.env
+/frontend/.env.local
 /frontend/.env.development
 /frontend/.env.production
 .env.development
