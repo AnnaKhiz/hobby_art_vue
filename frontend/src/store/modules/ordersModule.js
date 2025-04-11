@@ -11,14 +11,25 @@ export const ordersModule = {
   }),
   getters: {
     order: state => state.order,
-    totalQuantity: state => state.totalQuantity
+    totalQuantity: state => state.totalQuantity,
   },
   mutations: {
     updateOrders(state, payload) {
-      state.order = payload
+      state.order = payload;
     },
 		updateItemsInOrder(state, payload) {
-			state.order.items = payload;
+			state.order = { ...state.order, payload };
+			console.log('state', state.order.items)
+			console.log('payload', payload)
+		},
+		updateOrderData(state, payload) {
+			state.order = payload;
+		},
+
+		removeOrderItem(state, id) {
+			const index = state.order.items.findIndex(el => el._id._id === id);
+			if (index === -1) return;
+			state.order.items.splice(index, 1);
 		},
 
     addToOrder(state, payload) {
@@ -64,12 +75,33 @@ export const ordersModule = {
 			}
 		},
 
-		async updateOrders({commit}, { id, body }) {
+		async updateItemsInOrder({commit}, { id, body }) {
+			let result = null;
 			try {
-				await fetchData('orders/update/:id', 'PATCH', { id }, body);
-				commit('updateItemsInOrder', body);
+				result = await fetchData('orders/update/:id', 'PATCH', { id }, body);
+				console.log('result', result.data)
+
 			} catch (error) {
 				console.error('Error updating order items:', error);
+			}
+			commit('updateItemsInOrder', result.data);
+		},
+
+		async updateOrder({commit}, { idOrder, idItem, body }) {
+			try {
+				await fetchData('orders/update/:idOrder/:idItem', 'PATCH', { idOrder, idItem }, body);
+				commit('updateOrderData', body);
+			} catch (error) {
+				console.error('Error updating order items:', error);
+			}
+		},
+
+		async removeItemFromOrder({ commit }, { idOrder, idItem }) {
+			try {
+				await fetchData('orders/remove/:idOrder/:idItem', 'DELETE', { idOrder, idItem });
+				commit('removeOrderItem', idItem);
+			} catch (error) {
+				console.error('Error removing order items:', error);
 			}
 		}
 	}

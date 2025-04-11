@@ -142,15 +142,15 @@ export default {
   emits: ['updateShowDetails'],
   computed: {
     ...mapGetters({
+			order: 'order/order',
       parseDeliveryValue: 'delivery/parseDeliveryValue',
       parsePaymentValue: 'delivery/parsePaymentValue'
     }),
 		...mapState('items', ['itemsList']),
-		...mapState('order', ['order']),
   },
   methods: {
 		...mapActions('items', ['fetchItems']),
-		...mapActions('order', ['fetchOrders', 'updateOrders']),
+		...mapActions('order', ['fetchOrders', 'updateItemsInOrder', 'updateOrder', 'removeItemFromOrder']),
 
     notify(text) {
       this.message = text;
@@ -159,12 +159,12 @@ export default {
     parseCheckedColors(color, itemId) {
       const currentItem = this.selectedOrder.items[itemId];
 
-      const colorObject = currentItem._id.color.find(el => el.value === color);
+      const colorObject = currentItem?._id.color.find(el => el.value === color);
       if (!colorObject) return '';
 
       return colorObject.text
     },
-    changeCountAndPrice(index, quantity) {
+    async changeCountAndPrice(index, quantity) {
       const updatedFinalPrice = quantity * this.selectedOrder.items[index]._id.price;
 
       this.selectedOrder.items[index].quantity = quantity;
@@ -179,42 +179,29 @@ export default {
         'totalQuantity': this.selectedOrder.items.reduce((acc, curElem) => acc + +curElem.quantity, 0),
       }
 
-      this.updateOrder(updatedObject, itemId);
+      await this.updateOrder(
+				{
+					idOrder: this.selectedOrder._id,
+					idItem: itemId,
+					body: updatedObject,
+				});
     },
-    async updateOrder(dataField, itemId) {
 
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/orders/update/${this.selectedOrder._id}/${itemId}`, {
-          method: 'PATCH',
-          credentials: 'include',
-          body: JSON.stringify(dataField),
-          headers: {'Content-Type': 'application/json'}
-        })
-        const data = await result.json();
-        console.log(data)
-      } catch (error) {
-        console.log('Update error', error)
-      }
-    },
-    async deleteItemFromBasket(item, index) {
+    async deleteItemFromBasket(item) {
       this.message = '';
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/orders/remove/${this.selectedOrder._id}/${item._id._id}`, {
-          method: 'DELETE',
-          credentials: 'include',
-        })
-        const data = await result.json();
-        if (!data.result) return false;
-        this.selectedOrder.items.splice(index, 1)
-      } catch (error) {
-        console.log('Update error', error)
-      }
+
+			await this.removeItemFromOrder({
+				idOrder: this.selectedOrder._id,
+				idItem: item._id._id,
+			})
     },
     async getItemsList() {
       this.isDisplayDialog = true;
 
 			await this.fetchItems();
 			this.productList = this.itemsList;
+
+			if(!this.selectedOrder.items.length) return;
 
 			const list = this.selectedOrder.items.map(el => ({_id: el._id._id, checkedColor: el.checkedColor}));
 
@@ -229,38 +216,39 @@ export default {
 			})
     },
     async updateItemsListInOrder(item) {
-      const updatedItemsList = [...this.selectedOrder.items, { price: item.price, quantity: 1, _id: item , checkedColor: item.checkedColor}]
-      console.log(updatedItemsList)
-			await this.updateOrder({
+      const updatedItemsList = [
+				...this.selectedOrder.items,
+				{
+					price: item.price,
+					quantity: 1,
+					_id: item ,
+					checkedColor: item.checkedColor
+				}
+			]
+
+			await this.updateItemsInOrder({
 				id: this.selectedOrder._id,
 				body: { items: updatedItemsList },
 			})
-			this.selectedOrder.items.push({ price: item.price, quantity: 1, _id: item , checkedColor: item.checkedColor })
-			this.isDisplayDialog = false;
 
-      // try {
-      //   const result = await fetch(`${this.apiBaseUrl}/api/orders/update/${this.selectedOrder._id}`, {
-      //     method: 'PATCH',
-      //     credentials: 'include',
-      //     body: JSON.stringify({
-      //       items: updatedItemsList
-      //     }),
-      //     headers: {'Content-Type': 'application/json'}
-      //   })
-      //   const data = await result.json();
-      //   console.log(data)
-			//
-      //   this.selectedOrder.items.push({ price: item.price, quantity: 1, _id: item , checkedColor: item.checkedColor })
-      //   this.isDisplayDialog = false;
-			//
-      // } catch (error) {
-      //   console.log('Update error', error)
-      // }
+			console.log('this.selectedOrder', this.selectedOrder.items)
+			console.log('this.order', this.order.items)
+			// this.selectedOrder = this.order;
+
+			this.selectedOrder.items.push(
+				{
+					price: item.price,
+					quantity: 1,
+					_id: item,
+					checkedColor: item.checkedColor
+				})
+			this.isDisplayDialog = false;
     },
   },
   async mounted() {
 		await this.fetchOrders(this.orderId);
 		this.selectedOrder = this.order;
+		console.log('this.order', this.order)
   }
 
 }
