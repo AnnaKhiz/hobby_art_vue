@@ -110,7 +110,7 @@ async function removeOrderItemById(req, res, next) {
   const { orderId, itemId } = req.params;
 
   try {
-    await Order.findOneAndUpdate(
+    const result = await Order.findOneAndUpdate(
       { _id: new ObjectId(orderId)  },
       { $pull:
           { items: { _id: new ObjectId(itemId) } }
@@ -118,7 +118,7 @@ async function removeOrderItemById(req, res, next) {
       { new: true }
     );
 
-    res.status(200).send({result: true });
+    res.status(200).send({result: true, data: result });
 
   } catch (error) {
     res.status(404).send({result: false, data: `Delete error: ${error}`})

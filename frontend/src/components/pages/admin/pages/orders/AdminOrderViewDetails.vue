@@ -17,8 +17,7 @@
       </template>
     </ui-table-content>
 
-
-    <div class="main__basket-info-item-product-count" style="width: 100%; padding: 0 20px">
+    <div v-if="selectedOrder.items.length" class="main__basket-info-item-product-count container">
       <div v-for="(item, index) in selectedOrder.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block" style="margin-bottom: 15px">
         <div style="display: flex; align-items: center; justify-content: flex-start; column-gap: 15px">
           <div class="main__basket-info-item-product-img" style="width: 50px; height: 50px; object-fit: contain; aspect-ratio: 1/1">
@@ -39,6 +38,12 @@
         <ui-delete-icon @remove="selectedOrder.items.length > 1 ? deleteItemFromBasket(item, index) : notify('В заказе должен быть хотябы 1 товар')"/>
       </div>
     </div>
+		<div
+			v-else
+			class="main__basket-info-item-product-count container alert"
+		>
+			В этом заказе нет товаров
+		</div>
 
     <button class="button" @click="getItemsList" style="padding-left: 20px">Добавить товар</button>
     <div class="button-container">
@@ -112,6 +117,7 @@ export default {
 			productList: [],
 			isDisplayDialog: false,
 			selectedOrder: {
+				items: [],
 				deliveryInfo: {
 					receiver: {
 						fullName: '',
@@ -159,18 +165,18 @@ export default {
     parseCheckedColors(color, itemId) {
       const currentItem = this.selectedOrder.items[itemId];
 
-      const colorObject = currentItem?._id.color.find(el => el.value === color);
+      const colorObject = currentItem?._id?.color.find(el => el.value === color);
       if (!colorObject) return '';
 
       return colorObject.text
     },
     async changeCountAndPrice(index, quantity) {
-      const updatedFinalPrice = quantity * this.selectedOrder.items[index]._id.price;
+      const updatedFinalPrice = quantity * this.selectedOrder.items[index]._id?.price;
 
       this.selectedOrder.items[index].quantity = quantity;
       this.selectedOrder.items[index].price = updatedFinalPrice;
 
-      const itemId = this.selectedOrder.items[index]._id._id;
+      const itemId = this.selectedOrder.items[index]._id?._id;
 
       const updatedObject = {
         'price': updatedFinalPrice,
@@ -181,19 +187,23 @@ export default {
 
       await this.updateOrder(
 				{
-					idOrder: this.selectedOrder._id,
+					idOrder: this.orderId,
 					idItem: itemId,
 					body: updatedObject,
 				});
     },
 
-    async deleteItemFromBasket(item) {
+    async deleteItemFromBasket(item, index) {
       this.message = '';
 
-			await this.removeItemFromOrder({
-				idOrder: this.selectedOrder._id,
-				idItem: item._id._id,
+			const result = await this.removeItemFromOrder({
+				idOrder: this.orderId,
+				idItem: item._id._id
 			})
+
+			if (!result) return;
+			this.selectedOrder.items.splice(index, 1);
+
     },
     async getItemsList() {
       this.isDisplayDialog = true;
@@ -227,21 +237,13 @@ export default {
 			]
 
 			await this.updateItemsInOrder({
-				id: this.selectedOrder._id,
+				id: this.orderId,
 				body: { items: updatedItemsList },
 			})
 
-			console.log('this.selectedOrder', this.selectedOrder.items)
-			console.log('this.order', this.order.items)
-			// this.selectedOrder = this.order;
+			this.selectedOrder.items = updatedItemsList
 
-			this.selectedOrder.items.push(
-				{
-					price: item.price,
-					quantity: 1,
-					_id: item,
-					checkedColor: item.checkedColor
-				})
+			console.log('this.selectedOrder.items', this.selectedOrder.items)
 			this.isDisplayDialog = false;
     },
   },
@@ -249,7 +251,7 @@ export default {
 		await this.fetchOrders(this.orderId);
 		this.selectedOrder = this.order;
 		console.log('this.order', this.order)
-  }
+  },
 
 }
 </script>
@@ -321,4 +323,9 @@ table.order-items-table, th, td
   font-family: inherit
   border-radius: 12px
   box-shadow: 1px -1px 6px inset rgba(94, 92, 90, 0.58)
+.container
+  width: 100%
+  padding: 0 20px
+.alert
+  color: red
 </style>

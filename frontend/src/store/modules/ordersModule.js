@@ -4,10 +4,21 @@ export const ordersModule = {
   namespaced: true,
   state: () => ({
     order: {
-      items: [],
-      totalPrice: 0,
-      totalQuantity: 0
-    }
+			items: [],
+			totalPrice: 0,
+			totalQuantity: 0,
+			deliveryInfo: {
+				receiver: {
+					fullName: '',
+					phone: '',
+					email: '',
+				},
+				fullAddress: '',
+				deliveryMethod: '',
+				paymentMethod: '',
+				userComment: ''
+			}
+		}
   }),
   getters: {
     order: state => state.order,
@@ -18,18 +29,11 @@ export const ordersModule = {
       state.order = payload;
     },
 		updateItemsInOrder(state, payload) {
-			state.order = { ...state.order, payload };
-			console.log('state', state.order.items)
-			console.log('payload', payload)
+			state.order = { ...state.order, ...payload };
+			console.log('state.order', state.order)
 		},
 		updateOrderData(state, payload) {
-			state.order = payload;
-		},
-
-		removeOrderItem(state, id) {
-			const index = state.order.items.findIndex(el => el._id._id === id);
-			if (index === -1) return;
-			state.order.items.splice(index, 1);
+			state.order = {...payload};
 		},
 
     addToOrder(state, payload) {
@@ -76,15 +80,13 @@ export const ordersModule = {
 		},
 
 		async updateItemsInOrder({commit}, { id, body }) {
-			let result = null;
 			try {
-				result = await fetchData('orders/update/:id', 'PATCH', { id }, body);
-				console.log('result', result.data)
-
+				const result = await fetchData('orders/update/:id', 'PATCH', { id }, body);
+				commit('updateItemsInOrder', result.data);
 			} catch (error) {
 				console.error('Error updating order items:', error);
 			}
-			commit('updateItemsInOrder', result.data);
+
 		},
 
 		async updateOrder({commit}, { idOrder, idItem, body }) {
@@ -97,12 +99,15 @@ export const ordersModule = {
 		},
 
 		async removeItemFromOrder({ commit }, { idOrder, idItem }) {
+			let result = null;
 			try {
-				await fetchData('orders/remove/:idOrder/:idItem', 'DELETE', { idOrder, idItem });
-				commit('removeOrderItem', idItem);
+				result = await fetchData('orders/remove/:idOrder/:idItem', 'DELETE', { idOrder, idItem });
+				console.log('remove result', result)
+				commit('updateOrders', result.data);
 			} catch (error) {
 				console.error('Error removing order items:', error);
 			}
+			return result
 		}
 	}
 }
