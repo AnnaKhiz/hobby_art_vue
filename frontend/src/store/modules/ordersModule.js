@@ -72,14 +72,15 @@ export const ordersModule = {
 				console.error('Error fetching orders:', error);
 			}
 		},
-		async updateOrder({commit}, { idOrder, idItem, body }) {
+		async updateOrder({commit}, { id, body }) {
 			try {
-				await fetchData('orders/update/:idOrder/:idItem', 'PATCH', { idOrder, idItem }, body);
-				commit('updateOrderData', body);
+				const result = await fetchData('orders/update/:id', 'PATCH', { id }, body);
+				commit('updateItemsInOrder', result.data);
 			} catch (error) {
 				console.error('Error updating order items:', error);
 			}
 		},
+
 		// ORDERS
 		async fetchOrders({ commit }) {
 			try {
@@ -103,14 +104,13 @@ export const ordersModule = {
 		},
 
 		// ORDER ITEMS
-		async updateItemsInOrder({commit}, { id, body }) {
+		async updateItemsInOrder({commit}, { idOrder, idItem, body }) {
 			try {
-				const result = await fetchData('orders/update/:id', 'PATCH', { id }, body);
-				commit('updateItemsInOrder', result.data);
+				await fetchData('orders/update/:idOrder/:idItem', 'PATCH', { idOrder, idItem }, body);
+				commit('updateOrderData', body);
 			} catch (error) {
 				console.error('Error updating order items:', error);
 			}
-
 		},
 		async removeItemFromOrder({ commit }, { idOrder, idItem }) {
 			let result = null;

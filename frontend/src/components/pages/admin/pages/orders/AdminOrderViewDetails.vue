@@ -184,7 +184,7 @@ export default {
         'totalQuantity': this.selectedOrder.items.reduce((acc, curElem) => acc + +curElem.quantity, 0),
       }
 
-      await this.updateOrder(
+      await this.updateItemsInOrder(
 				{
 					idOrder: this.orderId,
 					idItem: itemId,
@@ -235,7 +235,7 @@ export default {
 				}
 			]
 
-			await this.updateItemsInOrder({
+			await this.updateOrder({
 				id: this.orderId,
 				body: { items: updatedItemsList },
 			})

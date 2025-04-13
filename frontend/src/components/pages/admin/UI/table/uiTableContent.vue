@@ -153,7 +153,7 @@ export default {
     },
   },
   methods: {
-		...mapActions('order', ['fetchOrderById']),
+		...mapActions('order', ['fetchOrderById', 'updateOrder']),
     saveEditedDataFromDialog(value) {
       const parsedObjectForEditing = { name: value, value: this.entityDataEditFromDialog };
 
@@ -221,7 +221,7 @@ export default {
         this.changeReadableStatus(index);
       }
 
-      this.updateOrder(dataField);
+      this.handleUpdateOrder(dataField);
 
       this.tableItemsList[index].value = item.value;
       this.entityDataEditFromDialog = {};
@@ -232,22 +232,14 @@ export default {
       this.tableItemsList[index].value = this.entityDataField;
     },
 
-    async updateOrder(dataField) {
+    async handleUpdateOrder(dataField) {
       const order = this.tableItemsList.find(el => el.name === 'title')
       if (!order) return false;
 
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/orders/update/${order.id}`, {
-          method: 'PATCH',
-          credentials: 'include',
-          body: JSON.stringify(dataField),
-          headers: {'Content-Type': 'application/json'}
-        })
-        const data = await result.json();
-        console.log(data);
-      } catch (error) {
-        console.log('Update error', error)
-      }
+			await this.updateOrder({
+				id: order.id,
+				body: dataField,
+			})
     },
 
     async initPage() {
