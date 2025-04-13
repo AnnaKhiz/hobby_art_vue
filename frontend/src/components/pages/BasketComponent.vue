@@ -295,6 +295,7 @@ export default {
     ...mapState('order', ['order']),
     ...mapGetters({
 			orderItems: ('order/order'),
+			userInfo: ('user/userInfo'),
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
     deliveryPrice() {
@@ -324,6 +325,7 @@ export default {
 			'clearOrder',
 		]),
 		...mapActions('order', ['addNewOrder',]),
+		...mapActions('user', ['getAuthUser']),
     parseCheckedColors(color, itemId) {
       const currentItem = this.order.items.find(el => el.item._id === itemId);
 
@@ -409,25 +411,25 @@ export default {
 
       localStorage.setItem('order', JSON.stringify(this.$store.state.order.order))
     },
-    async getUser() {
-      const result = await fetch(`${this.apiBaseUrl}/user`, {
-        method: 'GET',
-        credentials: 'include'
-      });
+    async initPage() {
+			if (localStorage.getItem('auth') === 'true') {
+				try {
+					await this.getAuthUser();
+					this.user = this.userInfo;
+					console.log(this.user)
+					this.deliveryInfo.address = this.user.address || {};
+					this.deliveryInfo.receiver = this.user || {};
+					this.currentOrder.isMailing = this.user.mailing || false;
+					this.currentOrder.users = this.user._id || '';
 
-      const data = await result.json()
+				} catch (error) {
+					console.error('Error in getting user (basket):', error);
+					this.addEmptyAddress();
+				}
 
-      if (!data.result) {
-        // console.log('no requested result')
-        // this.$router.back()
-        // await this.getAdmin()
-      } else {
-        // this.setIsAuthorizedInfo(true);
-
-        this.user = await data.user[0]
-        // this.$router.push(`/user_page/${this.user._id}`);
-        return { user: this.user }
-      }
+			} else {
+				this.addEmptyAddress();
+			}
     }
   },
  created() {
@@ -438,22 +440,7 @@ export default {
     }
   },
   async mounted() {
-    if (localStorage.getItem('auth') === 'true') {
-      try {
-				const { user } = await this.getUser();
-				this.deliveryInfo.address = user.address || '';
-				this.deliveryInfo.receiver = user || {};
-				this.currentOrder.isMailing = user.mailing || false;
-				this.currentOrder.users = user._id || '';
-
-			} catch (error) {
-				console.error('Error in getting user (basket):', error);
-				this.addEmptyAddress();
-			}
-
-    } else {
-			this.addEmptyAddress();
-		}
+    await this.initPage();
   },
   watch: {
     display(val) {

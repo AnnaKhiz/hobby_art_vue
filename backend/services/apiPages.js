@@ -2,9 +2,11 @@ const { User, Page, ObjectId, Item, Comment, Order, Admin} = require('../db');
 const {checkPass, generateJWt, hashPass} = require("../utils/authEncoding");
 
 async function getAllPages(req, res) {
+	console.log('user request')
     const { id } = req._auth;
+	console.log('id', id)
     const user = await User.find( { _id: new ObjectId(id)});
-
+		console.log(user)
     if (!user.length) {
       return res.send({ "result": false });
     }

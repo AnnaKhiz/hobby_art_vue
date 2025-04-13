@@ -79,6 +79,9 @@ export const ordersModule = {
 		updateOrdersList(state, payload) {
 			state.ordersList = [...payload];
 		},
+		addToOrdersList(state, payload) {
+			state.ordersList.push(payload);
+		},
 		updateItemsInOrder(state, payload) {
 			state.order = { ...state.order, ...payload };
 		},
@@ -122,7 +125,7 @@ export const ordersModule = {
 		// ORDER (selected)
 		async fetchOrderById({ commit }, id) {
 			try {
-				const result = await fetchData('orders/:id', 'GET', { id });
+				const result = await fetchData('api/orders/:id', 'GET', { id });
 
 				commit('updateOrder', result.data);
 			} catch (error) {
@@ -131,7 +134,7 @@ export const ordersModule = {
 		},
 		async updateOrder({commit}, { id, body }) {
 			try {
-				const result = await fetchData('orders/update/:id', 'PATCH', { id }, body);
+				const result = await fetchData('api/orders/update/:id', 'PATCH', { id }, body);
 				commit('updateItemsInOrder', result.data);
 			} catch (error) {
 				console.error('Error updating order items:', error);
@@ -141,7 +144,7 @@ export const ordersModule = {
 		// ORDERS
 		async fetchOrders({ commit }) {
 			try {
-				const result = await fetchData('orders');
+				const result = await fetchData('api/orders');
 				console.log(result)
 				commit('updateOrdersList', result.orders);
 			} catch (error) {
@@ -151,7 +154,7 @@ export const ordersModule = {
 		async removeOrder({ commit }, id) {
 			let result = null;
 			try {
-				result = await fetchData('orders/remove/:id', 'DELETE', { id });
+				result = await fetchData('api/orders/remove/:id', 'DELETE', { id });
 				commit('updateOrdersList', result.data)
 			} catch (error) {
 				console.error('Error removing order:', error);
@@ -162,9 +165,8 @@ export const ordersModule = {
 		async addNewOrder({ commit }, body) {
 			let result= null;
 			try {
-				result = await fetchData('orders/add', 'POST', {}, body);
-				console.log(result)
-				console.log(commit)
+				result = await fetchData('api/orders/add', 'POST', {}, body);
+				commit('addToOrdersList', result.data);
 			} catch (error) {
 				console.error('Error adding new order:', error);
 			}
@@ -174,7 +176,7 @@ export const ordersModule = {
 		// ORDER ITEMS
 		async updateItemsInOrder({commit}, { idOrder, idItem, body }) {
 			try {
-				await fetchData('orders/update/:idOrder/:idItem', 'PATCH', { idOrder, idItem }, body);
+				await fetchData('api/orders/update/:idOrder/:idItem', 'PATCH', { idOrder, idItem }, body);
 				commit('updateOrderData', body);
 			} catch (error) {
 				console.error('Error updating order items:', error);
@@ -183,7 +185,7 @@ export const ordersModule = {
 		async removeItemFromOrder({ commit }, { idOrder, idItem }) {
 			let result = null;
 			try {
-				result = await fetchData('orders/remove/:idOrder/:idItem', 'DELETE', { idOrder, idItem });
+				result = await fetchData('api/orders/remove/:idOrder/:idItem', 'DELETE', { idOrder, idItem });
 				console.log('remove result', result)
 				commit('updateOrder', result.data);
 			} catch (error) {

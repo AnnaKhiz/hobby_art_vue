@@ -6,7 +6,7 @@ export async function fetchData(url, method = 'GET', pathParams = {}, body = nul
 		for (const key in pathParams) {
 			processedUrl = processedUrl.replace(`:${key}`, encodeURIComponent(pathParams[key]));
 		}
-		const result = await fetch(`${apiBaseUrl}/api/${processedUrl}`, {
+		const result = await fetch(`${apiBaseUrl}/${processedUrl}`, {
 			method,
 			credentials: 'include',
 			headers: { "Content-Type": "application/json"},

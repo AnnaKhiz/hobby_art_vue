@@ -1,31 +1,45 @@
+import { fetchData } from "@/services/api";
+
 export const userModule = {
   namespaced: true,
   state: () => ({
     isRegistered: true,
     isAuthorized: false,
     user: {}
-
   }),
   getters: {
+		userInfo: state => state.user,
     getIsRegisteredInfo(state) {
-      return state.isRegistered
+      return state.isRegistered;
     },
     getIsAuthorizedInfo(state) {
-      return state.isAuthorized
+      return state.isAuthorized;
     },
     getUserInfo(state) {
-      return state.user
+      return state.user;
     }
   },
   mutations: {
     setIsRegisteredInfo(state, payload) {
-      state.isRegistered = payload
+      state.isRegistered = payload;
     },
     setIsAuthorizedInfo(state, payload) {
-      state.isAuthorized = payload
+      state.isAuthorized = payload;
     },
     setUserInfo(state, payload) {
-      state.user = payload
+      state.user = payload;
     }
-  }
+  },
+	actions: {
+		// USER
+		async getAuthUser({ commit }) {
+			try {
+				const result = await fetchData('user');
+				console.log('result', result)
+				commit('setUserInfo', result.user[0]);
+			} catch (error) {
+				console.error('Error getting auth user:', error);
+			}
+		}
+	}
 }

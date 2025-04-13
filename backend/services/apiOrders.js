@@ -51,7 +51,6 @@ async function addNewOrder(req, res, next) {
   }
 
 	if (!order.users) {
-
 		guestUser = new GuestUser({
 			name: order.deliveryInfo.receiver.fullName,
 			phone: order.deliveryInfo.receiver.phone,
@@ -67,19 +66,31 @@ async function addNewOrder(req, res, next) {
 		})
 
 		await guestUser.save();
+	} else {
+		guestUser = {};
 	}
 
   try {
     const newOrder = await new Order({
 			...order,
-			users: guestUser._id
+			users: order.users ? order.users : guestUser._id
 		});
     const result = await newOrder.save();
-		await GuestUser.findByIdAndUpdate(guestUser._id, {
-			$push: {
-				orders: result._id
-			}
-		});
+
+		if (!order.users) {
+			await GuestUser.findByIdAndUpdate(guestUser._id, {
+				$push: {
+					orders: result._id
+				}
+			});
+		} else {
+			await User.findByIdAndUpdate(order.users, {
+				$push: {
+					orders: result._id
+				}
+			});
+		}
+
     const data = await Order.findOne({ _id: new ObjectId(result._id)}).populate('items._id')
 
     res.send({ "result" : true, data: data });
