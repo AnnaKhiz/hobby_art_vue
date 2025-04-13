@@ -98,11 +98,7 @@
 
         </template>
       </ui-modal-template>
-
-
   </div>
-
-
 </template>
 
 
@@ -122,7 +118,6 @@ export default {
   },
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       entityDataEditFromDialog: {},
       dialogEditItemsList: [],
       isDisplayDialog: '',
@@ -137,20 +132,8 @@ export default {
   computed: {
 		...mapGetters({
 			order: 'order/order',
+			tableItems: 'order/orderTableList',
 		}),
-    tableItems() {
-      return [
-        { text: 'Заказ №', value: this.currentOrder._id, name: 'title', id: this.currentOrder._id},
-        { text: 'Получатель', value: this.currentOrder.deliveryInfo.receiver, name: 'receiver' },
-        { text: 'Адресс доставки', value: this.currentOrder.deliveryInfo.address, name: 'address'  },
-        { text: 'Телефон', value: this.currentOrder.deliveryInfo.receiver.phone, name: 'phone' },
-        { text: 'E-mail', value: this.currentOrder.deliveryInfo.receiver.email, name: 'email'  },
-        { text: 'Комментарий', value: this.currentOrder.deliveryInfo.userComment, name: 'comment'  },
-        { text: 'Способ доставки', value: this.currentOrder.deliveryInfo.deliveryMethod, name: 'deliveryMethod'  },
-        { text: 'Способ оплаты', value: this.currentOrder.deliveryInfo.paymentMethod, name: 'paymentMethod'  },
-
-      ]
-    },
   },
   methods: {
 		...mapActions('order', ['fetchOrderById', 'updateOrder']),

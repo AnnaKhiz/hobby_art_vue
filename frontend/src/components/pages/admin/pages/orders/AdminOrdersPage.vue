@@ -15,12 +15,12 @@
       <h3  class="item-row"><span class="label">Заказ №: </span> {{ order._id }}</h3>
     </div>
     <div class="content">
-      <p class="item-row"><span class="label">Стоимость: </span> {{order.totalPrice}} грн</p>
-      <p class="item-row"><span class="label">Количество товаров: </span> {{order.totalQuantity}}</p>
-      <p class="item-row"><span class="label">Заказчик: </span> {{ order.deliveryInfo.fullName }}</p>
-      <p class="item-row"><span class="label">Способ доставки: </span> {{ parseDeliveryValue(order.deliveryInfo.deliveryMethod) }}</p>
-      <p class="item-row"><span class="label">Способ оплаты: </span> {{ parsePaymentValue(order.deliveryInfo.paymentMethod) }}</p>
-      <p class="item-row"><span class="label">Комментарий пользователя: </span> {{order.deliveryInfo.userComment}}</p>
+      <p v-for="tableRow in tableRowsList" :key="tableRow.text" class="item-row">
+				<span class="label">
+					{{ tableRow.text }}
+				</span>
+				{{ !tableRow.isParsedValue ? tableRow.value : parsePaymentValue(tableRow.value) }}
+			</p>
     </div>
 
     <div class="actions">
@@ -65,6 +65,7 @@ export default
   computed: {
     ...mapGetters({
 			ordersList: 'order/ordersList',
+			tableRowsList: 'order/orderTableRowsList',
       parseDeliveryValue: 'delivery/parseDeliveryValue',
       parsePaymentValue: 'delivery/parsePaymentValue'
     }),

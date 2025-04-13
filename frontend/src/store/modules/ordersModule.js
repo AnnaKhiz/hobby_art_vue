@@ -7,12 +7,69 @@ export const ordersModule = {
 			items: [],
 			totalPrice: 0,
 			totalQuantity: 0,
+			deliveryInfo: {
+				receiver: {
+					fullName: '',
+					phone: '',
+					email: '',
+				},
+				fullAddress: '',
+				deliveryMethod: '',
+				paymentMethod: '',
+				userComment: ''
+			}
 		},
 		ordersList: [],
   }),
   getters: {
     order: state => state.order,
 		ordersList: state => state.ordersList,
+		orderTableList: state => (
+			[
+				{ text: 'Заказ №', value: state.order?._id, name: 'title', id: state.order?._id},
+				{ text: 'Получатель', value: state.order?.deliveryInfo?.receiver, name: 'receiver' },
+				{ text: 'Адресс доставки', value: state.order?.deliveryInfo?.address, name: 'address'},
+				{ text: 'Телефон', value: state.order?.deliveryInfo?.receiver.phone, name: 'phone' },
+				{ text: 'E-mail', value: state.order?.deliveryInfo?.receiver.email, name: 'email'  },
+				{ text: 'Комментарий', value: state.order?.deliveryInfo?.userComment, name: 'comment'  },
+				{ text: 'Способ доставки', value: state.order?.deliveryInfo?.deliveryMethod, name: 'deliveryMethod'  },
+				{ text: 'Способ оплаты', value: state.order?.deliveryInfo?.paymentMethod, name: 'paymentMethod'  },
+			]
+		),
+		orderTableRowsList: state => (
+			[
+				{
+					text: 'Стоимость:',
+					value: `${state.order?.totalPrice} грн`,
+					isParsedValue: false,
+				},
+				{
+					text: 'Количество товаров:',
+					value: state.order?.totalQuantity,
+					isParsedValue: false,
+				},
+				{
+					text: 'Заказчик:',
+					value: state.order?.deliveryInfo?.fullName,
+					isParsedValue: false,
+				},
+				{
+					text: 'Способ доставки:',
+					value: state.order?.deliveryInfo?.deliveryMethod,
+					isParsedValue: true,
+				},
+				{
+					text: 'Способ оплаты:',
+					value: state.order?.deliveryInfo?.paymentMethod,
+					isParsedValue: true,
+				},
+				{
+					text: 'Комментарий пользователя:',
+					value: state.order?.deliveryInfo?.userComment,
+					isParsedValue: false,
+				},
+			]
+		),
     totalQuantity: state => state.totalQuantity,
   },
   mutations: {
