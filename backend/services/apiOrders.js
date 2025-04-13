@@ -99,8 +99,9 @@ async function removeOrder(req, res, next) {
   const { orderId: id } = req.params;
 
   try {
-    await Order.findOneAndDelete({ _id: new ObjectId(id)} )
-    res.status(200).send({result: true });
+    await Order.findOneAndDelete({ _id: new ObjectId(id)} );
+		const remainingOrders = await Order.find();
+    res.status(200).send({result: true, data: remainingOrders });
 
   } catch (error) {
     res.status(404).send({result: false, data: `Delete error: ${error}`})

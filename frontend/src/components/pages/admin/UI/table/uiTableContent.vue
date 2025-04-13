@@ -109,6 +109,7 @@
 
 <script>
 import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "uiTableContent.vue",
@@ -134,6 +135,9 @@ export default {
   },
   emits: ['error'],
   computed: {
+		...mapGetters({
+			order: 'order/order',
+		}),
     tableItems() {
       return [
         { text: 'Заказ №', value: this.currentOrder._id, name: 'title', id: this.currentOrder._id},
@@ -149,6 +153,7 @@ export default {
     },
   },
   methods: {
+		...mapActions('order', ['fetchOrderById']),
     saveEditedDataFromDialog(value) {
       const parsedObjectForEditing = { name: value, value: this.entityDataEditFromDialog };
 
@@ -246,14 +251,10 @@ export default {
     },
 
     async initPage() {
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/orders/${this.orderId}`)
-        const data = await result.json();
-        this.currentOrder = data.data;
-        this.tableItemsList = this.tableItems.map(el => ({ ...el, isReadable: false }));
-      } catch (error) {
-        console.log('Get order error', error)
-      }
+			await this.fetchOrderById(this.orderId);
+			this.currentOrder = this.order;
+
+			this.tableItemsList = this.tableItems.map(el => ({ ...el, isReadable: false }));
     }
   },
   async mounted() {

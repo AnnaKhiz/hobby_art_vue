@@ -35,7 +35,7 @@
         <p class="main__basket-info-item-product-price" data-price="basket-item-price">
           {{ item.price }} грн
         </p>
-        <ui-delete-icon @remove="selectedOrder.items.length > 1 ? deleteItemFromBasket(item, index) : notify('В заказе должен быть хотябы 1 товар')"/>
+        <ui-delete-icon @remove="selectedOrder.items.length > 1 ? deleteItemFromOrder(item, index) : notify('В заказе должен быть хотябы 1 товар')"/>
       </div>
     </div>
 		<div
@@ -113,7 +113,6 @@ export default {
   },
   data() {
 		return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
 			productList: [],
 			isDisplayDialog: false,
 			selectedOrder: {
@@ -156,7 +155,7 @@ export default {
   },
   methods: {
 		...mapActions('items', ['fetchItems']),
-		...mapActions('order', ['fetchOrders', 'updateItemsInOrder', 'updateOrder', 'removeItemFromOrder']),
+		...mapActions('order', ['fetchOrderById', 'updateItemsInOrder', 'updateOrder', 'removeItemFromOrder']),
 
     notify(text) {
       this.message = text;
@@ -193,7 +192,7 @@ export default {
 				});
     },
 
-    async deleteItemFromBasket(item, index) {
+    async deleteItemFromOrder(item, index) {
       this.message = '';
 
 			const result = await this.removeItemFromOrder({
@@ -241,16 +240,14 @@ export default {
 				body: { items: updatedItemsList },
 			})
 
-			this.selectedOrder.items = updatedItemsList
+			this.selectedOrder.items = updatedItemsList;
 
-			console.log('this.selectedOrder.items', this.selectedOrder.items)
 			this.isDisplayDialog = false;
     },
   },
   async mounted() {
-		await this.fetchOrders(this.orderId);
+		await this.fetchOrderById(this.orderId);
 		this.selectedOrder = this.order;
-		console.log('this.order', this.order)
   },
 
 }

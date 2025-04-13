@@ -25,14 +25,14 @@
 
     <div class="actions">
       <button class="button" @click.prevent="showOrderDetails(order, index + 1)">Подробнее</button>
-      <button class="button" @click.prevent="removeOrder(order._id, index)">Удалить</button>
+      <button class="button" @click.prevent="handleRemoveOrder(order._id, index)">Удалить</button>
     </div>
   </div>
 
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 
 export default
 {
@@ -40,7 +40,6 @@ export default
   components: {},
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       errorMessage: '',
       checkedColor: '',
       isDisplayDialog: false,
@@ -65,13 +64,14 @@ export default
   },
   computed: {
     ...mapGetters({
+			ordersList: 'order/ordersList',
       parseDeliveryValue: 'delivery/parseDeliveryValue',
       parsePaymentValue: 'delivery/parsePaymentValue'
     }),
 
   },
   methods: {
-
+		...mapActions('order', ['fetchOrders', 'removeOrder']),
     showOrderDetails(order, index) {
       this.$router.push({name: 'admin-orders-edit', params: { orderId: order._id } })
       this.message = ''
@@ -80,40 +80,17 @@ export default
       this.selectedOrder = order;
     },
 
-    async removeOrder(orderId, index) {
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/orders/remove/${orderId}`, {
-          method: 'DELETE',
-          credentials: 'include',
-        })
-        const data = await result.json();
-        if (!data.result) return false;
-        this.orders.splice(index, 1)
-      } catch (error) {
-        console.log('Update error', error)
-      }
+    async handleRemoveOrder(orderId, index) {
+			const result = await this.removeOrder(orderId);
+
+			if (!result) return;
+
+			this.orders.splice(index, 1);
     },
-
-    async initPage() {
-      try {
-        const result = await fetch(`${this.apiBaseUrl}/api/orders`, {
-          method: 'GET',
-          credentials: 'include'
-        })
-
-        const data = await result.json();
-
-        if (!data.result) return;
-
-        this.orders = data.orders
-
-      } catch (error) {
-        console.log(error)
-      }
-    }
   },
   async mounted() {
-    await this.initPage();
+		await this.fetchOrders();
+		this.orders = this.ordersList;
   }
 }
 </script>
