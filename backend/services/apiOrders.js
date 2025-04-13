@@ -1,4 +1,4 @@
-const {Order, ObjectId} = require("../db");
+const {Order, ObjectId, User, GuestUser} = require("../db");
 
 async function gelAllOrders(req, res, next) {
 
@@ -40,6 +40,7 @@ async function getUserOrdersById(req, res, next) {
 }
 async function addNewOrder(req, res, next) {
   const { body: order } = req;
+	let guestUser = {};
 
   if (req._auth) {
     const { id } = req._auth;
@@ -49,9 +50,36 @@ async function addNewOrder(req, res, next) {
     return res.send({ "result" : false, data: 'No incoming data!' });
   }
 
+	if (!order.users) {
+
+		guestUser = new GuestUser({
+			name: order.deliveryInfo.receiver.fullName,
+			phone: order.deliveryInfo.receiver.phone,
+			email: order.deliveryInfo.receiver.email,
+			address: {
+				city: order.deliveryInfo.address.city,
+				street: order.deliveryInfo.address.street,
+				house: order.deliveryInfo.address.house,
+				apartment: order.deliveryInfo.address.apartment,
+				zipCode: order.deliveryInfo.address.zipCode
+			},
+			isGuest: true
+		})
+
+		await guestUser.save();
+	}
+
   try {
-    const newOrder = await new Order(order);
+    const newOrder = await new Order({
+			...order,
+			users: guestUser._id
+		});
     const result = await newOrder.save();
+		await GuestUser.findByIdAndUpdate(guestUser._id, {
+			$push: {
+				orders: result._id
+			}
+		});
     const data = await Order.findOne({ _id: new ObjectId(result._id)}).populate('items._id')
 
     res.send({ "result" : true, data: data });

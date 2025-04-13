@@ -35,7 +35,7 @@ const OrderSchema = new mongoose.Schema({
   users: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
-    default: null
+    default: null,
     // type: new mongoose.Schema({
     //   _id: {
     //     type: mongoose.Schema.Types.ObjectId,
@@ -108,6 +108,49 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'comments'
   }],
+	isGuest: {type: Boolean, required: false }
+});
+const GuestUserSchema = new mongoose.Schema({
+	_id: {
+		type: mongoose.Schema.Types.ObjectId,
+		default: () => new mongoose.Types.ObjectId()
+	},
+	name: { type: String },
+	login: {
+		type: String,
+		unique: true,
+		required: false,
+		default: function() {
+			return this._id.toString();
+		}
+	},
+	lastName: { type: String, required: false },
+	surName: { type: String, required: false },
+	birthDate: { type: String, required: false },
+	phone: { type: String },
+	email: { type: String, unique: true },
+	address: {
+		city: {type: String},
+		street: {type: String},
+		house: {type: String},
+		apartment: {type: Number},
+		zipCode: {type: Number}
+	},
+	bonuses: { type: Number, required: false },
+	mailing: { type: Boolean, required: false },
+	password: { type: String, required: false },
+	isPasswordSubmit: { type: Boolean, required: false },
+	favorites: { type: Array, required: false },
+	orders: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'orders',
+	}],
+	comments: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'comments',
+		required: false
+	}],
+	isGuest: {type: Boolean, required: true }
 });
 const CommentSchema = new mongoose.Schema({
   text: { type: String },
@@ -158,6 +201,7 @@ ItemSchema.pre('findOneAndDelete', async function(next) {
 
 const Item = mongoose.model('items', ItemSchema);
 const User = mongoose.model('users', UserSchema);
+const GuestUser = mongoose.model('guest-user', GuestUserSchema);
 const Order = mongoose.model('orders', OrderSchema);
 const Comment = mongoose.model('comments', CommentSchema);
 const Admin = mongoose.model('admins', AdminSchema)
@@ -181,5 +225,6 @@ module.exports = {
   Order,
   Comment,
   Item,
-  Admin
+  Admin,
+	GuestUser
 };

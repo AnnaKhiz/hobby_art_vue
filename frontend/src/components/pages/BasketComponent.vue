@@ -144,9 +144,9 @@
               Состав заказа
             </h2>
 
-            <div v-if="orders.items.length" class="main__basket-info-item-product-count">
+            <div v-if="order.items.length" class="main__basket-info-item-product-count">
 
-              <div v-for="(item, index) in orders.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
+              <div v-for="(item, index) in order.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
                 <div class="main__basket-info-item-product-img">
                   <img :src="require(`@/assets/${item.item.photo ? item.item.photo : 'img/image-card-item7.png'}`)" alt="product image">
                 </div>
@@ -215,7 +215,7 @@
                     <span class="basket-bonuses">51 бонус</span>
                   </p>
                   <p class="main__basket-info-item-order-total-item-final" id="total-sum-discount">
-                    {{ $store.state.order.order.totalPrice + (deliveryPrice !== 0 && orders.items.length ? deliveryPrice - 25 : 0) }} грн
+                    {{ $store.state.order.order.totalPrice + (deliveryPrice !== 0 && order.items.length ? deliveryPrice - 25 : 0) }} грн
                   </p>
                 </div>
               </div>
@@ -247,7 +247,7 @@
 
 <script>
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
-import {mapGetters, mapMutations, mapState} from "vuex";
+import {mapGetters, mapMutations, mapState, mapActions} from "vuex";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
@@ -259,7 +259,7 @@ export default {
     return {
 			apiBaseUrl: process.env.VUE_APP_API_URL,
       display: false,
-      orders: {
+      order: {
         items: [],
       },
       currentOrder: {
@@ -294,6 +294,7 @@ export default {
   computed: {
     ...mapState('order', ['order']),
     ...mapGetters({
+			orderItems: ('order/order'),
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
     deliveryPrice() {
@@ -316,9 +317,15 @@ export default {
 
   },
   methods: {
-    ...mapMutations('order', ['updateOrders', 'updateTotalQuantity', 'updateTotalPrice', 'clearOrder']),
+    ...mapMutations('order', [
+			'updateOrder',
+			'updateTotalQuantity',
+			'updateTotalPrice',
+			'clearOrder',
+		]),
+		...mapActions('order', ['addNewOrder',]),
     parseCheckedColors(color, itemId) {
-      const currentItem = this.orders.items.find(el => el.item._id === itemId);
+      const currentItem = this.order.items.find(el => el.item._id === itemId);
 
       const colorObject = currentItem.item.color.find(el => el.value === color);
       if (!colorObject) return;
@@ -337,16 +344,16 @@ export default {
       this.currentOrder.totalQuantity = this.$store.state.order.order.totalQuantity;
       this.currentOrder.items = this.$store.state.order.order.items.map(el => ( { _id: el.item._id, price : el.price, quantity: el.quantity, checkedColor: el.checkedColor } ));
 
-      // console.log(this.currentOrder)
+      console.log(this.currentOrder)
 
-      await this.addNewOrder();
+      await this.addNewOrder(this.currentOrder);
 
       this.clearOrderInfo();
       this.display = true;
     },
 
     clearOrderInfo() {
-      this.orders = {
+      this.order = {
         items: [],
       };
 
@@ -366,8 +373,7 @@ export default {
         receiver: {},
         address: {}
       };
-      // this.user = {};
-      // this.userAddress = {};
+
 
       localStorage.removeItem('order');
       this.clearOrder()
@@ -380,22 +386,11 @@ export default {
 				apartment: null,
 				zipCode: null,
 			};
-			this.deliveryInfo.receiver = '';
+			this.deliveryInfo.receiver = {};
 			this.currentOrder.isMailing = false;
 			this.currentOrder.users = '';
 		},
-    async addNewOrder() {
-      const result = await fetch(`${this.apiBaseUrl}/api/orders/add`, {
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify(this.currentOrder),
-        headers: { 'Content-Type': 'application/json' }
-      })
 
-      const response = await result.json();
-
-      console.log(response)
-    },
     countPrice(index, quantity) {
       this.$store.state.order.order.items[index].quantity = quantity;
       const price = this.$store.state.order.order.items[index].item.price;
@@ -437,8 +432,9 @@ export default {
   },
  created() {
     if( localStorage.getItem('order') ) {
-      this.orders = JSON.parse(localStorage.getItem('order'));
-      this.updateOrders(this.orders)
+      this.order = JSON.parse(localStorage.getItem('order'));
+			console.log(this.order)
+      this.updateOrder(this.order) // ???
     }
   },
   async mounted() {

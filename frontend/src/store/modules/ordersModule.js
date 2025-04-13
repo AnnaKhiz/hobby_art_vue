@@ -152,12 +152,23 @@ export const ordersModule = {
 			let result = null;
 			try {
 				result = await fetchData('orders/remove/:id', 'DELETE', { id });
-				console.log('remove order result', result.data)
 				commit('updateOrdersList', result.data)
 			} catch (error) {
-				console.error('Error removing order items:', error);
+				console.error('Error removing order:', error);
 			}
 			return result;
+		},
+
+		async addNewOrder({ commit }, body) {
+			let result= null;
+			try {
+				result = await fetchData('orders/add', 'POST', {}, body);
+				console.log(result)
+				console.log(commit)
+			} catch (error) {
+				console.error('Error adding new order:', error);
+			}
+			return result
 		},
 
 		// ORDER ITEMS
