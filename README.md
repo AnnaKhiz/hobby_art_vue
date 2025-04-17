@@ -1,14 +1,29 @@
-Интернет-магазин Hobby Art - в процессе разработки. В портфолио пока представлена предыдущая версия, без Vue и backend части.
+## Project is in progress now.
 
-Макет был взят в свободном доступе в интернете.
+### This is text project by free design from internet.
+The project includes frontend and backend parts.
+I also added admin page, which you can access by the default link, adding to the end /admin
 
-Сайт включает в себя Front-end и Back-end части.
+Login: admin
+Password: 1
 
-Front-end:
+The project is deployed [here](https://hobby-art-vue.vercel.app/), but remember, that some of the actions are still in progress.
+
+### Used technologies:
+**Frontend**
  - Vue.js (Options API)
  - Vuex
 
-Back-end:
- - Node.js
- - Express.js
- - MongoDB + mongoose
+**Backend:**
+- Node.js (Express.js)
+- MongoDB + mongoose
+
+## How to run the project
+
+Use this command from the /frontend folder
+**npm run serve**
+
+### To start backend part:
+
+Use this command from the /backend folder
+**npm run server**
