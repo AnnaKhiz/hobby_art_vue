@@ -1,10 +1,11 @@
-## Project is in progress now.
+## !!! Project is in progress now.
 
-### This is text project by free design from internet.
+### This is test project by free design from internet.
 The project includes frontend and backend parts.
 I also added admin page, which you can access by the default link, adding to the end /admin
 
 Login: admin
+
 Password: 1
 
 The project is deployed [here](https://hobby-art-vue.vercel.app/), but remember, that some of the actions are still in progress.
@@ -21,9 +22,11 @@ The project is deployed [here](https://hobby-art-vue.vercel.app/), but remember,
 ## How to run the project
 
 Use this command from the /frontend folder
+
 **npm run serve**
 
 ### To start backend part:
 
 Use this command from the /backend folder
+
 **npm run server**
