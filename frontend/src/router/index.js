@@ -191,7 +191,7 @@ const routes = [
   // },
 
   {
-    path: '/user_page/:id',
+    path: '/user/page/:id',
     name: 'User',
     component: UserPageComponent,
     props: true,

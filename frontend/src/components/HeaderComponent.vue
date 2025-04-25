@@ -26,10 +26,10 @@
               data-modal="callModal"
               @click.prevent="checkFunction"
             >
-							{{ userPageLabel() }}
+							{{ userPageLabel }}
 						</a>
 
-						<a v-if="userPageLabel() === 'Кабинет'" href="" class="header__menu-favoriteButton elem-sub" id="favorite-header" data-modal="callModal">
+						<a v-if="userPageLabel === 'Кабинет'" href="" class="header__menu-favoriteButton elem-sub" id="favorite-header" data-modal="callModal">
 							Избранное
 						</a>
 						<a class="header__menu-basketButton elem-sub basket-count" @click="$router.push('/basket')">
@@ -81,7 +81,9 @@ export default {
       getDisplayDialogState: 'dialog/getDisplayDialogState',
       totalQuantity: 'order/totalQuantity'
     }),
-
+		userPageLabel() {
+			return localStorage.getItem('auth') === 'true' ? 'Кабинет' : 'Войти'
+		},
   },
   methods: {
     ...mapMutations({
@@ -91,9 +93,7 @@ export default {
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
 
-    userPageLabel() {
-      return localStorage.getItem('auth') === 'true' ? 'Кабинет' : 'Войти'
-    },
+
     checkFunction() {
       return localStorage.getItem('auth') === 'true' ? this.getUser() : this.openDialog()
     },
@@ -132,7 +132,7 @@ export default {
         this.setIsAuthorizedInfo(true);
 
         this.user = await data.user[0]
-        this.$router.push(`/user_page/${this.user._id}`);
+        this.$router.push(`/user/page/${this.user._id}`);
         return this.user
       }
     }

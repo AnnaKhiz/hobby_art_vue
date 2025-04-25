@@ -130,7 +130,7 @@ export default {
       // document.cookie=`token=${data.token}`
       // this.setUserInfo(data.user);
       localStorage.setItem('auth', 'true')
-      this.$router.push(`/user_page/${data.id}`);
+      this.$router.push(`/user/${data.id}`);
       this.setDisplayDialogState(false)
       // this.setIsAuthorizedInfo(true)
       // console.log(data)

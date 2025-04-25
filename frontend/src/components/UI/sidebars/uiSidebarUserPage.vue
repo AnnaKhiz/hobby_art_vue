@@ -76,7 +76,7 @@ export default {
 
       console.log(result)
 
-      this.$router.push('/')
+      this.$router.push({ name: 'HobbyArt'})
     }
     // async getUser() {
       // this.userData = this.getUserInfo;

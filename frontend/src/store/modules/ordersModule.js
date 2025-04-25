@@ -162,11 +162,13 @@ export const ordersModule = {
 			return result;
 		},
 
-		async addNewOrder({ commit }, body) {
+		async addNewOrder({ commit }, { copy = false, body }) {
 			let result= null;
 			try {
 				result = await fetchData('api/orders/add', 'POST', {}, body);
-				commit('addToOrdersList', result.data);
+				!copy
+					? commit('addToOrdersList', result.data)
+					: commit('updateOrder', result.data);
 			} catch (error) {
 				console.error('Error adding new order:', error);
 			}

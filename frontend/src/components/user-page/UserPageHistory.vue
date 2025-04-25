@@ -5,7 +5,7 @@
         <div class="main__user-page-content-story-container-flex">
           <div class="main__user-page-content-story-block">
             <p class="main__user-page-content-story-desc">
-              Заказ № {{ order._id }} от {{ parseDate(order.date) }} {{parseTime(order.date)}}
+              {{ order.isOrderCopy ? 'КОПИЯ ' : '' }}Заказ № {{ order._id }} от {{ order.date }}
             </p>
             <p class="main__user-page-content-story-desc">
               {{ order.totalQuantity}} товара на сумму {{ order.totalPrice }} грн
@@ -20,7 +20,7 @@
                 {{ order.dateCompleted !== '' ? order.dateCompleted : 'В работе' }}
             </p>
 
-            <a href="" class="main__user-page-content-story-repeat-link" @click.prevent="addNewOrder(index)">
+            <a href="" class="main__user-page-content-story-repeat-link" @click.prevent="addNewOrderHandler(index)">
               Повторить заказ
             </a>
           </div>
@@ -85,7 +85,7 @@ export default {
       showNotify: false,
       show: false,
       userOrdersList: [],
-      date: ''
+      date: '',
     }
   },
 	computed: {
@@ -106,7 +106,7 @@ export default {
       this.userOrdersList[index].show = !this.userOrdersList[index].show
     },
 
-    async addNewOrder(index) {
+    async addNewOrderHandler(index) {
       const now = new Date(Date.now());
       const options = { timeZone: 'Europe/Kiev', hour12: false };
       this.date = now.toLocaleString('en-GB', options).replaceAll('/', '-');
@@ -114,42 +114,21 @@ export default {
       let newOrderCopy = { ...this.userOrdersList[index], date: this.date };
 
       delete newOrderCopy._id;
-			await this.addNewOrder(newOrderCopy)
-
-      // const result = await fetch(`h${this.apiBaseUrl}/api/orders/add`, {
-      //   method: 'POST',
-      //   credentials: 'include',
-      //   body: JSON.stringify(newOrderCopy),
-      //   headers: { 'Content-Type': 'application/json' }
-      // })
-			//
-      // const response = await result.json();
-
-      this.showNotify = true;
-      setTimeout(() => {
-        this.showNotify = false;
-      }, 1500);
+			newOrderCopy.isOrderCopy = true;
+			await this.addNewOrder({ copy: true, body: newOrderCopy })
 
       this.userOrdersList.push(this.orderItems);
     },
 
-    parseDate(date) {
-     const data = date.split(',');
-     return data[0]
-    },
-
-    parseTime(date) {
-      const time = date.split(',');
-      return time[1]
-    },
-
     async initPage() {
-      const result = await fetch(`${this.apiBaseUrl}/api/orders/user-orders`,
+			console.log('this.user', this.user._id)
+      const result = await fetch(`${this.apiBaseUrl}/api/orders/${this.user._id}/user-orders`,
         {
           method: 'GET',
           credentials: "include"
         });
       const data = await result.json()
+			console.log('user orders', data)
       this.userOrdersList = data.data.map(el => ({...el, show: false}));
     },
   },

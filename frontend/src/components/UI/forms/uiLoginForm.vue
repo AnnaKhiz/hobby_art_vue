@@ -107,7 +107,7 @@ export default {
       if (result.role === 'admin') {
         this.$router.push(`/admin`)
       } else {
-        this.$router.push(`/user_page/${data.id}`)
+        this.$router.push(`/user/page/${data.id}`)
       }
 
       // this.setIsRegisteredInfo(true)

@@ -15,28 +15,28 @@
 						/>
 
             <div class="main__user-page-content-block second-block main__user-page-content">
-              <user-page-about-form
+              <UserPageAboutForm
                 v-if="currentLink === 'general'"
                 :user="{...user}"
               />
-              <user-page-bonuses
+              <UserPageBonuses
                 v-if="currentLink === 'bonuses'"
                 :bonuses="Number(user.bonuses)"
               />
-              <user-page-favorites
+              <UserPageFavorites
                 v-if="currentLink === 'favorites'"
                 :user="{...user}"
               />
-              <user-page-history
+              <UserPageHistory
                 v-if="currentLink === 'history'"
                 :user="{...user}"
               />
-              <user-page-mailing
+              <UserPageMailing
                 v-if="currentLink === 'mailing'"
                 :mailing="user.mailing"
                 @mail="user.mailing = $event"
               />
-              <user-page-feedback
+              <UserPageFeedback
                 v-if="currentLink === 'feedback'"
                 :user="{...user}"
               />
@@ -52,14 +52,13 @@
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
-// import axios from 'axios';
-import {mapMutations} from "vuex";
-import userPageAboutForm from "@/components/user-page/userPageAboutForm.vue"
-import UserPageBonuses from "@/components/user-page/userPageBonuses.vue"
-import UserPageFavorites from "@/components/user-page/userPageFavorites.vue"
-import UserPageHistory from "@/components/user-page/userPageHistory.vue"
-import UserPageMailing from "@/components/user-page/userPageMailing.vue"
-import UserPageFeedback from "@/components/user-page/userPageFeedback.vue"
+import { mapMutations } from "vuex";
+import UserPageAboutForm from "@/components/user-page/UserPageAboutForm.vue"
+import UserPageBonuses from "@/components/user-page/UserPageBonuses.vue"
+import UserPageFavorites from "@/components/user-page/UserPageFavorites.vue"
+import UserPageHistory from "@/components/user-page/UserPageHistory.vue"
+import UserPageMailing from "@/components/user-page/UserPageMailing.vue"
+import UserPageFeedback from "@/components/user-page/UserPageFeedback.vue"
 
 
 export default {
@@ -68,7 +67,13 @@ export default {
     UserPageFeedback,
     UserPageMailing,
     UserPageHistory,
-    UserPageFavorites, UserPageBonuses, userPageAboutForm, UiSidebarUserPage, UiBreadcrumbs, UiMainBanner},
+    UserPageFavorites,
+		UserPageBonuses,
+		UserPageAboutForm,
+		UiSidebarUserPage,
+		UiBreadcrumbs,
+		UiMainBanner
+	},
   props: {
     id: String,
   },
@@ -101,7 +106,7 @@ export default {
       } else {
         this.setIsAuthorizedInfo(true);
         this.user = await data.user[0];
-        this.$router.push(`/user_page/${this.user._id}`);
+        this.$router.push(`/user/page/${this.user._id}`);
         return this.user;
       }
 
