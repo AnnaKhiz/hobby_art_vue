@@ -32,7 +32,6 @@ async function getUserOrdersById(req, res, next) {
 
   try {
     const orders = await Order.find({ users: new ObjectId(id)}).populate('items._id')
-    console.log(orders)
     res.send({ result: true, data: orders })
   } catch (error) {
     res.send({ result: false, data: [] })
