@@ -68,6 +68,7 @@
 
 <script>
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "userPageHistory",
@@ -87,7 +88,13 @@ export default {
       date: ''
     }
   },
+	computed: {
+		...mapGetters({
+			orderItems: ('order/order'),
+		}),
+	},
   methods: {
+		...mapActions('order', ['addNewOrder']),
     parseCheckedColors(color, item) {
       const colorObject = item._id.color.find(el => el.value === color);
       if (!colorObject) return '';
@@ -107,22 +114,23 @@ export default {
       let newOrderCopy = { ...this.userOrdersList[index], date: this.date };
 
       delete newOrderCopy._id;
+			await this.addNewOrder(newOrderCopy)
 
-      const result = await fetch(`h${this.apiBaseUrl}/api/orders/add`, {
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify(newOrderCopy),
-        headers: { 'Content-Type': 'application/json' }
-      })
-
-      const response = await result.json();
+      // const result = await fetch(`h${this.apiBaseUrl}/api/orders/add`, {
+      //   method: 'POST',
+      //   credentials: 'include',
+      //   body: JSON.stringify(newOrderCopy),
+      //   headers: { 'Content-Type': 'application/json' }
+      // })
+			//
+      // const response = await result.json();
 
       this.showNotify = true;
       setTimeout(() => {
         this.showNotify = false;
       }, 1500);
 
-      this.userOrdersList.push(response.data);
+      this.userOrdersList.push(this.orderItems);
     },
 
     parseDate(date) {
