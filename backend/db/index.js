@@ -12,6 +12,7 @@ const OrderSchema = new mongoose.Schema({
   dateCompleted: {type: String},
   totalPrice: {type: Number},
   totalQuantity: {type: Number},
+	isOrderCopy: {type: Boolean, required: false},
   deliveryInfo: {
     address: {
       city: {type: String},
