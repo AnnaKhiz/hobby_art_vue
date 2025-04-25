@@ -145,7 +145,6 @@ export const ordersModule = {
 		async fetchOrders({ commit }) {
 			try {
 				const result = await fetchData('api/orders');
-				console.log(result)
 				commit('updateOrdersList', result.orders);
 			} catch (error) {
 				console.error('Error fetching orders:', error);
@@ -161,7 +160,6 @@ export const ordersModule = {
 			}
 			return result;
 		},
-
 		async addNewOrder({ commit }, { copy = false, body }) {
 			let result= null;
 			try {
@@ -173,6 +171,14 @@ export const ordersModule = {
 				console.error('Error adding new order:', error);
 			}
 			return result
+		},
+		async getUserOrdersList({ commit }, id) {
+			try {
+				const result = await fetchData(`api/orders/:id/user-orders`, 'GET', { id });
+				commit('updateOrdersList', result.data)
+			} catch (error) {
+				console.error('Error getting user orders:', error);
+			}
 		},
 
 		// ORDER ITEMS

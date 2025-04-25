@@ -81,7 +81,6 @@ export default {
   },
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       showNotify: false,
       show: false,
       userOrdersList: [],
@@ -91,10 +90,11 @@ export default {
 	computed: {
 		...mapGetters({
 			orderItems: ('order/order'),
+			ordersList: ('order/ordersList'),
 		}),
 	},
   methods: {
-		...mapActions('order', ['addNewOrder']),
+		...mapActions('order', ['addNewOrder', 'getUserOrdersList']),
     parseCheckedColors(color, item) {
       const colorObject = item._id.color.find(el => el.value === color);
       if (!colorObject) return '';
@@ -121,15 +121,9 @@ export default {
     },
 
     async initPage() {
-			console.log('this.user', this.user._id)
-      const result = await fetch(`${this.apiBaseUrl}/api/orders/${this.user._id}/user-orders`,
-        {
-          method: 'GET',
-          credentials: "include"
-        });
-      const data = await result.json()
-			console.log('user orders', data)
-      this.userOrdersList = data.data.map(el => ({...el, show: false}));
+			await this.getUserOrdersList(this.user._id);
+
+      this.userOrdersList = this.ordersList.map(el => ({...el, show: false}));
     },
   },
   async mounted() {
