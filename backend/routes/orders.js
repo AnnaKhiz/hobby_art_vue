@@ -14,7 +14,7 @@ const {
 const {Order, ObjectId} = require("../db");
 
 router.get('/', gelAllOrders );
-router.get('/user-orders', parserJwt, getUserOrdersById );
+router.get('/:id/user-orders', parserJwt, getUserOrdersById );
 router.get('/:id', getOrderById);
 
 router.post('/add', parserJwt, addNewOrder );
