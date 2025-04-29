@@ -50,16 +50,24 @@
 	</header>
 </template>
 <script>
-import HeaderInfoComponent from "@/components/HeaderInfoComponent.vue"
-import UiSearchForm from "@/components/UI/forms/uiSearchForm.vue"
-import {mapGetters, mapMutations} from "vuex";
-import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue"
-import UiLoginForm from "@/components/UI/forms/uiLoginForm.vue"
-// import axios from "axios";
+import HeaderInfoComponent from "@/components/HeaderInfoComponent.vue";
+import UiSearchForm from "@/components/UI/forms/uiSearchForm.vue";
+import {
+	mapGetters,
+	mapMutations,
+	mapActions
+} from "vuex";
+import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue";
+import UiLoginForm from "@/components/UI/forms/uiLoginForm.vue";
 
 export default {
 	name: "HeaderComponent",
-	components: {UiLoginForm, UiModalWindow, UiSearchForm, HeaderInfoComponent },
+	components: {
+		UiLoginForm,
+		UiModalWindow,
+		UiSearchForm,
+		HeaderInfoComponent
+	},
   props: {
     getModalActive: {
       type: Function
@@ -67,7 +75,6 @@ export default {
   },
 	data() {
 		return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       displayDialog: false,
       user: {},
       basketQuantity: 0,
@@ -79,9 +86,9 @@ export default {
       order: 'order/order',
       getNavMenuLinks: 'links/getNavMenuLinks',
       getDisplayDialogState: 'dialog/getDisplayDialogState',
-      totalQuantity: 'order/totalQuantity'
+      totalQuantity: 'order/totalQuantity',
+			userInfo: 'user/userInfo'
     }),
-
   },
   methods: {
     ...mapMutations({
@@ -90,53 +97,45 @@ export default {
       setDisplayDialogState: 'dialog/setDisplayDialogState',
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
+		...mapActions('user', ['getAuthUser']),
 
 		userPageLabel() {
-			return localStorage.getItem('auth') === 'true' ? 'Кабинет' : 'Войти'
+			return localStorage.getItem('auth') === 'true' ? 'Кабинет' : 'Войти';
 		},
+
     checkFunction() {
-      return localStorage.getItem('auth') === 'true' ? this.getUser() : this.openDialog()
+      return localStorage.getItem('auth') === 'true' ? this.getUser() : this.openDialog();
     },
+
     openDialog() {
-
-      this.setDisplayDialogState(true)
-
-      // this.displayDialog = true;
-      this.setIsRegisteredInfo(true)
-      this.$router.push('/user/login')
-
+      this.setDisplayDialogState(true);
+      this.setIsRegisteredInfo(true);
+      this.$router.push('/user/login');
     },
+
     openMenuPage(link, value) {
       if (link) {
         this.$router.push(`${link}`);
       } else {
         const height = window.outerHeight * 100;
-        window.scrollTo({  top: height, behavior: 'smooth' })
+        window.scrollTo({  top: height, behavior: 'smooth' });
       }
-      this.setCheckedHeaderLink(value)
+      this.setCheckedHeaderLink(value);
     },
+
     async getUser() {
-      const result = await fetch(`${this.apiBaseUrl}/user`, {
-        method: 'GET',
-        credentials: 'include'
-      });
+			const result = await this.getAuthUser();
 
-      const data = await result.json()
-
-
-      if (!data.result) {
-        // console.log('no requested result')
-        this.$router.back()
-        // await this.getAdmin()
+      if (!result.result) {
+        this.$router.back();
       } else {
         this.setIsAuthorizedInfo(true);
-
-        this.user = await data.user[0]
+        this.user = this.userInfo;
         this.$router.push(`/user/page/${this.user._id}`);
-        return this.user
       }
     }
   },
+
   mounted() {
     setTimeout(() => {
       this.basketQuantity = this.order.totalQuantity
