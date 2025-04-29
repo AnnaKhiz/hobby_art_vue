@@ -12,18 +12,18 @@ const path = require('path')
 const express = require('express');
 const server = express();
 
-server.use(cors(
-  {
-    origin: 'http://localhost:8080',
-    credentials: true,
-  }
-));
 // server.use(cors(
 //   {
-//     origin: 'https://hobby-art-vue.vercel.app',
+//     origin: 'http://localhost:8080',
 //     credentials: true,
 //   }
 // ));
+server.use(cors(
+  {
+    origin: 'https://hobby-art-vue.vercel.app',
+    credentials: true,
+  }
+));
 server.use(cookieParser());
 
 server.listen(port, (req, resp) => {
