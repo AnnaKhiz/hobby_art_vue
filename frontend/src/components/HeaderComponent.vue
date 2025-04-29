@@ -126,7 +126,7 @@ export default {
     async getUser() {
 			const result = await this.getAuthUser();
 
-      if (!result.result) {
+      if (!result) {
         this.$router.back();
       } else {
         this.setIsAuthorizedInfo(true);
