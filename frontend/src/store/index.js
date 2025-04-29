@@ -6,6 +6,7 @@ import { ordersModule } from "@/store/modules/ordersModule";
 import { filterParamsModule } from "@/store/modules/filterParamsModule";
 import { deliveryPaymentModule } from "@/store/modules/deliveryPaymentModule";
 import { itemsModule } from "@/store/modules/itemsModule";
+import { userSidebarModule } from "@/store/modules/userSidebarModule";
 
 
 export default createStore({
@@ -17,6 +18,7 @@ export default createStore({
     filter: filterParamsModule,
     delivery: deliveryPaymentModule,
 		items: itemsModule,
+		userSidebar: userSidebarModule,
   }
 })
 
