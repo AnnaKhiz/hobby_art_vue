@@ -5,10 +5,25 @@ export const usersModule = {
   state: () => ({
     isRegistered: true,
     isAuthorized: false,
-    user: {}
+    user: {},
+		userAboutLabelsList: [
+			{ text: 'Имя:', value: 'name', idLabel: 'user-name', isReadable: false },
+			{ text: 'Фамилия:', value: 'lastName', idLabel: 'user-surname', isReadable: false},
+			{ text: 'Отчество:', value: 'surName', idLabel: 'user-surname-2', isReadable: false },
+			{ text: 'Дата рождения:', value: 'birthDate', idLabel: 'user-birth-date', isReadable: false },
+			{ text: 'Номер телефона:', value: 'phone', idLabel: 'user-phone', isReadable: false },
+			{ text: 'E-mail:', value: 'email', idLabel: 'user-email', isReadable: false },
+			{ text: 'Город:', value: 'address.city', idLabel: 'user-city', isReadable: true },
+			{ text: 'Улица:', value: 'address.street', idLabel: 'user-street', isReadable: true },
+			{ text: 'Дом:', value: 'address.house', idLabel: 'user-house', isReadable: true },
+			{ text: 'Квартира:', value: 'address.apartment', idLabel: 'user-apartment', isReadable: true },
+			{ text: 'Индекс:', value: 'address.zipCode', idLabel: 'user-code', isReadable: true },
+			{ text: 'Сменить пароль:', value: 'password', idLabel: 'user-password', isReadable: false },
+		]
   }),
   getters: {
 		userInfo: state => state.user,
+		userAboutLabelsList: state => state.userAboutLabelsList,
     getIsRegisteredInfo(state) {
       return state.isRegistered;
     },

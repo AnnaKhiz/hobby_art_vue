@@ -9,7 +9,7 @@
     <div class="main__user-page-content-block-data">
 
       <ul class="main__user-page-content-user-data">
-        <li v-for="(item, index) in userData" :key="index">
+        <li v-for="(item, index) in userAboutLabelsList" :key="index">
           <label :for="item.idLabel" class="form-label">{{item.text}}</label>
           <input
             v-if="item.value.includes('address')"
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "uiUserPageAboutForm",
@@ -52,7 +52,6 @@ export default {
   },
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       message: '',
       entityDataResult: {},
       entityDataUser: {
@@ -64,47 +63,27 @@ export default {
 					zipCode: null,
 				}
 			},
-      userData: [
-          { text: 'Имя:', value: 'name', idLabel: 'user-name', isReadable: false },
-          { text: 'Фамилия:', value: 'lastName', idLabel: 'user-surname', isReadable: false},
-          { text: 'Отчество:', value: 'surName', idLabel: 'user-surname-2', isReadable: false },
-          { text: 'Дата рождения:', value: 'birthDate', idLabel: 'user-birth-date', isReadable: false },
-          { text: 'Номер телефона:', value: 'phone', idLabel: 'user-phone', isReadable: false },
-          { text: 'E-mail:', value: 'email', idLabel: 'user-email', isReadable: false },
-          { text: 'Город:', value: 'address.city', idLabel: 'user-city', isReadable: true },
-          { text: 'Улица:', value: 'address.street', idLabel: 'user-street', isReadable: true },
-          { text: 'Дом:', value: 'address.house', idLabel: 'user-house', isReadable: true },
-          { text: 'Квартира:', value: 'address.apartment', idLabel: 'user-apartment', isReadable: true },
-          { text: 'Индекс:', value: 'address.zipCode', idLabel: 'user-code', isReadable: true },
-          { text: 'Сменить пароль:', value: 'password', idLabel: 'user-password', isReadable: false },
-        ]
     }
   },
-
+	computed: {
+		...mapGetters({
+			userAboutLabelsList: 'user/userAboutLabelsList'
+		})
+	},
   methods: {
+		...mapActions('user', ['userInfoUpdate']),
     focusInput(index) {
       this.$refs.inputs[index].focus()
     },
     async saveChanges() {
+			const result = await this.userInfoUpdate(this.entityDataResult);
+      if (!result.result) return;
 
-      const result = await fetch(`${this.apiBaseUrl}/user/edit`, {
-        method: 'PATCH',
-        body: JSON.stringify(this.entityDataResult),
-        headers: { "Content-Type": "application/json" },
-        credentials: 'include'
-      });
-
-      const data = await result.json()
-
-      console.log('edited user: ', data)
-
-      if (!data.result) return;
-
-      this.message = 'Данные успешно обновлены. Страница будет перезагружена автоматически.'
+      this.message = 'Данные успешно обновлены. Страница будет перезагружена автоматически.';
 
       setTimeout(() => {
         this.message = '';
-        this.$router.go(0)
+        this.$router.go(0);
       }, 1500)
 
     }
@@ -115,7 +94,6 @@ export default {
 			...this.entityDataUser,
 			...this.user,
 		}
-    console.log('mounted', this.entityDataUser)
   }
 }
 </script>
