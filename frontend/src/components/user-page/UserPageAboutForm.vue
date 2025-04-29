@@ -30,7 +30,7 @@
             @input="entityDataResult[item.value] = entityDataUser[item.value]"
           />
           <a href="" class="main__user-page-content-user-edit-link" @click.prevent="focusInput(index)">
-            <img src="../../assets/img/edit.svg" alt="edit icon">Изменить
+            <img :src="editIcon" alt="edit icon">Изменить
           </a>
         </li>
       </ul>
@@ -41,7 +41,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-
+import editIcon from "@/assets/icons/edit.svg";
 export default {
   name: "uiUserPageAboutForm",
   props: {
@@ -63,6 +63,7 @@ export default {
 					zipCode: null,
 				}
 			},
+			editIcon
     }
   },
 	computed: {

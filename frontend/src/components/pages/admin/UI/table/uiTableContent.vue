@@ -42,7 +42,7 @@
           <div v-if="item.name !== 'title'" class="controls-content">
             <img
               v-if="!item.isReadable"
-              src="@/assets/img/edit.svg"
+              :src="editIcon"
               alt="edit icon"
               class="edit-pencil-style"
               @click.prevent="item.name === 'receiver' || item.name === 'address' ? openDialogForEditing(item) : editElement(item, index)"
@@ -106,6 +106,7 @@
 <script>
 import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
 import {mapActions, mapGetters} from "vuex";
+import editIcon from "@/assets/icons/edit.svg";
 
 export default {
   name: "uiTableContent.vue",
@@ -125,7 +126,8 @@ export default {
       tableItemsList: [],
       hover: false,
       isReadable: true,
-      currentOrder: {}
+      currentOrder: {},
+			editIcon
     }
   },
   emits: ['error'],
