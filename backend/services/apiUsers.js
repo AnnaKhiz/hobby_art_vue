@@ -52,9 +52,10 @@ async function registerNewUser(req, res) {
 			.cookie('token', token, {
 				httpOnly: true,
 				secure: true,
-				sameSite: "Lax",
+				sameSite: 'None',
 				expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-				path: "/"
+				path: "/",
+				domain: 'https://hobby-art.onrender.com'
 			})
 			.send({"result" : "New user added", "id": result._id.toString()})
 
@@ -81,16 +82,16 @@ async function logInUserPage(req, res, next) {
 	const userFullData = await User.findOne( { _id: user._id}).populate('orders').populate('comments');
 
 	const authData = { role: "user", id: user._id.toString() };
-	req._auth = authData;
 
 	const token = generateJWt(authData);
 
 	res.cookie('token', token, {
 		httpOnly: true,
 		secure: true,
-		sameSite: "Lax",
+		sameSite: 'None',
 		expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-		path: "/"
+		path: "/",
+		domain: 'https://hobby-art.onrender.com'
 	});
 
 	res.send({ result: true, id: user._id.toString(), user: userFullData, role: "user", status: 200 });
@@ -100,8 +101,10 @@ async function logoutUserPage( req, res, next ) {
 	res.clearCookie('token', {
 		httpOnly: true,
 		secure: true,
-		sameSite: "Lax",
+		sameSite: 'None',
+		expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
 		path: "/",
+		domain: 'https://hobby-art.onrender.com'
 	});
 
 	res.send({ "result": true });
@@ -164,9 +167,10 @@ async function logInToAdminPanel(req, res, next) {
 	res.cookie('token', token, {
 		httpOnly: true,
 		secure: true,
-		sameSite: "Lax",
+		sameSite: 'None',
 		expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-		path: "/admin"
+		path: "/",
+		domain: 'https://hobby-art.onrender.com/admin'
 	})
 
 	res.send({ result: true, id: admin._id.toString(), role: "admin" });
@@ -176,8 +180,10 @@ async function logoutFromAdminPanel(req, res, next) {
 	res.clearCookie('token', {
 		httpOnly: true,
 		secure: true,
-		sameSite: "Lax",
-		path: "/admin",
+		sameSite: 'None',
+		expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+		path: "/",
+		domain: 'https://hobby-art.onrender.com/admin'
 	});
 
 	res.send({ "result": true });
