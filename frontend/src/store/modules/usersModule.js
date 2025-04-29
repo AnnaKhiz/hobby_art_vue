@@ -51,6 +51,7 @@ export const usersModule = {
 			let result = null;
 			try {
 				result = await fetchData('user');
+				console.log('get user', result)
 				commit('setUserInfo', result.user[0]);
 			} catch (error) {
 				console.error('Error getting auth user:', error);
