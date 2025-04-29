@@ -31,8 +31,11 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations, mapActions} from "vuex";
-// import axios from "axios";
+import {
+	mapGetters,
+	mapMutations,
+	mapActions
+} from "vuex";
 
 export default {
   name: "uiSidebarUserPage",
@@ -73,7 +76,3 @@ export default {
 
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>
