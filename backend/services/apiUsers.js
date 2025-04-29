@@ -92,7 +92,7 @@ async function logInUserPage(req, res, next) {
 		path: "/"
 	});
 
-	res.send({ result: true, user: userFullData, role: "user", status: 200 });
+	res.send({ result: true, id: user._id.toString(), user: userFullData, role: "user", status: 200 });
 	next();
 }
 async function logoutUserPage( req, res, next ) {
