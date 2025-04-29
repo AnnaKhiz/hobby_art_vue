@@ -33,13 +33,25 @@ export const usersModule = {
 	actions: {
 		// USER
 		async getAuthUser({ commit }) {
+			let result = null;
 			try {
-				const result = await fetchData('user');
-				console.log('result', result)
+				result = await fetchData('user');
+				console.log('result USER', result)
 				commit('setUserInfo', result.user[0]);
 			} catch (error) {
 				console.error('Error getting auth user:', error);
 			}
+			return result.result;
+		},
+
+		async logOutUser() {
+			let result = null;
+			try {
+				result = await fetchData('user/logout');
+			} catch (error) {
+				console.error('Error log out user:', error);
+			}
+			return result;
 		}
 	}
 }

@@ -52,7 +52,7 @@
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
-import { mapMutations } from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import UserPageAboutForm from "@/components/user-page/UserPageAboutForm.vue"
 import UserPageBonuses from "@/components/user-page/UserPageBonuses.vue"
 import UserPageFavorites from "@/components/user-page/UserPageFavorites.vue"
@@ -79,57 +79,42 @@ export default {
   },
 	data() {
 		return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       show: false,
 			user: {},
       currentLink: ''
 		}
 	},
+	computed: {
+		...mapGetters({
+			userInfo: 'user/userInfo',
+		}),
+	},
   methods: {
     ...mapMutations({
-      setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
+      setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
     }),
+		...mapActions('user', ['getAuthUser']),
 
     async getUser() {
-      const result = await fetch(`${this.apiBaseUrl}/user`, {
-        method: 'GET',
-        credentials: 'include'
-      });
+			const result = await this.getAuthUser();
 
-      const data = await result.json();
-      console.log('get result', data);
-
-      if (!data.result) {
-        console.log('no requested result');
+      if (!result) {
         this.$router.back();
-        // await this.getAdmin()
       } else {
         this.setIsAuthorizedInfo(true);
-        this.user = await data.user[0];
+        this.user = this.userInfo;
         this.$router.push(`/user/page/${this.user._id}`);
-        return this.user;
       }
 
+			this.currentLink = 'general';
+			this.show = true;
 
     },
-    // async getAdmin() {
-    //   try {
-    //     const result = await axios.get('/admin');
-    //     if (!result) return;
-    //     this.$router.push('/admin')
-    //   } catch (error) {
-    //     console.log('Getting admin page error:', error)
-    //   }
-    // }
 
   },
 
   async created() {
-    await this.getUser()
-
-
-    this.currentLink = 'general'
-    this.show = true;
+    await this.getUser();
   }
 
 }

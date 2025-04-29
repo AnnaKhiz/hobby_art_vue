@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 // import axios from "axios";
 
 export default {
@@ -44,7 +44,6 @@ export default {
 	},
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       userData: {},
       userSidebarItems: [
         { text: 'Мои данные', value: 'general', url: '' },
@@ -65,36 +64,18 @@ export default {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
+		...mapActions('user', ['logOutUser']),
     async logOut() {
+			await this.logOutUser();
       this.setIsAuthorizedInfo(false);
       localStorage.setItem('auth', 'false');
 
-      const result = await fetch(`${this.apiBaseUrl}/user/logout`, {
-        method: 'GET',
-        credentials: 'include'
-      });
-
-      console.log(result)
-
-      this.$router.push({ name: 'HobbyArt'})
+      this.$router.push({ name: 'HobbyArt'});
     }
-    // async getUser() {
-      // this.userData = this.getUserInfo;
-      // if (!userData) {
-      //   return
-      // }
-      // const result = await fetch(`http://localhost:5000/user/${localStorage.getItem('id')}`)
 
-      // const data = await result.json()
-      // const [ user ] = data.user
-      // this.userData = user
-      // console.log(this.userData)
-    // }
   },
   mounted() {
-    this.userData = this.user
-    console.log('this.userData', this.userData)
-    // this.getUser()
+    this.userData = this.user;
   }
 
 }
