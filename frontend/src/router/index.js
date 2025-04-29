@@ -209,20 +209,19 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('auth')
-  console.log('isAuthenticated', isAuthenticated)
-  console.log(process.env.BASE_URL)
+  const isAuthenticated = localStorage.getItem('auth');
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
 
+		switch(true) {
+			case (isAuthenticated === 'false' && to.path.includes('admin')):
+				return next('/admin/login');
+			case (isAuthenticated === 'false' && to.path.includes('user')):
+				return next('/');
+			default:
+				return next();
+		}
 
-    if (isAuthenticated === 'false') {
-      console.log('Auth false')
-      next('/admin/login');
-    } else {
-      console.log('Auth true')
-      next();
-    }
   } else {
     next();
   }

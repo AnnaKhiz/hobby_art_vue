@@ -66,7 +66,7 @@ export default {
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
     async logOut() {
-      this.setIsAuthorizedInfo(false)
+      this.setIsAuthorizedInfo(false);
       localStorage.setItem('auth', 'false');
 
       const result = await fetch(`${this.apiBaseUrl}/user/logout`, {
