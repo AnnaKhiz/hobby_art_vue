@@ -51,10 +51,10 @@ async function registerNewUser(req, res) {
 		res
 			.cookie('token', token, {
 				httpOnly: true,
-				secure: false,
-				sameSite: "Lax",
-				expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-				path: "/"
+				secure: true,
+				sameSite: 'None',
+				path: '/',
+				expires: new Date(Date.now() + 86400000)
 			})
 			.send({"result" : "New user added", "id": result._id.toString()})
 
@@ -86,10 +86,10 @@ async function logInUserPage(req, res, next) {
 
 	res.cookie('token', token, {
 		httpOnly: true,
-		secure: false,
-		sameSite: "Lax",
-		expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-		path: "/"
+		secure: true,
+		sameSite: 'None',
+		path: '/',
+		expires: new Date(Date.now() + 86400000)
 	});
 
 	res.send({ result: true, id: user._id.toString(), user: userFullData, role: "user", status: 200 });
@@ -98,9 +98,9 @@ async function logInUserPage(req, res, next) {
 async function logoutUserPage( req, res, next ) {
 	res.clearCookie('token', {
 		httpOnly: true,
-		secure: false,
-		sameSite: "Lax",
-		path: "/",
+		secure: true,
+		sameSite: 'None',
+		path: '/',
 	});
 
 	res.send({ "result": true });
@@ -162,10 +162,10 @@ async function logInToAdminPanel(req, res, next) {
 
 	res.cookie('token', token, {
 		httpOnly: true,
-		secure: false,
-		sameSite: "Lax",
-		expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-		path: "/admin"
+		secure: true,
+		sameSite: 'None',
+		path: '/admin',
+		expires: new Date(Date.now() + 86400000)
 	})
 
 	res.send({ result: true, id: admin._id.toString(), role: "admin" });
@@ -174,9 +174,10 @@ async function logInToAdminPanel(req, res, next) {
 async function logoutFromAdminPanel(req, res, next) {
 	res.clearCookie('token', {
 		httpOnly: true,
-		secure: false,
-		sameSite: "Lax",
-		path: "/admin",
+		secure: true,
+		sameSite: 'None',
+		path: '/admin',
+		expires: new Date(Date.now() + 86400000)
 	});
 
 	res.send({ "result": true });
