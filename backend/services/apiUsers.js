@@ -51,7 +51,7 @@ async function registerNewUser(req, res) {
 		res
 			.cookie('token', token, {
 				httpOnly: true,
-				secure: false,
+				secure: true,
 				sameSite: "Lax",
 				expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
 				path: "/"
@@ -87,7 +87,7 @@ async function logInUserPage(req, res, next) {
 
 	res.cookie('token', token, {
 		httpOnly: true,
-		secure: false,
+		secure: true,
 		sameSite: "Lax",
 		expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
 		path: "/"
@@ -99,7 +99,7 @@ async function logInUserPage(req, res, next) {
 async function logoutUserPage( req, res, next ) {
 	res.clearCookie('token', {
 		httpOnly: true,
-		secure: false,
+		secure: true,
 		sameSite: "Lax",
 		path: "/",
 	});
@@ -163,7 +163,7 @@ async function logInToAdminPanel(req, res, next) {
 
 	res.cookie('token', token, {
 		httpOnly: true,
-		secure: false,
+		secure: true,
 		sameSite: "Lax",
 		expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
 		path: "/admin"
@@ -175,7 +175,7 @@ async function logInToAdminPanel(req, res, next) {
 async function logoutFromAdminPanel(req, res, next) {
 	res.clearCookie('token', {
 		httpOnly: true,
-		secure: false,
+		secure: true,
 		sameSite: "Lax",
 		path: "/admin",
 	});
