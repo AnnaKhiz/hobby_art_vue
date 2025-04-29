@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { port } = require('config');
-const { router: pageRouter } = require('./routes/pages.js');
+const { router: usersRouter } = require('./routes/users.js');
 const { router: itemsRouter } = require('./routes/items.js')
 const { router: ordersRouter } = require('./routes/orders.js');
 const cookieParser = require('cookie-parser');
@@ -41,7 +41,7 @@ server.use(express.urlencoded({ extended: true }));
 
 // server.use(staticFileMiddleware);
 
-server.use('/', pageRouter);
+server.use('/', usersRouter);
 server.use('/api/items', itemsRouter)
 server.use('/api/orders', ordersRouter)
 
