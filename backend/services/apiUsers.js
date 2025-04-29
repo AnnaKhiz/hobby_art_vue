@@ -102,7 +102,7 @@ async function logoutUserPage( req, res, next ) {
 		path: "/",
 	});
 
-	res.send({ "result": "successful" });
+	res.send({ "result": true });
 	next();
 }
 async function updateUserInfo(req, res, next) {
