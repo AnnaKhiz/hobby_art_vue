@@ -48,7 +48,6 @@ export const usersModule = {
 			try {
 				result = await fetchData('user/login', 'POST', {}, body);
 				commit('setUserInfo', result.user);
-				console.log(result.user)
 			} catch (error) {
 				console.error('Error log in user:', error);
 			}
