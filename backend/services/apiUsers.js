@@ -76,8 +76,9 @@ async function logInUserPage(req, res, next) {
 	const result = await checkPass(password, user.password);
 
 	if (!result) {
-		return res.send({"result": false, message: "Wrong passwword", "status": 404});
+		return res.send({"result": false, message: "Wrong password", "status": 404});
 	}
+	const userFullData = await User.findOne( { _id: user._id}).populate('orders').populate('comments');
 
 	const authData = { role: "user", id: user._id.toString() };
 
@@ -91,7 +92,7 @@ async function logInUserPage(req, res, next) {
 		path: "/"
 	});
 
-	res.send({ result: true, id: user._id.toString(), role: "user", status: 200 });
+	res.send({ result: true, user: userFullData, role: "user", status: 200 });
 	next();
 }
 async function logoutUserPage( req, res, next ) {

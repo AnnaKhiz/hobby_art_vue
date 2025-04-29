@@ -50,22 +50,25 @@
 
 <script>
 import UiRegistForm from "@/components/UI/forms/uiRegistForm.vue"
-import {mapGetters, mapMutations} from "vuex";
-// import axios from "axios";
+import {
+	mapActions,
+	mapGetters,
+	mapMutations
+} from "vuex";
 
 export default {
   name: "uiLoginForm",
-  components: {UiRegistForm},
+  components: { UiRegistForm },
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       entityData: {},
       message: ''
     }
   },
   computed: {
     ...mapGetters({
-      getIsRegisteredInfo: 'user/getIsRegisteredInfo'
+      getIsRegisteredInfo: 'user/getIsRegisteredInfo',
+			userInfo: 'user/userInfo'
     })
   },
   methods: {
@@ -75,53 +78,26 @@ export default {
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
       setUserInfo: 'user/setUserInfo'
 		}),
+		...mapActions('user', ['userLogIn']),
 
 		async logIn() {
+			const result = await this.userLogIn(this.entityData);
 
-			const result = await fetch(`${this.apiBaseUrl}/user/login`, {
-        method: 'POST',
-        body: JSON.stringify(this.entityData),
-        headers: { "Content-Type": "application/json" },
-        credentials: 'include'
-      });
-
-      console.log(result)
-      const data = await result.json()
-
-      console.log('data log in', data)
-
-      console.log('data resulkt', data.result)
-      if (!data.result) {
-				console.log('no requested result')
-        this.message = 'Пользователь не найден'
-        return
+      if (!result.result) {
+        this.message = 'Пользователь не найден';
+        return;
 			}
 
-      this.message = ''
-      localStorage.setItem('auth', 'true')
-			// this.user = data.user
-      // this.setUserInfo = this.user
-
-      // console.log('user login', this.user)
+      this.message = '';
+      localStorage.setItem('auth', 'true');
 
       if (result.role === 'admin') {
-        this.$router.push(`/admin`)
+        this.$router.push(`/admin`);
       } else {
-        this.$router.push(`/user/page/${data.id}`)
+        this.$router.push(`/user/page/${this.userInfo._id}`);
       }
-
-      // this.setIsRegisteredInfo(true)
-      // this.setIsAuthorizedInfo(true)
-      this.setDisplayDialogState(false)
-			console.log(this.user)
+      this.setDisplayDialogState(false);
 		}
 	},
-  mounted() {
-
-  }
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>

@@ -43,6 +43,17 @@ export const usersModule = {
 			return result.result;
 		},
 
+		async userLogIn({ commit }, body) {
+			let result = null;
+			try {
+				result = await fetchData('user/login', 'POST', {}, body);
+				commit('setUserInfo', result.user);
+				console.log(result.user)
+			} catch (error) {
+				console.error('Error log in user:', error);
+			}
+			return result;
+		},
 		async logOutUser() {
 			let result = null;
 			try {
@@ -52,7 +63,6 @@ export const usersModule = {
 			}
 			return result;
 		},
-
 		async userInfoUpdate({ commit }, body) {
 			let result = null;
 			try {
