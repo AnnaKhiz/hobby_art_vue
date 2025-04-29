@@ -36,7 +36,6 @@ export const usersModule = {
 			let result = null;
 			try {
 				result = await fetchData('user');
-				console.log('result USER', result)
 				commit('setUserInfo', result.user[0]);
 			} catch (error) {
 				console.error('Error getting auth user:', error);
@@ -48,6 +47,17 @@ export const usersModule = {
 			let result = null;
 			try {
 				result = await fetchData('user/logout');
+			} catch (error) {
+				console.error('Error log out user:', error);
+			}
+			return result;
+		},
+
+		async userInfoUpdate({ commit }, body) {
+			let result = null;
+			try {
+				result = await fetchData('user/edit', 'PATCH', {}, body);
+				commit('setUserInfo', result.result);
 			} catch (error) {
 				console.error('Error log out user:', error);
 			}

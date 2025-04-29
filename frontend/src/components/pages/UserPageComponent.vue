@@ -108,18 +108,11 @@ export default {
 
 			this.currentLink = 'general';
 			this.show = true;
-
     },
-
   },
 
   async created() {
     await this.getUser();
   }
-
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>

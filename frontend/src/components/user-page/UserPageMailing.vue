@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "userPageMailing",
@@ -54,22 +54,24 @@ export default {
       }
     }
   },
+	computed: {
+		...mapGetters({
+			userInfo: 'user/userInfo'
+		})
+	},
   methods: {
+		...mapActions('user', ['userInfoUpdate']),
     async editMailingPreferences() {
-      this.entityMailing.mailing = !this.entityMailing.mailing
-      const result = await axios.patch('/user/edit', this.entityMailing);
+			this.entityMailing.mailing = !this.entityMailing.mailing;
+			const result = await this.userInfoUpdate(this.entityMailing);
 
       if (!result) return;
 
-      this.$emit('mail', this.entityMailing.mailing)
+      this.$emit('mail', this.userInfo.mailing)
     }
   },
   mounted() {
-    this.entityMailing.mailing = this.mailing
+    this.entityMailing.mailing = this.mailing;
   }
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>
