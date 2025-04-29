@@ -81,6 +81,7 @@ async function logInUserPage(req, res, next) {
 	const userFullData = await User.findOne( { _id: user._id}).populate('orders').populate('comments');
 
 	const authData = { role: "user", id: user._id.toString() };
+	req._auth = authData;
 
 	const token = generateJWt(authData);
 
