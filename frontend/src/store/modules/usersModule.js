@@ -1,6 +1,6 @@
 import { fetchData } from "@/services/api";
 
-export const userModule = {
+export const usersModule = {
   namespaced: true,
   state: () => ({
     isRegistered: true,

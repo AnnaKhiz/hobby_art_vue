@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import { linksModule } from "@/store/modules/linksModule"
-import { userModule } from "@/store/modules/userModule"
+import { usersModule } from "@/store/modules/usersModule"
 import { dialogModule } from "@/store/modules/dialogModule";
 import { ordersModule } from "@/store/modules/ordersModule";
 import { filterParamsModule } from "@/store/modules/filterParamsModule";
@@ -12,7 +12,7 @@ export default createStore({
   modules: {
     dialog: dialogModule,
     links: linksModule,
-    user: userModule,
+    user: usersModule,
     order: ordersModule,
     filter: filterParamsModule,
     delivery: deliveryPaymentModule,
