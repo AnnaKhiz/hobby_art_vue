@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {mapMutations} from "vuex";
+import {mapActions, mapMutations} from "vuex";
 import AsideMenu from "@/components/pages/admin/UI/AsideMenu.vue"
 
 
@@ -27,7 +27,6 @@ export default {
   components: {AsideMenu},
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       editFormData: {},
       itemsList: [],
       form: {},
@@ -39,26 +38,19 @@ export default {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
+		...mapActions('admin', ['logInAdmin']),
 
     async initPage() {
-      const result = await fetch(`${this.apiBaseUrl}/admin`, {
-        method: 'GET',
-        credentials: 'include'
-      })
-      const data = await result.json();
+			const result = await this.logInAdmin();
 
-      console.log(data.data)
-
-      if (!data.result) {
-        this.$router.push('/admin/login');
-      }
-      this.$router.push('/admin/items');
+			!result
+				? this.$router.push('/admin/login')
+				: this.$router.push('/admin/items');
     },
   },
   async mounted() {
     await this.initPage()
     this.checkedMenu = 'items';
-
   },
 }
 </script>
