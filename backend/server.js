@@ -5,22 +5,15 @@ const { router: itemsRouter } = require('./routes/items.js')
 const { router: ordersRouter } = require('./routes/orders.js');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const path = require('path')
-// const history = require('connect-history-api-fallback');
-// const { staticFileMiddleware } = require('./middleware/routes')
 
+const isProd = process.env.NODE_ENV === 'production';
 const express = require('express');
 const server = express();
 
-// server.use(cors(
-//   {
-//     origin: 'http://localhost:8080',
-//     credentials: true,
-//   }
-// ));
+
 server.use(cors(
   {
-    origin: 'https://hobby-art-vue.vercel.app',
+    origin: isProd ? 'https://hobby-art-vue.vercel.app' : 'http://localhost:8080',
     credentials: true,
   }
 ));
@@ -39,13 +32,7 @@ server.use(jsonBodyParser);
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
-// server.use(staticFileMiddleware);
-
 server.use('/', usersRouter);
-server.use('/api/items', itemsRouter)
-server.use('/api/orders', ordersRouter)
-
-
-// server.use(history());
-// server.use(staticFileMiddleware);
+server.use('/api/items', itemsRouter);
+server.use('/api/orders', ordersRouter);
 

@@ -1,6 +1,6 @@
 const { User, Page, ObjectId, Item, Comment, Order, Admin} = require('../db');
-const {checkPass, generateJWt, hashPass} = require("../utils/authEncoding");
-
+const { checkPass, generateJWt, hashPass } = require("../utils/authEncoding");
+const isProd = process.env.NODE_ENV === 'production';
 async function deleteOneUser(req, res) {
   const { id } = req.params;
   const result = await User.findOneAndDelete({ _id: new ObjectId(id) });
@@ -10,11 +10,9 @@ async function deleteOneUser(req, res) {
     : res.status(200).send(result);
 }
 async function getAllPages(req, res) {
-	console.log('user request')
 	const { id } = req._auth;
-	console.log('id', id)
 	const user = await User.find( { _id: new ObjectId(id)});
-	console.log(user)
+
 	if (!user.length) {
 		return res.send({ "result": false });
 	}
@@ -51,8 +49,8 @@ async function registerNewUser(req, res) {
 		res
 			.cookie('token', token, {
 				httpOnly: true,
-				secure: true,
-				sameSite: 'None',
+				secure: isProd,
+				sameSite: isProd ? 'None' : 'Lax',
 				path: '/',
 				expires: new Date(Date.now() + 86400000)
 			})
@@ -86,8 +84,8 @@ async function logInUserPage(req, res, next) {
 
 	res.cookie('token', token, {
 		httpOnly: true,
-		secure: true,
-		sameSite: 'None',
+		secure: isProd,
+		sameSite: isProd ? 'None' : 'Lax',
 		path: '/',
 		expires: new Date(Date.now() + 86400000)
 	});
@@ -98,8 +96,8 @@ async function logInUserPage(req, res, next) {
 async function logoutUserPage( req, res, next ) {
 	res.clearCookie('token', {
 		httpOnly: true,
-		secure: true,
-		sameSite: 'None',
+		secure: isProd,
+		sameSite: isProd ? 'None' : 'Lax',
 		path: '/',
 	});
 
@@ -162,8 +160,8 @@ async function logInToAdminPanel(req, res, next) {
 
 	res.cookie('token', token, {
 		httpOnly: true,
-		secure: true,
-		sameSite: 'None',
+		secure: isProd,
+		sameSite: isProd ? 'None' : 'Lax',
 		path: '/admin',
 		expires: new Date(Date.now() + 86400000)
 	})
@@ -174,8 +172,8 @@ async function logInToAdminPanel(req, res, next) {
 async function logoutFromAdminPanel(req, res, next) {
 	res.clearCookie('token', {
 		httpOnly: true,
-		secure: true,
-		sameSite: 'None',
+		secure: isProd,
+		sameSite: isProd ? 'None' : 'Lax',
 		path: '/admin',
 		expires: new Date(Date.now() + 86400000)
 	});
