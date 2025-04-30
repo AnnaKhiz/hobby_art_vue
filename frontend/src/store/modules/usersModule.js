@@ -24,6 +24,7 @@ export const usersModule = {
   getters: {
 		userInfo: state => state.user,
 		userAboutLabelsList: state => state.userAboutLabelsList,
+		isAuthorized: state => state.isAuthorized,
     getIsRegisteredInfo(state) {
       return state.isRegistered;
     },
@@ -56,7 +57,7 @@ export const usersModule = {
 			} catch (error) {
 				console.error('Error getting auth user:', error);
 			}
-			return result.result;
+			return result;
 		},
 
 		async userLogIn({ commit }, body) {
