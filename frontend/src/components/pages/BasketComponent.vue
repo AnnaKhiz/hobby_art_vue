@@ -1,5 +1,5 @@
 <template>
-  <main class="main">
+  <main class="main" ref="basket">
     <div class="main__basket" id="main-basket">
       <div class="container">
         <ui-breadcrumbs :link="getCheckedHeaderLink" />
@@ -239,7 +239,7 @@
     </div>
     <!--   dialogs -->
     <Transition name="fade">
-      <ui-notify-dialog v-if="display" text="Заказ успешно отправлен!"/>
+      <ui-notify-dialog v-if="display" :text="notifyMessage" :background="notifyStatus"/>
     </Transition>
   </main>
 </template>
@@ -257,7 +257,6 @@ export default {
   components: {UiNotifyDialog, UiQuantityCounter, UiDeleteIcon, UiBreadcrumbs},
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       display: false,
       order: {
         items: [],
@@ -279,6 +278,9 @@ export default {
         receiver: {},
       },
       user: {},
+			basketComponent: null,
+			notifyMessage: '',
+			notifyStatus: 'var(--bg-color-banner)',
     }
   },
   computed: {
@@ -305,7 +307,7 @@ export default {
 			'updateTotalPrice',
 			'clearOrder',
 		]),
-		...mapActions('order', ['addNewOrder',]),
+		...mapActions('order', ['addNewOrder']),
 		...mapActions('user', ['getAuthUser']),
     parseCheckedColors(color, itemId) {
       const currentItem = this.order.items.find(el => el.item._id === itemId);
@@ -327,12 +329,23 @@ export default {
       this.currentOrder.totalQuantity = this.$store.state.order.order.totalQuantity;
       this.currentOrder.items = this.$store.state.order.order.items.map(el => ( { _id: el.item._id, price : el.price, quantity: el.quantity, checkedColor: el.checkedColor } ));
 
+			if (!this.currentOrder.items.length) {
+				this.display = true;
+				this.notifyMessage = 'Пустой заказ!';
+				this.notifyStatus = 'var(--errorText)';
+				return
+			}
       console.log(this.currentOrder)
 
-      await this.addNewOrder(this.currentOrder);
+      await this.addNewOrder({
+				body: this.currentOrder
+			});
 
       this.clearOrderInfo();
+			this.scrollTop();
       this.display = true;
+			this.notifyMessage = 'Заказ успешно отправлен!';
+			this.notifyStatus = 'var(--bg-color-banner)';
     },
 
     clearOrderInfo() {
@@ -411,7 +424,14 @@ export default {
 			} else {
 				this.addEmptyAddress();
 			}
-    }
+    },
+		scrollTop() {
+			this.basketComponent.scrollTo({
+				top: 0,
+				left: 0,
+				behavior: "smooth",
+			})
+		}
   },
  created() {
     if( localStorage.getItem('order') ) {
@@ -422,6 +442,7 @@ export default {
   },
   async mounted() {
     await this.initPage();
+		this.basketComponent = this.$refs.basket.closest('div');
   },
   watch: {
     display(val) {

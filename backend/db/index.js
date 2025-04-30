@@ -125,8 +125,8 @@ const GuestUserSchema = new mongoose.Schema({
 			return this._id.toString();
 		}
 	},
-	lastName: { type: String, required: false },
-	surName: { type: String, required: false },
+	lastName: { type: String },
+	surName: { type: String },
 	birthDate: { type: String, required: false },
 	phone: { type: String },
 	email: { type: String, unique: true },

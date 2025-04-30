@@ -49,9 +49,12 @@ async function addNewOrder(req, res, next) {
     return res.send({ "result" : false, data: 'No incoming data!' });
   }
 
+	console.log(order)
 	if (!order.users) {
 		guestUser = new GuestUser({
-			name: order.deliveryInfo.receiver.fullName,
+			name: order.deliveryInfo.receiver.name,
+			lastName: order.deliveryInfo.receiver.lastName,
+			surName: order.deliveryInfo.receiver.surName,
 			phone: order.deliveryInfo.receiver.phone,
 			email: order.deliveryInfo.receiver.email,
 			address: {
