@@ -10,17 +10,28 @@
               Фильтры
             </a>
           </div>
-
-          <div class="main__product-page-price-block-btn" id="price-up-link">
-            <a href="#" @click.prevent="sortProducts('-')">Цена &#8595;</a>
-          </div>
-          <div class="main__product-page-price-block-btn" id="price-down-link">
-            <a href="#" @click.prevent="sortProducts('+')">Цена &#8593;</a>
-          </div>
+					<!--	SORT BUTTONS  -->
+					<ui-sort-button
+						desc
+						@update-items="handleItemsList"
+						:items="itemsList"
+					/>
+					<ui-sort-button
+						asc
+						@update-items="handleItemsList"
+						:items="itemsList "
+					/>
         </section>
         <section class="main__product-page-container">
-          <ui-filter-sidebar @search="searchFilters = $event" :filter-items-quantity="filterItemsQuantity"/>
-          <ui-product-list-page @items-list="itemsList = $event" :search-filters="searchFilters" @change="filterItemsQuantity = $event"/>
+          <ui-filter-sidebar
+						@search="handleSearchFilters"
+						:filter-items-quantity="filterItemsQuantity"
+					/>
+          <ui-product-list-page
+						@items-list="handleItemsList"
+						:search-filters="searchFilters"
+						@change="handleFilterItemsQuantity"
+					/>
         </section>
       </div>
     </section>
@@ -33,10 +44,11 @@ import UiFilterSidebar from "@/components/UI/sidebars/uiFilterSidebar.vue"
 import UiProductListPage from "@/components/UI/uiProductListPage.vue";
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import {mapGetters} from "vuex";
+import UiSortButton from "@/components/UI/uiSortButton.vue";
 
 export default {
   name: "ProductPageComponent",
-  components: {UiBreadcrumbs, UiFilterSidebar, UiMainBanner, UiProductListPage},
+  components: {UiSortButton, UiBreadcrumbs, UiFilterSidebar, UiMainBanner, UiProductListPage},
   data() {
     return {
       itemsList: [],
@@ -50,21 +62,16 @@ export default {
     }),
   },
   methods: {
-    sortProducts(condition) {
+		handleSearchFilters(value) {
+			this.searchFilters = value;
+		},
+		handleItemsList(value) {
+			this.itemsList = value;
+		},
+		handleFilterItemsQuantity(value) {
+			this.filterItemsQuantity = value;
+		},
 
-      switch(condition) {
-        case '-': return this.itemsList.sort((a, b) => a.price - b.price);
-        case '+': return this.itemsList.sort((a, b) => b.price - a.price);
-        default: return this.itemsList
-      }
-
-    }
   }
 }
 </script>
-
-
-
-<style scoped lang="sass">
-
-</style>

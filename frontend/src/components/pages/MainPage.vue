@@ -120,7 +120,6 @@ import UiCatalogItem from "@/components/UI/uiCatalogItem.vue";
 import UiItemPreference from "@/components/UI/uiItemPreference.vue";
 import UiFeedbackForm from "@/components/UI/forms/uiFeedbackForm.vue";
 import {mapGetters, mapMutations} from "vuex";
-import axios from "axios";
 
 export default defineComponent({
   name: 'MainPage',
@@ -173,15 +172,6 @@ export default defineComponent({
       this.isTypeSliderNew = value
 
     },
-    async getAdmin() {
-      try {
-        const result = await axios.get('/admin');
-        if (!result) return;
-        this.$router.push('/admin')
-      } catch (error) {
-        console.log('Getting admin page error:', error)
-      }
-    }
   },
   watch: {
     getCheckedHeaderLink() {
@@ -193,14 +183,5 @@ export default defineComponent({
       element.scrollIntoView({ behavior: 'smooth' });
     }
   },
-  mounted() {
-    // console.log(this.getCheckedHeaderLink)
-
-    // await this.getAdmin()
-  },
 })
 </script>
-
-<style scoped lang="sass">
-
-</style>

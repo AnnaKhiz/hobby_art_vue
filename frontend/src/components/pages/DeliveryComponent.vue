@@ -61,10 +61,5 @@ export default {
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
     }),
   },
-
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>
