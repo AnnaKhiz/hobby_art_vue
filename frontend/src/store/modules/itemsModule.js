@@ -5,8 +5,23 @@ export const itemsModule = {
 	state: () => ({
 		itemsList: [],
 		item: [],
+		boolOptions: [
+			{ text: 'Есть', value: true },
+			{ text: 'Нет', value: false }
+		],
+		colorsSelect: [
+			{ text: 'Красный', value: 'red' },
+			{ text: 'Зеленый', value: 'green' },
+			{ text: 'Желтый', value: 'yellow' },
+			{ text: 'Синий', value: 'blue' },
+			{ text: 'Белый', value: 'white' },
+			{ text: 'Черный', value: 'black' },
+			{ text: 'Оранжевый', value: 'orange' },
+		],
 	}),
 	getters: {
+		boolOptions: state => state.boolOptions,
+		colorsSelect: state => state.colorsSelect,
 		getItems(state) {
 			return state.itemsList;
 		},

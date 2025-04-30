@@ -143,7 +143,7 @@
 
 <script>
 // import axios from "axios";
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 export default {
   name: "adminItemsForm",
@@ -160,22 +160,15 @@ export default {
       form: {
         color: [],
       },
-      boolOptions: [
-        { text: 'Есть', value: true },
-        { text: 'Нет', value: false }
-      ],
-      colorsSelect: [
-        { text: 'Красный', value: 'red' },
-        { text: 'Зеленый', value: 'green' },
-        { text: 'Желтый', value: 'yellow' },
-        { text: 'Синий', value: 'blue' },
-        { text: 'Белый', value: 'white' },
-      ],
     }
   },
   emits: ['submitEdit', 'updatedItem'],
 	computed: {
 		...mapState('items', ['item']),
+		...mapGetters({
+			boolOptions: 'items/boolOptions',
+			colorsSelect: 'items/colorsSelect',
+		})
 	},
   methods: {
 		...mapActions('items', ['fetchItemById', 'addItem', 'updateItem']),
