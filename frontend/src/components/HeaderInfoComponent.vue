@@ -1,7 +1,7 @@
 <template>
 	<section class="header__contacts">
 		<div class="container">
-			<ui-contacts />
+			<ui-contacts :custom-class="'header__contacts-list'"/>
 		</div>
 	</section>
 </template>
