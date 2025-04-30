@@ -34,5 +34,15 @@ export const adminModule = {
 			}
 			return result;
 		},
+
+		async logOutAdmin() {
+			let result = null;
+			try {
+				result = await fetchData('admin/logout');
+			} catch (error) {
+				console.error('Error log in admin:', error);
+			}
+			return result.result;
+		},
 	}
 }

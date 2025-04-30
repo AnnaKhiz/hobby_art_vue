@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {mapMutations} from "vuex";
+import {mapMutations, mapActions} from "vuex";
 
 export default {
   name: "AsideMenu.vue",
@@ -38,28 +38,20 @@ export default {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
+		...mapActions('admin', ['logOutAdmin']),
     goToPage(value, children) {
       this.$emit('menu', value);
 
-      if (!children) {
-        this.$router.push({name: `admin-${value}`})
-      } else {
-        this.$router.push({name: `admin-${value}-${children}`})
-      }
-
-
+      !children
+				? this.$router.push({name: `admin-${value}`})
+				: this.$router.push({name: `admin-${value}-${children}`});
     },
     async logOut() {
       this.setIsAuthorizedInfo(false);
       localStorage.setItem('auth', 'false');
 
-      const result = await fetch(`${this.apiBaseUrl}/admin/logout`, {
-        method: 'GET',
-        credentials: 'include'
-      });
-
-      console.log(result)
-      this.$router.push('/')
+			await this.logOutAdmin();
+      this.$router.push('/');
     }
   }
 }
