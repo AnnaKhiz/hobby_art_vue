@@ -6,7 +6,7 @@ export const adminModule = {
 		admin: ''
 	}),
 	action: {
-		async logInAdmin() {
+		async checkAdmin() {
 			let result = null;
 			try {
 				result = await fetchData('admin');

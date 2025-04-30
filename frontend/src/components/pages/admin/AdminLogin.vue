@@ -19,8 +19,7 @@
 
 <script>
 import {mapActions, mapMutations} from "vuex";
-import AsideMenu from "@/components/pages/admin/UI/AsideMenu.vue"
-
+import AsideMenu from "@/components/pages/admin/UI/AsideMenu.vue";
 
 export default {
   name: "AdminLogin",
@@ -38,10 +37,10 @@ export default {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
-		...mapActions('admin', ['logInAdmin']),
+		...mapActions('admin', ['checkAdmin']),
 
     async initPage() {
-			const result = await this.logInAdmin();
+			const result = await this.checkAdmin();
 
 			!result
 				? this.$router.push('/admin/login')
