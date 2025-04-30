@@ -12,6 +12,8 @@ export const deliveryPaymentModule = {
     ],
   }),
   getters: {
+		deliveryMethods: state => state.deliveryMethods,
+		paymentMethod: state => state.paymentMethod,
     parseDeliveryValue: (state) => (value) => {
       const delivery = state.deliveryMethods.find(el => el.value === value);
       if (!delivery) return;

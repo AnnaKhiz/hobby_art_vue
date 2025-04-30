@@ -279,16 +279,6 @@ export default {
         receiver: {},
       },
       user: {},
-      // userAddress: {},
-      deliveryMethods: [
-        { text: 'Новая почта', value: 'novapost', price: 250 },
-        { text: 'Укрпочта', value: 'ukrpost', price: 150 },
-        { text: 'Самовывоз', value: 'pickup', price: 0 },
-      ],
-      paymentMethod: [
-        { text: 'Оплата при получении наличными или картой', value: 'cash' },
-        { text: 'Оплата банковской картой онлайн', value: 'online' },
-      ]
     }
   },
   computed: {
@@ -297,6 +287,8 @@ export default {
 			orderItems: ('order/order'),
 			userInfo: ('user/userInfo'),
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
+			paymentMethod: 'delivery/paymentMethod',
+			deliveryMethods: 'delivery/deliveryMethods',
     }),
     deliveryPrice() {
       const deliveryObject = this.deliveryMethods.find(el => el.value === this.deliveryInfo.deliveryMethod);
@@ -305,17 +297,6 @@ export default {
 
       return deliveryObject.price
     },
-    // address() {
-    //   const { city, street, house, apartment, postcode } = this.userAddress;
-    //   if (!city || !street || !house || !apartment || !postcode) return false;
-    //   return `Город: ${city}, ул. ${street}, дом ${house}, кв. ${apartment}. Индекс ${postcode}`
-    // },
-    // fullName() {
-    //   const { name, lastname, surname } = this.user;
-    //   if (!name || !lastname || !surname) return false;
-    //   return `${lastname} ${name} ${surname}`
-    // }
-
   },
   methods: {
     ...mapMutations('order', [
