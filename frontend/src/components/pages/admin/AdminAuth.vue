@@ -31,13 +31,12 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
   name: "AdminAuth",
   data() {
     return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
       entityData: {},
       errorMessage: ''
     }
@@ -54,32 +53,24 @@ export default {
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
       setUserInfo: 'user/setUserInfo'
     }),
+		...mapActions('admin', ['logInAdmin']),
 
     async logIn() {
+			const result = await this.logInAdmin(this.entityData);
 
-      const result = await fetch(`${this.apiBaseUrl}/admin/login`, {
-        method: 'POST',
-        credentials: 'include',
-        body: JSON.stringify(this.entityData),
-        headers: { "Content-Type": "application/json" }
-      });
-
-      const data = await result.json()
-
-      if (!data.result) {
+      if (!result.result) {
         this.errorMessage = 'Не верный логин или пароль!';
-        return
+        return;
       }
 
-      if (data.role !== 'admin') {
-        this.$router.back()
+      if (result.role !== 'admin') {
+        this.$router.back();
       }
-
 
       localStorage.setItem('auth', 'true');
-      this.setDisplayDialogState(false)
+      this.setDisplayDialogState(false);
 
-      this.$router.push('/admin')
+      this.$router.push('/admin');
     }
   },
 }
