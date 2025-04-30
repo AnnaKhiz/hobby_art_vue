@@ -21,18 +21,12 @@ import {mapMutations, mapActions} from "vuex";
 
 export default {
   name: "AsideMenu.vue",
-
   props: {
     checkedMenu: {
       type: String,
       default: 'items'
     }
   },
-	data() {
-		return {
-			apiBaseUrl: process.env.VUE_APP_API_URL,
-		}
-	},
   emits: ['addNew', 'getAll', 'add-item', 'add-order', 'menu'],
   methods: {
     ...mapMutations({
@@ -56,8 +50,6 @@ export default {
   }
 }
 </script>
-
-
 
 <style scoped lang="sass">
 .container
