@@ -1,6 +1,6 @@
 <template>
   <main class="main" ref="basket">
-    <div class="main__basket" id="main-basket">
+    <div class="main__basket">
       <div class="container">
         <ui-breadcrumbs :link="getCheckedHeaderLink" />
         <section class="main__basket-info">

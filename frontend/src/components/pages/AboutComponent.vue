@@ -6,7 +6,7 @@
         <ui-breadcrumbs :link="getCheckedHeaderLink" />
         <section class="main__delivery__page-container">
           <ui-sidebar-general />
-          <div class="main__content" id="main-content">
+          <div class="main__content">
             <div class="main__delivery__page-content" >
               <div class="main__delivery__page-content-block">
                 <h2 class="main__delivery__page-content-label">
@@ -56,7 +56,3 @@ export default {
 }
 </script>
 
-
-<style scoped lang="sass">
-
-</style>
