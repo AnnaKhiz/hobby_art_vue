@@ -7,7 +7,7 @@ export const linksModule = {
       { text: 'Оплата и доставка', value: 'delivery', url: 'delivery' },
       { text: 'Бонусная программа', value: 'bonuses', url: 'bonuses' },
       { text: 'О компании', value: 'about', url: 'about' },
-      { text: 'Контакты', value: 'contacts', url: `` }
+      { text: 'Контакты', value: 'contacts', url: `` },
     ],
     sidebarGeneralItems: [
       { id: 1, text: 'Макраме', value: 'makrame', price: '250', link: `/product-page`, image: 'catalog-img-pink.png' },
@@ -21,15 +21,9 @@ export const linksModule = {
     ],
   }),
   getters: {
-    getCheckedHeaderLink(state) {
-      return state.headerLink
-    },
-    getNavMenuLinks(state) {
-      return state.navMenuLinks
-    },
-    getSidebarGeneralItems(state) {
-      return state.sidebarGeneralItems
-    },
+    getCheckedHeaderLink: state => state.headerLink,
+    getNavMenuLinks: state => state.navMenuLinks,
+    getSidebarGeneralItems: state => state.sidebarGeneralItems,
   },
   mutations: {
     setCheckedHeaderLink(state, payload) {

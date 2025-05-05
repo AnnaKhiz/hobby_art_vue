@@ -52,7 +52,7 @@
 <script>
 import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue"
-import {mapActions, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 
 
@@ -70,24 +70,31 @@ export default {
       isCheckedColorNotify: false,
       checkedColor: [],
       display: false,
-      productList: [],
       savedIndex: null,
     }
   },
   emits: ['itemsList', 'change'],
   computed: {
 		...mapState('items', ['itemsList']),
+		...mapGetters({
+			searchList: 'items/searchList',
+			searchText: 'items/searchText',
+		}),
     params() {
       return this.checkedColor.length ? '?colors=' + this.checkedColor : '';
     },
     filteredItems() {
+			if (this.searchText) {
+				return this.searchList;
+			}
+
       const { brand, composition, type, width } = this.searchFilters;
 
       if (!brand && !composition && !type && !width) {
-          return this.productList;
-        }
+          return this.itemsList;
+			}
 
-      return this.productList.filter(product => {
+      return this.itemsList.filter(product => {
         const typeMatch = !type.length || type.includes(product.type.value) ;
         const compositionMatch = !composition.length || composition.includes(product.composition.value);
         const brandMatch = !brand.length || brand.includes(product.brand.value);
@@ -100,16 +107,20 @@ export default {
 
   methods: {
     ...mapMutations('order', ['addToOrder']),
+		...mapMutations({
+			setItems: 'items/setItems',
+			updateIsSelectedItem: 'items/updateIsSelectedItem'
+		}),
 		...mapActions('items', ['fetchItems']),
     checkIsSelectedItemUsed(event, id, index) {
       if (event.target.parentElement.id === id) {
-        this.savedIndex = id
-        this.productList[index].isSelectedItem = true;
-
+        this.savedIndex = id;
+				this.updateIsSelectedItem({ index, payload: true});
       } else {
         this.savedIndex = ''
-        this.productList[index].isSelectedItem = false;
+				this.updateIsSelectedItem({ index, payload: false});
       }
+			this.setItems(this.itemsList)
     },
     addCheckedColor(value, item) {
       if (this.savedIndex !== item._id) {
@@ -129,7 +140,7 @@ export default {
       }
     },
     parseCheckedColors(itemId) {
-      const currentItem = this.productList.find(el => el._id === itemId);
+      const currentItem = this.itemsList.find(el => el._id === itemId);
 
       const colorObjects = currentItem.color.filter(el => this.checkedColor.includes(el.value));
       if (!colorObjects) return;
@@ -154,9 +165,7 @@ export default {
   async mounted() {
 		await this.fetchItems();
 
-		this.productList = this.itemsList;
-		this.$emit('itemsList', this.productList)
-		console.log(this.productList)
+		this.$emit('itemsList', this.itemsList)
   },
   watch: {
     display(val) {
@@ -166,12 +175,7 @@ export default {
         }, 2000)
       }
     },
-    productList: {
-      handler(val) {
-        this.productList = val
-      },
-      deep: true
-    },
+
     isCheckedColorNotify(val) {
       if (val) {
         setTimeout(() => {

@@ -49,18 +49,15 @@ export default {
     },
     changeLinkValueSidebarToText() {
       const links = [...this.getSidebarGeneralItems];
-      const curLink = this.$router.currentRoute.value.href
+			links.push({ id: 9, text: 'Поиск', value: 'search'});
+      const curLink = this.$router.currentRoute.value.href;
       const item = links.find(el => curLink.includes(el.value));
       if (!item) {
-        return
+        return;
       }
-      return item.text
+      return item.text;
     }
   },
 
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>
