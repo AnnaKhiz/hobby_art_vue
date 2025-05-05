@@ -17,6 +17,9 @@ import AdminCommentsPage from "@/components/pages/admin/pages/AdminCommentsPage.
 import AdminItemAddEditForm from "@/components/pages/admin/pages/items/AdminItemAddEditForm.vue";
 import AdminOrderViewDetails from "@/components/pages/admin/pages/orders/AdminOrderViewDetails.vue";
 import AdminOrdersAddNew from "@/components/pages/admin/pages/orders/AdminOrdersAddNew.vue";
+import AuthenticationForm from "@/components/UI/forms/AuthenticationForm.vue";
+import uiLoginForm from "@/components/UI/forms/uiLoginForm.vue";
+import uiRegistForm from "@/components/UI/forms/uiRegistForm.vue";
 
 
 
@@ -176,8 +179,27 @@ const routes = [
       }
     ],
 
-  },
 
+  },
+	{
+		path: '/user',
+		name: 'user-auth',
+		component: AuthenticationForm,
+		props: true,
+		children: [
+			{
+				path: 'login',
+				name: 'user-login',
+				component: uiLoginForm,
+			},
+			{
+				path: 'regist',
+				name: 'user-regist',
+				component: uiRegistForm,
+			}
+
+		]
+	},
   // {
   //   path: '/admin/item/:id',
   //   name: 'admin-item',

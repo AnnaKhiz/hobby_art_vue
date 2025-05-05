@@ -19,7 +19,7 @@
 				@close="setDisplayDialogState(false)"
 			>
         <template #default>
-          <ui-login-form />
+					<AuthenticationForm />
         </template>
       </ui-modal-window>
     </teleport>
@@ -29,18 +29,18 @@
 import HeaderInfoComponent from "@/components/HeaderInfoComponent.vue";
 import {mapGetters, mapMutations} from "vuex";
 import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue";
-import UiLoginForm from "@/components/UI/forms/uiLoginForm.vue";
 import UiHeaderNavigation from "@/components/UI/header/uiHeaderNavigation.vue";
 import UiHeaderSubNavigation from "@/components/UI/header/uiHeaderSubNavigation.vue";
 import UiLogo from "@/components/UI/uiLogo.vue";
+import AuthenticationForm from "@/components/UI/forms/AuthenticationForm.vue";
 
 export default {
 	name: "HeaderComponent",
 	components: {
+		AuthenticationForm,
 		UiLogo,
 		UiHeaderSubNavigation,
 		UiHeaderNavigation,
-		UiLoginForm,
 		UiModalWindow,
 		HeaderInfoComponent
 	},

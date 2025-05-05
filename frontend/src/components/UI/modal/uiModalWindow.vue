@@ -1,9 +1,12 @@
 <template>
-  <div class="modal" id="modal" :class="{ scroll : getDisplayDialogState }">
+  <div
+		class="modal"
+		:class="[{ 'scroll' : getDisplayDialogState }]"
+	>
     <div class="modal__login">
       <div class="modal__registration-block login" >
-        <ui-close-icon @close="$emit('close')" />
-        <div class="scroll_on" id="scroll-on-content">
+        <ui-close-icon @close="handleClose" />
+        <div class="scroll_on">
           <slot name="default"></slot>
         </div>
       </div>
@@ -12,34 +15,23 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import UiCloseIcon from "@/components/UI/icons/uiCloseIcon.vue";
 
 export default {
   name: "uiModalWindow",
   components: { UiCloseIcon },
-  props: {
-  //   display: {
-  //     type: Boolean,
-  //     default: false
-  //   }
-  },
+	emits: ['close'],
   computed: {
     ...mapGetters({
       getDisplayDialogState: 'dialog/getDisplayDialogState'
     })
   },
-  // beforeRouteEnter(to, from, next) {
-  //   if (to.path) {
-  //     console.log('1111111')
-  //   }
-  //   next()
-  //   // this.$store.commit('setDisplayDialogState', true);
-  // }
-
+	methods: {
+		handleClose() {
+			this.$emit('close');
+			this.$router.push({ name: 'HobbyArt'});
+		}
+	}
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>

@@ -70,6 +70,16 @@ export const usersModule = {
 			}
 			return result;
 		},
+		async userRegister({ commit }, body) {
+			let result = null;
+			try {
+				result = await fetchData('register', 'POST', {}, body);
+				commit('setUserInfo', result.user);
+			} catch (error) {
+				console.error('Error register user:', error);
+			}
+			return result;
+		},
 		async logOutUser() {
 			let result = null;
 			try {

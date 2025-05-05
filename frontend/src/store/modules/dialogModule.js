@@ -4,10 +4,7 @@ export const dialogModule = {
     displayDialog: false,
   }),
   getters: {
-    getDisplayDialogState(state) {
-      return state.displayDialog
-    },
-
+    getDisplayDialogState: state => state.displayDialog
   },
   mutations: {
     setDisplayDialogState(state, payload) {
