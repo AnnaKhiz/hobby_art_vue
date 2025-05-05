@@ -43,7 +43,7 @@ import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiFilterSidebar from "@/components/UI/sidebars/uiFilterSidebar.vue"
 import UiProductListPage from "@/components/UI/uiProductListPage.vue";
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import UiSortButton from "@/components/UI/uiSortButton.vue";
 
 export default {
@@ -59,9 +59,11 @@ export default {
   computed: {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
+			getauth: 'user/isAuthorized'
     }),
   },
   methods: {
+		...mapMutations('user', ['setIsAuthorizedInfo']),
 		handleSearchFilters(value) {
 			this.searchFilters = value;
 		},
@@ -72,6 +74,12 @@ export default {
 			this.filterItemsQuantity = value;
 		},
 
-  }
+  },
+	mounted() {
+		if (localStorage.getItem('auth') === 'true') {
+			this.setIsAuthorizedInfo(true)
+		}
+		console.log('getauth', this.getauth)
+	}
 }
 </script>
