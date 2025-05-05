@@ -100,7 +100,10 @@ const UserSchema = new mongoose.Schema({
   mailing: { type: Boolean },
   password: { type: String },
   isPasswordSubmit: { type: Boolean },
-  favorites: { type: Array },
+  favorites: [{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'items'
+	}],
   orders: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'orders'
