@@ -77,8 +77,8 @@ export default {
   computed: {
 		...mapState('items', ['itemsList']),
 		...mapGetters({
-			searchList: 'items/searchList',
-			searchText: 'items/searchText',
+			searchList: 'search/searchList',
+			searchText: 'search/searchText',
 		}),
     params() {
       return this.checkedColor.length ? '?colors=' + this.checkedColor : '';

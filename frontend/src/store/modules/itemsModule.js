@@ -4,8 +4,6 @@ export const itemsModule = {
 	namespaced: true,
 	state: () => ({
 		itemsList: [],
-		searchList: [],
-		searchText: '',
 		item: [],
 		boolOptions: [
 			{ text: 'Есть', value: true },
@@ -22,8 +20,6 @@ export const itemsModule = {
 		],
 	}),
 	getters: {
-		searchText: state => state.searchText,
-		searchList: state => state.searchList,
 		boolOptions: state => state.boolOptions,
 		colorsSelect: state => state.colorsSelect,
 		getItems: state => state.itemsList,
@@ -49,22 +45,7 @@ export const itemsModule = {
 		setItem(state, payload) {
 			state.item = payload;
 		},
-		searchItem(state, payload) {
-			state.searchText = payload;
 
-			state.searchList = state.itemsList.filter(item => item.brand.text.includes(payload)
-				|| item.name.includes(payload)
-				|| item.description.includes(payload)
-				|| item.price === +payload
-				|| item.type.text.toLowerCase() === payload.toLowerCase()
-				|| item.length === +payload
-				|| item.width === +payload
-			)
-		},
-		resetSearch(state, payload) {
-			state.searchText = '';
-			state.searchList = payload;
-		},
 		updateIsSelectedItem(state, { index, payload}) {
 			return state.itemsList[index].isSelectedItem = payload
 		}

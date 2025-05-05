@@ -23,9 +23,9 @@ export default {
 	},
 	methods: {
 		...mapMutations({
-			search: 'items/searchItem',
+			search: 'search/searchItem',
 			setCheckedHeaderLink: 'links/setCheckedHeaderLink',
-			resetSearch: 'items/resetSearch'
+			resetSearch: 'search/resetSearch'
 		}),
 		...mapActions('items', ['fetchItems']),
 		onFocusSearch() {
@@ -36,6 +36,7 @@ export default {
 			if (!this.searchText) {
 				this.resetSearch([]);
 			}
+			this.$store.dispatch('search/getItemsList');
 			this.search(this.searchText);
 		}
 	}
