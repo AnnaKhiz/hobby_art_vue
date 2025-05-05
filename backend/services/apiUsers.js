@@ -20,6 +20,7 @@ async function getAllPages(req, res) {
 	user[0].password = '';
 	res.send({ "result": true, "user": user });
 }
+
 async function registerNewUser(req, res) {
 	try {
 		const { body: user } = req;
@@ -46,20 +47,23 @@ async function registerNewUser(req, res) {
 
 		const token = generateJWt(req._auth);
 
-		res
-			.cookie('token', token, {
+		res.cookie('token', token, {
 				httpOnly: true,
 				secure: isProd,
 				sameSite: isProd ? 'None' : 'Lax',
 				path: '/',
 				expires: new Date(Date.now() + 86400000)
-			})
-			.send({"result" : "New user added", "id": result._id.toString()})
+			});
+
+		res.send({
+			"result" : true,
+			"id": result._id.toString()
+		})
 
 	} catch (error) {
 		console.log(error)
 		if (error.code === 11000) {
-			res.status(401).send({'result': 'User with this email already exist'});
+			res.status(401).send({'result': false});
 		}
 	}
 }
@@ -90,7 +94,13 @@ async function logInUserPage(req, res, next) {
 		expires: new Date(Date.now() + 86400000)
 	});
 
-	res.send({ result: true, id: user._id.toString(), user: userFullData, role: "user", status: 200 });
+	res.send({
+		result: true,
+		id: user._id.toString(),
+		user: userFullData,
+		role: "user",
+		status: 200
+	});
 	next();
 }
 async function logoutUserPage( req, res, next ) {

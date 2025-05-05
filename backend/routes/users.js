@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { protectedRoute } = require('../middleware/route');
+const { checkDuplicateUser } = require('../middleware/checkDuplicateUser');
 const { parserJwt } = require('../middleware/auth');
 const {
 	getAllPages,
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
 router.get('/user', parserJwt, getAllPages );
 router.get('/user/logout',  logoutUserPage );
 router.post('/user/login', logInUserPage );
-router.post('/register', registerNewUser );
+router.post('/register', checkDuplicateUser, registerNewUser );
 router.patch('/user/edit', parserJwt, updateUserInfo );
 router.delete('/:id', parserJwt, protectedRoute(['admin'], '/auth/login'), deleteOneUser);
 
