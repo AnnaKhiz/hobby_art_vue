@@ -32,6 +32,7 @@
 import likeIcon from "@/assets/icons/like.svg";
 import menuDots from "@/assets/icons/menu-dots.svg";
 import mockedColors from "@/assets/icons/mocked-color-options.svg";
+import {mapGetters} from "vuex";
 export default {
   name: "userPageFavorites",
   props: {
@@ -47,6 +48,17 @@ export default {
 			menuDots,
 			mockedColors
     }
-  }
+  },
+	computed: {
+		...mapGetters({
+			user: 'user/userInfo'
+		})
+	},
+	methods: {
+
+	},
+	mounted() {
+		console.log(this.user)
+	}
 }
 </script>

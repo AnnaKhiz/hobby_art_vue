@@ -1,68 +1,39 @@
 <template>
   <div v-if="filteredItems.length" class="main__product-page-content">
-    <div v-for="(item, index) in filteredItems" :key="item._id" class="main__product-page-content-item">
-      <ui-product-item-header
-				:is-item-liked="isLiked(item)"
-				@update-is-liked="handleLike($event, item._id)"
-			/>
-      <div class="main__product-page-content-item-img">
-        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">
-          <img :src="require(`@/assets/${item.photo}`)" alt="card image">
-        </a>
-      </div>
-      <div class="main__product-page-content-item-label">
-        <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}${params}` )" style="cursor: pointer">{{ item.name }} </a>
-      </div>
-      <div class="main__product-page-content-item-color-variants" @click.stop="checkIsSelectedItemUsed($event, item._id, index)">
-        <ui-colors-icon
-          :item="item"
-          size="20"
-          position="flex-start"
-          @check="addCheckedColor($event, item, index)"
-        />
-      </div>
-      <p style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
-        <span v-if="parseCheckedColors(item._id) && item.isSelectedItem && savedIndex === item._id" >
-          <span style="font-weight: 600; line-height: 1.2rem">Выбранные цвета:</span> {{ parseCheckedColors(item._id) }}
-        </span>
-      </p>
-      <div class="main__product-page-content-item-price">
-        {{ item.price }} грн
-      </div>
-      <a
-        class="main__product-page-content-item-btnBuy"
-        style="cursor: pointer"
-        @click.prevent="checkedColor.length ? addToBasket(item) : isCheckedColorNotify = true"
-      >
-        В корзину
-      </a>
-
-    </div>
-    <!--   dialogs -->
-    <Transition name="fade">
-      <ui-notify-dialog v-if="display" />
-    </Transition>
-
-    <Transition name="fade">
-      <ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white" weight="600"/>
-    </Transition>
-
+		<ui-product-item
+			v-for="(item, index) in filteredItems"
+			:key="item._id"
+			:item="item"
+			:index="index"
+			:user="user"
+			class="main__product-page-content-item"
+			@update-display="handleDisplayState"
+			@update-is-checked-color-notify="handleChackedColorNotify"
+		/>
   </div>
   <div v-else>
     <p class="text-no-products">Нет товаров соответствующих критериям поиска</p>
   </div>
+
+	<!--   dialogs -->
+	<Transition name="fade">
+		<ui-notify-dialog v-if="display" />
+	</Transition>
+
+	<Transition name="fade">
+		<ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white" weight="600"/>
+	</Transition>
 </template>
 
 <script>
-import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
-import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue"
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
+import UiProductItem from "@/components/UI/uiProductItem.vue";
 
 
 export default {
   name: "uiProductListPage.vue",
-  components: {UiNotifyDialog, UiColorsIcon, UiProductItemHeader},
+  components: {UiProductItem, UiNotifyDialog},
   props: {
     searchFilters: {
       type: Object,
@@ -72,10 +43,7 @@ export default {
   data() {
     return {
       isCheckedColorNotify: false,
-      checkedColor: [],
       display: false,
-      savedIndex: null,
-			isItemLiked: false,
     }
   },
   emits: ['itemsList', 'change'],
@@ -87,9 +55,6 @@ export default {
 			user: 'user/userInfo',
 			isAuthorized: 'user/isAuthorized',
 		}),
-    params() {
-      return this.checkedColor.length ? '?colors=' + this.checkedColor : '';
-    },
     filteredItems() {
 			if (this.searchText) {
 				return this.searchList;
@@ -114,70 +79,16 @@ export default {
 
   methods: {
     ...mapMutations('order', ['addToOrder']),
-		...mapMutations({
-			setItems: 'items/setItems',
-			updateIsSelectedItem: 'items/updateIsSelectedItem'
-		}),
 		...mapActions({
 			fetchItems: 'items/fetchItems',
 			getAuthUser: 'user/getAuthUser',
-			userAddFavorite: 'user/userAddFavorite'
 		}),
-		isLiked(item) {
-			if (!this.isAuthorized) return false;
-			return item.users.find(el => el._id._id === this.user._id)?.isFavorite;
+		handleDisplayState(value) {
+			this.display = value;
 		},
-		async handleLike(value, id) {
-			await this.userAddFavorite({ id, isLiked: value });
-		},
-    checkIsSelectedItemUsed(event, id, index) {
-      if (event.target.parentElement.id === id) {
-        this.savedIndex = id;
-				this.updateIsSelectedItem({ index, payload: true});
-      } else {
-        this.savedIndex = ''
-				this.updateIsSelectedItem({ index, payload: false});
-      }
-			this.setItems(this.itemsList)
-    },
-    addCheckedColor(value, item) {
-      if (this.savedIndex !== item._id) {
-        this.checkedColor = []
-        this.checkedColor.push(value)
-      } else {
-
-        if(this.checkedColor.includes(value)) {
-          const index = this.checkedColor.findIndex(el => el === value);
-
-          if (index === -1) return false;
-
-          this.checkedColor.splice(index, 1);
-        } else {
-          this.checkedColor.push(value);
-        }
-      }
-    },
-    parseCheckedColors(itemId) {
-      const currentItem = this.itemsList.find(el => el._id === itemId);
-
-      const colorObjects = currentItem.color.filter(el => this.checkedColor.includes(el.value));
-      if (!colorObjects) return;
-
-      return colorObjects.map(el => (el.text)).join(', ')
-    },
-
-    addToBasket(item) {
-      this.isCheckedColorNotify = false
-      this.checkedColor.forEach(el => {
-        const orderItem = {quantity: 1, price: item.price, checkedColor: el, item: item}
-        this.addToOrder(orderItem);
-        this.checkedColor = [];
-      })
-
-      this.display = true;
-      this.savedIndex = null;
-    },
-
+		handleChackedColorNotify(value) {
+			this.isCheckedColorNotify = value;
+		}
   },
 
   async mounted() {
@@ -186,7 +97,7 @@ export default {
 			await this.getAuthUser();
 		}
 
-		this.$emit('itemsList', this.itemsList)
+		this.$emit('itemsList', this.itemsList);
   },
   watch: {
     display(val) {
@@ -211,12 +122,8 @@ export default {
       deep: true
     }
   },
-
-
 }
 </script>
-
-
 
 <style scoped lang="sass">
 .fade-enter-active,

@@ -56,7 +56,6 @@ export const itemsModule = {
 				const result = await fetchData('api/items');
 				addSelectedOption(result.items);
 				commit('setItems', result.items);
-				console.log('items list', result.items)
 			} catch (error) {
 				console.error('Error fetching items:', error);
 			}
