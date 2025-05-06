@@ -1,7 +1,7 @@
 <template>
 
     <div class="notify-content" :style="`width: ${width}px; height: ${height}px; background: ${background}`">
-      <h3 :style="`color: ${textColor}; font-weight: 600`">{{ text }}</h3>
+      <h3 :style="`color: ${textColor}; font-weight: ${weight}`">{{ text }}</h3>
     </div>
 </template>
 
@@ -30,7 +30,11 @@ export default {
     textColor: {
       type: String,
       default: 'black'
-    }
+    },
+		weight: {
+			type: String,
+			default: '400'
+		}
  }
 }
 </script>

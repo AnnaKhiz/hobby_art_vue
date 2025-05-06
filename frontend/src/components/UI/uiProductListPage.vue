@@ -1,7 +1,10 @@
 <template>
   <div v-if="filteredItems.length" class="main__product-page-content">
     <div v-for="(item, index) in filteredItems" :key="item._id" class="main__product-page-content-item">
-      <ui-product-item-header />
+      <ui-product-item-header
+				:is-item-liked="isLiked(item)"
+				@update-is-liked="handleLike($event, item._id)"
+			/>
       <div class="main__product-page-content-item-img">
         <a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">
           <img :src="require(`@/assets/${item.photo}`)" alt="card image">
@@ -41,8 +44,9 @@
     </Transition>
 
     <Transition name="fade">
-      <ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white"/>
+      <ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white" weight="600"/>
     </Transition>
+
   </div>
   <div v-else>
     <p class="text-no-products">Нет товаров соответствующих критериям поиска</p>
@@ -71,6 +75,7 @@ export default {
       checkedColor: [],
       display: false,
       savedIndex: null,
+			isItemLiked: false,
     }
   },
   emits: ['itemsList', 'change'],
@@ -79,6 +84,8 @@ export default {
 		...mapGetters({
 			searchList: 'search/searchList',
 			searchText: 'search/searchText',
+			user: 'user/userInfo',
+			isAuthorized: 'user/isAuthorized',
 		}),
     params() {
       return this.checkedColor.length ? '?colors=' + this.checkedColor : '';
@@ -111,7 +118,18 @@ export default {
 			setItems: 'items/setItems',
 			updateIsSelectedItem: 'items/updateIsSelectedItem'
 		}),
-		...mapActions('items', ['fetchItems']),
+		...mapActions({
+			fetchItems: 'items/fetchItems',
+			getAuthUser: 'user/getAuthUser',
+			userAddFavorite: 'user/userAddFavorite'
+		}),
+		isLiked(item) {
+			if (!this.isAuthorized) return false;
+			return item.users.find(el => el._id._id === this.user._id)?.isFavorite;
+		},
+		async handleLike(value, id) {
+			await this.userAddFavorite({ id, isLiked: value });
+		},
     checkIsSelectedItemUsed(event, id, index) {
       if (event.target.parentElement.id === id) {
         this.savedIndex = id;
@@ -164,6 +182,9 @@ export default {
 
   async mounted() {
 		await this.fetchItems();
+		if (this.isAuthorized) {
+			await this.getAuthUser();
+		}
 
 		this.$emit('itemsList', this.itemsList)
   },

@@ -1,9 +1,15 @@
 <template>
   <div class="main__product-page-content-item-header">
 		<svg @click="handleLike" class="red-color" width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-			<path d="M8 14.434C7.88951 14.4336 7.78224 14.3967 7.69495 14.3289C4.9145 12.1686 2.9992 10.3083 1.65898 8.47301C-0.0512953 6.12763 -0.441358 3.96228 0.498793 2.03698C1.1689 0.661755 3.09421 -0.463425 5.34457 0.19168C6.41752 0.501599 7.35364 1.16623 8 2.07698C8.64636 1.16623 9.58248 0.501599 10.6554 0.19168C12.9008 -0.453424 14.8311 0.661755 15.5012 2.03698C16.4414 3.96228 16.0513 6.12763 14.341 8.47301C13.0008 10.3083 11.0855 12.1686 8.30505 14.3289C8.21776 14.3967 8.11049 14.4336 8 14.434Z" fill="url(#paint0_linear)"/>
+			<path
+				d="M8 14.434C7.88951 14.4336 7.78224 14.3967 7.69495 14.3289C4.9145 12.1686 2.9992 10.3083 1.65898 8.47301C-0.0512953 6.12763 -0.441358 3.96228 0.498793 2.03698C1.1689 0.661755 3.09421 -0.463425 5.34457 0.19168C6.41752 0.501599 7.35364 1.16623 8 2.07698C8.64636 1.16623 9.58248 0.501599 10.6554 0.19168C12.9008 -0.453424 14.8311 0.661755 15.5012 2.03698C16.4414 3.96228 16.0513 6.12763 14.341 8.47301C13.0008 10.3083 11.0855 12.1686 8.30505 14.3289C8.21776 14.3967 8.11049 14.4336 8 14.434Z"
+				fill="url(#paint0_linear)"
+			/>
 			<g transform="translate(1,1) scale(0.88)">
-				<path d="M8 14.434C7.88951 14.4336 7.78224 14.3967 7.69495 14.3289C4.9145 12.1686 2.9992 10.3083 1.65898 8.47301C-0.0512953 6.12763 -0.441358 3.96228 0.498793 2.03698C1.1689 0.661755 3.09421 -0.463425 5.34457 0.19168C6.41752 0.501599 7.35364 1.16623 8 2.07698C8.64636 1.16623 9.58248 0.501599 10.6554 0.19168C12.9008 -0.453424 14.8311 0.661755 15.5012 2.03698C16.4414 3.96228 16.0513 6.12763 14.341 8.47301C13.0008 10.3083 11.0855 12.1686 8.30505 14.3289C8.21776 14.3967 8.11049 14.4336 8 14.434Z" :fill="isLiked ? 'red' : '#FEEAEA'"/>
+				<path
+					d="M8 14.434C7.88951 14.4336 7.78224 14.3967 7.69495 14.3289C4.9145 12.1686 2.9992 10.3083 1.65898 8.47301C-0.0512953 6.12763 -0.441358 3.96228 0.498793 2.03698C1.1689 0.661755 3.09421 -0.463425 5.34457 0.19168C6.41752 0.501599 7.35364 1.16623 8 2.07698C8.64636 1.16623 9.58248 0.501599 10.6554 0.19168C12.9008 -0.453424 14.8311 0.661755 15.5012 2.03698C16.4414 3.96228 16.0513 6.12763 14.341 8.47301C13.0008 10.3083 11.0855 12.1686 8.30505 14.3289C8.21776 14.3967 8.11049 14.4336 8 14.434Z"
+					:fill="isLiked ? 'red' : '#FEEAEA'"
+				/>
 			</g>
 
 			<defs>
@@ -35,42 +41,55 @@
     </svg>
 
 		<Transition name="fade">
-			<ui-notify-dialog v-if="display" text="Нужно авторизоваться!" background="#ff0000" textColor="white" />
+			<ui-notify-dialog v-if="display" text="Нужно авторизоваться!" background="#ff0000" textColor="white" weight="600" />
 		</Transition>
   </div>
 </template>
 
 <script>
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
-import {mapGetters} from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "uiProductItemHeader.vue",
-	components: {UiNotifyDialog},
+	components: { UiNotifyDialog },
+	props: {
+		isItemLiked: {
+			type: Boolean,
+			default: false,
+		}
+	},
 	data() {
 		return {
 			display: false,
-			isLiked: false
+			isLiked: false,
 		}
 	},
+	emits: ['updateIsLiked'],
 	computed: {
 		...mapGetters({
-			isAuthorized: 'user/isAuthorized'
-		})
+			isAuthorized: 'user/isAuthorized',
+		}),
 	},
 	methods: {
-		handleLike() {
+		...mapActions('user', ['userAddFavorite']),
+		async handleLike() {
 			if (!this.isAuthorized) {
 				this.display = true;
 				setTimeout(() => {
 					this.display = false;
-				}, 1500)
+				}, 1500);
 				return;
 			}
-
 			this.isLiked = !this.isLiked;
+			this.$emit('updateIsLiked', this.isLiked);
+		},
+	},
+	watch: {
+		isItemLiked(newVal) {
+			this.isLiked = newVal;
 		}
-	}
+	},
 }
 </script>
 

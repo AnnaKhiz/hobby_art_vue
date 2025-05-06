@@ -98,6 +98,17 @@ export const usersModule = {
 				console.error('Error log out user:', error);
 			}
 			return result;
+		},
+		async userAddFavorite({ commit }, body) {
+			let result = null;
+			try {
+				result = await fetchData('user/favorite', 'PATCH', {}, body);
+				console.log('update result', result)
+				commit('setUserInfo', result.data);
+			} catch (error) {
+				console.error('Error log out user:', error);
+			}
+			return result;
 		}
 	}
 }
