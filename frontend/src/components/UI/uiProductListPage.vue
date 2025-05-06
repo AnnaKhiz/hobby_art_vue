@@ -6,9 +6,10 @@
 			:item="item"
 			:index="index"
 			:user="user"
+			:itemId="item._id"
 			class="main__product-page-content-item"
 			@update-display="handleDisplayState"
-			@update-is-checked-color-notify="handleChackedColorNotify"
+			@update-is-checked-color-notify="handleCheckedColorNotify"
 		/>
   </div>
   <div v-else>
@@ -86,7 +87,7 @@ export default {
 		handleDisplayState(value) {
 			this.display = value;
 		},
-		handleChackedColorNotify(value) {
+		handleCheckedColorNotify(value) {
 			this.isCheckedColorNotify = value;
 		}
   },

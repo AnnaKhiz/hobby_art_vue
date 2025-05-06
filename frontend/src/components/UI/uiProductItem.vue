@@ -5,12 +5,12 @@
 			@update-is-liked="handleLike"
 		/>
 		<div class="main__product-page-content-item-img">
-			<a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}`)" style="cursor: pointer">
+			<a @click="$router.push(`${$router.currentRoute.value.href}/${itemId}`)" style="cursor: pointer">
 				<img :src="require(`@/assets/${item.photo}`)" alt="card image">
 			</a>
 		</div>
 		<div class="main__product-page-content-item-label">
-			<a @click="$router.push(`${$router.currentRoute.value.href}/${item._id}${params}` )" style="cursor: pointer">{{ item.name }} </a>
+			<a @click="$router.push(`${$router.currentRoute.value.href}/${itemId}${params}` )" style="cursor: pointer">{{ item.name }} </a>
 		</div>
 		<div class="main__product-page-content-item-color-variants" @click.stop="checkIsSelectedItemUsed">
 			<ui-colors-icon
@@ -21,7 +21,7 @@
 			/>
 		</div>
 		<p style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
-        <span v-if="parseCheckedColors() && item.isSelectedItem && savedIndex === item._id" >
+        <span v-if="parseCheckedColors() && item.isSelectedItem && savedIndex === itemId" >
           <span style="font-weight: 600; line-height: 1.2rem">Выбранные цвета:</span> {{ parseCheckedColors() }}
         </span>
 		</p>
@@ -53,6 +53,10 @@ export default {
 		index: {
 			type: [String, Number],
 			default: 0,
+		},
+		itemId: {
+			type: String,
+			default: ''
 		}
 	},
 	data() {
@@ -92,12 +96,12 @@ export default {
 		}),
 
 		async handleLike(value) {
-			const body = { id: this.item._id, isLiked: value };
+			const body = { id: this.itemId, isLiked: value };
 			await this.userAddFavorite(body);
 		},
 		checkIsSelectedItemUsed(event) {
-			if (event.target.parentElement.id === this.item._id) {
-				this.savedIndex = this.item._id;
+			if (event.target.parentElement.id === this.itemId) {
+				this.savedIndex = this.itemId;
 				this.updateIsSelectedItem({ index: this.index, payload: true});
 			} else {
 				this.savedIndex = '';
@@ -106,7 +110,7 @@ export default {
 			this.setItems(this.itemsList);
 		},
 		addCheckedColor(value) {
-			if (this.savedIndex !== this.item._id) {
+			if (this.savedIndex !== this.itemId) {
 				this.checkedColor = [];
 				this.checkedColor.push(value);
 
@@ -124,9 +128,10 @@ export default {
 			}
 		},
 		parseCheckedColors() {
-			const currentItem = this.itemsList.find(el => el._id === this.item._id);
+			console.log(this.items)
+			// const currentItem = this.itemsList.find(el => el._id === this.itemId);
 
-			const colorObjects = currentItem.color.filter(el => this.checkedColor.includes(el.value));
+			const colorObjects = this.item.color.filter(el => this.checkedColor.includes(el.value));
 			if (!colorObjects) return;
 
 			return colorObjects.map(el => (el.text)).join(', ');
