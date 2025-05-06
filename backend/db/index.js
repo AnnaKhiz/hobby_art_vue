@@ -80,6 +80,14 @@ const ItemSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'comments'
   }],
+	users: [
+		{
+		_id: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'users',
+		},
+		isFavorite: {type: Boolean},
+	}]
 })
 const UserSchema = new mongoose.Schema({
   name: { type: String },
@@ -100,14 +108,22 @@ const UserSchema = new mongoose.Schema({
   mailing: { type: Boolean },
   password: { type: String },
   isPasswordSubmit: { type: Boolean },
-  favorites: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'items'
-	}],
-  orders: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'orders'
-  }],
+  favorites: [
+		{
+			_id: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'items',
+			},
+			isLiked: {type: Boolean}
+		},
+	],
+  orders: [
+		{
+			_id: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: 'orders'
+			}
+		}],
   comments: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'comments'

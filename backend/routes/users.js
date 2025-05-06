@@ -11,7 +11,8 @@ const {
 	updateUserInfo,
 	logInToAdminPanel,
 	logoutFromAdminPanel,
-	deleteOneUser
+	deleteOneUser,
+	toggleFavorites
 } = require('../services/apiUsers')
 router.get('/', async (req, res) => {
 	res.send({ "result": "Server started here" })
@@ -24,6 +25,9 @@ router.post('/user/login', logInUserPage );
 router.post('/register', checkDuplicateUser, registerNewUser );
 router.patch('/user/edit', parserJwt, updateUserInfo );
 router.delete('/:id', parserJwt, protectedRoute(['admin'], '/auth/login'), deleteOneUser);
+
+// FAVORITE
+router.patch('/user/favorite', parserJwt, toggleFavorites);
 
 // ADMIN PAGEs
 router.get('/admin', parserJwt, protectedRoute(['admin']), uploadAdminPage );

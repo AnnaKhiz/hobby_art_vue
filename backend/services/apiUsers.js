@@ -11,7 +11,11 @@ async function deleteOneUser(req, res) {
 }
 async function getAllPages(req, res) {
 	const { id } = req._auth;
-	const user = await User.find( { _id: new ObjectId(id)});
+	const user = await User
+		.find( { _id: new ObjectId(id)})
+		.populate('orders')
+		.populate('comments')
+		.populate('favorites._id');
 
 	if (!user.length) {
 		return res.send({ "result": false });
@@ -80,7 +84,11 @@ async function logInUserPage(req, res, next) {
 	if (!result) {
 		return res.send({"result": false, message: "Wrong password", "status": 404});
 	}
-	const userFullData = await User.findOne( { _id: user._id}).populate('orders').populate('comments');
+	const userFullData = await User
+		.findOne( { _id: user._id})
+		.populate('orders')
+		.populate('comments')
+		.populate('favorites._id');
 
 	const authData = { role: "user", id: user._id.toString() };
 
@@ -136,6 +144,57 @@ async function updateUserInfo(req, res, next) {
 	}
 }
 
+async function toggleFavorites(req, res, next) {
+	const { id } = req._auth;
+	const { id: favoriteId, isLiked } = req.body;
+
+	const user = await User.findById({ _id: new ObjectId(id)});
+
+	if (!user) {
+		res.send({result : false, data: "User not found"});
+	}
+
+	const isDuplicated = user.favorites.some(el => el._id.toString() === favoriteId);
+
+	try {
+		let updatedUser = {};
+
+		if (isDuplicated) {
+			// update user favorites - isLiked state
+			updatedUser = await User.findOneAndUpdate(
+				{ _id: new ObjectId(id), "favorites._id": new ObjectId(favoriteId) },
+				{ $set: { "favorites.$.isLiked": isLiked } },
+				{ new: true }
+			);
+
+			// update items users - isFavorite state
+			await Item.findOneAndUpdate(
+				{ _id: new ObjectId(favoriteId), "users._id": new ObjectId(id) },
+				{ $set: { "users.$.isFavorite": isLiked } },
+				{ new: true }
+			)
+
+			return res.send({ "result": true, data: updatedUser })
+		}
+		// update user favorites - add favorite item to array
+		updatedUser = await User.findByIdAndUpdate({
+			_id: new ObjectId(id)},
+			{ $push: { "favorites": { _id: new ObjectId(favoriteId), isLiked }}},
+			{ new: true, runValidators: true})
+
+		// update item users - add user item to array
+		await Item.findOneAndUpdate({
+				_id: new ObjectId(favoriteId)},
+			{ $push: { "users": { _id: new ObjectId(id), isFavorite: isLiked } } },
+			{ new: true, runValidators: true }
+		)
+
+		res.send({ "result": true, data: updatedUser })
+	} catch (error) {
+		console.log('Add favorite item to user error', error)
+	}
+}
+
 // admin
 async function uploadAdminPage(req,res) {
 	const { role } = req._auth;
@@ -144,11 +203,10 @@ async function uploadAdminPage(req,res) {
 		return res.send({"result": false, role: role})
 	}
 
-	const users = await User.find().populate('orders').populate('comments');
-	const items = await Item.find().populate('comments');
+	const users = await User.find().populate('orders').populate('comments').populate('favorites._id');
+	const items = await Item.find().populate('comments').populate('users._id');
 	const comments = await Comment.find().populate('users').populate('items');
-	const orders = await Order.find().populate('users').populate('items._id')
-
+	const orders = await Order.find().populate('users').populate('items._id');
 
 	res.send({"result": true, role: role, data: [users, orders, items]})
 }
@@ -201,5 +259,6 @@ module.exports = {
 	updateUserInfo,
 	logInToAdminPanel,
 	logoutFromAdminPanel,
-	deleteOneUser
+	deleteOneUser,
+	toggleFavorites
 };
