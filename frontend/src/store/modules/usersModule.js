@@ -5,6 +5,7 @@ export const usersModule = {
   state: () => ({
     isRegistered: true,
     isAuthorized: false,
+		favoritesCount: 0,
     user: {},
 		userAboutLabelsList: [
 			{ text: 'Имя:', value: 'name', idLabel: 'user-name', isReadable: false },
@@ -22,6 +23,7 @@ export const usersModule = {
 		]
   }),
   getters: {
+		favoritesCount: state => state.favoritesCount,
 		userInfo: state => state.user,
 		userAboutLabelsList: state => state.userAboutLabelsList,
 		isAuthorized: state => state.isAuthorized,
@@ -36,6 +38,9 @@ export const usersModule = {
     }
   },
   mutations: {
+		updateFavoritesCount(state, payload) {
+			state.favoritesCount = payload;
+		},
     setIsRegisteredInfo(state, payload) {
       state.isRegistered = payload;
     },
@@ -63,6 +68,7 @@ export const usersModule = {
 				result = await fetchData('user');
 				console.log('get user', result)
 				commit('setUserInfo', result.user[0]);
+				commit('updateFavoritesCount', result.user[0].favorites.filter(el => el.isLiked).length);
 			} catch (error) {
 				console.error('Error getting auth user:', error);
 			}
@@ -114,6 +120,7 @@ export const usersModule = {
 				result = await fetchData('user/favorite', 'PATCH', {}, body);
 				console.log('update result', result)
 				commit('setUserInfo', result.data);
+				commit('updateFavoritesCount', result.data.favorites.filter(el => el.isLiked).length);
 			} catch (error) {
 				console.error('Error log out user:', error);
 			}

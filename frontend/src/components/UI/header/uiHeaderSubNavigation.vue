@@ -10,13 +10,13 @@
 
 		<button
 			v-if="isAuthorized"
-			class="header__menu-favoriteButton elem-sub"
+			class="header__menu-favoriteButton favorite-count count-elem"
 			@click="goToFavorite"
 		>
 			Избранное
 		</button>
 		<button
-			class="header__menu-basketButton elem-sub basket-count"
+			class="header__menu-basketButton elem-sub basket-count count-elem"
 			@click="$router.push({name: 'basket'})"
 		>
 			Корзина
@@ -41,6 +41,7 @@ export default {
 	},
 	computed: {
 		...mapGetters({
+			favoritesCount: 'user/favoritesCount',
 			totalQuantity: 'order/totalQuantity',
 			order: 'order/order',
 			isAuthorized: 'user/isAuthorized',
@@ -98,11 +99,15 @@ export default {
 	},
 	mounted() {
 		setTimeout(() => {
-			this.basketQuantity = this.order.totalQuantity
+			this.basketQuantity = this.order.totalQuantity;
+			document.documentElement.style.setProperty('--favorite-count', `"${ this.favoritesCount || 0 }"`);
 			document.documentElement.style.setProperty('--basket-count', `"${ this.basketQuantity || 0 }"`);
 		}, 10)
 	},
 	watch: {
+		favoritesCount(val) {
+			document.documentElement.style.setProperty('--favorite-count', `"${ val || 0 }"`);
+		},
 		order: {
 			handler(val) {
 				this.basketQuantity = val.totalQuantity
@@ -118,9 +123,13 @@ export default {
 
 <style scoped lang="sass">
 .basket-count
-	cursor: pointer
 	&:after
 		content: var(--basket-count)
+.favorite-count
+	&:after
+		content: var(--favorite-count)
+.count-elem
+	&:after
 		position: absolute
 		top: -6px
 		left: calc(100% - 13%)
