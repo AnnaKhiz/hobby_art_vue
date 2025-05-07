@@ -1,5 +1,5 @@
 <template>
-	<div v-if="user.favorites.length" class="main__product-page-content">
+	<div v-if="user.favorites.length" class="main__product-page-content-item">
 <!--		<div v-for="item in user.favorites" :key="item._id">{{item}}</div>-->
 		<ui-product-item
 			v-for="(item, index) in user.favorites"
