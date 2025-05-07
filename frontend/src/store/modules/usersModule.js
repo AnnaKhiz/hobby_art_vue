@@ -43,9 +43,17 @@ export const usersModule = {
       state.isAuthorized = payload;
     },
     setUserInfo(state, payload) {
-      state.user = payload;
-			console.log('payload', state.user)
-    }
+			const favorites = addSelectedOption(payload.favorites)
+      state.user = {
+				...payload,
+				favorites
+			};
+    },
+		updateIsSelectedItem(state, { id, payload}) {
+			const index = state.user.favorites.findIndex(el => el._id._id === id);
+			if(index === -1) return;
+			return state.user.favorites[index]._id.isSelectedItem = payload;
+		}
   },
 	actions: {
 		// USER
@@ -112,4 +120,9 @@ export const usersModule = {
 			return result;
 		}
 	}
+}
+
+function addSelectedOption(list) {
+	if (!list.length) return;
+	return list.map(el => ({...el, _id: { ...el._id, isSelectedItem: false } }));
 }

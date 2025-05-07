@@ -9,26 +9,40 @@
 			:itemId="item._id._id"
 			default-like
 			class="main__product-page-content-item shadow"
+			@update-display="handleDisplayState"
+			@update-is-checked-color-notify="handleCheckedColorNotify"
 		/>
 	</div>
 
 	<div v-else>
 		<p class="text-no-products">Нет избранных товаров</p>
 	</div>
+
+	<!--   dialogs -->
+	<Transition name="fade">
+		<ui-notify-dialog v-if="display" />
+	</Transition>
+
+	<Transition name="fade">
+		<ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white" weight="600"/>
+	</Transition>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import likeIcon from "@/assets/icons/like.svg";
 import menuDots from "@/assets/icons/menu-dots.svg";
 import mockedColors from "@/assets/icons/mocked-color-options.svg";
 import uiProductItem from "@/components/UI/uiProductItem.vue";
+import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 export default {
   name: "userPageFavorites",
-	components: { uiProductItem },
+	components: {UiNotifyDialog, uiProductItem },
   data() {
     return {
       id: 0,
+			isCheckedColorNotify: false,
+			display: false,
 			likeIcon,
 			menuDots,
 			mockedColors,
@@ -39,10 +53,35 @@ export default {
 			user: 'user/userInfo',
 		}),
 		favorites() {
-			if (!this.user && !this.user.favorites) return [];
+			if (!this.user) return [];
 			return this.user.favorites.filter(el => el.isLiked);
 		}
 	},
+	methods: {
+		handleDisplayState(value) {
+			this.display = value;
+		},
+		handleCheckedColorNotify(value) {
+			this.isCheckedColorNotify = value;
+		}
+	},
+	watch: {
+		display(val) {
+			if (val) {
+				setTimeout(() => {
+					this.display = false;
+				}, 2000)
+			}
+		},
+
+		isCheckedColorNotify(val) {
+			if (val) {
+				setTimeout(() => {
+					this.isCheckedColorNotify = false;
+				}, 2000)
+			}
+		},
+	}
 }
 </script>
 <style scoped lang="sass">

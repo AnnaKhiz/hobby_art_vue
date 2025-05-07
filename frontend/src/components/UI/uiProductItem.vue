@@ -84,7 +84,8 @@ export default {
 		},
 		isLiked() {
 			if (!this.isAuthorized) return false;
-
+			console.log('item', this.item)
+			console.log('user', this.user)
 			return this.item.users.find(el => el._id._id === this.user._id)?.isFavorite;
 		},
 	},
@@ -92,7 +93,8 @@ export default {
 		...mapMutations('order', ['addToOrder']),
 		...mapMutations({
 			setItems: 'items/setItems',
-			updateIsSelectedItem: 'items/updateIsSelectedItem'
+			updateIsSelectedItem: 'items/updateIsSelectedItem',
+			updateIsSelectedFavorite: 'user/updateIsSelectedItem'
 		}),
 		...mapActions({
 			fetchItems: 'items/fetchItems',
@@ -107,10 +109,14 @@ export default {
 		checkIsSelectedItemUsed(event) {
 			if (event.target.parentElement.id === this.itemId) {
 				this.savedIndex = this.itemId;
-				this.updateIsSelectedItem({ index: this.index, payload: true});
+				this.defaultLike
+					? this.updateIsSelectedFavorite({ id: this.itemId, payload: true})
+					: this.updateIsSelectedItem({ index: this.index, payload: true});
 			} else {
 				this.savedIndex = '';
-				this.updateIsSelectedItem({ index: this.index, payload: false});
+				this.defaultLike
+					? this.updateIsSelectedFavorite({ id: this.itemId, payload: false})
+					:	this.updateIsSelectedItem({ index: this.index, payload: false});
 			}
 			this.setItems(this.itemsList);
 		},
@@ -133,9 +139,15 @@ export default {
 			}
 		},
 		parseCheckedColors() {
-			const colorObjects = this.item.color.filter(el => this.checkedColor.includes(el.value));
+			const currentItem = this.itemsList.find(el => el._id === this.itemId);
+			console.log(this.item)
+			console.log(this.checkedColor)
+			const colorObjects = this.defaultLike
+				? this.item.color.filter(el => this.checkedColor.includes(el.value))
+				: currentItem.color.filter(el => this.checkedColor.includes(el.value));
 			if (!colorObjects) return;
 
+			console.log(colorObjects.map(el => (el.text)).join(', '))
 			return colorObjects.map(el => (el.text)).join(', ');
 		},
 

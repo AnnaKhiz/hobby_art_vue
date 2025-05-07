@@ -28,6 +28,7 @@ export const itemsModule = {
 	mutations: {
 		setItems(state, payload) {
 			state.itemsList = payload;
+			console.log('items', state.itemsList)
 		},
 		addNewItem(state, payload) {
 			state.itemsList.push(payload);
@@ -47,7 +48,7 @@ export const itemsModule = {
 		},
 
 		updateIsSelectedItem(state, { index, payload}) {
-			return state.itemsList[index].isSelectedItem = payload
+			return state.itemsList[index].isSelectedItem = payload;
 		}
 	},
 	actions: {
