@@ -320,7 +320,7 @@ export default {
       return this.order.checkedcolors = '';
     }
 
-    const checkedColorsFromQuery = this.$route.query.colors.split(',');
+    const checkedColorsFromQuery = this.$route.query.colors;
     checkedColorsFromQuery.forEach(color =>  this.order.checkedColor.push(color));
   },
   beforeUnmount() {

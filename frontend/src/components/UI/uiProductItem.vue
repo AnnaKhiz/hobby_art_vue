@@ -5,12 +5,12 @@
 			@update-is-liked="handleLike"
 		/>
 		<div class="main__product-page-content-item-img">
-			<a @click="$router.push(`${$router.currentRoute.value.href}/${itemId}`)" style="cursor: pointer">
+			<a @click="$router.push(routeImage)" style="cursor: pointer">
 				<img :src="require(`@/assets/${item.photo}`)" alt="card image">
 			</a>
 		</div>
 		<div class="main__product-page-content-item-label">
-			<a @click="$router.push(`${$router.currentRoute.value.href}/${itemId}${params}` )" style="cursor: pointer">{{ item.name }} </a>
+			<a @click="$router.push(routeName)" style="cursor: pointer">{{ item.name }} </a>
 		</div>
 		<div class="main__product-page-content-item-color-variants" @click.stop="checkIsSelectedItemUsed">
 			<ui-colors-icon
@@ -79,13 +79,29 @@ export default {
 			user: 'user/userInfo',
 			isAuthorized: 'user/isAuthorized',
 		}),
-		params() {
-			return this.checkedColor.length ? '?colors=' + this.checkedColor : '';
+		routeImage() {
+			return {
+				name: 'product-page-details',
+				params: {
+					type: this.item.type.value,
+					id: this.item._id
+				}
+			}
+		},
+		routeName() {
+			return {
+				name: 'product-page-details',
+				params: {
+					type: this.item.type.value,
+					id: this.item._id,
+				},
+				query: {
+					colors: this.checkedColor,
+				}
+			}
 		},
 		isLiked() {
 			if (!this.isAuthorized) return false;
-			console.log('item', this.item)
-			console.log('user', this.user)
 			return this.item.users.find(el => el._id._id === this.user._id)?.isFavorite;
 		},
 	},
@@ -140,14 +156,12 @@ export default {
 		},
 		parseCheckedColors() {
 			const currentItem = this.itemsList.find(el => el._id === this.itemId);
-			console.log(this.item)
-			console.log(this.checkedColor)
+
 			const colorObjects = this.defaultLike
 				? this.item.color.filter(el => this.checkedColor.includes(el.value))
 				: currentItem.color.filter(el => this.checkedColor.includes(el.value));
 			if (!colorObjects) return;
 
-			console.log(colorObjects.map(el => (el.text)).join(', '))
 			return colorObjects.map(el => (el.text)).join(', ');
 		},
 
