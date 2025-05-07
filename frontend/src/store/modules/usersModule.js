@@ -44,6 +44,7 @@ export const usersModule = {
     },
     setUserInfo(state, payload) {
       state.user = payload;
+			console.log('payload', state.user)
     }
   },
 	actions: {

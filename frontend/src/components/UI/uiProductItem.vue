@@ -1,7 +1,7 @@
 <template>
 	<div >
 		<ui-product-item-header
-			:is-item-liked="isLiked"
+			:is-item-liked="defaultLike ? defaultLike : isLiked"
 			@update-is-liked="handleLike"
 		/>
 		<div class="main__product-page-content-item-img">
@@ -57,6 +57,10 @@ export default {
 		itemId: {
 			type: String,
 			default: ''
+		},
+		defaultLike: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data() {
@@ -80,6 +84,7 @@ export default {
 		},
 		isLiked() {
 			if (!this.isAuthorized) return false;
+
 			return this.item.users.find(el => el._id._id === this.user._id)?.isFavorite;
 		},
 	},
@@ -128,9 +133,6 @@ export default {
 			}
 		},
 		parseCheckedColors() {
-			console.log(this.items)
-			// const currentItem = this.itemsList.find(el => el._id === this.itemId);
-
 			const colorObjects = this.item.color.filter(el => this.checkedColor.includes(el.value));
 			if (!colorObjects) return;
 

@@ -25,7 +25,6 @@
               />
               <UserPageFavorites
                 v-if="currentLink === 'favorites'"
-                :user="{...user}"
               />
               <UserPageHistory
                 v-if="currentLink === 'history'"

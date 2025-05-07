@@ -90,6 +90,9 @@ export default {
 			this.isLiked = newVal;
 		}
 	},
+	mounted() {
+		this.isLiked = this.isItemLiked;
+	}
 }
 </script>
 
