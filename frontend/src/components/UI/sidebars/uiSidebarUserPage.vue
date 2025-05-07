@@ -1,28 +1,31 @@
 <template>
-  <div class="main__user-page-content-block first-block" id="user-page-content-block">
-
-    <div class="main__user-page-content-user-info" id="user-name-info">
-      <div class="main__user-page-content-user-photo" id="auth-user-photo">
+  <div class="main__user-page-content-block first-block">
+    <div class="main__user-page-content-user-info">
+      <div class="main__user-page-content-user-photo">
         <img src="@/assets/img/user-photo.png" alt="user-photo">
       </div>
-      <p class="main__user-page-content-user-name" id="auth-user-name">
+      <p class="main__user-page-content-user-name" >
         {{ userData.name }} {{ userData.lastName }}
       </p>
 
     </div>
 
-    <ul class="main__user-page-content-user-list" id="user-menu-list">
+    <ul class="main__user-page-content-user-list" >
       <li
         v-for="link in userSidebarItems"
         :key="link.value"
       >
-        <a :href="link.url" id="my-data" @click.prevent="$emit('input', link.value)">{{ link.text }}</a>
+        <a
+					:href="link.url"
+					@click.prevent="changeLink(link.value)"
+				>
+					{{ link.text }}
+				</a>
       </li>
     </ul>
     <a
       href=""
       class="main__user-page-content-user-exit"
-      id="user-page-exit"
       @click.stop="logOut"
     >
       Выйти из личного кабинета
@@ -61,6 +64,17 @@ export default {
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
     }),
 		...mapActions('user', ['logOutUser']),
+		changeLink(link) {
+			this.$router.push({
+				name: 'User',
+					params: {
+				id: this.user._id,
+			},
+				query: {
+					link,
+				}
+			})
+		},
     async logOut() {
 			await this.logOutUser();
       this.setIsAuthorizedInfo(false);

@@ -178,8 +178,6 @@ const routes = [
         component: AdminCommentsPage,
       }
     ],
-
-
   },
 	{
 		path: '/user',
@@ -216,7 +214,7 @@ const routes = [
     path: '/user/page/:id',
     name: 'User',
     component: UserPageComponent,
-    props: true,
+    props: route => ({ link: route.query.link }),
     meta: {
       title: 'Личный кабинет',
       favicon: '',

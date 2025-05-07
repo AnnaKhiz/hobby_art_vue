@@ -11,12 +11,13 @@
 		<button
 			v-if="isAuthorized"
 			class="header__menu-favoriteButton elem-sub"
+			@click="goToFavorite"
 		>
 			Избранное
 		</button>
 		<button
 			class="header__menu-basketButton elem-sub basket-count"
-			@click="$router.push('/basket')"
+			@click="$router.push({name: 'basket'})"
 		>
 			Корзина
 		</button>
@@ -35,6 +36,7 @@ export default {
 		return {
 			basketQuantity: 0,
 			displayDialog: false,
+			isFavorite: false,
 		}
 	},
 	computed: {
@@ -54,9 +56,17 @@ export default {
 			setDisplayDialogState: 'dialog/setDisplayDialogState',
 		}),
 		...mapActions('user', ['getAuthUser']),
-
-		checkFunction() {
-			return this.isAuthorized ? this.getUser() : this.openDialog();
+		async goToFavorite() {
+			this.isFavorite = true
+			await this.getUser();
+		},
+		async checkFunction() {
+			if (!this.isAuthorized) {
+				this.openDialog();
+				return;
+			}
+			this.isFavorite = false;
+			await this.getUser();
 		},
 		async getUser() {
 			const result = await this.getAuthUser();
@@ -67,13 +77,23 @@ export default {
 			} else {
 				this.setIsAuthorizedInfo(true);
 				this.$emit('updateUser', this.userInfo);
-				this.$router.push(`/user/page/${result.user._id}`);
+				this.$router.push(
+					{
+						name: 'User',
+						params: {
+							id: result.user[0]._id,
+						},
+						query: {
+							link: this.isFavorite ? 'favorites' : 'general',
+						}
+					})
 			}
 		},
 		openDialog() {
+			this.isFavorite = false;
 			this.setDisplayDialogState(true);
 			this.setIsRegisteredInfo(true);
-			this.$router.push('/user/login');
+			this.$router.push({ name: 'user-login'});
 		},
 	},
 	mounted() {
@@ -92,7 +112,7 @@ export default {
 		basketQuantity(val) {
 			document.documentElement.style.setProperty('--basket-count', `"${ val || 0 }"`);
 		},
-	}
+	},
 }
 </script>
 

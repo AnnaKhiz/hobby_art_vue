@@ -10,7 +10,6 @@
           <div class="main__user-page-content">
             <ui-sidebar-user-page
               v-if="show"
-              @input="currentLink = $event"
 							:user="{...user}"
 						/>
 
@@ -75,12 +74,16 @@ export default {
 	},
   props: {
     id: String,
+		link: {
+			type: String,
+			default: 'general'
+		}
   },
 	data() {
 		return {
       show: false,
 			user: {},
-      currentLink: ''
+      currentLink: '',
 		}
 	},
 	computed: {
@@ -102,16 +105,28 @@ export default {
       } else {
         this.setIsAuthorizedInfo(true);
         this.user = this.userInfo;
-        this.$router.push(`/user/page/${this.user._id}`);
-      }
 
-			this.currentLink = 'general';
+				this.$router.push({
+					name: 'User',
+					params: {
+						id: this.user._id,
+					},
+					query: {
+						link: this.link,
+					}
+				})
+      }
+			this.currentLink = this.link ? this.link : 'general';
 			this.show = true;
     },
   },
-
   async created() {
     await this.getUser();
-  }
+  },
+	watch: {
+		link(val) {
+			this.currentLink = val;
+		}
+	}
 }
 </script>
