@@ -1,5 +1,6 @@
 <template>
-  <main class="main">
+	<loader-component v-if="loading" />
+  <main v-else class="main">
     <ui-main-banner />
     <section class="main__user-page">
       <div class="container">
@@ -57,11 +58,13 @@ import UserPageFavorites from "@/components/user-page/UserPageFavorites.vue"
 import UserPageHistory from "@/components/user-page/UserPageHistory.vue"
 import UserPageMailing from "@/components/user-page/UserPageMailing.vue"
 import UserPageFeedback from "@/components/user-page/UserPageFeedback.vue"
+import LoaderComponent from "@/components/UI/loader/LoaderComponent.vue";
 
 
 export default {
   name: "UserPageComponent",
   components: {
+		LoaderComponent,
     UserPageFeedback,
     UserPageMailing,
     UserPageHistory,
@@ -89,7 +92,11 @@ export default {
 	computed: {
 		...mapGetters({
 			userInfo: 'user/userInfo',
+			isLoading: 'user/isLoading',
 		}),
+		loading() {
+			return this.isLoading;
+		}
 	},
   methods: {
     ...mapMutations({
