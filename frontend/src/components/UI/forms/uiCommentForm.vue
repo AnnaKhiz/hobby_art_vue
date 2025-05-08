@@ -41,7 +41,11 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {
+	mapActions,
+	mapGetters,
+	mapMutations
+} from "vuex";
 
 export default {
 	name: "uiCommentForm.vue",
@@ -55,7 +59,6 @@ export default {
 			infoMessage: ''
 		}
 	},
-	emits: ['close'],
 	computed: {
 		...mapGetters({
 			user: 'user/userInfo',
@@ -83,7 +86,7 @@ export default {
 			if (this.user._id) {
 				this.feedback.user = this.user;
 			}
-
+      console.log(this.feedback)
 			const result = await this.addFeedback(this.feedback);
 
 			if (!result.result) {
