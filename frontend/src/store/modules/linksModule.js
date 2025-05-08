@@ -3,7 +3,7 @@ export const linksModule = {
   state: () => ({
     headerLink: '',
     navMenuLinks: [
-      { text: 'Каталог', value: 'catalog', url: '/#catalog' },
+      { text: 'Каталог', value: 'catalog', url: 'HobbyArt' },
       { text: 'Оплата и доставка', value: 'delivery', url: 'delivery' },
       { text: 'Бонусная программа', value: 'bonuses', url: 'bonuses' },
       { text: 'О компании', value: 'about', url: 'about' },

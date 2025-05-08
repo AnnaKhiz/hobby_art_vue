@@ -45,7 +45,7 @@ export default {
       localStorage.setItem('auth', 'false');
 
 			await this.logOutAdmin();
-      this.$router.push('/');
+      this.$router.push({ name: 'HobbyArt' });
     }
   }
 }

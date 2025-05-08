@@ -104,9 +104,9 @@ export default {
 		localStorage.setItem('auth', 'true');
 
 		if (result.role === 'admin') {
-			this.$router.push(`/admin`);
+			this.$router.push({ name: 'admin'});
 		} else {
-			this.$router.push(`/user/page/${this.userInfo._id}`);
+			this.$router.push({ name: 'User', params: { id: this.userInfo._id }});
 		}
 		this.setDisplayDialogState(false);
 		}

@@ -43,8 +43,8 @@ export default {
 			const result = await this.checkAdmin();
 
 			!result
-				? this.$router.push('/admin/login')
-				: this.$router.push('/admin/items');
+				? this.$router.push({ name: 'admin-login' })
+				: this.$router.push({ name: 'admin-items' });
     },
   },
   async mounted() {

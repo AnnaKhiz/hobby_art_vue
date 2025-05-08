@@ -135,7 +135,7 @@ export default {
 
       localStorage.setItem('auth', 'true')
 			setTimeout(() => {
-				this.$router.push(`/user/page/${result.id}`);
+				this.$router.push({ name: 'User', params: { id: result.id }});
 				this.setDisplayDialogState(false);
 				this.error = "";
 			}, 1500)

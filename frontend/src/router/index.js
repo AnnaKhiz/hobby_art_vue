@@ -39,7 +39,7 @@ const routes = [
   },
   {
     path: '/delivery',
-    name: 'Delivery',
+    name: 'delivery',
     component: DeliveryComponent,
     props: true,
     meta: {
@@ -50,7 +50,7 @@ const routes = [
   },
   {
     path: '/bonuses',
-    name: 'Bonuses',
+    name: 'bonuses',
     component: BonusesComponent,
     props: true,
     meta: {
@@ -61,7 +61,7 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'About',
+    name: 'about',
     component: AboutComponent,
     props: true,
     meta: {

@@ -70,7 +70,7 @@ export default {
       localStorage.setItem('auth', 'true');
       this.setDisplayDialogState(false);
 
-      this.$router.push('/admin');
+      this.$router.push({ name: 'admin'});
     }
   },
 }
