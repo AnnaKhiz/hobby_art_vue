@@ -1,6 +1,12 @@
 const { Feedback, ObjectId, User } = require('../db/index');
-async function getFeedbackList() {
-
+async function getFeedbackList(req, res, next) {
+	try {
+		const result = await Feedback.find().populate('user');
+		res.send({result: true, data: result})
+	} catch (error) {
+		console.log('Error in getting feedbacks', error);
+		res.status(404).send({result: false, data: []});
+	}
 }
 
 async function addNewFeedback(req, res, next) {
