@@ -97,12 +97,9 @@ export default {
   },
 
   async mounted() {
-		// await this.fetchItems();
 		if (this.isAuthorized) {
 			await this.getAuthUser();
 		}
-
-		// this.$emit('itemsList', this.itemsList);
   },
   watch: {
     display(val) {

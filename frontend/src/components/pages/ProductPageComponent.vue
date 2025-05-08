@@ -98,14 +98,11 @@ export default {
   },
 	async mounted() {
 		if (localStorage.getItem('auth') === 'true') {
-			this.setIsAuthorizedInfo(true)
+			this.setIsAuthorizedInfo(true);
 		}
 
 		await this.fetchItems();
 		this.itemsList = this.items;
-		if (this.isAuthorized) {
-			await this.getAuthUser();
-		}
 	}
 }
 </script>
