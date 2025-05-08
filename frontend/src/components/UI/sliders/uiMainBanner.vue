@@ -5,8 +5,6 @@
         :modules="modules"
         :slides-per-view="1"
         :space-between="15"
-        @swiper="onSwiper"
-        @slideChange="onSlideChange"
         navigation
         loop
         autoplay
@@ -23,9 +21,9 @@
               <p class="main__banner-item-text">
                 Повседневная практика показывает, что укрепление и развитие внутренней структуры обеспечивает широкому кругу (специалистов) участие в формировании форм воздействия.
               </p>
-              <a href="" class="main__banner-item-button">
+              <button class="main__banner-item-button" @click="$router.push({name: 'HobbyArt', hash: '#catalog'})">
                 В каталог
-              </a>
+              </button>
             </div>
           </div>
 
@@ -47,22 +45,10 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  setup() {
-    const onSwiper = (swiper) => {
-      console.log(`swiper main - ${swiper}`);
-    };
-    const onSlideChange = () => {
-      // console.log('slide change');
-    };
+  data() {
     return {
-      onSwiper,
-      onSlideChange,
       modules: [Navigation, Autoplay],
     };
   },
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>
