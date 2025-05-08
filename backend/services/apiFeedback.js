@@ -8,7 +8,6 @@ async function getFeedbackList(req, res, next) {
 		res.status(404).send({result: false, data: []});
 	}
 }
-
 async function addNewFeedback(req, res, next) {
 	const { body: feedback } = req;
 	let result = null;
@@ -33,12 +32,41 @@ async function addNewFeedback(req, res, next) {
 		res.status(409).send({result: false, data: {}})
 	}
 }
+async function getFeedbackById(req, res, next) {
+  const { id } = req.params;
 
-async function getFeedbackById() {
+	try {
+		const result = await Feedback.findOne({ _id: new ObjectId(id)}).populate('user');
 
+		if (!result) {
+			return res.send({result: true, data: []});
+		}
+
+		res.send({result: true, data: result})
+	} catch (error) {
+		console.log('Error getting feedback by ID', error);
+		res.status(404).send({result: false, data: []})
+	}
 }
 
-async function removeFeedback() {
+async function getFeedbackByUserId(req, res, next) {
+	const { id } = req.params;
+
+	try {
+		const result = await Feedback.find({ user: { _id: new ObjectId(id)}}).populate('user');
+
+		if (!result) {
+			return res.send({result: true, data: []});
+		}
+
+		res.send({result: true, data: result})
+	} catch (error) {
+		console.log('Error getting feedback by ID', error);
+		res.status(404).send({result: false, data: []})
+	}
+}
+
+async function removeFeedback(req, res, next) {
 
 }
 
@@ -46,5 +74,6 @@ module.exports = {
 	getFeedbackList,
 	addNewFeedback,
 	getFeedbackById,
-	removeFeedback
+	removeFeedback,
+	getFeedbackByUserId
 }
