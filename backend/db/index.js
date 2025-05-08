@@ -188,10 +188,10 @@ const FeedbackSchema = new mongoose.Schema({
 	text: { type: String },
 	date: { type: String },
 	userName: { type: String},
-	user: {
+	user: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'users'
-	},
+	}],
 })
 
 UserSchema.pre('findOneAndDelete', async function(next) {

@@ -3,6 +3,7 @@ const { port } = require('config');
 const { router: usersRouter } = require('./routes/users.js');
 const { router: itemsRouter } = require('./routes/items.js')
 const { router: ordersRouter } = require('./routes/orders.js');
+const { router: feedbackRouter } = require('./routes/feedback.js');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
@@ -35,4 +36,5 @@ server.use(express.urlencoded({ extended: true }));
 server.use('/', usersRouter);
 server.use('/api/items', itemsRouter);
 server.use('/api/orders', ordersRouter);
+server.use('/api/feedback', feedbackRouter);
 
