@@ -1,11 +1,3 @@
-<script>
-import { VProgressLinear } from "vuetify/components";
-export default {
-	name: "LoaderComponent.vue",
-	components: { VProgressLinear }
-}
-</script>
-
 <template>
 	<div
 		class="w-100 h-100 d-flex justify-center align-start pt-10"
@@ -23,6 +15,11 @@ export default {
 	</div>
 </template>
 
-<style scoped lang="sass">
+<script>
+import { VProgressLinear } from "vuetify/components";
+export default {
+	name: "LoaderComponent.vue",
+	components: { VProgressLinear },
+}
+</script>
 
-</style>
