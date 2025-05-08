@@ -205,8 +205,13 @@ UserSchema.pre('findOneAndDelete', async function(next) {
 
     if (!order) return;
 
+		const items = await Item.findOne(query);
+
+		if (!items) return;
+
     await mongoose.model('comments').deleteMany({ _id: { $in: user.comments }})
     await mongoose.model('orders').deleteMany({ _id: { $in: user.orders }})
+		await mongoose.model('items').deleteMany({ _id: { $in: user.favorites }})
 
   } catch (error) {
     next(error);
@@ -221,7 +226,12 @@ ItemSchema.pre('findOneAndDelete', async function(next) {
 
     if (!item) return;
 
+		const users = await User.findOne(query);
+
+		if (!users) return;
+
     await mongoose.model('comments').deleteMany({ _id: { $in: item.comments }})
+		await mongoose.model('users').deleteMany({ _id: { $in: item.users }})
   } catch (error) {
     next(error);
   }
