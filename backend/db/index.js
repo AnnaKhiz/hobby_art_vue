@@ -184,6 +184,14 @@ const CommentSchema = new mongoose.Schema({
     ref: 'items'
   }
 });
+const FeedbackSchema = new mongoose.Schema({
+	text: { type: String },
+	date: { type: String },
+	user: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'users'
+	},
+})
 
 UserSchema.pre('findOneAndDelete', async function(next) {
   const query = this.getQuery();
@@ -224,7 +232,8 @@ const User = mongoose.model('users', UserSchema);
 const GuestUser = mongoose.model('guest-user', GuestUserSchema);
 const Order = mongoose.model('orders', OrderSchema);
 const Comment = mongoose.model('comments', CommentSchema);
-const Admin = mongoose.model('admins', AdminSchema)
+const Feedback = mongoose.model('feedback', FeedbackSchema);
+const Admin = mongoose.model('admins', AdminSchema);
 
 async function init() {
   try {
@@ -246,5 +255,6 @@ module.exports = {
   Comment,
   Item,
   Admin,
-	GuestUser
+	GuestUser,
+	Feedback
 };
