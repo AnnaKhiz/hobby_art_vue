@@ -1,5 +1,4 @@
 <template>
-
 	<form class="popup-form w-100 d-flex flex-column ga-4 align-start">
 		<p class="popup-text align-self-center">Оставить отзыв</p>
 		<p>Имя</p>
@@ -30,10 +29,10 @@
 			</span>
 			</div>
 		</div>
-{{feedback}}
+		<div class="error-message">{{ infoMessage }}</div>
 		<button
 			class="popup-button align-self-center"
-			@click="submit"
+			@click.prevent="submit"
 		>
 			Отправить
 		</button>
@@ -42,7 +41,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
 	name: "uiCommentForm.vue",
@@ -52,27 +51,54 @@ export default {
 				text: '',
 				name: ''
 			},
-			length: 130
+			length: 130,
+			infoMessage: ''
 		}
 	},
+	emits: ['close'],
 	computed: {
 		...mapGetters({
-			user: 'user/userInfo'
+			user: 'user/userInfo',
 		}),
 		maxLength() {
-			return this.length - this.feedback.text.length
+			return this.length - this.feedback.text.length;
 		}
 	},
 	methods: {
-		submit() {
+		...mapMutations({
+			setDisplayDialogState: 'dialog/setDisplayDialogState',
+		}),
+		...mapActions({
+			addFeedback: 'feedback/addFeedback',
+		}),
+		async submit() {
+			const { text, name } = this.feedback;
 
+			if (!text && !name) {
+				this.infoMessage = 'Заполните все поля!';
+				return;
+			}
+			this.infoMessage = 'Ваш отзыв успешно отправлен!';
+
+			if (this.user._id) {
+				this.feedback.user = this.user;
+			}
+
+			const result = await this.addFeedback(this.feedback);
+
+			if (!result.result) {
+				this.infoMessage = 'Отзыв не опубликован! Приносим извинения за неудобства!';
+				return;
+			}
+
+			setTimeout(() => {
+				this.infoMessage = '';
+				this.setDisplayDialogState(false);
+			}, 1500);
 		}
 	},
 	mounted() {
-		if (!this.user._id) {
-			console.log('unregistered user')
-		} else {
-			console.log(this.user)
+		if (this.user._id) {
 			this.feedback.name = `${this.user.lastName} ${this.user.name}`;
 		}
 	}

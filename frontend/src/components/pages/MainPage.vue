@@ -113,9 +113,10 @@
 			<ui-modal-window
         v-if="getDisplayDialogState"
         @close="setDisplayDialogState(false)"
+				:full="isBigForm"
       >
         <template #default>
-          <ui-comment-form />
+          <FeedbackTemplateDialog @update-is-big-form="handleIsBigForm" />
         </template>
       </ui-modal-window>
     </teleport>
@@ -134,14 +135,14 @@ import UiCatalogItem from "@/components/UI/uiCatalogItem.vue";
 import UiItemPreference from "@/components/UI/uiItemPreference.vue";
 import UiFeedbackForm from "@/components/UI/forms/uiFeedbackForm.vue";
 import {mapGetters, mapMutations} from "vuex";
-import UiCommentForm from "@/components/UI/forms/uiCommentForm.vue";
 import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue";
+import FeedbackTemplateDialog from "@/components/UI/feedback/FeedbackTemplateDialog.vue";
 
 export default defineComponent({
   name: 'MainPage',
   components: {
+		FeedbackTemplateDialog,
 		UiModalWindow,
-		UiCommentForm,
 		UiFeedbackForm,
 		UiItemPreference,
 		UiCatalogItem,
@@ -151,6 +152,7 @@ export default defineComponent({
 	},
   data() {
     return {
+			isBigForm: false,
       isActiveLikesButton: true,
       isTypeSliderNew: false,
       clickedLink: '',
@@ -199,6 +201,9 @@ export default defineComponent({
       this.isTypeSliderNew = value
 
     },
+		handleIsBigForm(value) {
+			this.isBigForm = value;
+		},
   },
   watch: {
     getCheckedHeaderLink() {
