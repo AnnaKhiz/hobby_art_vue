@@ -1,6 +1,6 @@
 <template>
 	<form
-		class="modal__registration-form regist"
+		class="modal__registration-form regist px-10"
 	>
 		<h2 class="modal__registration-form-label">
 			Регистрация

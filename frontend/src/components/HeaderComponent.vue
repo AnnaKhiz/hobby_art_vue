@@ -27,7 +27,7 @@
 </template>
 <script>
 import HeaderInfoComponent from "@/components/HeaderInfoComponent.vue";
-import {mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue";
 import UiHeaderNavigation from "@/components/UI/header/uiHeaderNavigation.vue";
 import UiHeaderSubNavigation from "@/components/UI/header/uiHeaderSubNavigation.vue";
@@ -57,11 +57,19 @@ export default {
   methods: {
 		...mapMutations({
 			setDisplayDialogState: 'dialog/setDisplayDialogState',
+			setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
 		}),
+		...mapActions('user', ['getAuthUser']),
 		updateUser(data) {
 			this.user = data;
 		}
   },
+	async mounted() {
+		if (localStorage.getItem('auth') === 'true') {
+			await this.getAuthUser();
+			this.setIsAuthorizedInfo(true);
+		}
+	}
 }
 </script>
 

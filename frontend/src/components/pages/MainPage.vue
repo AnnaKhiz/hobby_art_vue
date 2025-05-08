@@ -62,12 +62,16 @@
                </svg>
                <span class="main__instagram-gallery-container-likes-digit" id="likes-digit"></span>
              </div>
-             <div class="main__instagram-gallery-container-comments">
-               <svg id="comments-popup" width="35" height="36" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                 <path fill-rule="evenodd" clip-rule="evenodd" d="M26.7011 30.8166L31.1111 35.2435V27.1294C33.5417 24.2796 35 20.6509 35 16.7002C35 7.53791 27.1639 0.108887 17.5 0.108887C7.83611 0.108887 0 7.53791 0 16.7002C0 25.8626 7.83611 33.2916 17.5 33.2916C20.7316 33.302 23.9076 32.4477 26.7011 30.8166Z" fill="white"/>
-               </svg>
-               <span class="main__instagram-gallery-container-comments-digit" id="comments-digit">0</span>
-             </div>
+             <v-tooltip text="Оставить отзыв" location="top">
+               <template v-slot:activator="{ props }">
+                 <div v-bind="props" class="main__instagram-gallery-container-comments" @click="setDisplayDialogState(true)">
+                   <svg id="comments-popup" width="35" height="36" viewBox="0 0 35 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path fill-rule="evenodd" clip-rule="evenodd" d="M26.7011 30.8166L31.1111 35.2435V27.1294C33.5417 24.2796 35 20.6509 35 16.7002C35 7.53791 27.1639 0.108887 17.5 0.108887C7.83611 0.108887 0 7.53791 0 16.7002C0 25.8626 7.83611 33.2916 17.5 33.2916C20.7316 33.302 23.9076 32.4477 26.7011 30.8166Z" fill="white"/>
+                   </svg>
+                   <span class="main__instagram-gallery-container-comments-digit" id="comments-digit">0</span>
+                 </div>
+               </template>
+             </v-tooltip>
              <img src="@/assets/img/insta-img-1.png" alt="image instagram" >
            </div>
          </div>
@@ -105,6 +109,16 @@
 
      </div>
    </section>
+		<teleport to="body" >
+			<ui-modal-window
+        v-if="getDisplayDialogState"
+        @close="setDisplayDialogState(false)"
+      >
+        <template #default>
+          <ui-comment-form />
+        </template>
+      </ui-modal-window>
+    </teleport>
    <section id="contacts"></section>
  </div>
 
@@ -120,10 +134,21 @@ import UiCatalogItem from "@/components/UI/uiCatalogItem.vue";
 import UiItemPreference from "@/components/UI/uiItemPreference.vue";
 import UiFeedbackForm from "@/components/UI/forms/uiFeedbackForm.vue";
 import {mapGetters, mapMutations} from "vuex";
+import UiCommentForm from "@/components/UI/forms/uiCommentForm.vue";
+import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue";
 
 export default defineComponent({
   name: 'MainPage',
-  components: {UiFeedbackForm, UiItemPreference, UiCatalogItem, UiPopularProducts, UiSwitcherMain, UiMainBanner},
+  components: {
+		UiModalWindow,
+		UiCommentForm,
+		UiFeedbackForm,
+		UiItemPreference,
+		UiCatalogItem,
+		UiPopularProducts,
+		UiSwitcherMain,
+		UiMainBanner
+	},
   data() {
     return {
       isActiveLikesButton: true,
@@ -156,7 +181,8 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
-      getSidebarMainItems: 'links/getSidebarGeneralItems'
+      getSidebarMainItems: 'links/getSidebarGeneralItems',
+			getDisplayDialogState: 'dialog/getDisplayDialogState',
     }),
 
     itemsForSlider() {
@@ -165,7 +191,8 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations({
-      setCheckedHeaderLink: 'links/setCheckedHeaderLink'
+      setCheckedHeaderLink: 'links/setCheckedHeaderLink',
+			setDisplayDialogState: 'dialog/setDisplayDialogState',
     }),
 
     getSwitcherState(value) {
@@ -176,7 +203,6 @@ export default defineComponent({
   watch: {
     getCheckedHeaderLink() {
       const element = document.getElementById(this.getCheckedHeaderLink);
-      console.log(element)
       if (!element) {
         return
       }

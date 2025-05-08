@@ -1,5 +1,5 @@
 <template>
-    <form class="modal__registration-form login">
+    <form class="modal__registration-form login px-10">
       <h2 class="modal__registration-form-label login">
         Войти в личный кабинет
       </h2>
