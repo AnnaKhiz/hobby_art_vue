@@ -5,6 +5,7 @@ export const usersModule = {
   state: () => ({
     isRegistered: true,
     isAuthorized: false,
+		isLoading: true,
 		favoritesCount: 0,
     user: {},
 		userAboutLabelsList: [
@@ -23,6 +24,7 @@ export const usersModule = {
 		]
   }),
   getters: {
+		isLoading: state => state.isLoading,
 		favoritesCount: state => state.favoritesCount,
 		userInfo: state => state.user,
 		userAboutLabelsList: state => state.userAboutLabelsList,
@@ -38,6 +40,9 @@ export const usersModule = {
     }
   },
   mutations: {
+		updateIsLoading(state, payload) {
+			state.isLoading = payload;
+		},
 		updateFavoritesCount(state, payload) {
 			state.favoritesCount = payload;
 		},
@@ -69,6 +74,7 @@ export const usersModule = {
 				console.log('get user', result)
 				commit('setUserInfo', result.user[0]);
 				commit('updateFavoritesCount', result.user[0].favorites.filter(el => el.isLiked).length);
+				commit('updateIsLoading', false);
 			} catch (error) {
 				console.error('Error getting auth user:', error);
 			}

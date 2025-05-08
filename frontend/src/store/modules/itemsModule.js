@@ -3,6 +3,7 @@ import { fetchData } from "@/services/api";
 export const itemsModule = {
 	namespaced: true,
 	state: () => ({
+		isLoading: true,
 		itemsList: [],
 		item: [],
 		boolOptions: [
@@ -20,12 +21,16 @@ export const itemsModule = {
 		],
 	}),
 	getters: {
+		isLoading: state => state.isLoading,
 		boolOptions: state => state.boolOptions,
 		colorsSelect: state => state.colorsSelect,
 		getItems: state => state.itemsList,
 		getItemById: state => state.item,
 	},
 	mutations: {
+		updateIsLoading(state, payload) {
+			state.isLoading = payload;
+		},
 		setItems(state, payload) {
 			state.itemsList = payload;
 			console.log('items', state.itemsList)
@@ -57,6 +62,7 @@ export const itemsModule = {
 				const result = await fetchData('api/items');
 				addSelectedOption(result.items);
 				commit('setItems', result.items);
+				commit('updateIsLoading', false);
 			} catch (error) {
 				console.error('Error fetching items:', error);
 			}

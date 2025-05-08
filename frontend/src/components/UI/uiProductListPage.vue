@@ -39,7 +39,11 @@ export default {
     searchFilters: {
       type: Object,
       default: () => {}
-    }
+    },
+		items: {
+			type: Array,
+			default: () => []
+		}
   },
   data() {
     return {
@@ -93,12 +97,12 @@ export default {
   },
 
   async mounted() {
-		await this.fetchItems();
+		// await this.fetchItems();
 		if (this.isAuthorized) {
 			await this.getAuthUser();
 		}
 
-		this.$emit('itemsList', this.itemsList);
+		// this.$emit('itemsList', this.itemsList);
   },
   watch: {
     display(val) {
