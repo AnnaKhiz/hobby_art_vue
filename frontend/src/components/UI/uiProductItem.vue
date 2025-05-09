@@ -3,6 +3,8 @@
 		<ui-product-item-header
 			:is-item-liked="defaultLike ? defaultLike : isLiked"
 			@update-is-liked="handleLike"
+			@open-details="openProductInfo"
+			@update-basket="checkedColor.length ? addToBasket() : $emit('updateIsCheckedColorNotify', true)"
 		/>
 		<div class="main__product-page-content-item-img">
 			<a @click="$router.push(routeImage)" style="cursor: pointer">
@@ -31,7 +33,7 @@
 		<a
 			class="main__product-page-content-item-btnBuy"
 			style="cursor: pointer"
-			@click.prevent="checkedColor.length ? addToBasket() : $emit('updateIsCheckedColorNotify', true);"
+			@click.prevent="checkedColor.length ? addToBasket() : $emit('updateIsCheckedColorNotify', true)"
 		>
 			В корзину
 		</a>
@@ -117,7 +119,9 @@ export default {
 			getAuthUser: 'user/getAuthUser',
 			userAddFavorite: 'user/userAddFavorite'
 		}),
-
+		openProductInfo(event) {
+			event ? this.$router.push(this.routeName) : false
+		},
 		async handleLike(value) {
 			const body = { id: this.itemId, isLiked: value };
 			await this.userAddFavorite(body);
