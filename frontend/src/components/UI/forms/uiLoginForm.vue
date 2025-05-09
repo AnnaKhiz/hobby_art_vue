@@ -1,5 +1,4 @@
 <template>
-	{{errors}}
     <form class="modal__registration-form login px-10">
       <h2 class="modal__registration-form-label login">
         Войти в личный кабинет
@@ -106,8 +105,8 @@ export default {
 		try {
 			await schema.validate(this.entityData, { abortEarly: false });
 			this.message = 'Пожалуйста, подождите';
-			this.errors = {};
 		} catch (error) {
+			console.log('valid error', error)
 			error.inner.forEach((validationError) => {
 				this.errors[validationError.path] = validationError.message
 			})
@@ -115,11 +114,11 @@ export default {
 	},
 
 	async logIn() {
+		this.errors = {};
 		await this.validation();
 
 		const { login, password } = this.errors;
 		if (login || password) return;
-
 
 		const result = await this.userLogIn(this.entityData);
 

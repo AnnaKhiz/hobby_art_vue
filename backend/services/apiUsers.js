@@ -32,6 +32,7 @@ async function registerNewUser(req, res) {
 		const userInfo = {
 			...user,
 			birthDate: '',
+			surName: user.surName || '',
 			address: {},
 			bonuses: 0,
 			favorites: [],

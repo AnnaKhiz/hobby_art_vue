@@ -1,4 +1,5 @@
 <template>
+	{{errors}}
 	<form
 		class="modal__registration-form regist px-10"
 	>
@@ -73,17 +74,17 @@
 				required
 			/>
 			<span class="modal__registration-form-error-block small" v-if="errors.passwordSubmit">{{ errors.passwordSubmit }}</span>
-			<span
-				class="modal__registration-form-message"
-			>
+		</div>
+		<span
+			class="modal__registration-form-message"
+		>
 			Пароль должен содержать от 6 символов
 		</span>
-			<span
-				class="modal__registration-form-message sec"
-			>
+		<span
+			class="modal__registration-form-message sec"
+		>
 			(большие и маленькие латинские буквы, цифры)
 		</span>
-		</div>
 
 		<div class="modal__registration-subitem-ch ">
 			<input
@@ -128,7 +129,7 @@ import {
 	mapMutations,
 	mapActions
 } from "vuex";
-// import * as yup from 'yup';
+import * as yup from 'yup';
 export default {
   name: "uiRegistForm",
   data() {
@@ -145,11 +146,41 @@ export default {
       setDisplayDialogState: 'dialog/setDisplayDialogState',
     }),
 		...mapActions('user', ['userRegister']),
+		async validation() {
+			const schema = yup.object({
+				name: yup.string().min(2,'Имя не меньше 2 букв').required('Имя обязательно'),
+				lastName: yup.string().min(2,'Фамилия не меньше 2 букв').required('Фамилия обязательна'),
+				phone: yup.string().min(10,'Не менее 10 цифр').max(13, 'Не более 13 цифр').required('Телефон обязателен').matches(/^\d+$/, 'Только цифры'),
+				email: yup.string().email('Неправильный формат email').required('Email обязателен'),
+				password: yup.string().min(6, 'Минимум 6 символов').required('Пароль обязателен'),
+				passwordSubmit: yup.string()
+					.min(6, 'Минимум 6 символов')
+					.required('Подтверждение пароля обязательно')
+					.oneOf([yup.ref('password')], 'Пароли не совпадают'),
+			})
+
+			try {
+				await schema.validate(this.entityData, { abortEarly: false });
+				this.error = 'Пожалуйста, подождите';
+
+			} catch (error) {
+				console.log('valid error', error)
+				error.inner.forEach((validationError) => {
+					this.errors[validationError.path] = validationError.message
+				})
+			}
+		},
 
     async registerOne() {
+			this.errors = {};
+			await this.validation();
+
+			const { name, lastName, login, password, phone, email, passwordSubmit } = this.errors;
+			if ( name || lastName || login || password || phone || email || passwordSubmit ) return;
+
 			const result = await this.userRegister({
 				...this.entityData,
-				login: this.entityData.email
+				login: this.entityData.email,
 			})
 
       if (!result.result) {
@@ -168,3 +199,13 @@ export default {
   }
 }
 </script>
+<style scoped lang="sass">
+.login-input-container
+	position: relative
+	margin-bottom: 30px
+.small
+	position: absolute
+	bottom: -35px
+	left: 10px
+	font-size: 0.8rem
+</style>
