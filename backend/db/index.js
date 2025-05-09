@@ -148,7 +148,7 @@ const GuestUserSchema = new mongoose.Schema({
 	surName: { type: String },
 	birthDate: { type: String, required: false },
 	phone: { type: String },
-	email: { type: String, unique: true },
+	email: { type: String },
 	address: {
 		city: {type: String},
 		street: {type: String},

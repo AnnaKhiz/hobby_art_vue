@@ -84,13 +84,14 @@ async function addNewOrder(req, res, next) {
 				$push: {
 					orders: result._id
 				}
-			});
+			}, { new: true, runValidators: true});
 		} else {
+			console.log('result', result)
 			await User.findByIdAndUpdate(order.users, {
 				$push: {
 					orders: result._id
-				}
-			});
+				},
+			}, { new: true, runValidators: true});
 		}
 
     const data = await Order.findOne({ _id: new ObjectId(result._id)}).populate('items._id')

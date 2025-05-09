@@ -166,7 +166,7 @@ async function toggleFavorites(req, res, next) {
 				{ _id: new ObjectId(id), "favorites._id": new ObjectId(favoriteId) },
 				{ $set: { "favorites.$.isLiked": isLiked } },
 				{ new: true }
-			);
+			).populate('favorites._id');
 
 			// update items users - isFavorite state
 			await Item.findOneAndUpdate(
@@ -181,7 +181,7 @@ async function toggleFavorites(req, res, next) {
 		updatedUser = await User.findByIdAndUpdate({
 			_id: new ObjectId(id)},
 			{ $push: { "favorites": { _id: new ObjectId(favoriteId), isLiked }}},
-			{ new: true, runValidators: true})
+			{ new: true, runValidators: true}).populate('favorites._id')
 
 		// update item users - add user item to array
 		await Item.findOneAndUpdate({
