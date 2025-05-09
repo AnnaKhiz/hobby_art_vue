@@ -11,56 +11,79 @@
 		>
 			{{ error }}
 		</p>
-		<input
+		<div class="login-input-container">
+			<input
 				v-model="entityData.name"
 				type="text"
 				placeholder="Имя"
 				required
-		>
-		<input
+			/>
+			<span class="modal__registration-form-error-block small" v-if="errors.name">{{ errors.name }}</span>
+		</div>
+		<div class="login-input-container">
+			<input
 				v-model="entityData.lastName"
 				type="text"
 				placeholder="Фамилия"
 				required
-		>
-		<input
+			/>
+			<span class="modal__registration-form-error-block small" v-if="errors.lastName">{{ errors.lastName }}</span>
+		</div>
+		<div class="login-input-container">
+			<input
 				v-model="entityData.surName"
 				type="text"
 				placeholder="Отчество"
-				required>
-		<input
+				required
+			/>
+			<span class="modal__registration-form-error-block small" v-if="errors.surName">{{ errors.surName }}</span>
+		</div>
+		<div class="login-input-container">
+			<input
 				v-model="entityData.phone"
 				type="tel"
 				placeholder="Номер телефона"
 				required
-		>
-		<input
+			/>
+			<span class="modal__registration-form-error-block small" v-if="errors.phone">{{ errors.phone }}</span>
+		</div>
+		<div class="login-input-container">
+			<input
 				v-model="entityData.email"
 				type="email"
 				placeholder="E-mail"
 				required
-		>
-		<input
+			/>
+			<span class="modal__registration-form-error-block small" v-if="errors.email">{{ errors.email }}</span>
+		</div>
+		<div class="login-input-container">
+			<input
 				v-model="entityData.password"
 				type="password"
 				placeholder="Придумайте пароль"
-				required>
-		<input
+				required
+			/>
+			<span class="modal__registration-form-error-block small" v-if="errors.password">{{ errors.password }}</span>
+		</div>
+		<div class="login-input-container">
+			<input
 				v-model="entityData.passwordSubmit"
 				type="password"
 				placeholder="Повторите пароль"
 				required
-		>
-		<span
-			class="modal__registration-form-message"
-		>
+			/>
+			<span class="modal__registration-form-error-block small" v-if="errors.passwordSubmit">{{ errors.passwordSubmit }}</span>
+			<span
+				class="modal__registration-form-message"
+			>
 			Пароль должен содержать от 6 символов
 		</span>
-		<span
-			class="modal__registration-form-message sec"
-		>
+			<span
+				class="modal__registration-form-message sec"
+			>
 			(большие и маленькие латинские буквы, цифры)
 		</span>
+		</div>
 
 		<div class="modal__registration-subitem-ch ">
 			<input
@@ -105,6 +128,7 @@ import {
 	mapMutations,
 	mapActions
 } from "vuex";
+// import * as yup from 'yup';
 export default {
   name: "uiRegistForm",
   data() {
@@ -112,7 +136,8 @@ export default {
       entityData: {
         mailing: false
       },
-      error: ''
+      error: '',
+			errors: {}
     }
   },
   methods: {

@@ -73,7 +73,7 @@ import {
 	mapGetters,
 	mapMutations
 } from "vuex";
-import * as yup from 'yup'
+import * as yup from 'yup';
 
 export default {
   name: "uiLoginForm",
