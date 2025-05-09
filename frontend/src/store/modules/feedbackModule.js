@@ -3,14 +3,19 @@ import { fetchData } from "@/services/api";
 export const feedbackModule = {
 	namespaced: true,
 	state: () => ({
+		isLoading: true,
 		feedback: {},
 		feedbackList: [],
 	}),
 	getters: {
+		isLoading: state => state.isLoading,
 		feedback: state => state.feedback,
 		feedbackList: state => state.feedbackList
 	},
 	mutations: {
+		updateIsLoading(state, payload) {
+			state.isLoading = payload;
+		},
 		setFeedback(state, payload) {
 			state.feedback = payload;
 		},
@@ -25,6 +30,7 @@ export const feedbackModule = {
 			try {
 				result = await fetchData('api/feedback/add', 'POST', {}, body);
 				commit('setFeedback', result.data);
+				commit('updateIsLoading', false);
 			} catch (error) {
 				console.log('Error adding new feedback');
 			}
@@ -36,6 +42,7 @@ export const feedbackModule = {
 			try {
 				result = await fetchData('api/feedback');
 				commit('setFeedbackList', result.data);
+				commit('updateIsLoading', false);
 			} catch (error) {
 				console.log('Error adding new feedback');
 			}

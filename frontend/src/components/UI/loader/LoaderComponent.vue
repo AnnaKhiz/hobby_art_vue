@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="w-100 h-100 d-flex justify-center align-start pt-10"
-		style="background-color: #E8E8E8;"
+		style="background-color: transparent;"
 	>
 		<div class="w-33 d-flex justify-center align-center flex-column ga-6">
 			<p>Пожалуйста, подождите... </p>

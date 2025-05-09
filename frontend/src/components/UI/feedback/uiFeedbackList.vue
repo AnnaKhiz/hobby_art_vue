@@ -1,26 +1,34 @@
 <template>
-	<div class="feedback__container">
-		<p class="popup-text align-self-center">Отзывы</p>
-		<ui-feedback-item
-			v-for="item in feedbackList"
-			:key="item._id"
-			:item="item"
-			class="feedback__item"
-		/>
+	<div >
+		<loader-component v-if="loading" />
+		<div v-else class="feedback__container">
+			<p class="popup-text align-self-center">Отзывы</p>
+			<ui-feedback-item
+				v-for="item in feedbackList"
+				:key="item._id"
+				:item="item"
+				class="feedback__item"
+			/>
+		</div>
 	</div>
 </template>
 
 <script>
 import UiFeedbackItem from "@/components/UI/feedback/uiFeedbackItem.vue";
 import { mapActions, mapGetters } from "vuex";
+import LoaderComponent from "@/components/UI/loader/LoaderComponent.vue";
 
 export default {
 	name: "uiFeedbackList.vue",
-	components: { UiFeedbackItem },
+	components: {LoaderComponent, UiFeedbackItem },
 	computed: {
 		...mapGetters({
 			feedbackList: 'feedback/feedbackList',
-		})
+			isLoading: 'feedback/isLoading',
+		}),
+		loading() {
+			return this.isLoading;
+		}
 	},
 	methods: {
 		...mapActions({
