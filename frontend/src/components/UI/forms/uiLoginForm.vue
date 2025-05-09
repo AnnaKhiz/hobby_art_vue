@@ -6,7 +6,7 @@
       <div class="modal__registration-form-error-block" >
         {{ message }}
       </div>
-			<div class="login-input-container">
+			<div class="input-container">
 				<input
 					v-model="entityData.login"
 					type="text"
@@ -15,7 +15,7 @@
 				>
 				<span class="modal__registration-form-error-block small" v-if="errors.login">{{ errors.login }}</span>
 			</div>
-      <div class="login-input-container">
+      <div class="input-container">
 				<input
 					v-model="entityData.password"
 					type="password"
@@ -140,13 +140,3 @@ export default {
 	},
 }
 </script>
-<style scoped lang="sass">
-.login-input-container
-	position: relative
-	margin-bottom: 30px
-.small
-	position: absolute
-	bottom: -35px
-	left: 10px
-	font-size: 0.8rem
-</style>

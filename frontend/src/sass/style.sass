@@ -1651,6 +1651,10 @@ body.bg-white .header__menu-search input
           column-gap: 16px
           @media screen and (max-width: 670px)
             display: block
+          & > div
+            width: 25%
+            & > input
+              width: 100%
           & input#city, & input#street, & input#house, & input#apartment, & input#postcode
             @media screen and (max-width: 670px)
               width: 100%
@@ -2109,7 +2113,18 @@ body.bg-white .header__menu-search input
 .fade-leave-to
   opacity: 0
 
-
+.input-container
+  position: relative
+  margin-bottom: 30px
+  & > .small
+    position: absolute
+    bottom: -35px
+    left: 10px
+    font-size: 0.8rem
+    &.b-10
+      bottom: -10px
+    &.b-3
+      bottom: 3px
 
 
 

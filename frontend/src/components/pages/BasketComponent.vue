@@ -5,139 +5,12 @@
         <ui-breadcrumbs :link="getCheckedHeaderLink" />
         <section class="main__basket-info">
           <div class="main__basket-info-item user-info">
-
-            <form action="#">
-              <div class="main__basket-info-delivery">
-                <h2 class="main__basket-info-delivery-label">
-                  Способ получения
-                </h2>
-                <input
-                  v-model="deliveryInfo.address.city"
-                  type="text"
-                  placeholder="Город"
-                  style="width: 100%"
-                >
-                <div class="main__basket-info-delivery-method">
-                  <select v-model="deliveryInfo.deliveryMethod" style="color: #424242">
-                    <option
-                      v-for="method in deliveryMethods"
-                      :key="method"
-                      :value="method.value"
-                    >
-                      {{ method.text }}
-                    </option>
-                  </select>
-                </div>
-                <div class="main__basket-info-delivery-subflex">
-                  <input
-                    v-model="deliveryInfo.address.street"
-                    type="text"
-                    placeholder="Улица"
-                    id="street"
-                  >
-                  <input
-                    v-model="deliveryInfo.address.house"
-                    type="text"
-                    placeholder="Дом"
-                    id="house"
-                  >
-                  <input
-                    v-model="deliveryInfo.address.apartment"
-                    type="number"
-                    placeholder="Квартира"
-                    id="apartment"
-                  >
-                  <input
-                    v-model="deliveryInfo.address.zipCode"
-                    type="number"
-                    placeholder="Индекс"
-                    id="postcode"
-                  >
-                </div>
-                <input
-                  v-model="deliveryInfo.userComment"
-                  type="text"
-                  placeholder="Добавить комментарий"
-                  id="comment"
-                >
-              </div>
-              <div class="main__basket-info-user">
-                <h2 class="main__basket-info-user-label">
-                  Данные получателя
-                </h2>
-                <div class="main__basket-info-user-subflex">
-                  <input
-                    v-model="deliveryInfo.receiver.lastName"
-                    type="text"
-                    placeholder="Фамилия"
-                    id="del-lastname"
-                  >
-                  <input
-                    v-model="deliveryInfo.receiver.name"
-                    type="text"
-                    placeholder="Имя"
-                    id="del-firstname"
-                  >
-                  <input
-                    v-model="deliveryInfo.receiver.surName"
-                    type="text"
-                    placeholder="Отчество"
-                    id="del-surname"
-                  >
-                </div>
-                <input
-                  v-model="deliveryInfo.receiver.phone"
-                  type="tel"
-                  placeholder="Номер телефона"
-                  id="del-phone"
-                >
-                <p class="main__basket-info-user-text">
-                  По этому номеру телефона мы с вяжемся с вами для подтверждения заказа
-                </p>
-                <input
-                  v-model="deliveryInfo.receiver.email"
-                  type="email"
-                  placeholder="E-mail"
-                  id="del-email"
-                >
-                <p class="main__basket-info-user-text">
-                  На эту почту вам придет письмо с составом заказа, а так же трэк-номер для его отслеживания
-                </p>
-
-                <label for="subscribe-basket" class="main__basket-info-user-checkbox">
-                  <input
-                    v-model="deliveryInfo.receiver.isMailing"
-                    type="checkbox"
-                    id="subscribe-basket"
-                    name="subscribed"
-                  >
-                  <span class="main__basket-info-user-checkbox-text">Подписаться на рассылку новинок и акций</span>
-                </label>
-
-
-              </div>
-              <div class="main__basket-info-payment">
-                <h2 class="main__basket-info-payment-label">
-                  Способ оплаты
-                </h2>
-                <label
-                  v-for="option in paymentMethod"
-                  :key="option"
-                  :for="option.value"
-                  class="main__basket-info-payment-radio-btn"
-                  style="margin-bottom: 20px"
-                >
-                  <input
-                    v-model="deliveryInfo.paymentMethod"
-                    type="radio"
-                    name="payment"
-                    :value="option.value"
-                    style="margin-bottom: 0;"
-                  >
-                  <span class="main__basket-info-payment-radio-text">{{ option.text }}</span>
-                </label>
-              </div>
-            </form>
+						<ui-new-order-form
+							ref="newOrderForm"
+							:is-sent="isSent"
+							@update-delivery-info="handleDeliveryInfo"
+							@update-order="handleUpdateOrder"
+						/>
           </div>
           <div class="main__basket-info-item order-info">
             <h2 class="main__basket-info-item-label">
@@ -251,16 +124,19 @@ import {mapGetters, mapMutations, mapState, mapActions} from "vuex";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
+import UiNewOrderForm from "@/components/UI/forms/uiNewOrderForm.vue";
+// import * as yup from 'yup';
 
 export default {
   name: "BasketComponent",
-  components: {UiNotifyDialog, UiQuantityCounter, UiDeleteIcon, UiBreadcrumbs},
+  components: {UiNewOrderForm, UiNotifyDialog, UiQuantityCounter, UiDeleteIcon, UiBreadcrumbs},
   data() {
     return {
       display: false,
       order: {
         items: [],
       },
+			isSent: false,
       currentOrder: {
         date: '',
         dateCompleted:'',
@@ -309,6 +185,12 @@ export default {
 		]),
 		...mapActions('order', ['addNewOrder']),
 		...mapActions('user', ['getAuthUser']),
+		handleUpdateOrder(value) {
+			this.currentOrder = { ...value};
+		},
+		handleDeliveryInfo(value) {
+			this.deliveryInfo = {...value};
+		},
     parseCheckedColors(color, itemId) {
       const currentItem = this.order.items.find(el => el.item._id === itemId);
 
@@ -319,6 +201,9 @@ export default {
     },
 
     async sendOrder() {
+			const validationResult = await this.$refs.newOrderForm.validation();
+			if (!validationResult) return;
+
       this.currentOrder.deliveryInfo = {...this.deliveryInfo};
       const now = new Date(Date.now());
       const options = { timeZone: 'Europe/Kiev', hour12: false };
@@ -329,13 +214,14 @@ export default {
       this.currentOrder.totalQuantity = this.$store.state.order.order.totalQuantity;
       this.currentOrder.items = this.$store.state.order.order.items.map(el => ( { _id: el.item._id, price : el.price, quantity: el.quantity, checkedColor: el.checkedColor } ));
 
+
 			if (!this.currentOrder.items.length) {
 				this.display = true;
 				this.notifyMessage = 'Пустой заказ!';
 				this.notifyStatus = 'var(--errorText)';
 				return
 			}
-      console.log(this.currentOrder)
+      console.log('current order', this.currentOrder)
 
       await this.addNewOrder({
 				body: this.currentOrder
@@ -363,6 +249,7 @@ export default {
         users: ''
       };
 
+			this.isSent = true;
       this.deliveryInfo = {
         deliveryMethod: 'novapost',
         paymentMethod: 'cash',
@@ -374,18 +261,18 @@ export default {
       localStorage.removeItem('order');
       this.clearOrder()
     },
-		addEmptyAddress() {
-			this.deliveryInfo.address = {
-				city: '',
-				street: '',
-				house: '',
-				apartment: null,
-				zipCode: null,
-			};
-			this.deliveryInfo.receiver = {};
-			this.currentOrder.isMailing = false;
-			this.currentOrder.users = '';
-		},
+		// addEmptyAddress() {
+		// 	this.deliveryInfo.address = {
+		// 		city: '',
+		// 		street: '',
+		// 		house: '',
+		// 		apartment: null,
+		// 		zipCode: null,
+		// 	};
+		// 	this.deliveryInfo.receiver = {};
+		// 	this.currentOrder.isMailing = false;
+		// 	this.currentOrder.users = '';
+		// },
 
     countPrice(index, quantity) {
       this.$store.state.order.order.items[index].quantity = quantity;
@@ -405,26 +292,26 @@ export default {
 
       localStorage.setItem('order', JSON.stringify(this.$store.state.order.order))
     },
-    async initPage() {
-			if (localStorage.getItem('auth') === 'true') {
-				try {
-					await this.getAuthUser();
-					this.user = this.userInfo;
-					console.log(this.user)
-					this.deliveryInfo.address = this.user.address || {};
-					this.deliveryInfo.receiver = this.user || {};
-					this.currentOrder.isMailing = this.user.mailing || false;
-					this.currentOrder.users = this.user._id || '';
-
-				} catch (error) {
-					console.error('Error in getting user (basket):', error);
-					this.addEmptyAddress();
-				}
-
-			} else {
-				this.addEmptyAddress();
-			}
-    },
+    // async initPage() {
+		// 	if (localStorage.getItem('auth') === 'true') {
+		// 		try {
+		// 			await this.getAuthUser();
+		// 			this.user = this.userInfo;
+		// 			console.log(this.user)
+		// 			this.deliveryInfo.address = this.user.address || {};
+		// 			this.deliveryInfo.receiver = this.user || {};
+		// 			this.currentOrder.isMailing = this.user.mailing || false;
+		// 			this.currentOrder.users = this.user._id || '';
+		//
+		// 		} catch (error) {
+		// 			console.error('Error in getting user (basket):', error);
+		// 			this.addEmptyAddress();
+		// 		}
+		//
+		// 	} else {
+		// 		this.addEmptyAddress();
+		// 	}
+    // },
 		scrollTop() {
 			this.basketComponent.scrollTo({
 				top: 0,
@@ -441,7 +328,7 @@ export default {
     }
   },
   async mounted() {
-    await this.initPage();
+    // await this.initPage();
 		this.basketComponent = this.$refs.basket.closest('div');
   },
   watch: {

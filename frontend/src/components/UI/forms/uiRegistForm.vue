@@ -1,5 +1,4 @@
 <template>
-	{{errors}}
 	<form
 		class="modal__registration-form regist px-10"
 	>
@@ -12,7 +11,7 @@
 		>
 			{{ error }}
 		</p>
-		<div class="login-input-container">
+		<div class="input-container">
 			<input
 				v-model="entityData.name"
 				type="text"
@@ -21,7 +20,7 @@
 			/>
 			<span class="modal__registration-form-error-block small" v-if="errors.name">{{ errors.name }}</span>
 		</div>
-		<div class="login-input-container">
+		<div class="input-container">
 			<input
 				v-model="entityData.lastName"
 				type="text"
@@ -30,7 +29,7 @@
 			/>
 			<span class="modal__registration-form-error-block small" v-if="errors.lastName">{{ errors.lastName }}</span>
 		</div>
-		<div class="login-input-container">
+		<div class="input-container">
 			<input
 				v-model="entityData.surName"
 				type="text"
@@ -39,7 +38,7 @@
 			/>
 			<span class="modal__registration-form-error-block small" v-if="errors.surName">{{ errors.surName }}</span>
 		</div>
-		<div class="login-input-container">
+		<div class="input-container">
 			<input
 				v-model="entityData.phone"
 				type="tel"
@@ -48,7 +47,7 @@
 			/>
 			<span class="modal__registration-form-error-block small" v-if="errors.phone">{{ errors.phone }}</span>
 		</div>
-		<div class="login-input-container">
+		<div class="input-container">
 			<input
 				v-model="entityData.email"
 				type="email"
@@ -57,7 +56,7 @@
 			/>
 			<span class="modal__registration-form-error-block small" v-if="errors.email">{{ errors.email }}</span>
 		</div>
-		<div class="login-input-container">
+		<div class="input-container">
 			<input
 				v-model="entityData.password"
 				type="password"
@@ -66,7 +65,7 @@
 			/>
 			<span class="modal__registration-form-error-block small" v-if="errors.password">{{ errors.password }}</span>
 		</div>
-		<div class="login-input-container">
+		<div class="input-container">
 			<input
 				v-model="entityData.passwordSubmit"
 				type="password"
@@ -199,13 +198,3 @@ export default {
   }
 }
 </script>
-<style scoped lang="sass">
-.login-input-container
-	position: relative
-	margin-bottom: 30px
-.small
-	position: absolute
-	bottom: -35px
-	left: 10px
-	font-size: 0.8rem
-</style>

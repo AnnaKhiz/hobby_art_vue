@@ -54,10 +54,13 @@ export const usersModule = {
     },
     setUserInfo(state, payload) {
 			const favorites = addSelectedOption(payload.favorites)
+			console.log('payload', payload)
       state.user = {
 				...payload,
 				favorites
 			};
+
+			console.log('update state', state.user)
     },
 		updateIsSelectedItem(state, { id, payload}) {
 			const index = state.user.favorites.findIndex(el => el._id._id === id);

@@ -53,7 +53,7 @@ export default {
 			user: 'user/userInfo',
 		}),
 		favorites() {
-			if (!this.user) return [];
+			if (!this.user.favorites) return [];
 			return this.user.favorites.filter(el => el.isLiked);
 		}
 	},
