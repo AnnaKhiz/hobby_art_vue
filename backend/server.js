@@ -4,6 +4,7 @@ const { router: usersRouter } = require('./routes/users.js');
 const { router: itemsRouter } = require('./routes/items.js')
 const { router: ordersRouter } = require('./routes/orders.js');
 const { router: feedbackRouter } = require('./routes/feedback.js');
+const { router: uploadRouter } = require('./routes/uploadFiles.js');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
@@ -37,4 +38,5 @@ server.use('/', usersRouter);
 server.use('/api/items', itemsRouter);
 server.use('/api/orders', ordersRouter);
 server.use('/api/feedback', feedbackRouter);
+server.use('/api/file', uploadRouter);
 

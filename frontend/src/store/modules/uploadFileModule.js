@@ -6,10 +6,11 @@ export const uploadFileModule = {
 		file: {}
 	}),
 	actions: {
-		async sendFile(body) {
+		async sendFile({commit}, body) {
 			try {
 				const result = await fetchData('api/file/upload', 'POST', {}, body);
-				console.log('Upload file: ', result)
+				console.log('Upload file result: ', result)
+				console.log(commit)
 			} catch (error) {
 				console.error('Error sending file: ', error)
 			}
