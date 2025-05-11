@@ -1,7 +1,7 @@
 <template>
  <div class="main">
    <ui-main-banner />
-
+<ui-upload-image />
    <section class="main__slider-popular">
      <div class="container">
         <ui-switcher-main
@@ -137,10 +137,12 @@ import UiFeedbackForm from "@/components/UI/forms/uiFeedbackForm.vue";
 import {mapGetters, mapMutations} from "vuex";
 import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue";
 import FeedbackTemplateDialog from "@/components/UI/feedback/FeedbackTemplateDialog.vue";
+import UiUploadImage from "@/components/UI/forms/uiUploadImage.vue";
 
 export default defineComponent({
   name: 'MainPage',
   components: {
+		UiUploadImage,
 		FeedbackTemplateDialog,
 		UiModalWindow,
 		UiFeedbackForm,
