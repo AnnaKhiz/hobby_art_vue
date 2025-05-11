@@ -82,14 +82,14 @@ async function addNewOrder(req, res, next) {
 		if (!order.users) {
 			await GuestUser.findByIdAndUpdate(guestUser._id, {
 				$push: {
-					orders: result._id
+					orders: { _id: result._id }
 				}
 			}, { new: true, runValidators: true});
 		} else {
 			console.log('result', result)
 			await User.findByIdAndUpdate(order.users, {
 				$push: {
-					orders: result._id
+					orders: { _id: result._id }
 				},
 			}, { new: true, runValidators: true});
 		}
