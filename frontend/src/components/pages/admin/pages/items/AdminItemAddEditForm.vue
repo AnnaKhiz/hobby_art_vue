@@ -61,12 +61,16 @@
       </option>
     </select>
 
-    <label for="photo" class="form-label">Ссылка на изображение</label>
-    <input
-      v-model="form.photo"
-      id="photo"
-      type="text"
-    >
+    <label for="photo" class="form-label">Выбрать изображение</label>
+		<div style="position: relative; cursor: pointer">
+			<button
+				class="header__menu-enterButton cover-input"
+				style="text-align: center"
+			>
+				{{ form.file?.name || 'Загрузить...' }}
+			</button>
+			<ui-upload-image @update-file="form.file = $event" style="opacity: 0" />
+		</div>
 
     <label for="price" class="form-label">Цена</label>
     <input
@@ -142,11 +146,16 @@
 </template>
 
 <script>
-// import axios from "axios";
-import {mapActions, mapGetters, mapState} from "vuex";
+import {
+	mapActions,
+	mapGetters,
+	mapState
+} from "vuex";
+import UiUploadImage from "@/components/UI/forms/uiUploadImage.vue";
 
 export default {
   name: "adminItemsForm",
+	components: { UiUploadImage },
   props: {
     itemId: {
       type: String,
@@ -158,7 +167,10 @@ export default {
       editFormData: {},
       message: '',
       form: {
-        color: [],
+				file: {
+					name: ''
+				},
+				color: [],
       },
     }
   },
@@ -168,13 +180,37 @@ export default {
 		...mapGetters({
 			boolOptions: 'items/boolOptions',
 			colorsSelect: 'items/colorsSelect',
+			file: 'uploadFile/file'
 		})
 	},
   methods: {
-		...mapActions('items', ['fetchItemById', 'addItem', 'updateItem']),
+		...mapActions({
+			fetchItemById: 'items/fetchItemById',
+			addItem: 'items/addItem',
+			updateItem: 'items/updateItem',
+			sendFile: 'uploadFile/sendFile'
+		}),
+		async appendFormFile() {
+			if (!this.file) {
+				this.message = 'Файл не выбран!';
+				return;
+			}
+			const formData = new FormData();
+			formData.append('file', this.form.file);
+			await this.sendFile(formData);
+		},
     async addNewItem() {
       this.parseFormFields();
 
+			await this.appendFormFile();
+
+			if (!this.file.filename) {
+				this.message = "Не удалось загрузить изображение";
+				return;
+			}
+
+			this.form.photo = this.file.filename;
+			delete this.form.file;
 			await this.addItem(this.form);
 
 			this.message = "Товар добавлен в базу данных";
@@ -272,4 +308,15 @@ export default {
     color: black
   &:focus
     color: black
+.cover-input
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  pointer-events: none
+  &:before
+    content: url("../../../../../assets/icons/upload.png")
+    top: 2px
+    left: 20px
+
 </style>

@@ -5,15 +5,24 @@ export const uploadFileModule = {
 	state: () => ({
 		file: {}
 	}),
+	getters: {
+		file: state => state.file,
+	},
+	mutations: {
+		setFileInfo(state, payload) {
+			state.file = { ...payload};
+		}
+	},
 	actions: {
 		async sendFile({commit}, body) {
+			let result = null;
 			try {
-				const result = await fetchData('api/file/upload', 'POST', {}, body);
-				console.log('Upload file result: ', result)
-				console.log(commit)
+				result = await fetchData('api/file/upload', 'POST', {}, body);
+				commit('setFileInfo', result.file)
 			} catch (error) {
 				console.error('Error sending file: ', error)
 			}
+			return result
 		}
 	}
 }

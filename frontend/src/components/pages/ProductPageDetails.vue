@@ -7,13 +7,13 @@
           <div class="main__product-details-about-flex">
             <div class="main__product-details-about-item left-item">
               <div class="main__product-details-about-item-image big">
-                <img :src="require(`@/assets/${productItem.photo ? productItem.photo : 'img/image-full-info-1.png'}`)" alt="image">
+                <img :src="`/uploads/${productItem.photo ? productItem.photo : 'no_image.png'}`" alt="image">
               </div>
               <div class="main__product-details-about-item-image">
-
-
                 <ui-colors-icon :item="productItem" size="50" position="center" @check="addCheckedColor($event)" details/>
-                <p v-if="order.checkedColor.length" style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
+                <p
+									v-if="order.checkedColor.length"
+									style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
                   <span>
                     <span style="font-weight: 600; line-height: 1.2rem">Выбранные цвета:</span> {{ parseCheckedColors || '' }}
                   </span>
@@ -313,6 +313,7 @@ export default {
   async mounted() {
 		await this.fetchItemById(this.id);
 		this.productItem = this.item;
+
     this.order.price = this.productItem.price;
     this.order.item = { ...this.productItem };
 

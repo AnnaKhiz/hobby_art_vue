@@ -124,6 +124,8 @@ body
       z-index: 0
       text-align: left
     &-enterButton
+      &:hover
+        cursor: pointer
       &:before
         @include headerContactsIcon (url('@/assets/img/human.svg'), 12px, 20px)
     &-favoriteButton
@@ -851,6 +853,7 @@ body.bg-white .header__menu-search input
       &-item
         display: flex
         flex-direction: column
+        gap: 10px
         min-width: 245px
         max-width: 300px
         flex: 0 0 18%
@@ -873,9 +876,8 @@ body.bg-white .header__menu-search input
               & path
                 fill: red
         &-img
-          max-width: 200px/img
-          height: 200px
-          margin-bottom: 16px
+          max-width: 200px
+          margin-bottom: 10px
           overflow: hidden
           display: flex
           align-items: center
@@ -888,7 +890,6 @@ body.bg-white .header__menu-search input
         &-label
           @include textBlock-width (166px)
           height: 35px
-          margin-bottom: 17px
           display: -webkit-box
           -webkit-box-orient: vertical
           -webkit-line-clamp: 2
@@ -1307,6 +1308,7 @@ body.bg-white .header__menu-search input
           font-size: 0.7rem
     &-about
       margin-bottom: 40px
+      padding-top: 50px
       &-flex
         display: flex
         column-gap: 44px
@@ -1326,7 +1328,7 @@ body.bg-white .header__menu-search input
             & img
               width: 100%
               aspect-ratio: 3 / 2
-              object-fit: contain
+              object-fit: cover
               height: auto
         &.left-item
           text-align: center

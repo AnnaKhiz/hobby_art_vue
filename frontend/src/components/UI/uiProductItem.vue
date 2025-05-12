@@ -8,7 +8,7 @@
 		/>
 		<div class="main__product-page-content-item-img">
 			<a @click="$router.push(routeImage)" style="cursor: pointer">
-				<img :src="require(`@/assets/${item.photo}`)" alt="card image">
+				<img :src="`/uploads/${item.photo}`" alt="card image">
 			</a>
 		</div>
 		<div class="main__product-page-content-item-label">
@@ -22,8 +22,11 @@
 				@check="addCheckedColor"
 			/>
 		</div>
-		<p style="min-height: 30px; font-size: 0.8rem; font-family: 'Montserrat'; overflow: hidden; padding: 10px 0">
-        <span v-if="parseCheckedColors() && item.isSelectedItem && savedIndex === itemId" >
+		<p
+			v-if="parseCheckedColors() && item.isSelectedItem && savedIndex === itemId"
+			class="checked-colors"
+		>
+        <span>
           <span style="font-weight: 600; line-height: 1.2rem">Выбранные цвета:</span> {{ parseCheckedColors() }}
         </span>
 		</p>
@@ -186,4 +189,11 @@ export default {
 	}
 }
 </script>
+<style scoped lang="sass">
+.checked-colors
+	min-height: 30px
+	font-size: 0.8rem
+	overflow: hidden
+	padding: 10px 0
+</style>
 
