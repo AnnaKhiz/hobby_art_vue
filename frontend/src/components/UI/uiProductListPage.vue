@@ -13,23 +13,16 @@
 				@update-is-checked-color-notify="handleCheckedColorNotify"
 			/>
 		</div>
-		<div>
-			<span
-				v-for="page in pages"
-				:key="page"
-				@click="handlePaginationCount(page)"
-				class="pagination-item"
-				:class="{ 'checked': currentPage === page}"
-			>
-				{{page}}
-			</span>
-		</div>
+		<ui-pagination
+			:pages="pages"
+			@update-last-index="handleLastIndex"
+			@update-start-index="handleStartIndex"
+		/>
 	</div>
 
   <div v-else>
     <p class="text-no-products">Нет товаров соответствующих критериям поиска</p>
   </div>
-
 
 	<!--   dialogs -->
 	<Transition name="fade">
@@ -45,11 +38,12 @@
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 import UiProductItem from "@/components/UI/uiProductItem.vue";
+import UiPagination from "@/components/UI/uiPagination.vue";
 
 
 export default {
   name: "uiProductListPage.vue",
-  components: {UiProductItem, UiNotifyDialog},
+  components: {UiPagination, UiProductItem, UiNotifyDialog},
   props: {
     searchFilters: {
       type: Object,
@@ -117,11 +111,11 @@ export default {
 		handleCheckedColorNotify(value) {
 			this.isCheckedColorNotify = value;
 		},
-		handlePaginationCount(value) {
-			this.currentPage = value;
-
-			this.lastIndex = +this.currentPage * this.itemsPerPage;
-			this.startIndex = this.lastIndex - 10;
+		handleLastIndex(index) {
+			this.lastIndex = index;
+		},
+		handleStartIndex(index) {
+			this.startIndex = index;
 		}
   },
 
@@ -150,7 +144,6 @@ export default {
     },
     filteredItems: {
       handler(val) {
-				this.handlePaginationCount(1);
 				this.pages = Math.ceil(this.filteredItems.length / this.itemsPerPage);
         this.$emit('change', val.length);
       },
@@ -172,19 +165,4 @@ export default {
 .text-no-products
   font: 400 normal 1rem/1.3rem 'Montserrat'
   color: var(--colorTextMain)
-
-.pagination-item
-  cursor: pointer
-  margin-right: 10px
-  background-color: var(--colorTextButton)
-  padding: 10px
-  box-shadow: 1px 1px 2px #ece1e1, inset -1px -1px 2px #818080
-  border-radius: 4px
-  &:hover
-    color: var(--colorTextButton)
-    background-color: var(--grayLinkColor)
-  &.checked
-    color: #976464
-    background-color: var(--colorLineBasket)
-    box-shadow: inset 1px 1px 2px #ece1e1, -1px -1px 2px #818080
 </style>

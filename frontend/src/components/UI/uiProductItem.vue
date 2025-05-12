@@ -185,7 +185,7 @@ export default {
 		},
 	},
 	mounted() {
-		console.log('item', this.item)
+		// console.log('item', this.item)
 	}
 }
 </script>
