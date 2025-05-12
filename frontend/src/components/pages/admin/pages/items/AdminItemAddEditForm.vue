@@ -67,7 +67,7 @@
 				class="header__menu-enterButton cover-input"
 				style="text-align: center"
 			>
-				{{ form.file?.name || 'Загрузить...' }}
+				{{ form.file?.name || form.photo || 'Загрузить...' }}
 			</button>
 			<ui-upload-image @update-file="form.file = $event" style="opacity: 0" />
 		</div>
@@ -80,6 +80,7 @@
     >
 
     <label for="color" class="form-label">Доступные цвета</label>
+		<code>{{form}}</code>
     <select
       v-model="form.color"
       id="color"
@@ -164,7 +165,6 @@ export default {
   },
   data() {
     return {
-      editFormData: {},
       message: '',
       form: {
 				file: {
@@ -180,7 +180,10 @@ export default {
 		...mapGetters({
 			boolOptions: 'items/boolOptions',
 			colorsSelect: 'items/colorsSelect',
-			file: 'uploadFile/file'
+			file: 'uploadFile/file',
+			itemTypesList: 'filter/type',
+			brandsList: 'filter/brand',
+			composition: 'filter/composition'
 		})
 	},
   methods: {
@@ -226,15 +229,27 @@ export default {
       return this.form = {
         ...this.form,
         color: this.colorsSelect.filter(el => this.form.color.includes(el.value)),
-        type: this.$store.state.filter.itemTypesList.find(el => this.form.type === el.value),
-        brand: this.$store.state.filter.brandsList.find(el => this.form.brand === el.value),
-        composition: this.$store.state.filter.itemCompositionsList.find(el => this.form.composition === el.value)
+        type: this.itemTypesList.find(el => this.form.type === el.value),
+        brand: this.brandsList.find(el => this.form.brand === el.value),
+        composition: this.composition.find(el => this.form.composition === el.value)
       }
     },
 
-    sendEditedItem() {
-      if (this.form.color.length) {
+    async sendEditedItem() {
         this.parseFormFields();
+				console.log(this.form)
+				if (this.form.file) {
+					await this.appendFormFile();
+					if (!this.file.filename) {
+						this.message = "Не удалось загрузить изображение";
+						return;
+					}
+				}
+
+
+
+				this.form.photo = this.file.filename;
+				delete this.form.file;
 
         this.message = "Товар обновлен успешно";
 
@@ -245,33 +260,26 @@ export default {
           this.$router.push({name: 'admin-items'})
         }, 1500)
       }
-    },
   },
   async mounted() {
     if (this.itemId) {
       await this.fetchItemById(this.itemId);
-			this.editFormData = this.item;
 
       this.form = {
-        ...this.editFormData,
-        brand: this.editFormData.brand.value,
-        type: this.editFormData.type.value,
-        composition: this.editFormData.composition.value,
-        color: this.editFormData.color.map(el => el.value)
+        ...this.item,
+        brand: this.item.brand.value,
+        type: this.item.type.value,
+        composition: this.item.composition.value,
+        color: this.item.color.map(el => el.value)
       }
+
     } else {
       this.form = {
         color: [],
       }
     }
   },
-  watch: {
-    editFormData(val) {
-      this.form = val
-    }
-  }
-
-}
+ }
 </script>
 
 <style scoped lang="sass">

@@ -6,11 +6,13 @@ export const filterParamsModule = {
       { text: 'Зефирка', value: 'zefirka' },
       { text: 'Гамма', value: 'gamma' },
       { text: 'Сибшнур', value: 'sibshnur' },
+			{ text: 'Yarn Art', value: 'yarnart' },
     ],
     itemTypesList: [
       { text: 'Шпагат, шнуры, веревки', value: 'shpagat' },
       { text: 'Кольца', value: 'kolca' },
       { text: 'Джут', value: 'dzut' },
+			{ text: 'Пряжа', value: 'priaja' },
     ],
     itemCompositionsList: [
       { text: 'Хлопок', value: 'cotton' },
@@ -25,17 +27,9 @@ export const filterParamsModule = {
     ]
   }),
   getters: {
-    brand(state) {
-      return state.brandsList
-    },
-    type(state) {
-      return state.itemTypesList
-    },
-    composition(state) {
-      return state.itemCompositionsList
-    },
-    width(state) {
-      return state.itemsWidthList
-    },
+    brand: state => state.brandsList,
+    type: state => state.itemTypesList,
+    composition: state => state.itemCompositionsList,
+    width: state => state.itemsWidthList,
   }
 }

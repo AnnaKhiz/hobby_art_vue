@@ -13,11 +13,11 @@ export const searchModule = {
 		searchItem(state, payload) {
 			state.searchText = payload;
 
-			state.searchList = state.itemsList.filter(item => item.brand.text.includes(payload)
+			state.searchList = state.itemsList.filter(item => item.brand?.text.includes(payload)
 				|| item.name.includes(payload)
 				|| item.description.includes(payload)
 				|| item.price === +payload
-				|| item.type.text.toLowerCase() === payload.toLowerCase()
+				|| item.type?.text.toLowerCase() === payload.toLowerCase()
 				|| item.length === +payload
 				|| item.width === +payload
 			)
