@@ -41,8 +41,6 @@ export default {
 }
 </script>
 
-
-
 <style scoped lang="sass">
 .pagination-item
 	cursor: pointer
