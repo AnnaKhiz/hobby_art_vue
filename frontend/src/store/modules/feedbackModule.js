@@ -42,6 +42,7 @@ export const feedbackModule = {
 			try {
 				result = await fetchData('api/feedback');
 				commit('setFeedbackList', result.data);
+				console.log('feedbacks', result.data)
 				commit('updateIsLoading', false);
 			} catch (error) {
 				console.log('Error adding new feedback');

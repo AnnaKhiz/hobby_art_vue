@@ -74,85 +74,7 @@
           <h2 class="main__product-details-feedback-label">
             Отзывы
           </h2>
-          <div class="main__product-details-feedback-rel">
-            <div class="container swiper swiper3 mySwiper-3 ">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                  <div class="main__product-details-feedback-container">
-                    <div class="main__product-details-feedback-flex">
-                      <div class="main__product-details-feedback-flex-item image">
-                        <img src="@/assets/img/feed-photo.png" alt="feedback foto">
-                      </div>
-                      <div class="main__product-details-feedback-flex-item user">
-                        <p class="main__product-details-feedback-flex-user">
-                          Евгения Доценко
-                        </p>
-                        <img src="@/assets/img/rating.png" alt="stars">
-                      </div>
-                      <div class="main__product-details-feedback-flex-item data">
-                        13.06.2021 12:30
-                      </div>
-                    </div>
-                    <p class="main__product-details-feedback-comment">
-                      <span>Комментарий:</span> Хороший шпагат
-                    </p>
-                  </div>
-
-                </div>
-                <div class="swiper-slide">
-
-                  <div class="main__product-details-feedback-container">
-                    <div class="main__product-details-feedback-flex">
-                      <div class="main__product-details-feedback-flex-item image">
-                        <img src="@/assets/img/feed-photo.png" alt="feedback foto">
-                      </div>
-                      <div class="main__product-details-feedback-flex-item user">
-                        <p class="main__product-details-feedback-flex-user">
-                          Евгения Доценко
-                        </p>
-                        <img src="@/assets/img/rating.png" alt="stars">
-                      </div>
-                      <div class="main__product-details-feedback-flex-item data">
-                        13.06.2021 12:30
-                      </div>
-                    </div>
-                    <p class="main__product-details-feedback-comment">
-                      <span>Комментарий:</span> Хороший шпагат
-                    </p>
-                  </div>
-
-                </div>
-                <div class="swiper-slide">
-
-                  <div class="main__product-details-feedback-container">
-                    <div class="main__product-details-feedback-flex">
-                      <div class="main__product-details-feedback-flex-item image">
-                        <img src="@/assets/img/feed-photo.png" alt="feedback foto">
-                      </div>
-                      <div class="main__product-details-feedback-flex-item user">
-                        <p class="main__product-details-feedback-flex-user">
-                          Евгения Доценко
-                        </p>
-                        <img src="@/assets/img/rating.png" alt="stars">
-                      </div>
-                      <div class="main__product-details-feedback-flex-item data">
-                        13.06.2021 12:30
-                      </div>
-                    </div>
-                    <p class="main__product-details-feedback-comment">
-                      <span>Комментарий:</span> Хороший шпагат
-                    </p>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-            <div class="swiper-button-next-3"></div>
-            <div class="swiper-button-prev-3"></div>
-          </div>
-
+					<ui-feedback-slider />
         </section>
         <section class="main__product-details-recommend">
           <h2 class="main__product-details-recommend-label">
@@ -233,10 +155,11 @@ import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue"
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
+import UiFeedbackSlider from "@/components/UI/sliders/uiFeedbackSlider.vue";
 
 export default {
   name: "ProductPageDetails",
-  components: {UiColorsIcon, UiNotifyDialog, UiProductItemHeader, UiBreadcrumbs, UiQuantityCounter},
+  components: {UiFeedbackSlider, UiColorsIcon, UiNotifyDialog, UiProductItemHeader, UiBreadcrumbs, UiQuantityCounter},
 
   props: {
     id: {
