@@ -5,11 +5,13 @@ const {
   getOneItemById,
   addNewItem,
   updateItemData,
-  removeItem
+  removeItem,
+	getRecommendedItems
   } = require('../services/apiItems');
 
 router.get('/', getAllItems );
 router.get('/:id', getOneItemById );
+router.post('/recommended', getRecommendedItems)
 
 router.post('/add', addNewItem );
 

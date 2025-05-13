@@ -22,6 +22,24 @@ async function getOneItemById(req, res, next) {
     res.send({ "result": false, item: {} });
   }
 }
+
+async function getRecommendedItems(req, res, next) {
+	const { id, type } = req.body;
+
+	let items = [];
+	try {
+		items = await Item.find({ "type.value": type, _id: { $ne: id } });
+
+		if (!items.length) {
+			items = await Item.find({ "type.value": 'dzut'});
+		}
+		res.send({ "result": true, items: items });
+
+	} catch (e) {
+		console.log(e)
+		res.send({ "result": false, items: [] });
+	}
+}
 async function addNewItem(req, res, next) {
   const { body: item } = req;
 
@@ -71,5 +89,6 @@ module.exports = {
   getOneItemById,
   addNewItem,
   updateItemData,
-  removeItem
+  removeItem,
+	getRecommendedItems
 }
