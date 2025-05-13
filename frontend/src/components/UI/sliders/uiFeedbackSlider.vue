@@ -67,7 +67,7 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-			feedbackList: 'feedback/feedbackList'
+			feedbackList: 'feedback/feedbackList',
 		})
 	},
 	methods: {
@@ -78,12 +78,7 @@ export default {
 	},
 	async mounted() {
 		await this.getFeedbackList();
-		console.log(this.feedbackList)
 	}
 }
 </script>
 
-
-
-<style scoped lang="sass">
-</style>
