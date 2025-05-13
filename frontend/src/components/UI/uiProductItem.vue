@@ -23,7 +23,7 @@
 			/>
 		</div>
 		<p
-			v-if="parseCheckedColors() && item.isSelectedItem && savedIndex === itemId"
+			v-if="showColorsList"
 			class="checked-colors"
 		>
         <span>
@@ -64,6 +64,10 @@ export default {
 			default: ''
 		},
 		defaultLike: {
+			type: Boolean,
+			default: false
+		},
+		isRecommended: {
 			type: Boolean,
 			default: false
 		}
@@ -109,13 +113,17 @@ export default {
 			if (!this.isAuthorized) return false;
 			return this.item.users.find(el => el._id._id === this.user._id)?.isFavorite;
 		},
+		showColorsList() {
+			return this.parseCheckedColors() && this.item.isSelectedItem && this.savedIndex === this.itemId;
+		}
 	},
 	methods: {
 		...mapMutations('order', ['addToOrder']),
 		...mapMutations({
 			setItems: 'items/setItems',
 			updateIsSelectedItem: 'items/updateIsSelectedItem',
-			updateIsSelectedFavorite: 'user/updateIsSelectedItem'
+			updateIsSelectedFavorite: 'user/updateIsSelectedItem',
+			updateColorsInRecommended: 'items/updateColorsInRecommended'
 		}),
 		...mapActions({
 			fetchItems: 'items/fetchItems',
@@ -129,17 +137,20 @@ export default {
 			const body = { id: this.itemId, isLiked: value };
 			await this.userAddFavorite(body);
 		},
+		updateSelected(data) {
+			return this.isRecommended ? this.updateColorsInRecommended(data) :	this.updateIsSelectedItem(data);
+		},
 		checkIsSelectedItemUsed(event) {
 			if (event.target.parentElement.id === this.itemId) {
 				this.savedIndex = this.itemId;
 				this.defaultLike
 					? this.updateIsSelectedFavorite({ id: this.itemId, payload: true})
-					: this.updateIsSelectedItem({ index: this.index, payload: true});
+					: this.updateSelected({ index: this.index, payload: true});
 			} else {
 				this.savedIndex = '';
 				this.defaultLike
 					? this.updateIsSelectedFavorite({ id: this.itemId, payload: false})
-					:	this.updateIsSelectedItem({ index: this.index, payload: false});
+					:	this.updateSelected({ index: this.index, payload: false});
 			}
 			this.setItems(this.itemsList);
 		},
@@ -160,9 +171,15 @@ export default {
 					this.checkedColor.push(value);
 				}
 			}
+			console.log(this.checkedColor)
 		},
 		parseCheckedColors() {
-			const currentItem = this.itemsList.find(el => el._id === this.itemId);
+
+			// const	currentItem = this.itemsList.find(el => el._id === this.itemId);
+
+			const currentItem = !this.itemsList.length
+				? this.item
+				: this.itemsList.find(el => el._id === this.itemId);
 
 			const colorObjects = this.defaultLike
 				? this.item.color.filter(el => this.checkedColor.includes(el.value))

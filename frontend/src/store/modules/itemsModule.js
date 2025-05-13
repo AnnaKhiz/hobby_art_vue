@@ -6,6 +6,7 @@ export const itemsModule = {
 		isLoading: true,
 		itemsList: [],
 		item: [],
+		recommendedItemsList: [],
 		boolOptions: [
 			{ text: 'Есть', value: true },
 			{ text: 'Нет', value: false }
@@ -26,10 +27,17 @@ export const itemsModule = {
 		colorsSelect: state => state.colorsSelect,
 		getItems: state => state.itemsList,
 		getItemById: state => state.item,
+		recommendedItemsList: state => state.recommendedItemsList,
 	},
 	mutations: {
 		updateIsLoading(state, payload) {
 			state.isLoading = payload;
+		},
+		updateRecommendedItems(state, payload) {
+			state.recommendedItemsList = addSelectedOption(payload);
+		},
+		updateColorsInRecommended(state, { index, payload}) {
+			return state.recommendedItemsList[index].isSelectedItem = payload;
 		},
 		setItems(state, payload) {
 			state.itemsList = payload;
@@ -75,6 +83,18 @@ export const itemsModule = {
 			} catch (error) {
 				console.error('Error fetching item:', error);
 			}
+		},
+
+		async fetchRecommendedItems({ commit }, body) {
+			let result = {};
+			try {
+				result = await fetchData('api/items/recommended', 'POST', {}, body);
+				commit('updateRecommendedItems', result.items)
+				console.log('recommended', result.items)
+			} catch (error) {
+				console.error('Error adding items:', error);
+			}
+			return result.data;
 		},
 
 		async addItem({ commit }, body) {
