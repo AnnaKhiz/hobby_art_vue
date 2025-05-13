@@ -21,7 +21,7 @@
 
               <div v-for="(item, index) in order.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
                 <div class="main__basket-info-item-product-img">
-                  <img :src="require(`@/assets/${item.item.photo ? item.item.photo : 'img/image-card-item7.png'}`)" alt="product image">
+                  <img :src="`/uploads/${item.item.photo ? item.item.photo : 'no_image.png'}`" alt="product image">
                 </div>
                 <p class="main__basket-info-item-product-name">
                   {{ item.item.name }}
