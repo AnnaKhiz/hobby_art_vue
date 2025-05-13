@@ -43,6 +43,8 @@ async function getRecommendedItems(req, res, next) {
 async function addNewItem(req, res, next) {
   const { body: item } = req;
 
+	item.isSelectedItem = false;
+
   if (!item) return;
 
   try {

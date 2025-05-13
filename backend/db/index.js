@@ -71,6 +71,7 @@ const ItemSchema = new mongoose.Schema({
   type: { text: String, value: String },
   isSold: { type: Boolean },
   isDiscount: { type: Boolean },
+	isSelected: {type: Boolean},
   discountPercentage: { type: Number },
   color: [
     { text: String, value: String }
