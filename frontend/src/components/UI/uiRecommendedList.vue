@@ -56,6 +56,7 @@ export default {
 		}),
 		handleDisplayState(value) {
 			this.display = value;
+			console.log(value)
 		},
 		handleCheckedColorNotify(value) {
 			this.isCheckedColorNotify = value;
@@ -78,7 +79,22 @@ export default {
 
 				this.$emit('update', false);
 			}
-		}
+		},
+		display(val) {
+			if (val) {
+				setTimeout(() => {
+					this.display = false;
+				}, 2000)
+			}
+		},
+
+		isCheckedColorNotify(val) {
+			if (val) {
+				setTimeout(() => {
+					this.isCheckedColorNotify = false;
+				}, 2000)
+			}
+		},
 	}
 }
 </script>
