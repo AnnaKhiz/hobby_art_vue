@@ -20,10 +20,13 @@ export default {
 			type: Number,
 			default: 1
 		},
+		itemsPerPage: {
+			type: Number,
+			default: 10
+		}
 	},
 	data() {
 		return {
-			itemsPerPage: 10,
 			currentPage: 1,
 			lastIndex: 10,
 			startIndex: 0

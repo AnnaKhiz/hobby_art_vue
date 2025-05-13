@@ -15,6 +15,7 @@
 		</div>
 		<ui-pagination
 			:pages="pages"
+			:items-per-page="itemsPerPage"
 			@update-last-index="handleLastIndex"
 			@update-start-index="handleStartIndex"
 		/>

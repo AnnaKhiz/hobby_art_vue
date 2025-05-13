@@ -4,10 +4,16 @@
 		<div v-else class="feedback__container">
 			<p class="popup-text align-self-center">Отзывы</p>
 			<ui-feedback-item
-				v-for="item in feedbackList"
+				v-for="item in itemsPerPageList"
 				:key="item._id"
 				:item="item"
 				class="feedback__item"
+			/>
+			<ui-pagination
+				:pages="pages"
+				:items-per-page="itemsPerPage"
+				@update-last-index="handleLastIndex"
+				@update-start-index="handleStartIndex"
 			/>
 		</div>
 	</div>
@@ -17,10 +23,20 @@
 import UiFeedbackItem from "@/components/UI/feedback/uiFeedbackItem.vue";
 import { mapActions, mapGetters } from "vuex";
 import LoaderComponent from "@/components/UI/loader/LoaderComponent.vue";
+import UiPagination from "@/components/UI/uiPagination.vue";
 
 export default {
 	name: "uiFeedbackList.vue",
-	components: {LoaderComponent, UiFeedbackItem },
+	components: {UiPagination, LoaderComponent, UiFeedbackItem },
+	data() {
+		return {
+			itemsPerPage: 6,
+			pages: 1,
+			currentPage: 1,
+			startIndex: 0,
+			lastIndex: 6
+		}
+	},
 	computed: {
 		...mapGetters({
 			feedbackList: 'feedback/feedbackList',
@@ -28,16 +44,27 @@ export default {
 		}),
 		loading() {
 			return this.isLoading;
+		},
+		itemsPerPageList() {
+			return this.feedbackList.filter((el, index) => index < this.lastIndex && index >= this.startIndex);
 		}
 	},
 	methods: {
 		...mapActions({
 			getFeedbackList: 'feedback/getFeedbackList',
 		}),
+		handleLastIndex(index) {
+			this.lastIndex = index;
+		},
+		handleStartIndex(index) {
+			this.startIndex = index;
+		}
+
 	},
 	async mounted() {
 		await this.getFeedbackList();
-	}
+		this.pages = Math.ceil(this.feedbackList.length / this.itemsPerPage);
+	},
 }
 </script>
 
