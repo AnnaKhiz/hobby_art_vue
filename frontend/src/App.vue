@@ -29,20 +29,6 @@ export default {
       getDisplayDialogState: 'dialog/getDisplayDialogState'
     })
   },
-  // data() {
-  //   return {
-  //     active: false
-  //   }
-  // },
-  methods: {
-    // getModalActive(value) {
-    //   this.active = value
-    // }
-  },
-  mounted() {
-    // console.log(this.$router)
-  }
-
 }
 </script>
 

@@ -1,5 +1,7 @@
 <template>
+	<loader-component v-if="loading" />
   <main class="main bg-white">
+
     <div class="main__product-details" id="product-details">
       <div class="container">
         <ui-breadcrumbs :link="getCheckedHeaderLink" product details />
@@ -105,10 +107,12 @@ import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
 import UiFeedbackSlider from "@/components/UI/sliders/uiFeedbackSlider.vue";
 import UiRecommendedList from "@/components/UI/uiRecommendedList.vue";
+import LoaderComponent from "@/components/UI/loader/LoaderComponent.vue";
 
 export default {
   name: "ProductPageDetails",
   components: {
+		LoaderComponent,
 		UiRecommendedList,
 		UiFeedbackSlider, UiColorsIcon, UiNotifyDialog, UiBreadcrumbs, UiQuantityCounter},
 
@@ -135,8 +139,13 @@ export default {
   computed: {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
+			isLoading: 'feedback/isLoading',
     }),
+
 		...mapState('items', ['item']),
+		loading() {
+			return this.isLoading;
+		},
     parseCheckedColors() {
 
       if (!this.order.checkedColor.length) {

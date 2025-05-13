@@ -80,6 +80,7 @@ export const itemsModule = {
 			try {
 				const result = await fetchData('api/items/:id', 'GET', { id });
 				commit('setItem', result.items || result.item);
+				commit('updateIsLoading', false);
 			} catch (error) {
 				console.error('Error fetching item:', error);
 			}
