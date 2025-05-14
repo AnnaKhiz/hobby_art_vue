@@ -5,7 +5,7 @@
     />
     <router-view />
     <footer-component
-      v-if="!$route.path.match(/^\/admin($|\/.*)/)"
+      v-if="!$route.path.match(/^\/admin($|\/.*)/) && !loading"
     />
   </div>
 
@@ -26,8 +26,12 @@ export default {
 	},
   computed: {
     ...mapGetters({
-      getDisplayDialogState: 'dialog/getDisplayDialogState'
-    })
+      getDisplayDialogState: 'dialog/getDisplayDialogState',
+			isLoading: 'items/isLoading'
+    }),
+		loading() {
+			return this.isLoading;
+		}
   },
 }
 </script>
