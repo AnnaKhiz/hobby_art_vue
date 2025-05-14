@@ -153,13 +153,13 @@ async function removeOrder(req, res, next) {
   }
 }
 async function removeOrderItemById(req, res, next) {
-  const { orderId, itemId } = req.params;
+  const { orderId, itemId, color } = req.params;
 
   try {
     const result = await Order.findOneAndUpdate(
       { _id: new ObjectId(orderId)  },
       { $pull:
-          { items: { _id: new ObjectId(itemId) } }
+          { items: { _id: new ObjectId(itemId), checkedColor: color } }
       },
       { new: true }
     ).populate('items._id').populate('users');
