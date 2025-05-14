@@ -9,6 +9,32 @@ async function deleteOneUser(req, res) {
     ? res.status(404).send({ 'result': 'User not found' })
     : res.status(200).send(result);
 }
+
+async function getAllUsers(req, res) {
+	const { role } = req._auth;
+
+	if (!role) {
+		return res.send({"result": false, "users": [], role: role});
+	}
+
+	try {
+		const users = await User
+			.find()
+			.populate('orders')
+			.populate('comments')
+			.populate('favorites._id');
+
+		if (!users.length) {
+			return res.send({ "result": false, "users": [] });
+		}
+
+		res.send({ "result": true, "users": users });
+	} catch (error) {
+		console.error('Error getting users list', error);
+		res.status(404).send({ "result": false, "users": [] });
+	}
+
+}
 async function getAllPages(req, res) {
 	const { id } = req._auth;
 	const user = await User
@@ -213,17 +239,17 @@ async function uploadAdminPage(req,res) {
 }
 async function logInToAdminPanel(req, res, next) {
 	const { login, password } = req.body;
-	console.log(login, password)
 
 	const admin = await Admin.findOne( { login });
 
 	const result = await checkPass(password, admin.password);
 
 	if (!result) {
-		return res.send({ result: false})
+		return res.send({ result: false })
 	}
 
-	req._auth = { role: 'user', id: admin._id.toString() };
+	req._auth = { role: 'admin', id: admin._id.toString() };
+
 	const authData = { role: "admin", id: admin._id.toString() };
 	const token = generateJWt(authData);
 
@@ -231,7 +257,7 @@ async function logInToAdminPanel(req, res, next) {
 		httpOnly: true,
 		secure: isProd,
 		sameSite: isProd ? 'None' : 'Lax',
-		path: '/admin',
+		path: '/',
 		expires: new Date(Date.now() + 86400000)
 	})
 
@@ -243,7 +269,7 @@ async function logoutFromAdminPanel(req, res, next) {
 		httpOnly: true,
 		secure: isProd,
 		sameSite: isProd ? 'None' : 'Lax',
-		path: '/admin',
+		path: '/',
 		expires: new Date(Date.now() + 86400000)
 	});
 
@@ -261,5 +287,6 @@ module.exports = {
 	logInToAdminPanel,
 	logoutFromAdminPanel,
 	deleteOneUser,
-	toggleFavorites
+	toggleFavorites,
+	getAllUsers
 };

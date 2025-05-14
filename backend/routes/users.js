@@ -12,13 +12,15 @@ const {
 	logInToAdminPanel,
 	logoutFromAdminPanel,
 	deleteOneUser,
-	toggleFavorites
+	toggleFavorites,
+	getAllUsers
 } = require('../services/apiUsers')
 router.get('/', async (req, res) => {
 	res.send({ "result": "Server started here" })
 })
 
 // USER PAGES
+router.get('/admin/users', parserJwt, protectedRoute(['admin'], '/auth/login'), getAllUsers);
 router.get('/user', parserJwt, getAllPages );
 router.get('/user/logout',  logoutUserPage );
 router.post('/user/login', logInUserPage );
