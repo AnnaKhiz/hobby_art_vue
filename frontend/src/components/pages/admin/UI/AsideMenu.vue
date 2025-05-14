@@ -11,7 +11,7 @@
       <a href="#" class="sidebar__submenu"  @click.prevent="goToPage('orders', 'add')" >Добавить заказ</a>
     </div>
     <button @click="goToPage('users', null)" class="modal__registration-form-button block">Пользователи</button>
-    <button @click="goToPage('comments', null)" class="modal__registration-form-button block">Комментарии</button>
+    <button @click="goToPage('comments', null)" class="modal__registration-form-button block">Отзывы</button>
     <button @click="logOut" class="modal__registration-form-button block exit">Выход</button>
   </div>
 </template>

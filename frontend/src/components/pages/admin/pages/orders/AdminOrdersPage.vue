@@ -98,7 +98,7 @@ export default
 
 			if (!result) return;
 
-			this.orders.splice(index, 1);
+			this.tableRowList.splice(index, 1);
     },
   },
   async mounted() {

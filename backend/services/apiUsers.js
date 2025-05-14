@@ -20,7 +20,7 @@ async function getAllUsers(req, res) {
 	try {
 		const users = await User
 			.find()
-			.populate('orders')
+			.populate('orders._id')
 			.populate('comments')
 			.populate('favorites._id');
 

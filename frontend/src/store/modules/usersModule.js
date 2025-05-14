@@ -7,6 +7,7 @@ export const usersModule = {
     isAuthorized: false,
 		isLoading: true,
 		favoritesCount: 0,
+		usersList: [],
     user: {},
 		userAboutLabelsList: [
 			{ text: 'Имя:', value: 'name', idLabel: 'user-name', isReadable: false },
@@ -29,6 +30,7 @@ export const usersModule = {
 		userInfo: state => state.user,
 		userAboutLabelsList: state => state.userAboutLabelsList,
 		isAuthorized: state => state.isAuthorized,
+		usersList: state => state.usersList,
     getIsRegisteredInfo(state) {
       return state.isRegistered;
     },
@@ -49,6 +51,9 @@ export const usersModule = {
     setIsRegisteredInfo(state, payload) {
       state.isRegistered = payload;
     },
+		setUsersList(state, payload) {
+			state.usersList = payload;
+		},
     setIsAuthorizedInfo(state, payload) {
       state.isAuthorized = payload;
     },
@@ -80,6 +85,19 @@ export const usersModule = {
 				commit('updateIsLoading', false);
 			} catch (error) {
 				console.error('Error getting auth user:', error);
+			}
+			return result;
+		},
+
+		async getUsersList({ commit }) {
+			let result = null;
+			try {
+				result = await fetchData('admin/users');
+				console.log('get users list', result)
+				commit('setUsersList', result.users);
+				commit('updateIsLoading', false);
+			} catch (error) {
+				console.error('Error getting users list:', error);
 			}
 			return result;
 		},

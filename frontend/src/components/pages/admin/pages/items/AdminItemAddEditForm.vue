@@ -80,7 +80,6 @@
     >
 
     <label for="color" class="form-label">Доступные цвета</label>
-		<code>{{form}}</code>
     <select
       v-model="form.color"
       id="color"
