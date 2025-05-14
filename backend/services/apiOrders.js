@@ -15,7 +15,7 @@ async function getOrderById(req, res, next) {
   const { id } = req.params;
 
   try {
-    const order = await Order.findOne({ _id: new ObjectId(id) }).populate('items._id')
+    const order = await Order.findOne({ _id: new ObjectId(id) }).populate('items._id').populate('users')
 
     res.status(200).send({result: true, data: order });
   } catch (error) {
@@ -31,7 +31,7 @@ async function getUserOrdersById(req, res, next) {
   console.log(id)
 
   try {
-    const orders = await Order.find({ users: new ObjectId(id)}).populate('items._id')
+    const orders = await Order.find({ users: new ObjectId(id)}).populate('items._id').populate('users')
     res.send({ result: true, data: orders })
   } catch (error) {
     res.send({ result: false, data: [] })
@@ -94,7 +94,7 @@ async function addNewOrder(req, res, next) {
 			}, { new: true, runValidators: true});
 		}
 
-    const data = await Order.findOne({ _id: new ObjectId(result._id)}).populate('items._id')
+    const data = await Order.findOne({ _id: new ObjectId(result._id)}).populate('items._id').populate('users')
 
     res.send({ "result" : true, data: data });
   } catch (error) {
@@ -106,7 +106,10 @@ async function updateOrderData(req, res, next) {
   const { id } = req.params;
 
   try {
-    const updatedOrder = await Order.findByIdAndUpdate({_id: new ObjectId(id)}, { $set: order }, { new: true, runValidators: true})
+    const updatedOrder = await Order
+			.findByIdAndUpdate({_id: new ObjectId(id)}, { $set: order }, { new: true, runValidators: true})
+			.populate('items._id')
+			.populate('users')
 
     res.status(200).send({result: true, data: updatedOrder });
   } catch (error) {
@@ -129,7 +132,7 @@ async function updateOrderItemById(req, res, next) {
         }
       },
       { new: true, runValidators: true}
-    );
+    ).populate('items._id').populate('users');
 
     res.status(200).send({result: true, data: updatedOrder });
   } catch (error) {
@@ -142,7 +145,7 @@ async function removeOrder(req, res, next) {
 
   try {
     await Order.findOneAndDelete({ _id: new ObjectId(id)} );
-		const remainingOrders = await Order.find();
+		const remainingOrders = await Order.find().populate('items._id').populate('users');
     res.status(200).send({result: true, data: remainingOrders });
 
   } catch (error) {
@@ -159,7 +162,7 @@ async function removeOrderItemById(req, res, next) {
           { items: { _id: new ObjectId(itemId) } }
       },
       { new: true }
-    );
+    ).populate('items._id').populate('users');
 
     res.status(200).send({result: true, data: result });
 
