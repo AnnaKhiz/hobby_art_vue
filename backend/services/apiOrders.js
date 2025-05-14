@@ -2,7 +2,7 @@ const {Order, ObjectId, User, GuestUser} = require("../db");
 
 async function gelAllOrders(req, res, next) {
 
-  const orders = await Order.find().populate('items._id')
+  const orders = await Order.find().populate('items._id').populate('users');
 
   if (!orders) {
     res.send({ "result": false, orders: [] });
