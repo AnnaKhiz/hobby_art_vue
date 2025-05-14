@@ -23,6 +23,6 @@ router.patch('/update/:id',updateOrderData );
 router.patch('/update/:orderId/:itemId', updateOrderItemById );
 
 router.delete('/remove/:orderId', removeOrder );
-router.delete('/remove/:orderId/:itemId', removeOrderItemById);
+router.delete('/remove/:orderId/:itemId/:color', removeOrderItemById);
 
 module.exports = { router };
