@@ -4,29 +4,39 @@
     Пока нет заказов
   </div>
 
-  <div
-    v-else
-    class="items-container__item"
-    :class="{ 'hidden' : isShowDetails}"
-    v-for="(order, index) in orders"
-    :key="order._id"
-  >
-    <div class="title">
-      <h3  class="item-row"><span class="label">Заказ №: </span> {{ order._id }}</h3>
-    </div>
-    <div class="content">
-      <p v-for="tableRow in tableRowsList" :key="tableRow.text" class="item-row">
-				<span class="label">
-					{{ tableRow.text }}
-				</span>
-				{{ !tableRow.isParsedValue ? tableRow.value : parsePaymentValue(tableRow.value) }}
-			</p>
-    </div>
-
-    <div class="actions">
-      <button class="button" @click.prevent="showOrderDetails(order, index + 1)">Подробнее</button>
-      <button class="button" @click.prevent="handleRemoveOrder(order._id, index)">Удалить</button>
-    </div>
+    <div
+			v-else
+			v-for="(tableRow, index) in tableRowList"
+			:key="tableRow.text"
+			class="items-container__item pa-4"
+			:class="{ 'hidden' : isShowDetails}"
+		>
+      <div class="content" >
+				<p class="label align-self-center">Заказ №:</p>
+				<p class="row-value align-self-center mb-3">{{ tableRow.id}}</p>
+				<p class="label">Стоимость:
+					<span class="row-value">{{ tableRow.price }}</span>
+				</p>
+				<p class="label">Количество:
+					<span class="row-value">{{ tableRow.quantity }}</span>
+				</p>
+				<p class="label">Заказчик:
+					<span class="row-value">{{ tableRow.user }}</span>
+				</p>
+				<p class="label">Способ доставки:
+					<span class="row-value">{{ tableRow.delivery }}</span>
+				</p>
+				<p class="label">Способ оплаты:
+					<span class="row-value">{{ tableRow.payment }}</span>
+				</p>
+				<p class="label">Комментарий:
+					<span class="row-value">{{ tableRow.comment }}</span>
+				</p>
+				<div class="actions mt-auto">
+					<button class="button" @click.prevent="showOrderDetails(tableRow, index + 1)">Подробнее</button>
+					<button class="button" @click.prevent="handleRemoveOrder(tableRow.id, index)">Удалить</button>
+				</div>
+			</div>
   </div>
 
 </template>
@@ -40,41 +50,43 @@ export default
   components: {},
   data() {
     return {
-      errorMessage: '',
-      checkedColor: '',
-      isDisplayDialog: false,
-      itemsList: [],
-      message: '',
-      isShowDetails: false,
-      selectedOrder: {
-        deliveryInfo: {
-          receiver: {
-            fullName: '',
-            phone: '',
-            email: '',
-          },
-          fullAddress: '',
-          deliveryMethod: '',
-          paymentMethod: '',
-          userComment: ''
-        }
-      },
-      orders: [],
-    }
+			errorMessage: '',
+			checkedColor: '',
+			isDisplayDialog: false,
+			itemsList: [],
+			message: '',
+			isShowDetails: false,
+			selectedOrder: {
+				deliveryInfo: {
+					receiver: {
+						fullName: '',
+						phone: '',
+						email: '',
+					},
+					fullAddress: '',
+					deliveryMethod: '',
+					paymentMethod: '',
+					userComment: ''
+				}
+			},
+			orders: [],
+			tableRowList: []
+		}
   },
   computed: {
     ...mapGetters({
 			ordersList: 'order/ordersList',
-			tableRowsList: 'order/orderTableRowsList',
+			// tableRowsList: 'order/orderTableRowsList',
       parseDeliveryValue: 'delivery/parseDeliveryValue',
       parsePaymentValue: 'delivery/parsePaymentValue'
     }),
+
 
   },
   methods: {
 		...mapActions('order', ['fetchOrders', 'removeOrder']),
     showOrderDetails(order, index) {
-      this.$router.push({name: 'admin-orders-edit', params: { orderId: order._id } })
+      this.$router.push({name: 'admin-orders-edit', params: { orderId: order.id } })
       this.message = ''
       this.isShowDetails = true
       order.index = index;
@@ -92,6 +104,20 @@ export default
   async mounted() {
 		await this.fetchOrders();
 		this.orders = this.ordersList;
+
+		this.tableRowList = this.orders.map(el => (
+			{
+				id: el._id,
+				price: el.totalPrice,
+				quantity: el.totalQuantity,
+				user: `${el.users?.lastName || ''} ${el.users?.name || ''} ${el.users?.surName || ''}`,
+				delivery: this.parseDeliveryValue(el.deliveryInfo.deliveryMethod),
+				payment: this.parsePaymentValue(el.deliveryInfo.paymentMethod),
+				comment: el.deliveryInfo.receiver.userComment || '',
+				isParsedValue: false,
+			})
+		)
+		console.log(this.tableRowList)
   }
 }
 </script>
@@ -103,24 +129,28 @@ export default
   &__item
     background: #E8E8E8
     border-radius: 12px
-    width: 30%
+    width: 45%
     height: 350px
 
     padding: 15px
     display: flex
     flex-direction: column
     align-items: flex-start
+    justify-content: space-between
     & > .title
       width: 100%
       text-align: center
     & > .content
-      flex-grow: 1
-    & > .actions
       display: flex
-      align-items: center
-      justify-content: start
-      gap: 20px
-      margin-top: 15px
+      flex-direction: column
+      gap: 10px
+      flex-grow: 1
+.actions
+  display: flex
+  align-items: center
+  justify-content: start
+  gap: 20px
+  margin-top: 15px
 .item-row
   margin-bottom: 5px
   &:not(p.item-row)
@@ -139,4 +169,7 @@ export default
     text-decoration: underline
 .hidden
   display: none
+.row-value
+  max-width: 200px
+  font-weight: 400
 </style>

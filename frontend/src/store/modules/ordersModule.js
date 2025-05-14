@@ -36,40 +36,6 @@ export const ordersModule = {
 				{ text: 'Способ оплаты', value: state.order?.deliveryInfo?.paymentMethod, name: 'paymentMethod'  },
 			]
 		),
-		orderTableRowsList: state => (
-			[
-				{
-					text: 'Стоимость:',
-					value: `${state.order?.totalPrice} грн`,
-					isParsedValue: false,
-				},
-				{
-					text: 'Количество товаров:',
-					value: state.order?.totalQuantity,
-					isParsedValue: false,
-				},
-				{
-					text: 'Заказчик:',
-					value: state.order?.deliveryInfo?.fullName,
-					isParsedValue: false,
-				},
-				{
-					text: 'Способ доставки:',
-					value: state.order?.deliveryInfo?.deliveryMethod,
-					isParsedValue: true,
-				},
-				{
-					text: 'Способ оплаты:',
-					value: state.order?.deliveryInfo?.paymentMethod,
-					isParsedValue: true,
-				},
-				{
-					text: 'Комментарий пользователя:',
-					value: state.order?.deliveryInfo?.userComment,
-					isParsedValue: false,
-				},
-			]
-		),
     totalQuantity: state => state.totalQuantity,
   },
   mutations: {
@@ -126,19 +92,21 @@ export const ordersModule = {
 		async fetchOrderById({ commit }, id) {
 			try {
 				const result = await fetchData('api/orders/:id', 'GET', { id });
-
 				commit('updateOrder', result.data);
 			} catch (error) {
 				console.error('Error fetching orders:', error);
 			}
 		},
 		async updateOrder({commit}, { id, body }) {
+			let result = null;
 			try {
-				const result = await fetchData('api/orders/update/:id', 'PATCH', { id }, body);
+				result = await fetchData('api/orders/update/:id', 'PATCH', { id }, body);
 				commit('updateItemsInOrder', result.data);
+				console.log('update order result', result.data)
 			} catch (error) {
 				console.error('Error updating order items:', error);
 			}
+			return result
 		},
 
 		// ORDERS
@@ -146,6 +114,7 @@ export const ordersModule = {
 			try {
 				const result = await fetchData('api/orders');
 				commit('updateOrdersList', result.orders);
+				console.log('orders - ', result.orders)
 			} catch (error) {
 				console.error('Error fetching orders:', error);
 			}
@@ -190,10 +159,10 @@ export const ordersModule = {
 				console.error('Error updating order items:', error);
 			}
 		},
-		async removeItemFromOrder({ commit }, { idOrder, idItem }) {
+		async removeItemFromOrder({ commit }, { idOrder, idItem, color }) {
 			let result = null;
 			try {
-				result = await fetchData('api/orders/remove/:idOrder/:idItem', 'DELETE', { idOrder, idItem });
+				result = await fetchData('api/orders/remove/:idOrder/:idItem/:color', 'DELETE', { idOrder, idItem, color });
 				console.log('remove result', result)
 				commit('updateOrder', result.data);
 			} catch (error) {

@@ -13,7 +13,7 @@ export const linksModule = {
       { id: 1, text: 'Макраме', value: 'makrame', price: '250', link: `/product-page`, image: 'catalog-img-pink.png' },
       { id: 2, text: 'Вязание', value: 'knitting', price: '250', link: '/product-page', image: 'catalog-img-violet.png' },
       { id: 3, text: 'Вышивка', value: 'crosstich', price: '250', link: '/product-page', image: 'catalog-img-pink-shadow.png' },
-      { id: 4,text: 'Лепка', value: 'modeling', price: '250', link: '/product-page', image: 'catalog-img-pink-shadow.png' },
+      { id: 4, text: 'Лепка', value: 'modeling', price: '250', link: '/product-page', image: 'catalog-img-pink-shadow.png' },
       { id: 5, text: 'Инструменты', value: 'tools', price: '250', link: '/product-page', image: 'catalog-img-pink.png' },
       { id: 6, text: 'Упаковка', value: 'package', price: '250', link: '/product-page', image: 'catalog-img-violet.png' },
       { id: 7, text: 'Товары для творчества', value: 'art-supplies', price: '250', link: '/product-page', image: 'catalog-img-pink-shadow.png' },

@@ -21,7 +21,7 @@
       <div v-for="(item, index) in selectedOrder.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block" style="margin-bottom: 15px">
         <div style="display: flex; align-items: center; justify-content: flex-start; column-gap: 15px">
           <div class="main__basket-info-item-product-img" style="width: 50px; height: 50px; object-fit: contain; aspect-ratio: 1/1">
-            <img :src="require(`@/assets/${item._id.photo ? item._id.photo : 'img/image-card-item7.png'}`)" alt="product image" style="height: 100%">
+            <img :src="`/uploads/${item._id.photo ? item._id.photo : 'no_image.png'}`" alt="product image" style="height: 100%">
           </div>
           <p class="main__basket-info-item-product-name admin-order-view" >
             {{ item._id.name }}
@@ -162,8 +162,10 @@ export default {
     },
 
     parseCheckedColors(color, itemId) {
-      const currentItem = this.selectedOrder.items[itemId];
+			if (!this.selectedOrder.items.length) return;
 
+      const currentItem = this.selectedOrder.items[itemId];
+			console.log(currentItem)
       const colorObject = currentItem?._id?.color.find(el => el.value === color);
       if (!colorObject) return '';
 
@@ -192,16 +194,27 @@ export default {
 				});
     },
 
-    async deleteItemFromOrder(item, index) {
+    async deleteItemFromOrder(item) {
       this.message = '';
 
 			const result = await this.removeItemFromOrder({
 				idOrder: this.orderId,
-				idItem: item._id._id
+				idItem: item._id._id,
+				color: item.checkedColor
 			})
 
 			if (!result) return;
-			this.selectedOrder.items.splice(index, 1);
+			this.selectedOrder.items = result.data.items;
+
+			const resultUpdate = await this.updateOrder({
+				id: this.orderId,
+				body: {
+					totalPrice: result.data.items.reduce((acc, curElem) => acc + +curElem.price, 0),
+					totalQuantity: result.data.items.reduce((acc, curElem) => acc + +curElem.quantity, 0)
+				},
+			})
+
+			this.selectedOrder = resultUpdate.data;
 
     },
     async getItemsList() {
@@ -235,12 +248,26 @@ export default {
 				}
 			]
 
-			await this.updateOrder({
+			const result = await this.updateOrder({
 				id: this.orderId,
 				body: { items: updatedItemsList },
 			})
 
-			this.selectedOrder.items = updatedItemsList;
+			this.selectedOrder.items = [...result.data.items];
+
+			const updatedObject = {
+				'price': item.price,
+				'quantity': 1,
+				'totalPrice': result.data.items.reduce((acc, curElem) => acc + +curElem.price, 0),
+				'totalQuantity': result.data.items.reduce((acc, curElem) => acc + +curElem.quantity, 0),
+			}
+
+			await this.updateItemsInOrder(
+				{
+					idOrder: this.orderId,
+					idItem: item._id,
+					body: updatedObject,
+				});
 
 			this.isDisplayDialog = false;
     },
@@ -249,7 +276,6 @@ export default {
 		await this.fetchOrderById(this.orderId);
 		this.selectedOrder = this.order;
   },
-
 }
 </script>
 
