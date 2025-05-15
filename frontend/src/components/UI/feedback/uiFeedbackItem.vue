@@ -1,6 +1,17 @@
 <template>
 	<div>
-		<p class="feedback-text mb-4">{{ item.text }}</p>
+		<textarea
+			v-if="admin && edit"
+			v-model="feedbackText"
+			rows="6"
+			cols="50"
+			name="comment-text"
+			placeholder="Введите текст..."
+			autofocus
+			class="popup-textarea border"
+			@input="handleFeedbackText"
+		></textarea>
+		<p v-else class="feedback-text mb-4">{{ item.text }}</p>
 		<div class="feedback-about" :class="{ 'mb-6' : admin}">
 			<p class="feedback-author">{{ item.name }}</p>
 			<p class="feedback-author">{{ item.date }}</p>
@@ -20,7 +31,25 @@ export default {
 		admin: {
 			type: Boolean,
 			default: false
+		},
+		edit: {
+			type: Boolean,
+			default: false
 		}
+	},
+	data() {
+		return {
+			feedbackText: ''
+		}
+	},
+	emits: ['updateText'],
+	methods: {
+		handleFeedbackText() {
+			this.$emit('updateText', this.feedbackText);
+		}
+	},
+	mounted() {
+		this.feedbackText = this.item.text;
 	}
 }
 </script>

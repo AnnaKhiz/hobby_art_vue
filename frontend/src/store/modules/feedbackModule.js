@@ -75,6 +75,19 @@ export const feedbackModule = {
 				console.log('Error removing feedback');
 			}
 			return result;
+		},
+
+		async updateFeedbackAdmin({ commit }, { id, body }) {
+			let result = null;
+			try {
+				result = await fetchData('admin/feedback/update/:id', 'PATCH', { id }, body);
+				commit('setFeedback', result.data);
+				console.log(result.data)
+				commit('updateIsLoading', false);
+			} catch (error) {
+				console.log('Error removing feedback');
+			}
+			return result;
 		}
 	}
 }

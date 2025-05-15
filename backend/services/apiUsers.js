@@ -297,7 +297,6 @@ async function updateFeedbackText(req, res) {
 	const { id } = req.params;
 	const { body: feedback } = req;
 
-	console.log(feedback)
 	try {
 		const result = await Feedback.findOneAndUpdate(
 			{ _id: new ObjectId(id)},
