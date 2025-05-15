@@ -11,7 +11,7 @@
 			class="popup-textarea border"
 			@input="handleFeedbackText"
 		></textarea>
-		<p v-else class="feedback-text mb-4">{{ item.text }}</p>
+		<p v-else class="feedback-text mb-4">{{ item.text || feedbackText }}</p>
 		<div class="feedback-about" :class="{ 'mb-6' : admin}">
 			<p class="feedback-author">{{ item.name }}</p>
 			<p class="feedback-author">{{ item.date }}</p>

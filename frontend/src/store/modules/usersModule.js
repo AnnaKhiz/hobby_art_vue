@@ -147,7 +147,6 @@ export const usersModule = {
 			let result = null;
 			try {
 				result = await fetchData('admin/users');
-				console.log('get users list', result)
 				commit('setUsersList', result.users);
 				commit('updateIsLoading', false);
 			} catch (error) {

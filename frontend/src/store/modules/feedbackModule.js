@@ -56,7 +56,6 @@ export const feedbackModule = {
 			try {
 				result = await fetchData('admin/feedback');
 				commit('setFeedbackList', result.data);
-				console.log('feedbacks', result.data)
 				commit('updateIsLoading', false);
 			} catch (error) {
 				console.log('Error adding new feedback');
@@ -69,7 +68,6 @@ export const feedbackModule = {
 			try {
 				result = await fetchData('admin/feedback/remove/:id', 'DELETE', { id });
 				commit('setFeedback', result.data);
-				console.log(result.data)
 				commit('updateIsLoading', false);
 			} catch (error) {
 				console.log('Error removing feedback');
@@ -82,7 +80,6 @@ export const feedbackModule = {
 			try {
 				result = await fetchData('admin/feedback/update/:id', 'PATCH', { id }, body);
 				commit('setFeedback', result.data);
-				console.log(result.data)
 				commit('updateIsLoading', false);
 			} catch (error) {
 				console.log('Error removing feedback');
