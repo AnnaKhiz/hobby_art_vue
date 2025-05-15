@@ -13,7 +13,7 @@
 			>
 				<template #actions>
 					<button
-						@click.stop="removeFeedback(item._id)"
+						@click.stop="removeFeedback(item._id, index)"
 						class="action-style"
 					>
 						Удалить
@@ -55,10 +55,11 @@ export default {
 			removeFeedbackAdmin: 'feedback/removeFeedbackAdmin',
 			updateFeedbackAdmin: 'feedback/updateFeedbackAdmin',
 		}),
-		async removeFeedback(id) {
+		async removeFeedback(id, index) {
 			const result = await this.removeFeedbackAdmin(id);
 			if (!result) return;
-			this.$store.commit('feedback/setFeedbackList', this.feedbackList.filter(e => e._id !== id));
+			this.feedbacks.splice(index, 1);
+			this.$store.commit('feedback/setFeedbackList', this.feedbacks);
 		},
 
 		async editFeedback(item, index) {
