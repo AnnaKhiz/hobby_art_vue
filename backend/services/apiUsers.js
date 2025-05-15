@@ -197,7 +197,7 @@ async function toggleFavorites(req, res, next) {
 	}
 }
 
-// admin
+// ADMIN
 async function uploadAdminPage(req,res) {
 	const { role } = req._auth;
 
@@ -294,6 +294,30 @@ async function getAllFeedbacks(req, res) {
 	}
 }
 
+async function deleteFeedbackById(req, res) {
+	const { role } = req._auth;
+
+	if (!role) {
+		return res.send({result: false, data: [], role: role});
+	}
+	const { id } = req.params;
+
+	try {
+		const result = await Feedback.findOneAndDelete({ _id: new ObjectId(id)}).populate('user');
+		console.log(result)
+
+		if (!result) {
+			return res.send({result: true, data: {}});
+		}
+
+		res.send({result: true, data: result});
+	} catch (error) {
+		console.log('Error deleting feedback by ID', error);
+		res.status(404).send({result: false, data: {}});
+	}
+
+}
+
 module.exports = {
 	getAllPages,
 	registerNewUser,
@@ -306,5 +330,6 @@ module.exports = {
 	deleteOneUser,
 	toggleFavorites,
 	getAllUsers,
-	getAllFeedbacks
+	getAllFeedbacks,
+	deleteFeedbackById
 };

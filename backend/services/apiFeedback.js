@@ -65,27 +65,10 @@ async function getFeedbackByUserId(req, res, next) {
 	}
 }
 
-async function removeFeedback(req, res, next) {
-	const { id } = req.params;
-
-	try {
-		const result = await Feedback.findOneAndDelete({ _id: new ObjectId(id)}).populate('user');
-
-		if (!result) {
-			return res.send({result: true, data: {}});
-		}
-
-		res.send({result: true, data: result});
-	} catch (error) {
-		console.log('Error deleting feedback by ID', error);
-		res.status(404).send({result: false, data: {}});
-	}
-}
 
 module.exports = {
 	getFeedbackList,
 	addNewFeedback,
 	getFeedbackById,
-	removeFeedback,
 	getFeedbackByUserId
 }
