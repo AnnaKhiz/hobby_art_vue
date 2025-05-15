@@ -1,5 +1,6 @@
-const { User, Page, ObjectId, Item, Comment, Order, Admin} = require('../db');
+const { User, Page, ObjectId, Item, Comment, Order, Admin, Feedback} = require('../db');
 const { checkPass, generateJWt, hashPass } = require("../utils/authEncoding");
+const { getFeedbackList } = require("./apiFeedback");
 const isProd = process.env.NODE_ENV === 'production';
 async function deleteOneUser(req, res) {
   const { id } = req.params;
@@ -8,32 +9,6 @@ async function deleteOneUser(req, res) {
   !result
     ? res.status(404).send({ 'result': 'User not found' })
     : res.status(200).send(result);
-}
-
-async function getAllUsers(req, res) {
-	const { role } = req._auth;
-
-	if (!role) {
-		return res.send({"result": false, "users": [], role: role});
-	}
-
-	try {
-		const users = await User
-			.find()
-			.populate('orders._id')
-			.populate('comments')
-			.populate('favorites._id');
-
-		if (!users.length) {
-			return res.send({ "result": false, "users": [] });
-		}
-
-		res.send({ "result": true, "users": users });
-	} catch (error) {
-		console.error('Error getting users list', error);
-		res.status(404).send({ "result": false, "users": [] });
-	}
-
 }
 async function getAllPages(req, res) {
 	const { id } = req._auth;
@@ -277,6 +252,48 @@ async function logoutFromAdminPanel(req, res, next) {
 	next();
 }
 
+async function getAllUsers(req, res) {
+	const { role } = req._auth;
+
+	if (!role) {
+		return res.send({"result": false, "users": [], role: role});
+	}
+
+	try {
+		const users = await User
+			.find()
+			.populate('orders._id')
+			.populate('comments')
+			.populate('favorites._id');
+
+		if (!users.length) {
+			return res.send({ "result": false, "users": [] });
+		}
+
+		res.send({ "result": true, "users": users });
+	} catch (error) {
+		console.error('Error getting users list', error);
+		res.status(404).send({ "result": false, "users": [] });
+	}
+
+}
+
+async function getAllFeedbacks(req, res) {
+	const { role } = req._auth;
+
+	if (!role) {
+		return res.send({"result": false, "users": [], role: role});
+	}
+
+	try {
+		const result = await Feedback.find().populate('user');
+		res.send({result: true, data: result})
+	} catch (error) {
+		console.log('Error in getting feedbacks', error);
+		res.status(404).send({result: false, data: []});
+	}
+}
+
 module.exports = {
 	getAllPages,
 	registerNewUser,
@@ -288,5 +305,6 @@ module.exports = {
 	logoutFromAdminPanel,
 	deleteOneUser,
 	toggleFavorites,
-	getAllUsers
+	getAllUsers,
+	getAllFeedbacks
 };
