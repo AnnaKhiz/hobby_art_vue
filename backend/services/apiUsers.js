@@ -293,7 +293,28 @@ async function getAllFeedbacks(req, res) {
 		res.status(404).send({result: false, data: []});
 	}
 }
+async function updateFeedbackText(req, res) {
+	const { id } = req.params;
+	const { body: feedback } = req;
 
+	console.log(feedback)
+	try {
+		const result = await Feedback.findOneAndUpdate(
+			{ _id: new ObjectId(id)},
+			{ $set: feedback },
+			{ new: true, runValidators: true} )
+			.populate('user');
+
+		if (!result) {
+			return res.send({result: true, data: []});
+		}
+
+		res.send({result: true, data: result})
+	} catch (error) {
+		console.log('Error updating feedback by ID', error);
+		res.status(404).send({result: false, data: []})
+	}
+}
 async function deleteFeedbackById(req, res) {
 	const { role } = req._auth;
 
@@ -331,5 +352,6 @@ module.exports = {
 	toggleFavorites,
 	getAllUsers,
 	getAllFeedbacks,
-	deleteFeedbackById
+	deleteFeedbackById,
+	updateFeedbackText
 };
