@@ -21,6 +21,7 @@
 					<option v-for="fav in item.favorites.filter(el => el.isLiked)" :key="fav._id" label="" :value="fav._id" >{{fav._id?.name}} ({{fav._id?.color.map(e => e.text).join(', ')}})</option>
 				</select>
 			</div>
+			<button @click.stop="removeUser(item)" class="action-style w-33">Удалить</button>
 		</div>
 	</div>
 
@@ -39,7 +40,10 @@ export default {
 	methods: {
 		...mapActions({
 			getUsersList: 'user/getUsersList',
-		})
+		}),
+		removeUser(item) {
+			console.log(item)
+		}
 	},
 	async mounted() {
 		await this.getUsersList();

@@ -48,6 +48,19 @@ export const feedbackModule = {
 				console.log('Error adding new feedback');
 			}
 			return result;
+		},
+
+		async getFeedbackListAdmin({ commit}) {
+			let result = null;
+			try {
+				result = await fetchData('admin/feedback');
+				commit('setFeedbackList', result.data);
+				console.log('feedbacks', result.data)
+				commit('updateIsLoading', false);
+			} catch (error) {
+				console.log('Error adding new feedback');
+			}
+			return result;
 		}
 	}
 }

@@ -89,19 +89,6 @@ export const usersModule = {
 			return result;
 		},
 
-		async getUsersList({ commit }) {
-			let result = null;
-			try {
-				result = await fetchData('admin/users');
-				console.log('get users list', result)
-				commit('setUsersList', result.users);
-				commit('updateIsLoading', false);
-			} catch (error) {
-				console.error('Error getting users list:', error);
-			}
-			return result;
-		},
-
 		async userLogIn({ commit }, body) {
 			let result = null;
 			try {
@@ -152,7 +139,22 @@ export const usersModule = {
 				console.error('Error log out user:', error);
 			}
 			return result;
-		}
+		},
+
+		// ADMIN
+
+		async getUsersList({ commit }) {
+			let result = null;
+			try {
+				result = await fetchData('admin/users');
+				console.log('get users list', result)
+				commit('setUsersList', result.users);
+				commit('updateIsLoading', false);
+			} catch (error) {
+				console.error('Error getting users list:', error);
+			}
+			return result;
+		},
 	}
 }
 

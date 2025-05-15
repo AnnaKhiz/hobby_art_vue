@@ -3,8 +3,8 @@
 		<div v-for="item in feedbackList" :key=item._id class="items-container__item">
 			<ui-feedback-item :item="item" admin >
 				<template #actions>
-					<button @click.stop="removeFeedback" class="remove">Удалить</button>
-					<button @click.stop="editFeedback" class="remove">Изменить</button>
+					<button @click.stop="removeFeedback" class="action-style">Удалить</button>
+					<button @click.stop="editFeedback" class="action-style">Изменить</button>
 				</template>
 			</ui-feedback-item>
 		</div>
@@ -25,7 +25,7 @@ export default {
 	},
 	methods: {
 		...mapActions({
-			getFeedbackList: 'feedback/getFeedbackList',
+			getFeedbackListAdmin: 'feedback/getFeedbackList',
 		}),
 		removeFeedback() {
 
@@ -35,7 +35,7 @@ export default {
 		}
 	},
 	async mounted() {
-		await this.getFeedbackList();
+		await this.getFeedbackListAdmin();
 	}
 }
 </script>
@@ -58,13 +58,5 @@ export default {
 			justify-content: start
 			gap: 20px
 			margin-top: 15px
-.remove
-	transition: all 0.3s ease-in-out 0s
-	background: linear-gradient(102.48deg, #976464 -29.03%, #CFA5A5 97.75%)
-	padding: 5px 8px
-	border-radius: 4px
-	color: white
-	margin-right: 20px
-	&:hover
-		box-shadow: 2px 2px 10px #837f7f
+
 </style>
