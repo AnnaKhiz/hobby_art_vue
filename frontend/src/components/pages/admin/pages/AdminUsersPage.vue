@@ -16,9 +16,9 @@
 					<option disabled selected>Список заказов</option>
 					<option v-for="order in item.orders" :key="order._id" label="" :value="order._id" >Заказ от {{order._id?.date}}</option>
 				</select>
-				<select v-if="item.favorites.length" name="orders" id="">
+				<select v-if="item.favorites.filter(el => el.isLiked).length" name="orders" id="">
 					<option disabled selected>Избранные товары</option>
-					<option v-for="fav in item.favorites" :key="fav._id" label="" :value="fav._id" >{{fav._id?.name}} ({{fav._id?.color.map(e => e.text).join(', ')}})</option>
+					<option v-for="fav in item.favorites.filter(el => el.isLiked)" :key="fav._id" label="" :value="fav._id" >{{fav._id?.name}} ({{fav._id?.color.map(e => e.text).join(', ')}})</option>
 				</select>
 			</div>
 		</div>
@@ -31,11 +31,6 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "AdminUsersPage.vue",
-	data() {
-		return {
-			users: []
-		}
-	},
 	computed: {
 		...mapGetters({
 			usersList: 'user/usersList',
@@ -48,7 +43,6 @@ export default {
 	},
 	async mounted() {
 		await this.getUsersList();
-		console.log('component users list', this.usersList)
 	}
 }
 </script>

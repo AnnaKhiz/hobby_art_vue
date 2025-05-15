@@ -1,10 +1,11 @@
 <template>
 	<div>
-		<p class="feedback-text">{{ item.text }}</p>
-		<div class="feedback-about">
+		<p class="feedback-text mb-4">{{ item.text }}</p>
+		<div class="feedback-about" :class="{ 'mb-6' : admin}">
 			<p class="feedback-author">{{ item.name }}</p>
 			<p class="feedback-author">{{ item.date }}</p>
 		</div>
+		<slot name="actions" />
 	</div>
 </template>
 
@@ -15,6 +16,10 @@ export default {
 		item: {
 			type: Object,
 			default: () => {}
+		},
+		admin: {
+			type: Boolean,
+			default: false
 		}
 	}
 }
