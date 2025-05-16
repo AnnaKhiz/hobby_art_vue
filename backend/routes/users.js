@@ -32,7 +32,7 @@ router.post('/user/login', logInUserPage );
 router.post('/register', checkDuplicateUser, registerNewUser );
 router.patch('/user/edit', parserJwt, updateUserInfo );
 router.patch('/user/favorite', parserJwt, toggleFavorites);
-router.post('/user/upload', upload.single('file'), uploadFile);
+router.post('/user/upload', parserJwt, upload.single('file'), uploadFile);
 
 // ADMIN PAGEs
 router.get('/admin', parserJwt, protectedRoute(['admin']), uploadAdminPage );
