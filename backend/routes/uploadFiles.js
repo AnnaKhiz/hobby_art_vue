@@ -3,5 +3,6 @@ const { uploadFile } = require('../services/apiUploadFiles.js');
 const { upload } = require("../middleware/upload.js");
 
 router.post('/upload', upload.single('file'), uploadFile );
+router.post('/user/upload', upload.single('file'), uploadFile);
 
 module.exports = { router }

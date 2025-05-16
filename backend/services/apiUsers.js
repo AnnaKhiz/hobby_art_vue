@@ -28,7 +28,7 @@ async function registerNewUser(req, res) {
 			surName: user.surName || '',
 			address: {},
 			bonuses: 0,
-			avatar: '/uploads/no_user.jpg',
+			avatar: 'no_user.jpg',
 			favorites: [],
 			orders: [],
 			comments: []
