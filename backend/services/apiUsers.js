@@ -2,14 +2,6 @@ const { User, Page, ObjectId, Item, Comment, Order, Admin, Feedback} = require('
 const { checkPass, generateJWt, hashPass } = require("../utils/authEncoding");
 const { getFeedbackList } = require("./apiFeedback");
 const isProd = process.env.NODE_ENV === 'production';
-async function deleteOneUser(req, res) {
-  const { id } = req.params;
-  const result = await User.findOneAndDelete({ _id: new ObjectId(id) });
-
-  !result
-    ? res.status(404).send({ 'result': 'User not found' })
-    : res.status(200).send(result);
-}
 async function getAllPages(req, res) {
 	const { id } = req._auth;
 	const user = await User
@@ -276,6 +268,24 @@ async function getAllUsers(req, res) {
 		res.status(404).send({ "result": false, "users": [] });
 	}
 
+}
+
+async function deleteOneUser(req, res) {
+	const { role } = req._auth;
+
+	if (!role) {
+		return res.send({result: false, users: [], role: role});
+	}
+
+	const { id } = req.params;
+
+	try {
+		const result = await User.findOneAndDelete({ _id: new ObjectId(id) });
+		res.send({ result: true, users: result });
+	} catch (error) {
+		console.error('Error removing user', error);
+		res.status(404).send({ result: false, users: [] });
+	}
 }
 
 async function getAllFeedbacks(req, res) {

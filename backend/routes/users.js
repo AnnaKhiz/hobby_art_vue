@@ -35,10 +35,13 @@ router.patch('/user/favorite', parserJwt, toggleFavorites);
 router.get('/admin', parserJwt, protectedRoute(['admin']), uploadAdminPage );
 router.post('/admin/login', logInToAdminPanel );
 router.get('/admin/logout', logoutFromAdminPanel);
+
+// ADMIN users
 router.get('/admin/users', parserJwt, protectedRoute(['admin'], '/auth/login'), getAllUsers);
+router.delete('/admin/user/remove/:id', parserJwt, protectedRoute(['admin'], '/auth/login'), deleteOneUser);
+// ADMIN feedback
 router.get('/admin/feedback', parserJwt, protectedRoute(['admin'], '/auth/login'), getAllFeedbacks);
 router.patch('/admin/feedback/update/:id', parserJwt, protectedRoute(['admin'], '/auth/login'), updateFeedbackText);
-router.delete('/:id', parserJwt, protectedRoute(['admin'], '/auth/login'), deleteOneUser);
 router.delete('/admin/feedback/remove/:id', parserJwt, protectedRoute(['admin'], '/auth/login'), deleteFeedbackById);
 
 module.exports = { router };
