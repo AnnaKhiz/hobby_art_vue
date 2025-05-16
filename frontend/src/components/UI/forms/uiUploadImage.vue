@@ -1,6 +1,6 @@
 <template>
 	<form enctype="multipart/form-data">
-		<input type="file" @change="handleFileChange" name="file"/>
+		<input type="file" @change="handleFileChange" name="file" style="width: 100%"/>
 	</form>
 </template>
 
