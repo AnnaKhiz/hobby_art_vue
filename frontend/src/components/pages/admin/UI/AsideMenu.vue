@@ -6,10 +6,6 @@
       <a href="#" class="sidebar__submenu"  @click.prevent="goToPage('items', 'add')" >Добавить товар</a>
     </div>
     <button @click="goToPage('orders', null)" class="modal__registration-form-button block">Заказы</button>
-    <div v-if="checkedMenu === 'orders'" class="sidebar" >
-      <a href="#" class="sidebar__submenu" @click.prevent="goToPage('orders', null)">Все заказы</a>
-      <a href="#" class="sidebar__submenu"  @click.prevent="goToPage('orders', 'add')" >Добавить заказ</a>
-    </div>
     <button @click="goToPage('users', null)" class="modal__registration-form-button block">Пользователи</button>
     <button @click="goToPage('comments', null)" class="modal__registration-form-button block">Отзывы</button>
     <button @click="logOut" class="modal__registration-form-button block exit">Выход</button>

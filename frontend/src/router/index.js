@@ -16,7 +16,6 @@ import AdminUsersPage from "@/components/pages/admin/pages/AdminUsersPage.vue";
 import AdminCommentsPage from "@/components/pages/admin/pages/AdminCommentsPage.vue";
 import AdminItemAddEditForm from "@/components/pages/admin/pages/items/AdminItemAddEditForm.vue";
 import AdminOrderViewDetails from "@/components/pages/admin/pages/orders/AdminOrderViewDetails.vue";
-import AdminOrdersAddNew from "@/components/pages/admin/pages/orders/AdminOrdersAddNew.vue";
 import AuthenticationForm from "@/components/UI/forms/AuthenticationForm.vue";
 import uiLoginForm from "@/components/UI/forms/uiLoginForm.vue";
 import uiRegistForm from "@/components/UI/forms/uiRegistForm.vue";
@@ -153,12 +152,6 @@ const routes = [
         props: true,
         children: [
           {
-            path: 'add',
-            name: 'admin-orders-add',
-            component: AdminOrdersAddNew,
-            props: true
-          },
-          {
             path: 'edit/:orderId',
             name: 'admin-orders-edit',
             component: AdminOrderViewDetails,
@@ -198,18 +191,6 @@ const routes = [
 
 		]
 	},
-  // {
-  //   path: '/admin/item/:id',
-  //   name: 'admin-item',
-  //   component: AdminLogin,
-  //   props: { edit: true },
-  //   meta: {
-  //     title: 'Админ',
-  //     favicon: '',
-  //     requiresAuth: true
-  //   },
-  // },
-
   {
     path: '/user/page/:id',
     name: 'User',
@@ -264,19 +245,6 @@ router.afterEach((to, from) => {
 	const favicon = to.meta.favicon || '';
 	document.querySelector('link[rel="icon"]').href = favicon;
 });
-
-// async function initPage() {
-//   const result = await fetch('http://localhost:3000/admin', {
-//     method: 'GET',
-//     credentials: 'include'
-//   })
-//   const data = await result.json()
-//   console.log(data)
-//
-//   if (!data.result) {
-//     this.$router.push('/admin/login')
-//   }
-// }
 
 
 export default router

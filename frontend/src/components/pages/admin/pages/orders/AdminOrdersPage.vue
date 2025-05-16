@@ -76,7 +76,6 @@ export default
   computed: {
     ...mapGetters({
 			ordersList: 'order/ordersList',
-			// tableRowsList: 'order/orderTableRowsList',
       parseDeliveryValue: 'delivery/parseDeliveryValue',
       parsePaymentValue: 'delivery/parsePaymentValue'
     }),
@@ -86,18 +85,16 @@ export default
   methods: {
 		...mapActions('order', ['fetchOrders', 'removeOrder']),
     showOrderDetails(order, index) {
-      this.$router.push({name: 'admin-orders-edit', params: { orderId: order.id } })
-      this.message = ''
-      this.isShowDetails = true
+      this.$router.push({name: 'admin-orders-edit', params: { orderId: order.id } });
+      this.message = '';
+      this.isShowDetails = true;
       order.index = index;
       this.selectedOrder = order;
     },
 
     async handleRemoveOrder(orderId, index) {
 			const result = await this.removeOrder(orderId);
-
 			if (!result) return;
-
 			this.tableRowList.splice(index, 1);
     },
   },
@@ -117,7 +114,6 @@ export default
 				isParsedValue: false,
 			})
 		)
-		console.log(this.tableRowList)
   }
 }
 </script>
