@@ -1,6 +1,6 @@
 <template>
-	<div v-if="usersList.length" class="d-flex justify-start align-stretch ga-6 w-100">
-		<div v-for="item in usersList" :key=item._id class="items-container__item w-50 d-flex flex-column justify-space-between">
+	<div v-if="usersList.length" class="d-flex justify-start align-stretch ga-6 w-100 flex-wrap">
+		<div v-for="item in usersList" :key=item._id class="items-container__item d-flex flex-column justify-space-between">
 			<div class="d-flex flex-column ga-3">
 				<p>Имя: <span>{{ `${item.lastName || ''} ${item.name || ''} ${item.surName || ''}`}}</span></p>
 				<p>Дата рождения: <span>{{item.birthDate}}</span></p>
@@ -14,11 +14,23 @@
 			<div class="d-flex flex-column ga-3">
 				<select v-if="item.orders.length" name="orders" id="">
 					<option disabled selected>Список заказов</option>
-					<option v-for="order in item.orders" :key="order._id" label="" :value="order._id" >Заказ от {{order._id?.date}}</option>
+					<option
+						v-for="order in item.orders"
+						:key="order._id"
+						:value="order._id"
+					>
+						Заказ от {{order._id?.date}}
+					</option>
 				</select>
 				<select v-if="item.favorites.filter(el => el.isLiked).length" name="orders" id="">
 					<option disabled selected>Избранные товары</option>
-					<option v-for="fav in item.favorites.filter(el => el.isLiked)" :key="fav._id" label="" :value="fav._id" >{{fav._id?.name}} ({{fav._id?.color.map(e => e.text).join(', ')}})</option>
+					<option
+						v-for="fav in item.favorites.filter(el => el.isLiked)"
+						:key="fav._id"
+						:value="fav._id"
+					>
+						{{fav._id?.name}} ({{fav._id?.color.map(e => e.text).join(', ')}})
+					</option>
 				</select>
 			</div>
 			<button @click.stop="removeUser(item)" class="action-style w-33">Удалить</button>
@@ -40,9 +52,15 @@ export default {
 	methods: {
 		...mapActions({
 			getUsersList: 'user/getUsersList',
+			removeUserByIdAdmin: 'user/removeUserByIdAdmin',
 		}),
-		removeUser(item) {
-			console.log(item)
+		async removeUser(item) {
+			const result = await this.removeUserByIdAdmin(item._id);
+
+			if (!result.result) return;
+
+			const updatedUsersList = this.usersList.filter(e => e._id !== result.users._id);
+			this.$store.commit('user/setUsersList', updatedUsersList);
 		}
 	},
 	async mounted() {
@@ -60,7 +78,7 @@ export default {
 		flex-direction: column
 		background: #E8E8E8
 		border-radius: 12px
-		width: 30%
+		width: 45%
 		padding: 15px
 		height: 350px
 		& .info

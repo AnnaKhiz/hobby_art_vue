@@ -88,7 +88,6 @@ export const usersModule = {
 			}
 			return result;
 		},
-
 		async userLogIn({ commit }, body) {
 			let result = null;
 			try {
@@ -154,6 +153,19 @@ export const usersModule = {
 			}
 			return result;
 		},
+
+		async removeUserByIdAdmin({ commit }, id) {
+			let result = null;
+			try {
+				result = await fetchData('admin/user/remove/:id', 'DELETE', { id });
+				console.log('remove result', result)
+				// commit('setUsersList', result.users);
+				commit('updateIsLoading', false);
+			} catch (error) {
+				console.error('Error getting users list:', error);
+			}
+			return result;
+		}
 	}
 }
 

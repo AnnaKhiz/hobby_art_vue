@@ -129,9 +129,8 @@ export default
   &__item
     background: #E8E8E8
     border-radius: 12px
-    width: 45%
+    width: 48%
     height: 350px
-
     padding: 15px
     display: flex
     flex-direction: column
