@@ -96,6 +96,7 @@ const UserSchema = new mongoose.Schema({
   lastName: { type: String },
   surName: { type: String },
   birthDate: { type: String },
+	avatar: {type: String},
   phone: { type: String },
   email: { type: String, unique: true },
   address: {
