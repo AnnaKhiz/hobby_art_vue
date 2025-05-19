@@ -28,7 +28,7 @@
         :key="link.value"
       >
         <a
-					:href="link.url"
+					href=""
 					@click.prevent="changeLink(link.value)"
 				>
 					{{ link.text }}
@@ -122,6 +122,7 @@ export default {
 			},
 				query: {
 					link,
+					noScroll: 'true'
 				}
 			})
 		},

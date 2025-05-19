@@ -208,6 +208,9 @@ const router = createRouter({
 	history: createWebHistory(process.env.BASE_URL),
   routes,
 	scrollBehavior(to) {
+		if (to.query.noScroll) {
+			return false;
+		}
 		if (to.hash) {
 			return {
 				el: to.hash,
