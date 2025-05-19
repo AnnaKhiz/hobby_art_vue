@@ -1,9 +1,9 @@
 <template>
   <div class="main__delivery__page-sidebar">
-    <h3 class="main__delivery__page-label">
+    <h3 class="main__delivery__page-label" @click="isShow = !isShow">
       Каталог
     </h3>
-    <ul id="sidebar-menu">
+    <ul :class="{ 'hidden': !isShow && hidden }" >
       <li
           v-for="(item, index) in sidebarGeneralItems"
           :key="index"
@@ -23,13 +23,16 @@ export default {
   name: "uiSidebarGeneral",
   data() {
     return {
-
+			isShow: false,
     }
   },
   computed: {
     ...mapGetters({
       sidebarGeneralItems: 'links/getSidebarGeneralItems'
     }),
+		hidden() {
+			return window.innerWidth <= '765';
+		}
   }
 }
 </script>
@@ -41,4 +44,6 @@ export default {
 	right: 0
 	@media screen and (max-width: 920px)
 		display: none
+.hidden
+	display: none
 </style>
