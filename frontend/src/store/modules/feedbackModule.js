@@ -54,10 +54,21 @@ export const feedbackModule = {
 			let result = null;
 			try {
 				result = await fetchData('user/feedbacks');
-				console.log(result)
 				commit('setFeedbackList', result.data);
 			} catch (error) {
 				console.log('Error getting user feedback', error);
+			}
+			return result;
+		},
+
+		async deleteFeedbackById({ commit }, id ) {
+			let result = null;
+			try {
+				result = await fetchData('user/feedback/remove/:id', 'DELETE', { id });
+				commit('setFeedback', result.data);
+				commit('updateIsLoading', false);
+			} catch (error) {
+				console.log('Error removing feedback');
 			}
 			return result;
 		},

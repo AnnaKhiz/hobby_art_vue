@@ -3,7 +3,7 @@
     <p class="main__user-page-content-user-name data-page review">
       Мои отзывы
     </p>
-    <div v-for="item in feedbackList" :key="item._id" class="main__user-page-content-review-container">
+    <div v-for="(item, index) in feedbacks" :key="item._id" class="main__user-page-content-review-container">
       <div class="main__user-page-content-review-block rating-block">
         <img src="@/assets/img/rating.png" alt="rating stars">
         <p class="main__user-page-content-review-data">
@@ -11,13 +11,13 @@
         </p>
       </div>
       <div class="main__user-page-content-review-block info-block">
-        <div class="main__user-page-content-review-img">
-          <img src="@/assets/img/image-card-item4.png" alt="image card">
-        </div>
         <div class="main__user-page-content-review-info">
           <p>{{ item.name }}</p>
           <p>Комментарий: <span>{{ item.text }}</span></p>
         </div>
+				<div class="action-style mr-0">
+					<button @click.prevent="removeFeedback(item._id, index)">Удалить отзыв</button>
+				</div>
       </div>
     </div>
   </div>
@@ -37,6 +37,11 @@ export default {
       default: () => {}
     }
   },
+	data() {
+		return {
+			feedbacks: [],
+		}
+	},
 	computed: {
 		...mapGetters({
 			feedbackList: 'feedback/feedbackList',
@@ -45,11 +50,18 @@ export default {
 	methods: {
 		...mapActions({
 			getFeedbackByUserId: 'feedback/getFeedbackByUserId',
-		})
+			deleteFeedbackById: 'feedback/deleteFeedbackById'
+		}),
+		async removeFeedback(id, index) {
+			const result = await this.deleteFeedbackById(id);
+			if (!result) return;
+			this.feedbacks.splice(index, 1);
+			this.$store.commit('feedback/setFeedbackList', this.feedbacks);
+		}
 	},
 	async mounted() {
 		await this.getFeedbackByUserId(this.user._id);
-		console.log(this.feedbackList)
+		this.feedbacks = this.feedbackList;
 	}
 }
 </script>
