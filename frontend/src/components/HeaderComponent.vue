@@ -26,7 +26,7 @@
 	</header>
 </template>
 <script>
-import HeaderInfoComponent from "@/components/HeaderInfoComponent.vue";
+import HeaderInfoComponent from "@/components/UI/header/HeaderInfoComponent.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue";
 import UiHeaderNavigation from "@/components/UI/header/uiHeaderNavigation.vue";

@@ -5,7 +5,7 @@
     />
     <router-view />
     <footer-component
-      v-if="!$route.path.match(/^\/admin($|\/.*)/) && !loading"
+      v-if="!$route.path.match(/^\/admin($|\/.*)/) || !loading"
     />
   </div>
 

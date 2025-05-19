@@ -5,7 +5,7 @@
 				v-for="link in getNavMenuLinks"
 				:key="link.url"
 			>
-				<span @click="openMenuPage(link.url, link.value)">{{ link.text }} </span>
+				<span @click="openMenu(link.url, link.value)">{{ link.text }} </span>
 			</li>
 		</ul>
 	</nav>
@@ -13,6 +13,7 @@
 
 <script>
 import {mapGetters, mapMutations} from "vuex";
+import {openMenuPage} from "@/services/linkConverter";
 
 export default {
 	name: "uiHeaderNavigation.vue",
@@ -25,15 +26,11 @@ export default {
 		...mapMutations({
 			setCheckedHeaderLink: 'links/setCheckedHeaderLink',
 		}),
-		openMenuPage(link, value) {
-			if (link) {
-				this.$router.push({ name: link, hash: value === 'catalog' ? '#catalog' : false });
-			} else {
-				const height = window.outerHeight * 100;
-				window.scrollTo({  top: height, behavior: 'smooth' });
-			}
+		openMenu(link, value) {
+			const path = openMenuPage(link, value);
+			this.$router.push(path);
 			this.setCheckedHeaderLink(value);
-		},
+		}
 	}
 }
 </script>

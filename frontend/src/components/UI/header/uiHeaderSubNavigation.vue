@@ -26,7 +26,12 @@
 
 <script>
 import UiSearchForm from "@/components/UI/forms/uiSearchForm.vue";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {
+	mapActions,
+	mapGetters,
+	mapMutations
+} from "vuex";
+import { checkFunction, getUser } from "@/services/handleLogInDialog";
 
 export default {
 	name: "uiHeaderSubNavigation.vue",
@@ -37,6 +42,8 @@ export default {
 			basketQuantity: 0,
 			displayDialog: false,
 			isFavorite: false,
+			checkFunction,
+			getUser
 		}
 	},
 	computed: {
@@ -56,45 +63,12 @@ export default {
 			setIsRegisteredInfo: 'user/setIsRegisteredInfo',
 			setDisplayDialogState: 'dialog/setDisplayDialogState',
 		}),
-		...mapActions('user', ['getAuthUser']),
+		...mapActions({
+			getAuthUser: 'user/getAuthUser',
+		}),
 		async goToFavorite() {
-			this.isFavorite = true
-			await this.getUser();
-		},
-		async checkFunction() {
-			if (!this.isAuthorized) {
-				this.openDialog();
-				return;
-			}
-			this.isFavorite = false;
-			await this.getUser();
-		},
-		async getUser() {
-			const result = await this.getAuthUser();
-
-			if (!result.result) {
-				this.$router.back();
-				this.setIsAuthorizedInfo(false);
-			} else {
-				this.setIsAuthorizedInfo(true);
-				this.$emit('updateUser', this.userInfo);
-				this.$router.push(
-					{
-						name: 'User',
-						params: {
-							id: result.user[0]._id,
-						},
-						query: {
-							link: this.isFavorite ? 'favorites' : 'general',
-						}
-					})
-			}
-		},
-		openDialog() {
-			this.isFavorite = false;
-			this.setDisplayDialogState(true);
-			this.setIsRegisteredInfo(true);
-			this.$router.push({ name: 'user-login'});
+			this.isFavorite = true;
+			await this.getUser(true);
 		},
 	},
 	mounted() {

@@ -2,8 +2,8 @@
  <div class="main">
    <ui-main-banner />
 
-   <section class="main__slider-popular">
-     <div class="container">
+   <section class="main__slider-popular" >
+     <div class="container" id="popular">
         <ui-switcher-main
           @switcher-state="getSwitcherState"
         >
