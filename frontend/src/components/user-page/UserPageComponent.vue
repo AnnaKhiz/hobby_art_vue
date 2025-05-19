@@ -49,7 +49,7 @@
 
 <script>
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
-import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
+import UiBreadcrumbs from "@/components/UI/breadcrumbs/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import UserPageAboutForm from "@/components/user-page/UserPageAboutForm.vue"

@@ -46,8 +46,8 @@
 <script>
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiFilterSidebar from "@/components/UI/sidebars/uiFilterSidebar.vue"
-import UiProductListPage from "@/components/UI/uiProductListPage.vue";
-import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
+import UiProductListPage from "@/components/UI/product/uiProductListPage.vue";
+import UiBreadcrumbs from "@/components/UI/breadcrumbs/uiBreadcrumbs.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import UiSortButton from "@/components/UI/uiSortButton.vue";
 import LoaderComponent from "@/components/UI/loader/LoaderComponent.vue";

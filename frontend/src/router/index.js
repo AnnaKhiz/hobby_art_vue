@@ -3,7 +3,7 @@ import MainPage from "@/components/pages/MainPage.vue";
 import DeliveryComponent from "@/components/pages/DeliveryComponent.vue";
 import BonusesComponent from "@/components/pages/BonusesComponent.vue";
 import AboutComponent from "@/components/pages/AboutComponent.vue";
-import UserPageComponent from "@/components/pages/UserPageComponent.vue";
+import UserPageComponent from "@/components/user-page/UserPageComponent.vue";
 import AdminLogin from "@/components/pages/admin/AdminLogin.vue";
 import AdminAuth from "@/components/pages/admin/AdminAuth.vue";
 import BasketComponent from "@/components/pages/BasketComponent.vue";

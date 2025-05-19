@@ -23,7 +23,7 @@
 import UiFeedbackItem from "@/components/UI/feedback/uiFeedbackItem.vue";
 import { mapActions, mapGetters } from "vuex";
 import LoaderComponent from "@/components/UI/loader/LoaderComponent.vue";
-import UiPagination from "@/components/UI/uiPagination.vue";
+import UiPagination from "@/components/UI/pagination/uiPagination.vue";
 
 export default {
 	name: "uiFeedbackList.vue",

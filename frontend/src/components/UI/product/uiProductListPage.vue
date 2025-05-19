@@ -38,8 +38,8 @@
 <script>
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
-import UiProductItem from "@/components/UI/uiProductItem.vue";
-import UiPagination from "@/components/UI/uiPagination.vue";
+import UiProductItem from "@/components/UI/product/uiProductItem.vue";
+import UiPagination from "@/components/UI/pagination/uiPagination.vue";
 
 
 export default {

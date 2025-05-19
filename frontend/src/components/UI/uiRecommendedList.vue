@@ -26,7 +26,7 @@
 
 <script>
 import {mapActions, mapGetters} from "vuex";
-import UiProductItem from "@/components/UI/uiProductItem.vue"
+import UiProductItem from "@/components/UI/product/uiProductItem.vue"
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 
 export default {

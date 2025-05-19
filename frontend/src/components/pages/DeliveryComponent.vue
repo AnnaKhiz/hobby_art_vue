@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue"
+import UiBreadcrumbs from "@/components/UI/breadcrumbs/uiBreadcrumbs.vue"
 import {mapGetters} from "vuex";
 import UiSidebarGeneral from "@/components/UI/sidebars/uiSidebarGeneral.vue";
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue"

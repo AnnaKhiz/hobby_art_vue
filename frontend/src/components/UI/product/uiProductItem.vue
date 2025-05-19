@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import UiProductItemHeader from "@/components/UI/uiProductItemHeader.vue";
+import UiProductItemHeader from "@/components/UI/product/uiProductItemHeader.vue";
 import UiColorsIcon from "@/components/UI/icons/uiColorsIcon.vue";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 export default {

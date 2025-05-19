@@ -14,8 +14,8 @@
 <script>
 
 
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
+import HeaderComponent from "@/components/UI/header/HeaderComponent.vue";
+import FooterComponent from "@/components/UI/footer/FooterComponent.vue";
 import {mapGetters} from "vuex";
 
 export default {

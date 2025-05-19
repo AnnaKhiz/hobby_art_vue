@@ -100,7 +100,7 @@
 </template>
 <script>
 
-import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
+import UiBreadcrumbs from "@/components/UI/breadcrumbs/uiBreadcrumbs.vue";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";

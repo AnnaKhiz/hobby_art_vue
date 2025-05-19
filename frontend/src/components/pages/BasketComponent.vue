@@ -119,7 +119,7 @@
 
 
 <script>
-import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
+import UiBreadcrumbs from "@/components/UI/breadcrumbs/uiBreadcrumbs.vue";
 import {mapGetters, mapMutations, mapState, mapActions} from "vuex";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";

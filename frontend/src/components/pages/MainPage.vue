@@ -129,7 +129,7 @@
 
 import {defineComponent} from "vue";
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
-import UiSwitcherMain from "@/components/UI/uiSwitcherMain.vue";
+import UiSwitcherMain from "@/components/UI/switcher/uiSwitcherMain.vue";
 import UiPopularProducts from "@/components/UI/sliders/uiPopularProducts.vue";
 import UiCatalogItem from "@/components/UI/uiCatalogItem.vue";
 import UiItemPreference from "@/components/UI/uiItemPreference.vue";
