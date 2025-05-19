@@ -1,6 +1,6 @@
 <template>
-  <div class="main__delivery__page-sidebar" id="sidebar-catalog">
-    <h3 class="main__delivery__page-label" id="sidebar">
+  <div class="main__delivery__page-sidebar">
+    <h3 class="main__delivery__page-label">
       Каталог
     </h3>
     <ul id="sidebar-menu">
@@ -10,7 +10,7 @@
       >
         <a href="#" >
           {{ item.text }}
-          <img style="position: absolute; top: 0; right: 0" :src="require(`@/assets/img/catalog-img-link${item.id}.png`)" alt="link image">
+          <img class="link-image" :src="require(`@/assets/img/catalog-img-link${item.id}.png`)" alt="link image">
         </a></li>
     </ul>
   </div>
@@ -35,5 +35,10 @@ export default {
 </script>
 
 <style scoped lang="sass">
-
+.link-image
+	position: absolute
+	top: 0
+	right: 0
+	@media screen and (max-width: 920px)
+		display: none
 </style>
