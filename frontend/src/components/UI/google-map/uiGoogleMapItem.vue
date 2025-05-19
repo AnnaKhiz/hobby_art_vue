@@ -26,5 +26,4 @@ export default {
 .map-view
 	width: 100%
 	height: 400px
-	border-radius: 12px
 </style>
