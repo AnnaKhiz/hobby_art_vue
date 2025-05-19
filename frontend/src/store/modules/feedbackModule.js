@@ -44,7 +44,20 @@ export const feedbackModule = {
 				commit('setFeedbackList', result.data);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.log('Error adding new feedback');
+				console.log('Error adding new feedback', error);
+			}
+			return result;
+		},
+
+		// USER
+		async getFeedbackByUserId({ commit }) {
+			let result = null;
+			try {
+				result = await fetchData('user/feedbacks');
+				console.log(result)
+				commit('setFeedbackList', result.data);
+			} catch (error) {
+				console.log('Error getting user feedback', error);
 			}
 			return result;
 		},
