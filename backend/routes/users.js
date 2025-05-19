@@ -20,6 +20,7 @@ const {
 } = require('../services/apiUsers');
 const { upload} = require("../middleware/upload");
 const { uploadFile } = require("../services/apiUploadFiles");
+const {getFeedbackByUserId} = require("../services/apiFeedback");
 router.get('/', async (req, res) => {
 	res.send({ "result": "Server started here" })
 })
@@ -32,6 +33,7 @@ router.post('/user/login', logInUserPage );
 router.post('/register', checkDuplicateUser, registerNewUser );
 router.patch('/user/edit', parserJwt, updateUserInfo );
 router.patch('/user/favorite', parserJwt, toggleFavorites);
+router.get('/user/feedbacks', parserJwt, getFeedbackByUserId);
 router.post('/user/upload', parserJwt, upload.single('file'), uploadFile);
 
 // ADMIN PAGEs

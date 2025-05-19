@@ -49,7 +49,9 @@ async function getFeedbackById(req, res, next) {
 	}
 }
 async function getFeedbackByUserId(req, res, next) {
-	const { id } = req.params;
+	const { id } = req._auth;
+
+	console.log('user id', id)
 
 	try {
 		const result = await Feedback.find({ user: { _id: new ObjectId(id)}}).populate('user');
