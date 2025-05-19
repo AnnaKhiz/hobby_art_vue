@@ -14,6 +14,11 @@ The project is deployed [here](https://hobby-art-vue.vercel.app/), but remember,
 **Frontend**
  - Vue.js (Options API)
  - Vuex
+ - Vue-Router
+ - GoogleMaps
+ - Vuetify
+ - Swiper
+ - YUP
 
 **Backend:**
 - Node.js (Express.js)
