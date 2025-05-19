@@ -13,9 +13,7 @@
                   О компании
                 </h2>
                 <div class="main__delivery__page-content-text-block">
-                  <div class="main__delivery__page-content-photo">
-                    <img src="@/assets/img/photo-about.png" alt="photo about">
-                  </div>
+									<ui-google-map-container />
                   <p class="main__delivery__page-content-text">Доброго времени! Рады видеть вас на нашем сайте!</p>
                   <p class="main__delivery__page-content-text">Наш магазин работает с 2012 года.</p>
                   <p class="main__delivery__page-content-text"> как многие, были увлечены различными видами творчества, любили пробовать
@@ -40,14 +38,20 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiBreadcrumbs from "@/components/UI/uiBreadcrumbs.vue";
 import UiSidebarGeneral from "@/components/UI/sidebars/uiSidebarGeneral.vue";
+import UiGoogleMapContainer from "@/components/UI/google-map/uiGoogleMapContainer.vue";
 
 export default {
   name: "AboutComponent",
-  components: {UiSidebarGeneral, UiBreadcrumbs, UiMainBanner},
+  components: {
+		UiGoogleMapContainer,
+		UiSidebarGeneral,
+		UiBreadcrumbs,
+		UiMainBanner
+	},
   computed: {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',
@@ -55,4 +59,3 @@ export default {
   },
 }
 </script>
-

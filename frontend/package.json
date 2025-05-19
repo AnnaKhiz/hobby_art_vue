@@ -9,6 +9,7 @@
     "server": "node ./server.js"
   },
   "dependencies": {
+    "@fawmi/vue-google-maps": "^0.9.79",
     "axios": "^1.6.8",
     "core-js": "^3.8.3",
     "sass": "^1.76.0",
