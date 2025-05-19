@@ -35,6 +35,7 @@ router.patch('/user/edit', parserJwt, updateUserInfo );
 router.patch('/user/favorite', parserJwt, toggleFavorites);
 router.get('/user/feedbacks', parserJwt, getFeedbackByUserId);
 router.post('/user/upload', parserJwt, upload.single('file'), uploadFile);
+router.delete('/user/feedback/remove/:id', parserJwt, protectedRoute(['admin', 'user'], '/auth/login'), deleteFeedbackById);
 
 // ADMIN PAGEs
 router.get('/admin', parserJwt, protectedRoute(['admin']), uploadAdminPage );
