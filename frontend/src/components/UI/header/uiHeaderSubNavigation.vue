@@ -10,7 +10,7 @@
 
 		<button
 			v-if="isAuthorized"
-			class="header__menu-favoriteButton favorite-count count-elem"
+			class="header__menu-favoriteButton favorite-count count-elem elem-sub"
 			@click="goToFavorite"
 		>
 			Избранное
