@@ -3,7 +3,7 @@
 		<div class="burger__container">
 			<ul class="burger__list-menu">
 				<li
-					v-for="link in getNavMenuLinks"
+					v-for="link in links"
 					:key="link.url"
 				>
 					<span @click="openMenuPage(link.url, link.value)">{{ link.text }} </span>
@@ -27,6 +27,9 @@ export default {
 		...mapGetters({
 			getNavMenuLinks: 'links/getNavMenuLinks',
 		}),
+		links() {
+			return  this.getNavMenuLinks.filter(el => el.value !== 'contacts');
+		}
 	},
 	methods: {
 		...mapMutations({
