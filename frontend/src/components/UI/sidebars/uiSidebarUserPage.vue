@@ -1,19 +1,23 @@
 <template>
   <div class="main__user-page-content-block first-block">
-    <div class="main__user-page-content-user-info">
-      <div class="main__user-page-content-user-photo">
-        <img :src="`/uploads/${userData?.avatar || 'no_user.jpg'}`" alt="user-photo" style="width: 80px; height: 80px; border-radius: 50%">
-				<img
-					:src="require('@/assets/icons/add.png')"
-					alt="icon-plus"
+    <div class="main__user-page-content-user-info justify-space-between">
+			<div class="main__user-page-content-user-info">
+				<div class="main__user-page-content-user-photo">
+					<img :src="`/uploads/${userData?.avatar || 'no_user.jpg'}`" alt="user-photo" style="width: 80px; height: 80px; border-radius: 50%">
+					<img
+						:src="require('@/assets/icons/add.png')"
+						alt="icon-plus"
 
-					class="add-icon"
-				>
-				<ui-upload-image class="add-icon" @update-file="form.file = $event" style="opacity: 0" />
-      </div>
-      <p class="main__user-page-content-user-name" >
-        {{ userData.name || '' }} {{ userData.lastName || ''}}
-      </p>
+						class="add-icon"
+					>
+					<ui-upload-image class="add-icon" @update-file="form.file = $event" style="opacity: 0" />
+				</div>
+				<p class="main__user-page-content-user-name" >
+					{{ userData.name || '' }} {{ userData.lastName || ''}}
+				</p>
+			</div>
+
+			<ui-burger-button user :userData="userData"/>
     </div>
 		<p v-if="form.file?.name">{{ form.file?.name }}</p>
 
@@ -59,10 +63,11 @@ import {
 
 import UiUploadImage from "@/components/UI/forms/uiUploadImage.vue";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
+import UiBurgerButton from "@/components/UI/burger/uiBurgerButton.vue";
 
 export default {
   name: "uiSidebarUserPage",
-	components: {UiNotifyDialog, UiUploadImage },
+	components: {UiBurgerButton, UiNotifyDialog, UiUploadImage },
 	props: {
 		user: {
 			type: Object,

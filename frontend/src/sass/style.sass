@@ -952,13 +952,17 @@ body.bg-white .header__menu-search input
       box-shadow: 0px 0px 30px rgba(68, 68, 68, 0.05)
       border-radius: 20px
       margin-bottom: 99px
+      @media screen and (max-width: 960px)
+        display: block
       @media screen and (max-width: 768px)
         display: block
       &-block
         padding: 56px 64px 40px
         align-items: center
-        @media screen and (max-width: 850px)
-          padding: 56px 45px 40px
+        @media screen and (max-width: 1140px)
+          padding: 56px 20px 40px
+        @media screen and (max-width: 960px)
+          padding: 20px 20px 40px
         @media screen and (max-width: 768px)
           position: relative
         &.first-block
@@ -974,8 +978,8 @@ body.bg-white .header__menu-search input
             background-color: $grayLinkColor
             @media screen and (max-width: 1200px)
               height: 100%
-            @media screen and (max-width: 768px)
-              display: none
+            //@media screen and (max-width: 768px)
+            //  display: none
         &.second-block
           margin-top: 50px
           width: 70%
@@ -984,9 +988,12 @@ body.bg-white .header__menu-search input
           @media screen and (max-width: 1450px)
             justify-content: space-around
             flex-wrap: wrap
-          @media screen and (max-width: 768px)
+          @media screen and (max-width: 960px)
+            margin-top: 0
             width: 100%
-            padding: 10px 45px 40px
+          @media screen and (max-width: 800px)
+            width: 100%
+            padding: 20px
         &-data
           display: flex
           column-gap: 40px
@@ -1011,6 +1018,8 @@ body.bg-white .header__menu-search input
           border-radius: 50px 20px 20px 50px
           @media screen and (max-width: 576px)
             border-radius: 20px
+        @media screen and (max-width: 780px)
+          margin-bottom: 0
         @media screen and (max-width: 576px)
           display: block
           padding: 10px
@@ -1029,14 +1038,21 @@ body.bg-white .header__menu-search input
           margin-top: 38px
           margin-bottom: 40px
           text-align: left
+          @media screen and (max-width: 960px)
+            margin-top: 20px
           @media screen and (max-width: 768px)
             text-align: center
             margin-top: 10px
           @media screen and (max-width: 576px)
             max-width: 100%
       &-user-list
-        @media screen and (max-width: 768px)
-          text-align: center
+        @media screen and (max-width: 960px)
+          display: flex
+          gap: 20px
+          height: 80px
+          margin-bottom: 30px
+        @media screen and (max-width: 800px)
+          display: none
         & li a
           @include textSmallBold (1.125rem, 1.375rem, $grayLinkColor)
           @include trans
@@ -1047,8 +1063,11 @@ body.bg-white .header__menu-search input
           &:hover, &:active
             @include trans
             color: $colorTextButton
-            padding-left: 32px
+            padding: 0 10px 0 32px
             background: linear-gradient(59.75deg, #C5C5A8 -2.61%, #E2E1CF 76.3%, #E2E1CF 76.3%)
+          @media screen and (max-width: 960px)
+            &:hover, &:active
+              padding: 10px
         & li:last-of-type
           margin-bottom: 138px
           @media screen and (max-width: 768px)
@@ -1057,26 +1076,20 @@ body.bg-white .header__menu-search input
         @include textSmallBold (1.125rem, 1.375rem, $grayLinkColor)
         padding-left: 27px
         position: relative
-        @media screen and (max-width: 768px)
-          position: absolute
-          top: 15px
-          right: 45px
-        @media screen and (max-width: 576px)
-          top: 20%
         &:before
           content: url("@/assets/img/exit.png")
           top: 0
           left: 0
           position: absolute
-          @media screen and (max-width: 768px)
-            content: url("@/assets/img/exit_mobile.png")
-            top: 70px
-            left: -50px
+        @media screen and (max-width: 780px)
+          display: none
       &-user-data
         -moz-column-count: 2
         -webkit-column-count: 2
         column-count: 2
         width: 100%
+        @media screen and (max-width: 660px)
+          column-count: 1
         @media screen and (max-width: 1200px)
           width: 100%
           margin-bottom: 27px
