@@ -23,6 +23,9 @@ The project is deployed [here](https://hobby-art-vue.vercel.app/), but remember,
 **Backend:**
 - Node.js (Express.js)
 - MongoDB + mongoose
+- JWT token
+- Multer
+- Bcrypt
 
 ## How to run the project
 
