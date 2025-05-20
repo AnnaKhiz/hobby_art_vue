@@ -6,7 +6,18 @@
 					v-for="link in burgerUserPageList"
 					:key="link.value"
 				>
-					<span @click.prevent="changeLink(link.value)">{{ link.text }} </span>
+					<span
+						v-if="link.value === 'logout'"
+						@click.prevent="logOut"
+					>
+						{{ link.text }}
+					</span>
+					<span
+						v-else
+						@click.prevent="changeLink(link.value)"
+					>
+						{{ link.text }}
+					</span>
 				</li>
 			</ul>
 		</div>
@@ -14,7 +25,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 
 export default {
 	name: "uiBurgerUserPage.vue",
@@ -50,11 +61,19 @@ export default {
 	methods: {
 		...mapMutations({
 			setDisplayDialogState: 'dialog/setDisplayDialogState',
-		}),
-		...mapMutations({
 			setCheckedHeaderLink: 'links/setCheckedHeaderLink',
+			setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
 		}),
+		...mapActions({
+			logOutUser: 'user/logOutUser',
+		}),
+		async logOut() {
+			await this.logOutUser();
+			this.setIsAuthorizedInfo(false);
+			localStorage.setItem('auth', 'false');
 
+			this.$router.push({ name: 'HobbyArt'});
+		},
 		changeLink(link) {
 			this.$router.push({
 				name: 'User',
