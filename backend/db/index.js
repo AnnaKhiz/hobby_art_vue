@@ -191,6 +191,7 @@ const FeedbackSchema = new mongoose.Schema({
 	text: { type: String },
 	date: { type: String },
 	name: { type: String},
+	rating: { type: Number},
 	user: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'users'
