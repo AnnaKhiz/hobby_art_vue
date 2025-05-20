@@ -14,6 +14,7 @@
 				:items-per-page="itemsPerPage"
 				@update-last-index="handleLastIndex"
 				@update-start-index="handleStartIndex"
+				class="mt-5"
 			/>
 		</div>
 	</div>

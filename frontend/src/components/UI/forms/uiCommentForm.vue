@@ -28,6 +28,10 @@
 				{{ maxLength }}
 			</span>
 			</div>
+			<ui-rating-stars
+				@update-rating="feedback.rating = $event"
+				class="align-self-start"
+			/>
 		</div>
 		<div class="error-message">{{ infoMessage }}</div>
 		<button
@@ -46,14 +50,17 @@ import {
 	mapGetters,
 	mapMutations
 } from "vuex";
+import UiRatingStars from "@/components/UI/rating-stars/uiRatingStars.vue";
 
 export default {
 	name: "uiCommentForm.vue",
+	components: {UiRatingStars},
 	data() {
 		return {
 			feedback: {
 				text: '',
-				name: ''
+				name: '',
+				rating: 0
 			},
 			length: 130,
 			infoMessage: ''
@@ -86,7 +93,7 @@ export default {
 			if (this.user._id) {
 				this.feedback.user = this.user;
 			}
-      console.log(this.feedback)
+      console.log('feedback', this.feedback)
 			const result = await this.addFeedback(this.feedback);
 
 			if (!result.result) {

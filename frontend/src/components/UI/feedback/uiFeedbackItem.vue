@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<ui-rating-stars v-if="item.rating" :saved-rating="item.rating || 0" no-actions />
 		<textarea
 			v-if="admin && edit"
 			v-model="feedbackText"
@@ -16,13 +17,18 @@
 			<p class="feedback-author">{{ item.name }}</p>
 			<p class="feedback-author">{{ item.date }}</p>
 		</div>
+
 		<slot name="actions" />
 	</div>
 </template>
-
 <script>
+
+
+import UiRatingStars from "@/components/UI/rating-stars/uiRatingStars.vue";
+
 export default {
 	name: "uiFeedbackItem.vue",
+	components: {UiRatingStars},
 	props: {
 		item: {
 			type: Object,
