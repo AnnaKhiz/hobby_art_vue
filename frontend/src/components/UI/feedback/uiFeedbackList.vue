@@ -47,7 +47,10 @@ export default {
 			return this.isLoading;
 		},
 		itemsPerPageList() {
-			return this.feedbackList.filter((el, index) => index < this.lastIndex && index >= this.startIndex);
+			return this.sortedItems.filter((el, index) => index < this.lastIndex && index >= this.startIndex);
+		},
+		sortedItems() {
+			return [...this.feedbackList].sort((a, b) => b.date.localeCompare(a.date));
 		}
 	},
 	methods: {
