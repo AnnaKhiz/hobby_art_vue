@@ -177,6 +177,7 @@ const GuestUserSchema = new mongoose.Schema({
 const CommentSchema = new mongoose.Schema({
   text: { type: String },
   date: { type: String },
+	rating: { type: Number},
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users'
