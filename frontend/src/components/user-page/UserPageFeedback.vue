@@ -3,23 +3,16 @@
     <p class="main__user-page-content-user-name data-page review">
       Мои отзывы
     </p>
-    <div v-for="(item, index) in feedbacks" :key="item._id" class="main__user-page-content-review-container">
-      <div class="main__user-page-content-review-block rating-block">
-				<ui-rating-stars v-if="item.rating" :saved-rating="item.rating" no-actions/>
-
-        <p class="main__user-page-content-review-data">
-          {{ item.date }}
-        </p>
-      </div>
-      <div class="main__user-page-content-review-block info-block">
-        <div class="main__user-page-content-review-info">
-          <p>{{ item.name }}</p>
-          <p>Комментарий: <span>{{ item.text }}</span></p>
-        </div>
-				<div class="action-style mr-0">
-					<button @click.prevent="removeFeedback(item._id, index)">Удалить отзыв</button>
-				</div>
-      </div>
+    <div
+			v-for="(item, index) in feedbacks"
+			:key="item._id"
+			class="main__user-page-content-review-container"
+		>
+      <ui-feedback-item-user-page
+				:item="item"
+				:index="index"
+				@remove="removeFeedback"
+			/>
     </div>
   </div>
 </template>
@@ -29,11 +22,11 @@ import {
 	mapActions,
 	mapGetters
 } from "vuex";
-import UiRatingStars from "@/components/UI/rating-stars/uiRatingStars.vue";
+import UiFeedbackItemUserPage from "@/components/UI/feedback/uiFeedbackItemUserPage.vue";
 
 export default {
   name: "userPageFeedback",
-	components: {UiRatingStars},
+	components: { UiFeedbackItemUserPage },
   props: {
     user: {
       type: Object,
@@ -53,11 +46,8 @@ export default {
 	methods: {
 		...mapActions({
 			getFeedbackByUserId: 'feedback/getFeedbackByUserId',
-			deleteFeedbackById: 'feedback/deleteFeedbackById'
 		}),
-		async removeFeedback(id, index) {
-			const result = await this.deleteFeedbackById(id);
-			if (!result) return;
+		removeFeedback(index) {
 			this.feedbacks.splice(index, 1);
 			this.$store.commit('feedback/setFeedbackList', this.feedbacks);
 		}
@@ -69,10 +59,3 @@ export default {
 }
 </script>
 
-
-
-<style scoped lang="sass">
-
-
-
-</style>
