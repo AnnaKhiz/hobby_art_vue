@@ -3,8 +3,8 @@
 
 		<ui-order-info-container
 			:user-orders-list="userOrdersList"
-			@update-orders-list="handleUpdate"
-			@update-show="handleExpand"
+			@update-order="handleUpdate"
+			@update-show-value="handleExpand"
 		/>
 
     <!--  dialog notify -->
@@ -68,6 +68,3 @@ export default {
   }
 }
 </script>
-<style scoped lang="sass">
-
-</style>

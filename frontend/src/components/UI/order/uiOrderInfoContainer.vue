@@ -1,88 +1,40 @@
 <template>
-	<div v-for="(order, index) in userOrdersList" :key="order._id" class="main__user-page-content-story-container" >
-		<div>
-			<div class="main__user-page-content-story-container-flex">
-				<div class="main__user-page-content-story-block">
-					<p class="main__user-page-content-story-desc">
-						{{ order.isOrderCopy ? 'КОПИЯ ' : '' }}Заказ № {{ order._id }} от {{ order.date }}
-					</p>
-					<p class="main__user-page-content-story-desc">
-						{{ order.totalQuantity}} товара на сумму {{ order.totalPrice }} грн
-					</p>
-					<a href="" class="main__user-page-content-story-link" @click.prevent="expandOrder(index)">
-						<span >Подробнее о заказе</span>
-						<img
-							src="@/assets/img/arrow-down.svg"
-							alt="arrow-down icon"
-							:style="`${order.show ? 'transform: rotate(180deg)' : 'transform: rotate(0)'}`"
-						>
-					</a>
-				</div>
-				<div class="main__user-page-content-story-block block-right">
-					<p class="main__user-page-content-story-desc right-block">
-						<span>Статус:</span>
-						{{ order.dateCompleted !== '' ? order.dateCompleted : 'В работе' }}
-					</p>
-
-					<a href="" class="main__user-page-content-story-repeat-link" @click.prevent="addNewOrderHandler(index)">
-						Повторить заказ
-					</a>
-				</div>
-
-			</div>
-			<!--      order list block -->
-			<ui-order-items-list :order="order" />
-		</div>
+	<div
+		v-for="(order, index) in userOrdersList"
+		:key="order._id"
+		class="main__user-page-content-story-container"
+	>
+		<ui-order-info-item
+			:order="order"
+			:index="index"
+			:user-orders-list="userOrdersList"
+			@update-show="handleShow"
+			@update-orders-list="handleUpdate"
+		/>
 
 	</div>
 </template>
 
 <script>
-import UiOrderItemsList from "@/components/UI/order/uiOrderItemsList.vue";
-import {mapActions, mapGetters} from "vuex";
+import UiOrderInfoItem from "@/components/UI/order/uiOrderInfoItem.vue";
 
 export default {
 	name: "uiOrderInfoContainer.vue",
-	components: {UiOrderItemsList},
+	components: { UiOrderInfoItem },
 	props: {
 		userOrdersList: {
 			type: Array,
 			default: () => []
 		}
 	},
-	emits: ['updateOrdersList', 'updateShow'],
-	computed: {
-		...mapGetters({
-			orderItems: ('order/order'),
-		}),
-	},
+	emits: ['updateOrder', 'updateShowValue'],
 	methods: {
-		...mapActions({
-			addNewOrder: 'order/addNewOrder',
-		}),
-		expandOrder(index) {
-			this.$emit('updateShow', index)
+		handleShow(index) {
+			this.$emit('updateShowValue', index);
 		},
-
-		async addNewOrderHandler(index) {
-			const now = new Date(Date.now());
-			const options = { timeZone: 'Europe/Kiev', hour12: false };
-			this.date = now.toLocaleString('en-GB', options).replaceAll('/', '-');
-
-			let newOrderCopy = { ...this.userOrdersList[index], date: this.date };
-
-			delete newOrderCopy._id;
-			newOrderCopy.isOrderCopy = true;
-			await this.addNewOrder({ copy: true, body: newOrderCopy });
-
-			this.$emit('updateOrdersList', this.orderItems);
-		},
+		handleUpdate(value) {
+			this.$emit('updateOrder', value);
+		}
 	}
 }
 </script>
-
-
-
-<style scoped lang="sass">
-
-</style>
