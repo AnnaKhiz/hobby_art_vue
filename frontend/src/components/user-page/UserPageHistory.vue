@@ -11,7 +11,12 @@
               {{ order.totalQuantity}} товара на сумму {{ order.totalPrice }} грн
             </p>
             <a href="" class="main__user-page-content-story-link" @click.prevent="expandOrder(index)">
-              <span >Подробнее о заказе</span><img src="@/assets/img/arrow-down.svg" alt="arrow-down icon" :style="`${order.show ? 'transform: rotate(180deg)' : 'transform: rotate(0)'}`">
+              <span >Подробнее о заказе</span>
+							<img
+								src="@/assets/img/arrow-down.svg"
+								alt="arrow-down icon"
+								:style="`${order.show ? 'transform: rotate(180deg)' : 'transform: rotate(0)'}`"
+							>
             </a>
           </div>
           <div class="main__user-page-content-story-block block-right">
@@ -31,12 +36,15 @@
           <!--      order items block -->
           <div class="main__user-page-content-story-container-items "  >
             <div class="main__user-page-content-story-container-items-flex">
-              <div class="main__user-page-content-story-container-items-block left-block" style="width: 100%">
-                <div class="main__user-page-content-story-container-items-img" style="width: 100px; object-fit: contain; aspect-ratio: 1/1">
-                  <img :src="require(`@/assets/${item._id.photo}`)" alt="image card">
+              <div class="main__user-page-content-story-container-items-block left-block w-100">
+                <div class="main__user-page-content-story-container-items-img order-image">
+                  <img :src="`/uploads/${item._id.photo}`" alt="image card">
                 </div>
                 <p class="main__user-page-content-story-container-items-name" style="width: 100%">
-                  {{ item._id.name }} <span style="font-size: 0.8rem; font-weight: 400">( {{ parseCheckedColors(item.checkedColor, item) }} )</span>
+                  {{ item._id.name }}
+									<span style="font-size: 0.8rem; font-weight: 400">
+										( {{ parseCheckedColors(item.checkedColor, item) }} )
+									</span>
                 </p>
               </div>
               <div class="main__user-page-content-story-container-items-block right-block" style="column-gap: 50px">
@@ -131,3 +139,9 @@ export default {
   }
 }
 </script>
+<style scoped lang="sass">
+.order-image
+	width: 100px
+	object-fit: contain
+	aspect-ratio: 1/1
+</style>

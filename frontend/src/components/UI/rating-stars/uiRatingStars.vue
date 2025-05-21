@@ -73,6 +73,8 @@ export default {
 <style scoped lang="sass">
 .rating-container
 	width: fit-content
+	@media screen and (max-width: 768px)
+		margin-bottom: 20px
 .star-icon
 	width: 20px
 	height: 20px

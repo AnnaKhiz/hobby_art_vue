@@ -3,6 +3,7 @@ const {Item, ObjectId} = require("../db");
 
 async function getAllItems(req, res, next) {
   const items = await Item.find().populate('users._id');
+	console.log(items)
 
   if (!items) {
     res.send({ "result": false, items: [] });
