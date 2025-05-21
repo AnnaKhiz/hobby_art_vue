@@ -31,12 +31,8 @@
           </div>
 
         </div>
-
-        <div v-for="item in order.items" :key="item._id" class="main__user-page-content-story-container-block " :class="{ 'non-visible' : !order.show }">
-          <!--      order items block -->
-          <ui-order-item :item="item" />
-
-        </div>
+				<!--      order list block -->
+        <ui-order-items-list :order="order" />
       </div>
 
     </div>
@@ -55,11 +51,11 @@
 <script>
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 import { mapActions, mapGetters } from "vuex";
-import UiOrderItem from "@/components/UI/order/uiOrderItem.vue";
+import UiOrderItemsList from "@/components/UI/order/uiOrderItemsList.vue";
 
 export default {
   name: "userPageHistory",
-  components: {UiOrderItem, UiNotifyDialog},
+  components: { UiOrderItemsList, UiNotifyDialog },
   props: {
     user: {
       type: Object,
