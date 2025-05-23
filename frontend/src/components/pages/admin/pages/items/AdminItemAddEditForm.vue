@@ -291,6 +291,10 @@ export default {
   width: 50%
   margin: 0
   padding-bottom: 20px
+  @media screen and (max-width: 1000px)
+    width: 60%
+  @media screen and (max-width: 768px)
+    width: 100%
   &::after
     content: none
 .form-select
