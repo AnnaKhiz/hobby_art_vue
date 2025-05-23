@@ -1,5 +1,8 @@
 <template>
-  <router-view v-if="$route.path.includes('add') || $route.path.includes('edit')" :is-show-details="isShowDetails"></router-view>
+  <router-view
+		v-if="$route.path.includes('add') || $route.path.includes('edit')"
+		:is-show-details="isShowDetails"
+	/>
   <div v-else-if="!orders.length">
     Пока нет заказов
   </div>
@@ -12,8 +15,8 @@
 			:class="{ 'hidden' : isShowDetails}"
 		>
       <div class="content" >
-				<p class="label align-self-center">Заказ №:</p>
-				<p class="row-value align-self-center mb-3">{{ tableRow.id}}</p>
+				<p class="label">Заказ №:</p>
+				<p class="row-value mb-3">{{ tableRow.id}}</p>
 				<p class="label">Стоимость:
 					<span class="row-value">{{ tableRow.price }}</span>
 				</p>
@@ -79,8 +82,6 @@ export default
       parseDeliveryValue: 'delivery/parseDeliveryValue',
       parsePaymentValue: 'delivery/parsePaymentValue'
     }),
-
-
   },
   methods: {
 		...mapActions('order', ['fetchOrders', 'removeOrder']),
@@ -118,8 +119,6 @@ export default
 }
 </script>
 
-
-
 <style scoped lang="sass">
 .items-container
   &__item
@@ -132,6 +131,9 @@ export default
     flex-direction: column
     align-items: flex-start
     justify-content: space-between
+    @media screen and (max-width: 768px)
+      width: 100%
+      height: fit-content
     & > .title
       width: 100%
       text-align: center
