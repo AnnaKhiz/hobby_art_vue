@@ -10,26 +10,30 @@
 				<ui-breadcrumbs :link="getCheckedHeaderLink" product />
 				<section class="main__product-page-price-block">
 					<div class="main__product-page-price-block-filter bl-hidden">
-						<a href="" class="main__product-page-price-block-filter-button">
+						<a v-if="documentSize" href="" class="main__product-page-price-block-filter-button" @click.prevent="isHidden = !isHidden">
 							Фильтры
 						</a>
 					</div>
 					<!--	SORT BUTTONS  -->
-					<ui-sort-button
-						desc
-						@update-items="handleItemsList"
-						:items="itemsList"
-					/>
-					<ui-sort-button
-						asc
-						@update-items="handleItemsList"
-						:items="itemsList"
-					/>
+					<div :class="{ 'hide-filters' : isHidden && documentSize }" class="main__product-page-price-block-filter-sort">
+						<ui-sort-button
+							desc
+							@update-items="handleItemsList"
+							:items="itemsList"
+						/>
+						<ui-sort-button
+							asc
+							@update-items="handleItemsList"
+							:items="itemsList"
+						/>
+					</div>
+
 				</section>
-				<section class="main__product-page-container">
+				<section class="main__product-page-container" >
 					<ui-filter-sidebar
 						@search="handleSearchFilters"
 						:filter-items-quantity="filterItemsQuantity"
+						:class="{ 'hide-filters' : isHidden && documentSize }"
 					/>
 					<ui-product-list-page
 						:items="itemsList"
@@ -66,7 +70,8 @@ export default {
     return {
       itemsList: [],
       searchFilters: {},
-      filterItemsQuantity: null
+      filterItemsQuantity: null,
+			isHidden: true
     }
   },
   computed: {
@@ -77,6 +82,9 @@ export default {
     }),
 		loading() {
 			return this.isLoading;
+		},
+		documentSize() {
+			return window.innerWidth <= '820';
 		}
   },
   methods: {
@@ -94,7 +102,6 @@ export default {
 		handleFilterItemsQuantity(value) {
 			this.filterItemsQuantity = value;
 		},
-
   },
 	async mounted() {
 		if (localStorage.getItem('auth') === 'true') {
@@ -103,6 +110,10 @@ export default {
 
 		await this.fetchItems();
 		this.itemsList = this.items;
-	}
+	},
 }
 </script>
+<style scoped lang="sass">
+.hide-filters
+	display: none
+</style>

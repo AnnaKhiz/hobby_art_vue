@@ -772,13 +772,31 @@ body.bg-white .header__menu-search input
       justify-content: flex-end
       align-items: center
       column-gap: 15px
+      @media screen and (max-width: 820px)
+        justify-content: space-between
       @media screen and (max-width: 500px)
-        justify-content: center
-      &-btn a
-        @include buttonWithBorder
+        display: block
+      &-btn
+        @media screen and (max-width: 500px)
+          margin-bottom: 10px
+        & > a
+          @include buttonWithBorder
       &-filter
+        @media screen and (max-width: 500px)
+          margin-bottom: 20px
+          width: 100%
+        & > a
+          @media screen and (max-width: 500px)
+            display: block
+            width: 100%
+            text-align: center
+        &-sort
+          display: flex
+          align-items: center
+          justify-content: flex-end
+          gap: 10px
         &.bl-hidden
-          @media screen and (max-width: 768px)
+          @media screen and (max-width: 820px)
             display: block
         &-button
           @include button
@@ -787,11 +805,11 @@ body.bg-white .header__menu-search input
       column-gap: 80px
       align-items: flex-start
       margin-bottom: 99px
-      @media screen and (max-width: 768px)
+      @media screen and (max-width: 820px)
         display: block
     &-sidebar
       &-search
-        @media screen and (max-width: 768px)
+        @media screen and (max-width: 820px)
           flex-wrap: wrap
           display: flex
           justify-content: space-between
@@ -804,7 +822,7 @@ body.bg-white .header__menu-search input
         margin-bottom: 10px
       &-item
         margin-bottom: 20px
-        @media screen and (max-width: 768px)
+        @media screen and (max-width: 820px)
           display: inline-block
           width: 24%
           vertical-align: top
@@ -824,10 +842,10 @@ body.bg-white .header__menu-search input
         height: 1px
         background: $grayLinkColor
         margin: 27px 0 20px 0
-        @media screen and (max-width: 768px)
+        @media screen and (max-width: 820px)
           display: none
       &-buttons
-        @media screen and (max-width: 768px)
+        @media screen and (max-width: 820px)
           margin: 0 auto 24px auto
       &-button
         @include trans
@@ -864,7 +882,7 @@ body.bg-white .header__menu-search input
         background: $colorTextButton
         box-shadow: 0px 0px 30px rgba(68, 68, 68, 0.05)
         border-radius: 20px
-        @media screen and (max-width: 768px)
+        @media screen and (max-width: 820px)
           flex: 0 0 100%
           margin: 0px auto 20px auto
         &-header
