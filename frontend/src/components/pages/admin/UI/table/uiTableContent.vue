@@ -261,7 +261,8 @@ export default {
 .order-user-info
   position: relative
   width: 100%
-  overflow: auto
+  @media screen and (max-width: 543px)
+    overflow: auto
 table, th, td
   border-bottom: 1px solid var(--grayLinkColor)
   border-collapse: collapse
