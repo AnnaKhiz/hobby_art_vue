@@ -53,7 +53,10 @@
 </template>
 
 <script>
-import {mapMutations, mapActions} from "vuex";
+import {
+	mapMutations,
+	mapActions
+} from "vuex";
 
 export default {
   name: "AsideMenu.vue",
@@ -63,7 +66,13 @@ export default {
       default: 'items'
     }
   },
-  emits: ['addNew', 'getAll', 'add-item', 'add-order', 'menu'],
+  emits: [
+		'addNew',
+		'getAll',
+		'add-item',
+		'add-order',
+		'menu'
+	],
   methods: {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
@@ -107,7 +116,7 @@ export default {
       @media screen and (max-width: 1200px)
         padding: 10px
   &__label
-    font: 600 normal 1.75rem/2.6875rem 'Spectral SC' //28/43px
+    font: 600 normal 1.75rem/2.6875rem 'Spectral SC'
     text-transform: uppercase
     color: #424242
     text-align: center

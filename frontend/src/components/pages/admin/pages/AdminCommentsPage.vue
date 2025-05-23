@@ -84,8 +84,6 @@ export default {
 }
 </script>
 
-
-
 <style scoped lang="sass">
 .items-container
 	&__item
@@ -103,5 +101,4 @@ export default {
 			justify-content: start
 			gap: 20px
 			margin-top: 15px
-
 </style>

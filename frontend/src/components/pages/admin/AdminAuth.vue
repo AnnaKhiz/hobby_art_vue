@@ -25,13 +25,16 @@
           Войти
         </button>
       </form>
+		</div>
   </div>
-  </div>
-
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {
+	mapActions,
+	mapGetters,
+	mapMutations
+} from "vuex";
 
 export default {
   name: "AdminAuth",
@@ -48,12 +51,11 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setIsRegisteredInfo: 'user/setIsRegisteredInfo',
       setDisplayDialogState: 'dialog/setDisplayDialogState',
-      setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
-      setUserInfo: 'user/setUserInfo'
     }),
-		...mapActions('admin', ['logInAdmin']),
+		...mapActions({
+			logInAdmin: 'admin/logInAdmin'
+		}),
 
     async logIn() {
 			const result = await this.logInAdmin(this.entityData);

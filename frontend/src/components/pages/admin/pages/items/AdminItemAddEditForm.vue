@@ -236,7 +236,7 @@ export default {
 
     async sendEditedItem() {
         this.parseFormFields();
-				console.log(this.form)
+
 				if (this.form.file) {
 					await this.appendFormFile();
 					if (!this.file.filename) {
@@ -244,8 +244,6 @@ export default {
 						return;
 					}
 				}
-
-
 
 				this.form.photo = this.file.filename;
 				delete this.form.file;

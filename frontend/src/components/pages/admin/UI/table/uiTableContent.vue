@@ -117,8 +117,6 @@
   </div>
 </template>
 
-
-
 <script>
 import UiModalTemplate from "@/components/UI/modal/uiModalTemplate.vue";
 import {mapActions, mapGetters} from "vuex";
@@ -259,8 +257,6 @@ export default {
 }
 </script>
 
-
-
 <style scoped lang="sass">
 .order-user-info
   position: relative
@@ -305,8 +301,6 @@ table.change-data-table, table.change-data-table th, table.change-data-table td
       background: var(--colorLineBasket)
   & td
     padding: 10px
-
-
 .select-list
   padding: 8px 11px
   width: 100%
@@ -316,5 +310,3 @@ table.change-data-table, table.change-data-table th, table.change-data-table td
   border-radius: 12px
   box-shadow: 1px -1px 6px inset rgba(94, 92, 90, 0.58)
 </style>
-<script setup>
-</script>
