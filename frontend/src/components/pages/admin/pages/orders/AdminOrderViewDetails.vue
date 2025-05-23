@@ -2,7 +2,7 @@
   <div v-if="isShowDetails" style="position: absolute; top: -30px; left: 0; color: red">
     {{ errorMessage }}
   </div>
-  <div  class="items-container__item" style="width: 100%; padding: 0">
+  <div  class="items-container__item admin-order-item" style="width: 100%; padding: 0">
 
     <ui-table-content
       :orderId="orderId"
@@ -17,25 +17,34 @@
       </template>
     </ui-table-content>
 
-    <div v-if="selectedOrder.items.length" class="main__basket-info-item-product-count container">
-      <div v-for="(item, index) in selectedOrder.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block" style="margin-bottom: 15px">
-        <div style="display: flex; align-items: center; justify-content: flex-start; column-gap: 15px">
-          <div class="main__basket-info-item-product-img" style="width: 50px; height: 50px; object-fit: contain; aspect-ratio: 1/1">
+    <div v-if="selectedOrder.items.length" class="main__basket-info-item-product-count container admin-order-item">
+      <div
+				v-for="(item, index) in selectedOrder.items"
+				:key="item._id"
+				class="main__basket-info-item-product admin-order"
+				data-count="count-block"
+				style="margin-bottom: 15px"
+			>
+        <div class="main__basket-info-item-product-container about">
+          <div class="main__basket-info-item-product-img admin-order-image" >
             <img :src="`/uploads/${item._id.photo ? item._id.photo : 'no_image.png'}`" alt="product image" style="height: 100%">
           </div>
           <p class="main__basket-info-item-product-name admin-order-view" >
             {{ item._id.name }}
           </p>
-          <p class="main__basket-info-item-product-name admin-order-view" style="font-weight: 400">
+          <p class="main__basket-info-item-product-name admin-order-view" style="font-weight: 400; max-width: 100px">
             ( {{ parseCheckedColors(item.checkedColor, index)}} )
           </p>
         </div>
 
-        <ui-quantity-counter @input="changeCountAndPrice(index, $event)" :order-count="item.quantity"/>
-        <p class="main__basket-info-item-product-price" data-price="basket-item-price">
-          {{ item.price }} грн
-        </p>
-        <ui-delete-icon @remove="selectedOrder.items.length > 1 ? deleteItemFromOrder(item, index) : notify('В заказе должен быть хотябы 1 товар')"/>
+				<div class="main__basket-info-item-product-container order-count">
+					<ui-quantity-counter @input="changeCountAndPrice(index, $event)" :order-count="item.quantity" class="counter"/>
+					<p class="main__basket-info-item-product-price price" data-price="basket-item-price">
+						{{ item.price }} грн
+					</p>
+					<ui-delete-icon class="action" @remove="selectedOrder.items.length > 1 ? deleteItemFromOrder(item, index) : notify('В заказе должен быть хотябы 1 товар')"/>
+				</div>
+
       </div>
     </div>
 		<div
@@ -351,4 +360,12 @@ table.order-items-table, th, td
   padding: 0 20px
 .alert
   color: red
+.admin-order-image
+  width: 50px
+  height: 50px
+  object-fit: contain
+  aspect-ratio: 1/1
+.admin-order-item
+  flex-grow: 1
+  height: 100%
 </style>

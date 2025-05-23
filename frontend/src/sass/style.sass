@@ -1805,8 +1805,38 @@ body.bg-white .header__menu-search input
             border-radius: 20px
             background: $colorTextButton
             box-shadow: 0px 0px 30px 0px rgba(68, 68, 68, 0.05)
+          &.admin-order
+            @media screen and (max-width: 1100px)
+              display: block
+              width: 100%
           &-count
             margin-bottom: 17px
+          &-container
+            display: flex
+            align-items: center
+            justify-content: flex-start
+            column-gap: 15px
+            & > .counter
+              width: 80px
+            & > .price
+              width: 150px
+              text-align: center
+            &.about
+              @media screen and (max-width: 1100px)
+                margin-bottom: 20px
+              @media screen and (max-width: 670px)
+                display: flex
+                justify-content: space-between
+                align-items: center
+            &.order-count
+              @media screen and (max-width: 1100px)
+                padding-bottom: 30px
+                border-bottom: 1px solid #a4a3a2
+              @media screen and (max-width: 670px)
+                display: flex
+                justify-content: center
+                align-items: center
+                border-bottom: none
           &-img
             width: 200px
             height: 200px
@@ -1825,10 +1855,12 @@ body.bg-white .header__menu-search input
             max-height: 50px
             &.admin-order-view
               font-size: 0.8rem
-              width: 400px
+              width: 200px
               overflow: hidden
               text-overflow: ellipsis
               white-space: nowrap
+              @media screen and (max-width: 1100px)
+                width: fit-content
             @media screen and (max-width: 768px)
               font-size: 0.9rem
               line-height: 1rem

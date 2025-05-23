@@ -5,9 +5,25 @@
         <td :style="{ borderTopLeftRadius: hover && index === 0 ? '12px' : 'none' }" class="column-title">{{item.text}}:</td>
         <td :style="`width: auto; ${!item.isReadable ? 'padding: 10px 15px' : 'padding: 0'}`">
           <slot v-if="$slots[item.name] && !item.isReadable" :name="item.name" :item="item"></slot>
-          <p v-if="item.name === 'title'">{{ item.value }}</p>
-          <p v-if="item.name === 'receiver'">{{ item.value.lastName }} {{ item.value.name }} {{ item.value.surName }}</p>
-          <p v-if="item.name === 'address'">Город: {{ item.value.city }}, ул. {{ item.value.street }}, дом {{ item.value.house }}, кв. {{ item.value.apartment }}. Индекс {{ item.value.zipCode }} </p>
+          <p
+						v-if="item.name === 'title'"
+					>
+						{{ item.value }}
+					</p>
+          <p
+						v-if="item.name === 'receiver'"
+					>
+						{{ item.value.lastName }} {{ item.value.name }} {{ item.value.surName }}
+					</p>
+          <p
+						v-if="item.name === 'address'"
+					>
+						Город: {{ item.value.city }},
+						ул. {{ item.value.street }},
+						дом {{ item.value.house }},
+						кв. {{ item.value.apartment }}.
+						Индекс {{ item.value.zipCode }}
+					</p>
           <select
             class="select-list"
             v-if="$slots[item.name] && item.isReadable"
