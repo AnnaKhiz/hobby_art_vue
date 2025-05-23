@@ -44,7 +44,7 @@ export default {
       editFormData: {}
     }
   },
-  emits: ['updateIsNewFormData', 'editItem', 'update'],
+  emits: ['updateIsNewFormData'],
 	computed: {
 		...mapState('items', ['itemsList']),
 	},
@@ -55,27 +55,9 @@ export default {
       if (index === -1) return false;
       this.productList[index] = item;
     },
-    openAddProduct() {
-      this.$emit('updateIsNewFormData', true)
-      // this.isNewFormData = true;
-      this.editFormData = {}
-    },
-    openEditItem(item) {
-      this.$emit('updateIsNewFormData', true)
-      // this.isNewFormData = true
-      this.editFormData = item
-    },
-    addProduct(item) {
-      this.$emit('updateIsNewFormData', false)
-      // this.isNewFormData = false;
-      this.editFormData = {}
-      this.productList.push(item)
-    },
-
     async removeProduct(id) {
 			await this.removeItem(id);
 			this.productList = this.itemsList;
-			// this.$emit('update', id);
     },
     renderColorsArray(item){
       if (!item) return
