@@ -1,6 +1,14 @@
 <template>
-    <router-view v-if="$route.path.includes('add') || $route.path.includes('edit')" @updated-item="updateItemData"></router-view>
-    <div v-else v-for="(item, index) in productList" :key="item._id" class="items-container__item">
+    <router-view
+			v-if="$route.path.includes('add') || $route.path.includes('edit')"
+			@updated-item="updateItemData"
+		/>
+    <div
+			v-else
+			v-for="(item, index) in productList"
+			:key="item._id"
+			class="items-container__item"
+		>
       <div class="info">
         <h3 class="item-row"><span class="label">Название:</span> {{item.name}}</h3>
         <p class="item-row"><span class="label">Описание:</span> {{item.description}}</p>
@@ -130,6 +138,11 @@ export default {
       justify-content: start
       gap: 20px
       margin-top: 15px
+    @media screen and (max-width: 1440px)
+      width: 45%
+    @media screen and (max-width: 850px)
+      width: 100%
+      height: fit-content
 .button
   font-size: 1rem
   color: #7B4646

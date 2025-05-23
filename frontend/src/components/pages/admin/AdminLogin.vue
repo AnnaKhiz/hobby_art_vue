@@ -2,8 +2,17 @@
   <main class="main admin"  style="text-align: left">
     <div class="container">
       <h2 class="container__label">Добро пожаловать в Админ панель!</h2>
+			<button
+				v-if="menuButton"
+				class="menu-button-container"
+				@click.prevent="isHidden = !isHidden"
+			>
+				<img :src="menuButtonIcon" alt="menu icon" class="menu-dots">
+			</button>
+
       <div class="container__flex">
         <aside-menu
+					v-if="isHidden"
           :checked-menu="checkedMenu"
           @get-all="isNewFormData = false"
           @add-new="isNewFormData = true"
@@ -20,6 +29,7 @@
 <script>
 import {mapActions, mapMutations} from "vuex";
 import AsideMenu from "@/components/pages/admin/UI/AsideMenu.vue";
+import menuButtonIcon from "@/assets/icons/menu-dots.svg";
 
 export default {
   name: "AdminLogin",
@@ -30,9 +40,16 @@ export default {
       itemsList: [],
       form: {},
       checkedMenu: '',
-      isNewFormData: false
+      isNewFormData: false,
+			isHidden: true,
+			menuButtonIcon
     }
   },
+	computed: {
+		menuButton() {
+			return window.innerWidth <= '768';
+		}
+	},
   methods: {
     ...mapMutations({
       setIsAuthorizedInfo: 'user/setIsAuthorizedInfo'
@@ -50,6 +67,7 @@ export default {
   async mounted() {
     await this.initPage()
     this.checkedMenu = 'items';
+		this.isHidden = !this.menuButton;
   },
 }
 </script>
@@ -67,6 +85,8 @@ export default {
     gap: 20px
     flex-grow: 1
     height: 100%
+    @media screen and (max-width: 768px)
+      display: block
   &__item
     border-radius: 24px
     background: rgba(255, 253, 253, 0.47)
@@ -76,6 +96,9 @@ export default {
       padding: 20px
       @media screen and (max-width: 1200px)
         padding: 10px
+      @media screen and (max-width: 768px)
+        width: 100%
+        margin-bottom: 20px
     &.content
       display: flex
       gap: 15px
@@ -84,7 +107,9 @@ export default {
       text-align: start
       width: 80%
       @media screen and (max-width: 1200px)
-        padding: 50px
+        padding: 20px
+      @media screen and (max-width: 768px)
+        width: 100%
   &__label
     font: 600 normal 1.75rem/2.6875rem 'Spectral SC' //28/43px
     text-transform: uppercase
@@ -128,5 +153,13 @@ export default {
   justify-content: start
   flex-wrap: wrap
   gap: 15px
-
+.menu-dots
+  background-color: #ffffff
+  padding: 20px 10px
+  border-radius: 12px
+  box-shadow: 1px 1px 4px #afabab, inset -1px -1px 4px #afabab
+  transform: rotate(90deg)
+  margin: 0 0 20px 0
+.menu-button-container
+  text-align: left
 </style>

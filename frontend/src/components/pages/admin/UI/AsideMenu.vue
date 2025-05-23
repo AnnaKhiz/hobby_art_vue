@@ -1,14 +1,54 @@
 <template>
   <div class="container__item aside">
-    <button @click="goToPage('items', null)" class="modal__registration-form-button block">Товары</button>
-    <div v-if="checkedMenu === 'items'" class="sidebar">
-      <a href="#" class="sidebar__submenu" @click.prevent="goToPage('items', null)">Все товары</a>
-      <a href="#" class="sidebar__submenu"  @click.prevent="goToPage('items', 'add')" >Добавить товар</a>
+    <button
+			@click="goToPage('items', null)"
+			class="modal__registration-form-button block"
+		>
+			Товары
+		</button>
+    <div
+			v-if="checkedMenu === 'items'"
+			class="sidebar"
+		>
+      <a
+				href="#"
+				class="sidebar__submenu"
+				@click.prevent="goToPage('items', null)"
+			>
+				Все товары
+			</a>
+      <a
+				href="#"
+				class="sidebar__submenu"
+				@click.prevent="goToPage('items', 'add')"
+			>
+				Добавить товар
+			</a>
     </div>
-    <button @click="goToPage('orders', null)" class="modal__registration-form-button block">Заказы</button>
-    <button @click="goToPage('users', null)" class="modal__registration-form-button block">Пользователи</button>
-    <button @click="goToPage('comments', null)" class="modal__registration-form-button block">Отзывы</button>
-    <button @click="logOut" class="modal__registration-form-button block exit">Выход</button>
+    <button
+			@click="goToPage('orders', null)"
+			class="modal__registration-form-button block"
+		>
+			Заказы
+		</button>
+    <button
+			@click="goToPage('users', null)"
+			class="modal__registration-form-button block"
+		>
+			Пользователи
+		</button>
+    <button
+			@click="goToPage('comments', null)"
+			class="modal__registration-form-button block"
+		>
+			Отзывы
+		</button>
+    <button
+			@click="logOut"
+			class="modal__registration-form-button block exit"
+		>
+			Выход
+		</button>
   </div>
 </template>
 
@@ -66,13 +106,6 @@ export default {
       padding: 20px
       @media screen and (max-width: 1200px)
         padding: 10px
-    &.content
-      padding: 50px
-      text-align: start
-      background: rgba(255, 253, 253, 0.47)
-      width: 80%
-      @media screen and (max-width: 1200px)
-        padding: 50px
   &__label
     font: 600 normal 1.75rem/2.6875rem 'Spectral SC' //28/43px
     text-transform: uppercase
@@ -93,6 +126,7 @@ export default {
       border: 1px solid #525252
       color: #525252
   @media screen and (max-width: 1200px)
+    max-width: 100%
     font-size: 0.8rem
     padding: 13px 30px
   @media screen and (max-width: 900px)
