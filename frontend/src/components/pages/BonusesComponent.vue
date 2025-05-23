@@ -41,8 +41,6 @@
 
     </section>
   </main>
-
-
 </template>
 
 <script>
@@ -53,7 +51,11 @@ import {mapGetters} from "vuex";
 
 export default {
   name: "BonusesComponent",
-  components: {UiBreadcrumbs, UiSidebarGeneral, UiMainBanner},
+  components: {
+		UiBreadcrumbs,
+		UiSidebarGeneral,
+		UiMainBanner
+	},
   computed: {
     ...mapGetters({
       getCheckedHeaderLink: 'links/getCheckedHeaderLink',

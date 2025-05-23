@@ -10,7 +10,12 @@
 				<ui-breadcrumbs :link="getCheckedHeaderLink" product />
 				<section class="main__product-page-price-block">
 					<div class="main__product-page-price-block-filter bl-hidden">
-						<a v-if="documentSize" href="" class="main__product-page-price-block-filter-button" @click.prevent="isHidden = !isHidden">
+						<a
+							v-if="documentSize"
+							href=""
+							class="main__product-page-price-block-filter-button"
+							@click.prevent="isHidden = !isHidden"
+						>
 							Фильтры
 						</a>
 					</div>

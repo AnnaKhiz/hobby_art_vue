@@ -19,7 +19,12 @@
 
             <div v-if="order.items.length" class="main__basket-info-item-product-count">
 
-              <div v-for="(item, index) in order.items" :key="item._id" class="main__basket-info-item-product" data-count="count-block">
+              <div
+								v-for="(item, index) in order.items"
+								:key="item._id"
+								class="main__basket-info-item-product"
+								data-count="count-block"
+							>
                 <div class="main__basket-info-item-product-img">
                   <img :src="`/uploads/${item.item.photo ? item.item.photo : 'no_image.png'}`" alt="product image">
                 </div>
@@ -120,16 +125,26 @@
 
 <script>
 import UiBreadcrumbs from "@/components/UI/breadcrumbs/uiBreadcrumbs.vue";
-import {mapGetters, mapMutations, mapState, mapActions} from "vuex";
+import {
+	mapGetters,
+	mapMutations,
+	mapState,
+	mapActions
+} from "vuex";
 import UiDeleteIcon from "@/components/UI/icons/uiDeleteIcon.vue";
 import UiQuantityCounter from "@/components/UI/uiQuantityCounter.vue";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 import UiNewOrderForm from "@/components/UI/forms/uiNewOrderForm.vue";
-// import * as yup from 'yup';
 
 export default {
   name: "BasketComponent",
-  components: {UiNewOrderForm, UiNotifyDialog, UiQuantityCounter, UiDeleteIcon, UiBreadcrumbs},
+  components: {
+		UiNewOrderForm,
+		UiNotifyDialog,
+		UiQuantityCounter,
+		UiDeleteIcon,
+		UiBreadcrumbs
+	},
   data() {
     return {
       display: false,
@@ -170,10 +185,8 @@ export default {
     }),
     deliveryPrice() {
       const deliveryObject = this.deliveryMethods.find(el => el.value === this.deliveryInfo.deliveryMethod);
-
       if(!deliveryObject) return;
-
-      return deliveryObject.price
+      return deliveryObject.price;
     },
   },
   methods: {
@@ -193,11 +206,9 @@ export default {
 		},
     parseCheckedColors(color, itemId) {
       const currentItem = this.order.items.find(el => el.item._id === itemId);
-
       const colorObject = currentItem.item.color.find(el => el.value === color);
       if (!colorObject) return;
-
-      return colorObject.text
+      return colorObject.text;
     },
 
     async sendOrder() {
@@ -214,14 +225,12 @@ export default {
       this.currentOrder.totalQuantity = this.$store.state.order.order.totalQuantity;
       this.currentOrder.items = this.$store.state.order.order.items.map(el => ( { _id: el.item._id, price : el.price, quantity: el.quantity, checkedColor: el.checkedColor } ));
 
-
 			if (!this.currentOrder.items.length) {
 				this.display = true;
 				this.notifyMessage = 'Пустой заказ!';
 				this.notifyStatus = 'var(--errorText)';
 				return
 			}
-      console.log('current order', this.currentOrder)
 
       await this.addNewOrder({
 				body: this.currentOrder
@@ -292,26 +301,7 @@ export default {
 
       localStorage.setItem('order', JSON.stringify(this.$store.state.order.order))
     },
-    // async initPage() {
-		// 	if (localStorage.getItem('auth') === 'true') {
-		// 		try {
-		// 			await this.getAuthUser();
-		// 			this.user = this.userInfo;
-		// 			console.log(this.user)
-		// 			this.deliveryInfo.address = this.user.address || {};
-		// 			this.deliveryInfo.receiver = this.user || {};
-		// 			this.currentOrder.isMailing = this.user.mailing || false;
-		// 			this.currentOrder.users = this.user._id || '';
-		//
-		// 		} catch (error) {
-		// 			console.error('Error in getting user (basket):', error);
-		// 			this.addEmptyAddress();
-		// 		}
-		//
-		// 	} else {
-		// 		this.addEmptyAddress();
-		// 	}
-    // },
+
 		scrollTop() {
 			this.basketComponent.scrollTo({
 				top: 0,
@@ -323,12 +313,11 @@ export default {
  created() {
     if( localStorage.getItem('order') ) {
       this.order = JSON.parse(localStorage.getItem('order'));
-			console.log(this.order)
-      this.updateOrder(this.order) // ???
+
+      this.updateOrder(this.order);
     }
   },
   async mounted() {
-    // await this.initPage();
 		this.basketComponent = this.$refs.basket.closest('div');
   },
   watch: {
@@ -340,11 +329,8 @@ export default {
       }
     }
   }
-
 }
 </script>
-
-
 
 <style scoped lang="sass">
 .empty-basket

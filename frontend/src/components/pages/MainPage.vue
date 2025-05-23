@@ -7,13 +7,10 @@
         <ui-switcher-main
           @switcher-state="getSwitcherState"
         >
-
           <template #popular-swiper>
             <ui-popular-products :slider-items="itemsForSlider" />
           </template>
-
         </ui-switcher-main>
-
      </div>
    </section>
 

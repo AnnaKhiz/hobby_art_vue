@@ -114,8 +114,12 @@ export default {
   components: {
 		LoaderComponent,
 		UiRecommendedList,
-		UiFeedbackSlider, UiColorsIcon, UiNotifyDialog, UiBreadcrumbs, UiQuantityCounter},
-
+		UiFeedbackSlider,
+		UiColorsIcon,
+		UiNotifyDialog,
+		UiBreadcrumbs,
+		UiQuantityCounter
+	},
   props: {
     id: {
       type: String,
@@ -157,7 +161,6 @@ export default {
 
       return colorObjects.map(el => (el.text)).join(', ')
     },
-
   },
   methods: {
     ...mapMutations('order', ['addToOrder']),
@@ -165,9 +168,7 @@ export default {
     addCheckedColor(value) {
       if (this.order.checkedColor.includes(value)) {
         const index = this.order.checkedColor.findIndex(el => el === value)
-
         if (index === -1) return false;
-
         this.order.checkedColor.splice(index, 1)
       } else {
         this.order.checkedColor.push(value)
@@ -176,7 +177,7 @@ export default {
 
     addToBasket() {
       this.order.checkedColor.forEach(el => {
-        const orderItem = { ...this.order, checkedColor: el }
+        const orderItem = { ...this.order, checkedColor: el };
         this.addToOrder(orderItem);
       })
 
@@ -191,7 +192,7 @@ export default {
       }
     },
     countFinalPrice() {
-      return this.order.price = this.productItem.price * this.order.quantity
+      return this.order.price = this.productItem.price * this.order.quantity;
     },
 		async initPage() {
 			await this.fetchItemById(this.id);
@@ -238,8 +239,6 @@ export default {
   }
 }
 </script>
-
-
 
 <style scoped lang="sass">
 .fade-enter-active,
