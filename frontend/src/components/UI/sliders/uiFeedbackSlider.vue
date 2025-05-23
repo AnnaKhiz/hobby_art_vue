@@ -3,7 +3,7 @@
 		<div class="container">
 			<swiper
 				:modules="modules"
-				:slides-per-view="2"
+				:slides-per-view="slidesPerPage"
 				:space-between="15"
 				navigation
 				loop
@@ -54,6 +54,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
 import {mapActions, mapGetters} from "vuex";
+
 export default {
 	name: "uiFeedbackSlider.vue",
 	components: {
@@ -68,7 +69,10 @@ export default {
 	computed: {
 		...mapGetters({
 			feedbackList: 'feedback/feedbackList',
-		})
+		}),
+		slidesPerPage() {
+			return window.innerWidth >= '1000' ? 2 : 1;
+		}
 	},
 	methods: {
 		...mapActions({
