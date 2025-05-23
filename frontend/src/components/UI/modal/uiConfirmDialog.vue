@@ -84,6 +84,7 @@ export default {
     font-family: 'Montserrat'
     font-size: 1.3rem
     text-align: center
+    overflow: auto
   &-action
     padding: 13px 45px
     margin-top: 15px

@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; width: 100%">
+  <div class="order-user-info">
     <table style="width: 100%; margin-bottom: 20px;">
       <tr v-for="(item, index) in tableItemsList" :key="item" @mouseover="hover = true" @mouseleave="hover = false">
         <td :style="{ borderTopLeftRadius: hover && index === 0 ? '12px' : 'none' }" class="column-title">{{item.text}}:</td>
@@ -91,7 +91,7 @@
         :value="isDisplayDialog !== ''"
         @close="isDisplayDialog = ''"
         @save="saveEditedDataFromDialog(isDisplayDialog)"
-        width="50%"
+        :width="tableWidth"
         height="fit-content"
         :header="isDisplayDialog === 'receiver' ? 'Редактировать данные получателя' : 'Редактировать адрес доставки'"
       >
@@ -152,6 +152,9 @@ export default {
 			order: 'order/order',
 			tableItems: 'order/orderTableList',
 		}),
+		tableWidth() {
+			return window.innerWidth <= '768' ? '95%' : '50%';
+		}
   },
   methods: {
 		...mapActions('order', ['fetchOrderById', 'updateOrder']),
@@ -259,6 +262,10 @@ export default {
 
 
 <style scoped lang="sass">
+.order-user-info
+  position: relative
+  width: 100%
+  overflow: auto
 table, th, td
   border-bottom: 1px solid var(--grayLinkColor)
   border-collapse: collapse

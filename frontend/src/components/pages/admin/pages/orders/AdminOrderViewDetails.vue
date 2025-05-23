@@ -2,7 +2,7 @@
   <div v-if="isShowDetails" style="position: absolute; top: -30px; left: 0; color: red">
     {{ errorMessage }}
   </div>
-  <div  class="items-container__item admin-order-item" style="width: 100%; padding: 0">
+  <div  class="items-container__item admin-order-item" style="width: 100%; padding: 0;">
 
     <ui-table-content
       :orderId="orderId"
@@ -70,7 +70,6 @@
           </tr>
           <tr v-for="(item, index) in productList" :key="item._id">
             <td style="width: 50px">{{ index + 1 }}</td>
-            <td>{{item._id}}</td>
             <td>{{item.name}}</td>
             <td style="width: 200px">
               <select class="select-list" v-model="item.checkedColor" >
@@ -143,7 +142,6 @@ export default {
 
 			headers: [
 				{ text: "№", value: 'count' },
-				{ text: "Артикул", value: 'id' },
 				{ text: "Название", value: 'name' },
 				{ text: "Цвет", value: 'color' },
 				{ text: "Остаток", value: 'restBalance' },
@@ -174,7 +172,6 @@ export default {
 			if (!this.selectedOrder.items.length) return;
 
       const currentItem = this.selectedOrder.items[itemId];
-			console.log(currentItem)
       const colorObject = currentItem?._id?.color.find(el => el.value === color);
       if (!colorObject) return '';
 
@@ -343,6 +340,8 @@ table.order-items-table, th, td
       background: var(--colorLineBasket)
   & td
     padding: 10px
+    @media screen and (max-width: 1120px)
+      padding: 5px
 .discount-style
   width: 100px
   text-decoration: line-through
