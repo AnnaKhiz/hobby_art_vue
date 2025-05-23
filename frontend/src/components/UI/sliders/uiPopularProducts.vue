@@ -1,7 +1,7 @@
 <template>
   <swiper
     :modules="modules"
-    :slides-per-view="5"
+    :slides-per-view="slidesPerPage"
     :space-between="25"
     @swiper="onSwiperPopular"
     @slideChange="onSlideChangePopular"
@@ -31,6 +31,8 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
+import { computed } from "vue";
+
 export default {
   name: "uiPopularProducts",
   components: {
@@ -44,6 +46,16 @@ export default {
     }
   },
   setup() {
+		const slidesPerPage = computed(() => {
+			switch(true) {
+				case window.innerWidth <= '900' && window.innerWidth > '560':
+					return 3;
+				case window.innerWidth <= '560':
+					return 2;
+				default:
+					return 5;
+			}
+		});
     const onSwiperPopular = (swiper) => {
       console.log(`swiper popular - ${swiper}`);
     };
@@ -53,6 +65,7 @@ export default {
     return {
       onSwiperPopular,
       onSlideChangePopular,
+			slidesPerPage,
       modules: [Navigation, Autoplay],
     };
   },
