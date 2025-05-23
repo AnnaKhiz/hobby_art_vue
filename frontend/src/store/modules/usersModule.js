@@ -31,15 +31,9 @@ export const usersModule = {
 		userAboutLabelsList: state => state.userAboutLabelsList,
 		isAuthorized: state => state.isAuthorized,
 		usersList: state => state.usersList,
-    getIsRegisteredInfo(state) {
-      return state.isRegistered;
-    },
-    getIsAuthorizedInfo(state) {
-      return state.isAuthorized;
-    },
-    getUserInfo(state) {
-      return state.user;
-    }
+    getIsRegisteredInfo: state => state.isRegistered,
+    getIsAuthorizedInfo: state => state.isAuthorized,
+    getUserInfo: state => state.user,
   },
   mutations: {
 		updateIsLoading(state, payload) {
@@ -58,14 +52,11 @@ export const usersModule = {
       state.isAuthorized = payload;
     },
     setUserInfo(state, payload) {
-			const favorites = addSelectedOption(payload.favorites)
-			console.log('payload', payload)
+			const favorites = addSelectedOption(payload.favorites);
       state.user = {
 				...payload,
 				favorites
 			};
-
-			console.log('update state', state.user)
     },
 		updateIsSelectedItem(state, { id, payload}) {
 			const index = state.user.favorites.findIndex(el => el._id._id === id);
@@ -79,7 +70,6 @@ export const usersModule = {
 			let result = null;
 			try {
 				result = await fetchData('user');
-				console.log('get user', result)
 				commit('setUserInfo', result.user[0]);
 				commit('updateFavoritesCount', result.user[0].favorites.filter(el => el.isLiked).length);
 				commit('updateIsLoading', false);
@@ -94,7 +84,7 @@ export const usersModule = {
 				result = await fetchData('user/login', 'POST', {}, body);
 				commit('setUserInfo', result.user);
 			} catch (error) {
-				console.error('Error log in user:', error);
+				console.error('Error log in user: ', error);
 			}
 			return result;
 		},
@@ -104,7 +94,7 @@ export const usersModule = {
 				result = await fetchData('register', 'POST', {}, body);
 				commit('setUserInfo', result.user);
 			} catch (error) {
-				console.error('Error register user:', error);
+				console.error('Error register user: ', error);
 			}
 			return result;
 		},
@@ -113,7 +103,7 @@ export const usersModule = {
 			try {
 				result = await fetchData('user/logout');
 			} catch (error) {
-				console.error('Error log out user:', error);
+				console.error('Error log out user: ', error);
 			}
 			return result;
 		},
@@ -123,7 +113,7 @@ export const usersModule = {
 				result = await fetchData('user/edit', 'PATCH', {}, body);
 				commit('setUserInfo', result.result);
 			} catch (error) {
-				console.error('Error log out user:', error);
+				console.error('Error user info update: ', error);
 			}
 			return result;
 		},
@@ -131,17 +121,15 @@ export const usersModule = {
 			let result = null;
 			try {
 				result = await fetchData('user/favorite', 'PATCH', {}, body);
-				console.log('update result', result)
 				commit('setUserInfo', result.data);
 				commit('updateFavoritesCount', result.data.favorites.filter(el => el.isLiked).length);
 			} catch (error) {
-				console.error('Error log out user:', error);
+				console.error('Error user add favorite: ', error);
 			}
 			return result;
 		},
 
 		// ADMIN
-
 		async getUsersList({ commit }) {
 			let result = null;
 			try {
@@ -149,7 +137,7 @@ export const usersModule = {
 				commit('setUsersList', result.users);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.error('Error getting users list:', error);
+				console.error('Error getting users list: ', error);
 			}
 			return result;
 		},
@@ -158,11 +146,9 @@ export const usersModule = {
 			let result = null;
 			try {
 				result = await fetchData('admin/user/remove/:id', 'DELETE', { id });
-				console.log('remove result', result)
-				// commit('setUsersList', result.users);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.error('Error getting users list:', error);
+				console.error('Error removing user [admin]:', error);
 			}
 			return result;
 		}

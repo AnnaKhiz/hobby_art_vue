@@ -1,6 +1,12 @@
 const apiBaseUrl = process.env.VUE_APP_API_URL;
-const headersDefault = { "Content-Type": "application/json"}
-export async function fetchData(url, method = 'GET', pathParams = {}, body = null, headers = headersDefault) {
+const headersDefault = { "Content-Type": "application/json" };
+export async function fetchData(
+	url,
+	method = 'GET',
+	pathParams = {},
+	body = null,
+	headers = headersDefault
+) {
 	let data = null;
 	try {
 		let processedUrl = url;
@@ -9,7 +15,7 @@ export async function fetchData(url, method = 'GET', pathParams = {}, body = nul
 		}
 		const isFormData = body instanceof FormData;
 		const fetchHeaders = isFormData ? {} : headers;
-		console.log('fetchHeaders', isFormData)
+
 		const result = await fetch(`${apiBaseUrl}/${processedUrl}`, {
 			method,
 			credentials: 'include',
@@ -18,7 +24,7 @@ export async function fetchData(url, method = 'GET', pathParams = {}, body = nul
 		})
 		data = await result.json();
 	} catch (e) {
-		console.log(e)
+		console.log('Fetch request error:', e);
 	}
 	return data;
 }

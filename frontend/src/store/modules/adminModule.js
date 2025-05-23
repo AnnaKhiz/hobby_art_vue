@@ -1,5 +1,4 @@
 import { fetchData } from "@/services/api";
-
 export const adminModule = {
 	namespaced: true,
 	state: () => ({

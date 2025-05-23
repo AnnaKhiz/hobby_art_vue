@@ -40,7 +40,7 @@ export const linksModule = {
   },
   mutations: {
     setCheckedHeaderLink(state, payload) {
-      state.headerLink = payload
+      state.headerLink = payload;
     },
   },
 }

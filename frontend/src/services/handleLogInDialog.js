@@ -9,16 +9,13 @@ export async function checkFunction() {
 	return { isFavorite: false }
 }
 export async function getUser(isFavorite = false) {
-
 	const result = await store.dispatch('user/getAuthUser');
 
 	if (!result.result) {
 		router.back();
 		store.commit('user/setIsAuthorizedInfo', false);
-
 	} else {
 		store.commit('user/setIsAuthorizedInfo', true);
-
 		router.push(
 			{
 				name: 'User',
@@ -28,7 +25,7 @@ export async function getUser(isFavorite = false) {
 				query: {
 					link: isFavorite ? 'favorites' : 'general',
 				}
-			})
+			});
 	}
 }
 function openDialog() {

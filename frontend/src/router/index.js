@@ -20,11 +20,7 @@ import AuthenticationForm from "@/components/UI/forms/AuthenticationForm.vue";
 import uiLoginForm from "@/components/UI/forms/uiLoginForm.vue";
 import uiRegistForm from "@/components/UI/forms/uiRegistForm.vue";
 
-
-
-
 const routes = [
-
   {
     path: '/',
     name: 'HobbyArt',
@@ -225,7 +221,6 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('auth');
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
-
 		switch(true) {
 			case (isAuthenticated === 'false' && to.path.includes('admin')):
 				return next('/admin/login');
@@ -234,7 +229,6 @@ router.beforeEach((to, from, next) => {
 			default:
 				return next();
 		}
-
   } else {
     next();
   }
@@ -242,14 +236,12 @@ router.beforeEach((to, from, next) => {
 
 router.beforeEach((to, from, next) => {
   if (!localStorage.getItem('order')) {
-    next()
+    next();
   } else {
     const basketItems = JSON.parse(localStorage.getItem('order'));
     store.state.order.order = basketItems;
-    next()
+    next();
   }
-
-
 })
 // eslint-disable-next-line
 router.afterEach((to, from) => {
@@ -257,6 +249,5 @@ router.afterEach((to, from) => {
 	const favicon = to.meta.favicon || '';
 	document.querySelector('link[rel="icon"]').href = favicon;
 });
-
 
 export default router

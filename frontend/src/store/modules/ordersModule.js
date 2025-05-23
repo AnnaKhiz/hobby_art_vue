@@ -1,5 +1,4 @@
-import {fetchData} from "@/services/api";
-
+import { fetchData } from "@/services/api";
 export const ordersModule = {
   namespaced: true,
   state: () => ({
@@ -56,27 +55,27 @@ export const ordersModule = {
 		},
     addToOrder(state, payload) {
       if (state.order.items.length) {
-        searchForMatches(state, payload)
+        searchForMatches(state, payload);
       } else {
         state.order.totalQuantity = payload.quantity;
         state.order.totalPrice = payload.price;
-        state.order.items.push(payload)
+        state.order.items.push(payload);
       }
 
       if (!localStorage.getItem('order')) {
-        localStorage.setItem('order', JSON.stringify(state.order))
+        localStorage.setItem('order', JSON.stringify(state.order));
       } else {
-        state.order = JSON.parse(localStorage.getItem('order'))
+        state.order = JSON.parse(localStorage.getItem('order'));
         searchForMatches(state, payload);
         localStorage.setItem('order', JSON.stringify(state.order));
       }
     },
 
     updateTotalQuantity(state) {
-      state.order.totalQuantity = state.order.items.reduce((acc, curVal) => acc + +curVal.quantity, 0)
+      state.order.totalQuantity = state.order.items.reduce((acc, curVal) => acc + +curVal.quantity, 0);
     },
     updateTotalPrice(state) {
-      state.order.totalPrice = state.order.items.reduce((acc, curVal) => acc + +curVal.price, 0)
+      state.order.totalPrice = state.order.items.reduce((acc, curVal) => acc + +curVal.price, 0);
     },
 
     clearOrder(state) {
@@ -94,7 +93,7 @@ export const ordersModule = {
 				const result = await fetchData('api/orders/:id', 'GET', { id });
 				commit('updateOrder', result.data);
 			} catch (error) {
-				console.error('Error fetching orders:', error);
+				console.error('Error fetching orders: ', error);
 			}
 		},
 		async updateOrder({commit}, { id, body }) {
@@ -102,9 +101,8 @@ export const ordersModule = {
 			try {
 				result = await fetchData('api/orders/update/:id', 'PATCH', { id }, body);
 				commit('updateItemsInOrder', result.data);
-				console.log('update order result', result.data)
 			} catch (error) {
-				console.error('Error updating order items:', error);
+				console.error('Error updating order items: ', error);
 			}
 			return result
 		},
@@ -114,9 +112,8 @@ export const ordersModule = {
 			try {
 				const result = await fetchData('api/orders');
 				commit('updateOrdersList', result.orders);
-				console.log('orders - ', result.orders)
 			} catch (error) {
-				console.error('Error fetching orders:', error);
+				console.error('Error fetching orders: ', error);
 			}
 		},
 		async removeOrder({ commit }, id) {
@@ -125,7 +122,7 @@ export const ordersModule = {
 				result = await fetchData('api/orders/remove/:id', 'DELETE', { id });
 				commit('updateOrdersList', result.data)
 			} catch (error) {
-				console.error('Error removing order:', error);
+				console.error('Error removing order: ', error);
 			}
 			return result;
 		},
@@ -137,7 +134,7 @@ export const ordersModule = {
 					? commit('addToOrdersList', result.data)
 					: commit('updateOrder', result.data);
 			} catch (error) {
-				console.error('Error adding new order:', error);
+				console.error('Error adding new order: ', error);
 			}
 			return result
 		},
@@ -146,7 +143,7 @@ export const ordersModule = {
 				const result = await fetchData(`api/orders/:id/user-orders`, 'GET', { id });
 				commit('updateOrdersList', result.data)
 			} catch (error) {
-				console.error('Error getting user orders:', error);
+				console.error('Error getting user orders: ', error);
 			}
 		},
 
@@ -156,17 +153,16 @@ export const ordersModule = {
 				await fetchData('api/orders/update/:idOrder/:idItem', 'PATCH', { idOrder, idItem }, body);
 				commit('updateOrderData', body);
 			} catch (error) {
-				console.error('Error updating order items:', error);
+				console.error('Error updating order items: ', error);
 			}
 		},
 		async removeItemFromOrder({ commit }, { idOrder, idItem, color }) {
 			let result = null;
 			try {
 				result = await fetchData('api/orders/remove/:idOrder/:idItem/:color', 'DELETE', { idOrder, idItem, color });
-				console.log('remove result', result)
 				commit('updateOrder', result.data);
 			} catch (error) {
-				console.error('Error removing order items:', error);
+				console.error('Error removing order items: ', error);
 			}
 			return result
 		},
@@ -174,19 +170,19 @@ export const ordersModule = {
 }
 
 function countTotal(state, storeFieldName, objectFieldName) {
-  state.order[storeFieldName] = state.order.items.reduce((acc, curVal) => acc + +curVal[objectFieldName], 0)
+  state.order[storeFieldName] = state.order.items.reduce((acc, curVal) => acc + +curVal[objectFieldName], 0);
 }
 
 function searchForMatches(state, payload) {
   const index = state.order.items.findIndex(el => el.item._id === payload.item._id && el.checkedColor === payload.checkedColor);
 
   if (index === -1) {
-    state.order.items.push(payload)
+    state.order.items.push(payload);
   } else {
-    state.order.items[index].price += payload.price
-    state.order.items[index].quantity += payload.quantity
+    state.order.items[index].price += payload.price;
+    state.order.items[index].quantity += payload.quantity;
   }
 
-  countTotal(state, 'totalPrice', 'price')
-  countTotal(state, 'totalQuantity', 'quantity')
+  countTotal(state, 'totalPrice', 'price');
+  countTotal(state, 'totalQuantity', 'quantity');
 }

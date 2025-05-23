@@ -22,7 +22,6 @@ export const feedbackModule = {
 		setFeedbackList(state, payload) {
 			state.feedbackList = [...payload];
 		},
-
 	},
 	actions: {
 		async addFeedback({ commit }, body) {
@@ -32,7 +31,7 @@ export const feedbackModule = {
 				commit('setFeedback', result.data);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.log('Error adding new feedback');
+				console.error('Error adding new feedback', error);
 			}
 			return result;
 		},
@@ -44,7 +43,7 @@ export const feedbackModule = {
 				commit('setFeedbackList', result.data);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.log('Error adding new feedback', error);
+				console.error('Error getting feedback list', error);
 			}
 			return result;
 		},
@@ -56,7 +55,7 @@ export const feedbackModule = {
 				result = await fetchData('user/feedbacks');
 				commit('setFeedbackList', result.data);
 			} catch (error) {
-				console.log('Error getting user feedback', error);
+				console.error('Error getting user feedback by ID', error);
 			}
 			return result;
 		},
@@ -68,13 +67,12 @@ export const feedbackModule = {
 				commit('setFeedback', result.data);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.log('Error removing feedback');
+				console.error('Error removing feedback: ', error);
 			}
 			return result;
 		},
 
 		// ADMIN
-
 		async getFeedbackListAdmin({ commit}) {
 			let result = null;
 			try {
@@ -82,7 +80,7 @@ export const feedbackModule = {
 				commit('setFeedbackList', result.data);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.log('Error adding new feedback');
+				console.error('Error getting feedback list [admin]: ', error);
 			}
 			return result;
 		},
@@ -94,7 +92,7 @@ export const feedbackModule = {
 				commit('setFeedback', result.data);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.log('Error removing feedback');
+				console.error('Error removing feedback [admin]: ', error);
 			}
 			return result;
 		},
@@ -106,7 +104,7 @@ export const feedbackModule = {
 				commit('setFeedback', result.data);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.log('Error removing feedback');
+				console.error('Error editing feedback [admin]: ', error);
 			}
 			return result;
 		}

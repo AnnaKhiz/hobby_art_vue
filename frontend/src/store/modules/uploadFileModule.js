@@ -1,5 +1,4 @@
 import { fetchData } from "@/services/api";
-
 export const uploadFileModule = {
 	namespaced: true,
 	state: () => ({
@@ -22,19 +21,18 @@ export const uploadFileModule = {
 			} catch (error) {
 				console.error('Error sending file: ', error)
 			}
-			return result
+			return result;
 		},
 
 		async sendUserAvatar({commit}, body) {
 			let result = null;
 			try {
 				result = await fetchData('user/upload', 'POST', {}, body);
-				console.log('avatar - ', result)
-				commit('setFileInfo', result.file)
+				commit('setFileInfo', result.file);
 			} catch (error) {
-				console.error('Error sending file: ', error)
+				console.error('Error sending file: ', error);
 			}
-			return result
+			return result;
 		}
 	}
 }

@@ -1,5 +1,4 @@
 import { fetchData } from "@/services/api";
-
 export const itemsModule = {
 	namespaced: true,
 	state: () => ({
@@ -41,7 +40,6 @@ export const itemsModule = {
 		},
 		setItems(state, payload) {
 			state.itemsList = payload;
-			console.log('items', state.itemsList)
 		},
 		addNewItem(state, payload) {
 			state.itemsList.push(payload);
@@ -59,7 +57,6 @@ export const itemsModule = {
 		setItem(state, payload) {
 			state.item = payload;
 		},
-
 		updateIsSelectedItem(state, { index, payload}) {
 			return state.itemsList[index].isSelectedItem = payload;
 		}
@@ -72,7 +69,7 @@ export const itemsModule = {
 				commit('setItems', result.items);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.error('Error fetching items:', error);
+				console.error('Error fetching items: ', error);
 			}
 		},
 
@@ -82,7 +79,7 @@ export const itemsModule = {
 				commit('setItem', result.items || result.item);
 				commit('updateIsLoading', false);
 			} catch (error) {
-				console.error('Error fetching item:', error);
+				console.error('Error fetching item by ID: ', error);
 			}
 		},
 
@@ -91,9 +88,8 @@ export const itemsModule = {
 			try {
 				result = await fetchData('api/items/recommended', 'POST', {}, body);
 				commit('updateRecommendedItems', result.items)
-				console.log('recommended', result.items)
 			} catch (error) {
-				console.error('Error adding items:', error);
+				console.error('Error adding items: ', error);
 			}
 			return result.data;
 		},
@@ -104,7 +100,7 @@ export const itemsModule = {
 				result = await fetchData('api/items/add', 'POST', {}, body);
 				commit('addNewItem', result.data)
 			} catch (error) {
-				console.error('Error adding items:', error);
+				console.error('Error adding one item: ', error);
 			}
 			return result.data;
 		},
@@ -114,17 +110,16 @@ export const itemsModule = {
 				await fetchData('api/items/update/:id', 'PATCH', { id }, body);
 				commit('updateItemsList', { id, payload: body });
 			} catch (error) {
-				console.error('Error updating items:', error);
+				console.error('Error updating items: ', error);
 			}
 		},
 
 		async removeItem({ commit }, id) {
-			console.log('removed id', id)
 			try {
 				const result = await fetchData('api/items/remove/:id', 'DELETE', { id })
 				commit('removeItems', result.data._id);
 			} catch (error) {
-				console.log('Error removing items:', error)
+				console.error('Error removing items: ', error)
 			}
 		}
 	}

@@ -11,8 +11,6 @@ import { adminModule } from "@/store/modules/adminModule";
 import { searchModule } from "@/store/modules/searchModule";
 import { feedbackModule } from "@/store/modules/feedbackModule";
 import { uploadFileModule } from "@/store/modules/uploadFileModule";
-
-
 export default createStore({
   modules: {
     dialog: dialogModule,
