@@ -1,5 +1,5 @@
 <template>
-	<form action="#">
+	<form action="#" style="width: 100%">
 		<div class="main__basket-info-delivery">
 			<h2 class="main__basket-info-delivery-label">
 				Способ получения
@@ -113,17 +113,18 @@
 					placeholder="Номер телефона"
 					style="width: 100%"
 				/>
-				<span class="modal__registration-form-error-block small b-3" v-if="errors.receiver.phone">{{ errors.receiver.phone }}</span>
+				<span class="modal__registration-form-error-block small bphone-3" v-if="errors.receiver.phone">{{ errors.receiver.phone }}</span>
 				<p class="main__basket-info-user-text">
 					По этому номеру телефона мы с вяжемся с вами для подтверждения заказа
 				</p>
 			</div>
 
-			<div class="input-container" id="del-email">
+			<div class="input-container" >
 				<input
 					v-model="deliveryInfo.receiver.email"
 					type="email"
 					placeholder="E-mail"
+					style="width: 100%"
 				>
 				<span class="modal__registration-form-error-block small b-3" v-if="errors.receiver.email">{{ errors.receiver.email }}</span>
 				<p class="main__basket-info-user-text">
