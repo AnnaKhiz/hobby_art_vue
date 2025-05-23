@@ -1,6 +1,6 @@
 <template>
 	<div v-if="itemsPerPageList.length" >
-		<div class="main__product-page-content" style="margin-bottom: 30px">
+		<div class="main__product-page-content mb-7">
 			<ui-product-item
 				v-for="(item, index) in itemsPerPageList"
 				:key="item._id"
@@ -31,20 +31,33 @@
 	</Transition>
 
 	<Transition name="fade">
-		<ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white" weight="600"/>
+		<ui-notify-dialog
+			v-if="isCheckedColorNotify"
+			text="Выберите цвет!"
+			background="#ff0000"
+			textColor="white"
+			weight="600"
+		/>
 	</Transition>
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import {
+	mapActions,
+	mapGetters,
+	mapMutations,
+	mapState
+} from "vuex";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 import UiProductItem from "@/components/UI/product/uiProductItem.vue";
 import UiPagination from "@/components/UI/pagination/uiPagination.vue";
-
-
 export default {
   name: "uiProductListPage.vue",
-  components: {UiPagination, UiProductItem, UiNotifyDialog},
+  components: {
+		UiPagination,
+		UiProductItem,
+		UiNotifyDialog
+	},
   props: {
     searchFilters: {
       type: Object,

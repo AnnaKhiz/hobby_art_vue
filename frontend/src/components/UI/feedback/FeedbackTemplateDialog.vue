@@ -17,7 +17,7 @@ import UiFeedbackList from "@/components/UI/feedback/uiFeedbackList.vue";
 
 export default {
 	name: "FeedbackTemplateDialog.vue",
-	components: {UiFeedbackList, UiCommentForm},
+	components: { UiFeedbackList, UiCommentForm },
 	emits: ['updateIsBigForm'],
 	data() {
 		return {

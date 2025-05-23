@@ -29,7 +29,12 @@ export default {
 		}),
 		...mapActions('items', ['fetchItems']),
 		onFocusSearch() {
-			this.$router.push({ name: 'Product-page', params: { type: 'search'}});
+			this.$router.push({
+				name: 'Product-page',
+				params: {
+					type: 'search'
+				}
+			});
 			this.setCheckedHeaderLink('search');
 		},
 		searchItem() {

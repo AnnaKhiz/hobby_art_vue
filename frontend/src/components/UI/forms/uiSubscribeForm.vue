@@ -11,7 +11,3 @@ export default {
   name: "uiSubscribe"
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>

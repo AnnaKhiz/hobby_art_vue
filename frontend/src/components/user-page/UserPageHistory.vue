@@ -1,6 +1,5 @@
 <template>
   <div v-if="userOrdersList.length">
-
 		<ui-order-info-container
 			:user-orders-list="userOrdersList"
 			@update-order="handleUpdate"
@@ -25,7 +24,7 @@ import UiOrderInfoContainer from "@/components/UI/order/uiOrderInfoContainer.vue
 
 export default {
   name: "userPageHistory",
-  components: {UiOrderInfoContainer, UiNotifyDialog },
+  components: { UiOrderInfoContainer, UiNotifyDialog },
   props: {
     user: {
       type: Object,
@@ -59,7 +58,6 @@ export default {
 		},
     async initPage() {
 			await this.getUserOrdersList(this.user._id);
-
       this.userOrdersList = this.ordersList.map(el => ({...el, show: false}));
     },
   },

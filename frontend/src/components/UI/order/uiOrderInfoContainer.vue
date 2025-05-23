@@ -11,7 +11,6 @@
 			@update-show="handleShow"
 			@update-orders-list="handleUpdate"
 		/>
-
 	</div>
 </template>
 

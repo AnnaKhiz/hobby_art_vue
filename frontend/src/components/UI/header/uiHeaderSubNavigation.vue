@@ -29,7 +29,6 @@ import UiSearchForm from "@/components/UI/forms/uiSearchForm.vue";
 import {
 	mapActions,
 	mapGetters,
-	mapMutations
 } from "vuex";
 import { checkFunction, getUser } from "@/services/handleLogInDialog";
 
@@ -58,11 +57,6 @@ export default {
 		},
 	},
 	methods: {
-		...mapMutations({
-			setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
-			setIsRegisteredInfo: 'user/setIsRegisteredInfo',
-			setDisplayDialogState: 'dialog/setDisplayDialogState',
-		}),
 		...mapActions({
 			getAuthUser: 'user/getAuthUser',
 		}),

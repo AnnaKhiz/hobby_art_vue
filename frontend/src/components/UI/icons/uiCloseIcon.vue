@@ -12,9 +12,3 @@ export default {
   name: "uiCloseIcon",
 }
 </script>
-
-
-
-<style scoped lang="sass">
-
-</style>

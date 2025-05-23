@@ -5,24 +5,27 @@
     </p>
 
     <div class="switcher-button" >
-      <div class="switch-btn switch-off" @click="toggleSwitcher" :class="{ 'switch-on' : isSwitchOn}"></div>
-      <div id="bl-2" ></div>
+      <div
+				class="switch-btn switch-off"
+				@click="toggleSwitcher"
+				:class="{ 'switch-on' : isSwitchOn}"
+			/>
+      <div id="bl-2" />
     </div>
 
     <p class="main__slider-popular-switcher-label" :class="{ 'red-text' : isSwitchOn }">
       Популярное
     </p>
   </div>
-  <slot name="popular-swiper"></slot>
+  <slot name="popular-swiper" />
 </template>
 
 <script>
-
 export default {
   name: "uiSwitcherMain",
   data() {
     return {
-      isSwitchOn: false
+      isSwitchOn: false,
     }
   },
   emits: ['switcher-state'],
@@ -34,7 +37,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>

@@ -163,7 +163,7 @@ export default {
 				this.error = 'Пожалуйста, подождите';
 
 			} catch (error) {
-				console.log('valid error', error)
+				console.error('Validation error: ', error)
 				error.inner.forEach((validationError) => {
 					this.errors[validationError.path] = validationError.message
 				})

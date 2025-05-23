@@ -20,12 +20,21 @@
 	</Transition>
 
 	<Transition name="fade">
-		<ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white" weight="600"/>
+		<ui-notify-dialog
+			v-if="isCheckedColorNotify"
+			text="Выберите цвет!"
+			background="#ff0000"
+			textColor="white"
+			weight="600"
+		/>
 	</Transition>
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {
+	mapActions,
+	mapGetters
+} from "vuex";
 import UiProductItem from "@/components/UI/product/uiProductItem.vue"
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 
@@ -71,7 +80,7 @@ export default {
 	watch: {
 		isUpdate: {
 			async handler(newVal) {
-				console.log('updated', newVal)
+				console.log(newVal)
 				await this.fetchRecommendedItems({
 					id: this.$route.params?.id,
 					type: this.$route.params?.type
@@ -98,8 +107,6 @@ export default {
 	}
 }
 </script>
-
-
 
 <style scoped lang="sass">
 .shadow

@@ -3,8 +3,6 @@
     :modules="modules"
     :slides-per-view="slidesPerPage"
     :space-between="25"
-    @swiper="onSwiperPopular"
-    @slideChange="onSlideChangePopular"
     navigation
     loop
     autoplay
@@ -56,23 +54,12 @@ export default {
 					return 5;
 			}
 		});
-    const onSwiperPopular = (swiper) => {
-      console.log(`swiper popular - ${swiper}`);
-    };
-    const onSlideChangePopular = () => {
-      // console.log('slide change');
-    };
+
     return {
-      onSwiperPopular,
-      onSlideChangePopular,
 			slidesPerPage,
       modules: [Navigation, Autoplay],
     };
   },
-
 }
 </script>
 
-<style scoped lang="sass">
-
-</style>

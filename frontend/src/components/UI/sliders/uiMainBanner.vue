@@ -26,9 +26,7 @@
               </button>
             </div>
           </div>
-
         </swiper-slide>
-
       </swiper>
     </div>
   </section>

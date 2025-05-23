@@ -1,6 +1,10 @@
 <template>
 	<div class="main__user-page-content-review-block rating-block">
-		<ui-rating-stars v-if="item.rating" :saved-rating="item.rating" no-actions/>
+		<ui-rating-stars
+			v-if="item.rating"
+			:saved-rating="item.rating"
+			no-actions
+		/>
 
 		<p class="main__user-page-content-review-data">
 			{{ item.date }}

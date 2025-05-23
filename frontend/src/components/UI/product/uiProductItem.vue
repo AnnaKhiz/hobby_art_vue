@@ -4,7 +4,7 @@
 			:is-item-liked="defaultLike ? defaultLike : isLiked"
 			@update-is-liked="handleLike"
 			@open-details="openProductInfo"
-			@update-basket="checkedColor.length ? addToBasket() : $emit('updateIsCheckedColorNotify', true)"
+			@update-basket="checkedColor.length ? addToBasket() : $emit('updateIsCheckedColorNotify', true);"
 		/>
 		<div class="main__product-page-content-item-img">
 			<a @click="$router.push(routeImage)" style="cursor: pointer">
@@ -171,12 +171,8 @@ export default {
 					this.checkedColor.push(value);
 				}
 			}
-			console.log(this.checkedColor)
 		},
 		parseCheckedColors() {
-
-			// const	currentItem = this.itemsList.find(el => el._id === this.itemId);
-
 			const currentItem = !this.itemsList.length
 				? this.item
 				: this.itemsList.find(el => el._id === this.itemId);
@@ -201,9 +197,6 @@ export default {
 			this.savedIndex = null;
 		},
 	},
-	mounted() {
-		// console.log('item', this.item)
-	}
 }
 </script>
 <style scoped lang="sass">

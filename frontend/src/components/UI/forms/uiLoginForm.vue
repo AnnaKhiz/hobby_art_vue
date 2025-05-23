@@ -66,7 +66,6 @@
 </template>
 
 <script>
-
 import {
 	mapActions,
 	mapGetters,
@@ -90,10 +89,7 @@ export default {
   },
   methods: {
 	...mapMutations({
-		setIsRegisteredInfo: 'user/setIsRegisteredInfo',
 		setDisplayDialogState: 'dialog/setDisplayDialogState',
-		setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
-		setUserInfo: 'user/setUserInfo'
 	}),
 	...mapActions('user', ['userLogIn']),
 	async validation() {
@@ -106,7 +102,7 @@ export default {
 			await schema.validate(this.entityData, { abortEarly: false });
 			this.message = 'Пожалуйста, подождите';
 		} catch (error) {
-			console.log('valid error', error)
+			console.error('Validation error', error)
 			error.inner.forEach((validationError) => {
 				this.errors[validationError.path] = validationError.message
 			})
@@ -133,7 +129,12 @@ export default {
 		if (result.role === 'admin') {
 			this.$router.push({ name: 'admin'});
 		} else {
-			this.$router.push({ name: 'User', params: { id: this.userInfo._id }});
+			this.$router.push({
+				name: 'User',
+				params: {
+					id: this.userInfo._id
+				}
+			});
 		}
 		this.setDisplayDialogState(false);
 		}

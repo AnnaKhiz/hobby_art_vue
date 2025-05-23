@@ -1,12 +1,23 @@
 <template>
-    <div class="notify-content" :style="`width: ${width}px; height: ${height}px; background: ${background}`">
-      <h3 :style="`color: ${textColor}; font-weight: ${weight}`">{{ text }}</h3>
+    <div
+			class="notify-content"
+			:style="`
+				width: ${width}px;
+				height: ${height}px;
+				background: ${background};
+			`">
+      <h3
+				:style="`
+					color: ${textColor};
+					font-weight: ${weight};
+				`"
+			>
+				{{ text }}
+			</h3>
     </div>
 </template>
 
 <script>
-
-
 export default {
   name: "uiNotifyDialog.vue",
   props: {
@@ -39,8 +50,6 @@ export default {
 </script>
 
 <style scoped lang="sass">
-
-
 .notify-content
   font: 400 normal 0.8rem/1rem 'Montserrat'
   position: fixed

@@ -3,9 +3,16 @@
     v-if="display"
     class="modal-message"
   >
-    <ui-confirm-dialog :save="save" @close="display = false" :width="width" :height="height" @save="$emit('save')" :header="header">
+    <ui-confirm-dialog
+			:save="save"
+			:width="width"
+			:height="height"
+			:header="header"
+			@close="display = false"
+			@save="$emit('save')"
+		>
       <template #content>
-       <slot name="tableData" ></slot>
+       <slot name="tableData" />
       </template>
     </ui-confirm-dialog>
   </div>
@@ -47,19 +54,19 @@ export default {
   watch : {
     display() {
       if ( this.value !== this.display ) {
-        this.$emit('close' , this.display)
+        this.$emit('close' , this.display);
       }
     },
     value() {
       if ( this.value !== this.display ) {
-        this.display = this.value
+        this.display = this.value;
       }
     }
   },
 
   mounted() {
     if ( this.value ) {
-      this.display = this.value
+      this.display = this.value;
     }
   }
 }
@@ -75,5 +82,4 @@ export default {
   display: flex
   align-items: center
   justify-content: center
-
 </style>

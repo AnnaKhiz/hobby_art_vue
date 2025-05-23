@@ -22,13 +22,11 @@
 	</div>
 </template>
 <script>
-
-
 import UiRatingStars from "@/components/UI/rating-stars/uiRatingStars.vue";
 
 export default {
 	name: "uiFeedbackItem.vue",
-	components: {UiRatingStars},
+	components: { UiRatingStars },
 	props: {
 		item: {
 			type: Object,

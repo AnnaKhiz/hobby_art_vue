@@ -5,7 +5,7 @@
 				class="dropdown__item"
 				v-for="item in dropdownList"
 				:key="item"
-				@click="handleclick(item.value)"
+				@click="handleClick(item.value)"
 			>
 				{{ item.text }}
 			</li>
@@ -43,9 +43,14 @@ export default {
 			]
 		}
 	},
-	emits: ['favorites', 'details', 'basket', 'close'],
+	emits: [
+		'favorites',
+		'details',
+		'basket',
+		'close'
+	],
 	methods: {
-		handleclick(value) {
+		handleClick(value) {
 			if (['favorites', 'details', 'basket', 'close'].includes(value)) {
 				this.$emit(value, true);
 				this.$emit('close', false);

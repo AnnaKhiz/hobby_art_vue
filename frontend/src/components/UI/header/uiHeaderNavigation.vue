@@ -12,8 +12,11 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
-import {openMenuPage} from "@/services/linkConverter";
+import {
+	mapGetters,
+	mapMutations
+} from "vuex";
+import { openMenuPage } from "@/services/linkConverter";
 
 export default {
 	name: "uiHeaderNavigation.vue",

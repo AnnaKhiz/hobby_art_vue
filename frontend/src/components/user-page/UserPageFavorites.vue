@@ -24,12 +24,18 @@
 	</Transition>
 
 	<Transition name="fade">
-		<ui-notify-dialog v-if="isCheckedColorNotify" text="Выберите цвет!" background="#ff0000" textColor="white" weight="600"/>
+		<ui-notify-dialog
+			v-if="isCheckedColorNotify"
+			text="Выберите цвет!"
+			background="#ff0000"
+			textColor="white"
+			weight="600"
+		/>
 	</Transition>
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import likeIcon from "@/assets/icons/like.svg";
 import menuDots from "@/assets/icons/menu-dots.svg";
 import mockedColors from "@/assets/icons/mocked-color-options.svg";
@@ -37,7 +43,7 @@ import uiProductItem from "@/components/UI/product/uiProductItem.vue";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 export default {
   name: "userPageFavorites",
-	components: {UiNotifyDialog, uiProductItem },
+	components: { UiNotifyDialog, uiProductItem },
   data() {
     return {
       id: 0,
@@ -73,7 +79,6 @@ export default {
 				}, 2000)
 			}
 		},
-
 		isCheckedColorNotify(val) {
 			if (val) {
 				setTimeout(() => {
@@ -84,6 +89,7 @@ export default {
 	}
 }
 </script>
+
 <style scoped lang="sass">
 .shadow
 	box-shadow: 1px 1px 6px var(--colorTextMain)

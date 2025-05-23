@@ -51,7 +51,11 @@
 import UiMainBanner from "@/components/UI/sliders/uiMainBanner.vue";
 import UiBreadcrumbs from "@/components/UI/breadcrumbs/uiBreadcrumbs.vue";
 import UiSidebarUserPage from "@/components/UI/sidebars/uiSidebarUserPage.vue";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {
+	mapActions,
+	mapGetters,
+	mapMutations
+} from "vuex";
 import UserPageAboutForm from "@/components/user-page/UserPageAboutForm.vue"
 import UserPageBonuses from "@/components/user-page/UserPageBonuses.vue"
 import UserPageFavorites from "@/components/user-page/UserPageFavorites.vue"
@@ -59,8 +63,6 @@ import UserPageHistory from "@/components/user-page/UserPageHistory.vue"
 import UserPageMailing from "@/components/user-page/UserPageMailing.vue"
 import UserPageFeedback from "@/components/user-page/UserPageFeedback.vue"
 import LoaderComponent from "@/components/UI/loader/LoaderComponent.vue";
-
-
 export default {
   name: "UserPageComponent",
   components: {

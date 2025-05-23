@@ -24,7 +24,6 @@
 
 <script>
 import {
-	mapActions,
 	mapGetters,
 	mapMutations
 } from "vuex";
@@ -51,12 +50,6 @@ export default {
 	methods: {
 		...mapMutations({
 			setCheckedHeaderLink: 'links/setCheckedHeaderLink',
-			setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
-			setDisplayDialogState: 'dialog/setDisplayDialogState',
-			setIsRegisteredInfo: 'user/setIsRegisteredInfo',
-		}),
-		...mapActions({
-			getAuthUser: 'user/getAuthUser',
 		}),
 		openMenu(link, value) {
 			const path = openMenuPage(link, value);

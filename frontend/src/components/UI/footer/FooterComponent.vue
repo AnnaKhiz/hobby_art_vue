@@ -39,7 +39,7 @@
 <script>
 import UiContacts from "@/components/UI/uiContacts.vue";
 import UiSubscribe from "@/components/UI/forms/uiSubscribeForm.vue"
-import UiLogo from "@/components/UI/uiLogo.vue";
+import UiLogo from "@/components/UI/icons/uiLogo.vue";
 import UiFooterNavigation from "@/components/UI/footer/uiFooterNavigation.vue";
 
 export default {

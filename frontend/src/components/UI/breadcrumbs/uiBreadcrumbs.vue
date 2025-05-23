@@ -1,21 +1,48 @@
 <template>
-  <div class="main__delivery__page-breadcrumbs" :style="details ? 'margin: 0' : 'margin: 64 0'">
+  <div
+		class="main__delivery__page-breadcrumbs"
+		:style="details ? 'margin: 0' : 'margin: 64 0'"
+	>
     <ul class="main__delivery__page-breadcrumbs-list">
-      <li><a @click="$router.push({ name: 'HobbyArt' })" style="cursor: pointer">Главная</a></li>
-      <li><span class="arrow-symbol">&#8594;</span></li>
-      <li v-if="product"><a @click="`${$router.push('/#catalog')}`" style="cursor: pointer">Каталог</a></li>
-      <li v-if="product"><span class="arrow-symbol">&#8594;</span></li>
-      <li v-if="details && product"><a @click="$router.back()" style="cursor: pointer">{{changeLinkValueSidebarToText}}</a></li>
-      <li v-else >{{ product ? changeLinkValueSidebarToText : changeLinkValueToText }}</li>
-
+      <li>
+				<a
+					@click="$router.push({ name: 'HobbyArt' })"
+					class="cursor-pointer"
+				>
+					Главная
+				</a>
+			</li>
+      <li>
+				<span class="arrow-symbol">&#8594;</span>
+			</li>
+      <li v-if="product">
+				<a
+					@click="`${$router.push('/#catalog')}`"
+					class="cursor-pointer"
+				>
+					Каталог
+				</a>
+			</li>
+      <li v-if="product">
+				<span class="arrow-symbol">&#8594;</span>
+			</li>
+      <li v-if="details && product">
+				<a
+					@click="$router.back()"
+					class="cursor-pointer"
+				>
+					{{ changeLinkValueSidebarToText }}
+				</a>
+			</li>
+      <li v-else >
+				{{ product ? changeLinkValueSidebarToText : changeLinkValueToText }}
+			</li>
     </ul>
   </div>
 </template>
 
 <script>
-
-
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "uiBreadcrumbs",
@@ -43,9 +70,9 @@ export default {
       const links = [...this.getNavMenuLinks];
       const item = links.find(el => el.url === this.link);
       if (!item) {
-        return
+        return;
       }
-      return item.text
+      return item.text;
     },
     changeLinkValueSidebarToText() {
       const links = [...this.getSidebarGeneralItems];
@@ -58,6 +85,5 @@ export default {
       return item.text;
     }
   },
-
 }
 </script>

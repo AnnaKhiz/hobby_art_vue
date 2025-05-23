@@ -25,7 +25,11 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {
+	mapActions,
+	mapGetters,
+	mapMutations
+} from "vuex";
 
 export default {
 	name: "uiBurgerUserPage.vue",
@@ -47,7 +51,6 @@ export default {
 	emits: ['updateIsShow'],
 	computed: {
 		...mapGetters({
-			getDisplayDialogState: 'dialog/getDisplayDialogState',
 			userSidebarItems: 'userSidebar/userSidebarItems',
 		}),
 		burgerUserPageList() {
@@ -61,7 +64,6 @@ export default {
 	methods: {
 		...mapMutations({
 			setDisplayDialogState: 'dialog/setDisplayDialogState',
-			setCheckedHeaderLink: 'links/setCheckedHeaderLink',
 			setIsAuthorizedInfo: 'user/setIsAuthorizedInfo',
 		}),
 		...mapActions({
@@ -101,7 +103,6 @@ export default {
 				this.$emit('updateIsShow', false);
 				document.removeEventListener('click', this.handleClickOutside);
 			}
-
 		}
 	},
 	watch: {
@@ -138,5 +139,4 @@ export default {
 		background: white
 	& > span
 		color: #525252
-
 </style>

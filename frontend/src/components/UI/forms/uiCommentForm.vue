@@ -93,7 +93,7 @@ export default {
 			if (this.user._id) {
 				this.feedback.user = this.user;
 			}
-      console.log('feedback', this.feedback)
+
 			const result = await this.addFeedback(this.feedback);
 
 			if (!result.result) {

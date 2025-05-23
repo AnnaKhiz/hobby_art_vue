@@ -78,7 +78,6 @@ export default {
 		...mapActions({
 			getFeedbackList: 'feedback/getFeedbackList',
 		}),
-
 	},
 	async mounted() {
 		await this.getFeedbackList();

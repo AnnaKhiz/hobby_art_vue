@@ -1,5 +1,5 @@
 <template>
-	<form action="#" style="width: 100%">
+	<form action="#" class="w-100">
 		<div class="main__basket-info-delivery">
 			<h2 class="main__basket-info-delivery-label">
 				Способ получения
@@ -9,7 +9,7 @@
 					v-model="deliveryInfo.address.city"
 					type="text"
 					placeholder="Город"
-					style="width: 100%"
+					class="w-100"
 				/>
 				<span class="modal__registration-form-error-block small b-10" v-if="errors.address.city">{{ errors.address.city }}</span>
 			</div>
@@ -80,7 +80,7 @@
 						v-model="deliveryInfo.receiver.lastName"
 						type="text"
 						placeholder="Фамилия"
-						style="width: 100%"
+						class="w-100"
 					/>
 					<span class="modal__registration-form-error-block small b-10" v-if="errors.receiver.lastName">{{ errors.receiver.lastName }}</span>
 				</div>
@@ -90,7 +90,7 @@
 						v-model="deliveryInfo.receiver.name"
 						type="text"
 						placeholder="Имя"
-						style="width: 100%"
+						class="w-100"
 					/>
 					<span class="modal__registration-form-error-block small b-10" v-if="errors.receiver.name">{{ errors.receiver.name }}</span>
 				</div>
@@ -100,7 +100,7 @@
 						v-model="deliveryInfo.receiver.surName"
 						type="text"
 						placeholder="Отчество"
-						style="width: 100%"
+						class="w-100"
 					/>
 					<span class="modal__registration-form-error-block small b-10" v-if="errors.receiver.surName">{{ errors.receiver.surName }}</span>
 				</div>
@@ -111,7 +111,7 @@
 					v-model="deliveryInfo.receiver.phone"
 					type="tel"
 					placeholder="Номер телефона"
-					style="width: 100%"
+					class="w-100"
 				/>
 				<span class="modal__registration-form-error-block small bphone-3" v-if="errors.receiver.phone">{{ errors.receiver.phone }}</span>
 				<p class="main__basket-info-user-text">
@@ -124,7 +124,7 @@
 					v-model="deliveryInfo.receiver.email"
 					type="email"
 					placeholder="E-mail"
-					style="width: 100%"
+					class="w-100"
 				>
 				<span class="modal__registration-form-error-block small b-3" v-if="errors.receiver.email">{{ errors.receiver.email }}</span>
 				<p class="main__basket-info-user-text">
@@ -169,7 +169,10 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {
+	mapActions,
+	mapGetters
+} from "vuex";
 import * as yup from "yup";
 
 export default {

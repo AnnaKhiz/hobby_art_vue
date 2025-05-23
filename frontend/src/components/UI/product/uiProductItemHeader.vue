@@ -86,7 +86,7 @@ export default {
 		},
 		handleOutsideClick(event) {
 			if (this.$refs.menu && !this.$refs.menu.contains(event.target)) {
-				this.isDropdownShow = false
+				this.isDropdownShow = false;
 			}
 		},
 		toggleDropdown() {

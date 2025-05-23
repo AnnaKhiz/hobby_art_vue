@@ -3,14 +3,14 @@
     <div class="main__user-page-content-user-info justify-space-between">
 			<div class="main__user-page-content-user-info">
 				<div class="main__user-page-content-user-photo">
-					<img :src="`/uploads/${userData?.avatar || 'no_user.jpg'}`" alt="user-photo" style="width: 80px; height: 80px; border-radius: 50%">
+					<img :src="`/uploads/${userData?.avatar || 'no_user.jpg'}`" alt="user-photo" class="avatar-image">
 					<img
 						:src="require('@/assets/icons/add.png')"
 						alt="icon-plus"
 
 						class="add-icon"
 					>
-					<ui-upload-image class="add-icon" @update-file="form.file = $event" style="opacity: 0" />
+					<ui-upload-image @update-file="form.file = $event" class="add-icon opacity-0" />
 				</div>
 				<p class="main__user-page-content-user-name" >
 					{{ userData.name || '' }} {{ userData.lastName || ''}}
@@ -23,7 +23,7 @@
 
     <ul class="main__user-page-content-user-list" >
 			<li v-if="form.file?.name">
-				<a @click.prevent="uploadPhoto" style="cursor: pointer">
+				<a @click.prevent="uploadPhoto" class="cursor-pointer">
 					Обновить аватар
 				</a>
 			</li>
@@ -67,7 +67,11 @@ import UiBurgerButton from "@/components/UI/burger/uiBurgerButton.vue";
 
 export default {
   name: "uiSidebarUserPage",
-	components: {UiBurgerButton, UiNotifyDialog, UiUploadImage },
+	components: {
+		UiBurgerButton,
+		UiNotifyDialog,
+		UiUploadImage
+	},
 	props: {
 		user: {
 			type: Object,
@@ -143,7 +147,6 @@ export default {
   mounted() {
     this.userData = this.user;
   }
-
 }
 </script>
 <style scoped lang="sass">
@@ -154,5 +157,9 @@ export default {
 	right: -5px
 	cursor: pointer
 	background-color: white
+	border-radius: 50%
+.avatar-image
+	width: 80px
+	height: 80px
 	border-radius: 50%
 </style>

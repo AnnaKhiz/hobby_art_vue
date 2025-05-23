@@ -1,7 +1,12 @@
 <template>
-
-  <div class="dialog-content scrollable" :style="`width: ${width}; height: ${height}`">
-    <div class="dialog-header" :style="save && header ? 'width: 100%' : 'width: fit-content'">
+  <div
+		class="dialog-content scrollable"
+		:style="`width: ${width}; height: ${height}`"
+	>
+    <div
+			class="dialog-header"
+			:style="save && header ? 'width: 100%' : 'width: fit-content'"
+		>
       <h3 :class="{ 'big-header' : save && header }">{{ header }}</h3>
       <ui-close-icon @close="$emit('close')" style="position: static;"/>
     </div>
@@ -11,7 +16,7 @@
       </slot>
     </div>
     <div>
-      <button v-if="save" class="dialog-action" @click="$emit('save')" style="margin-right: 15px">
+      <button v-if="save" class="dialog-action mr-4" @click="$emit('save')">
         Сохранить
       </button>
       <button class="dialog-action" @click="$emit('close')">
@@ -22,7 +27,6 @@
 </template>
 
 <script>
-
 import UiCloseIcon from "@/components/UI/icons/uiCloseIcon.vue";
 
 export default {

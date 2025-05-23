@@ -17,13 +17,17 @@
         method="get"
         class="footer__item-form main__user-page-content-mailing-form"
       >
-        <input v-model="entityMailing.email" type="email" placeholder="Ваш Email" class="email-mailing">
+        <input
+					v-model="entityMailing.email"
+					type="email"
+					placeholder="Ваш Email"
+					class="email-mailing"
+				>
         <button type="submit" @click.prevent="editMailingPreferences">Подписаться</button>
       </form>
       <button
         v-else
-        class="main__user-page-content-mailing cancel"
-        style="margin-bottom: 0"
+        class="main__user-page-content-mailing cancel mb-0"
         @click.prevent="editMailingPreferences"
       >
         Да, отписаться</button>
@@ -33,12 +37,10 @@
       Нажимая на кнопку, вы соглашаетесь с политикой конфиденциальности
     </p>
   </div>
-
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-
 export default {
   name: "userPageMailing",
   props: {

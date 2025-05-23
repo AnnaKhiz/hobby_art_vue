@@ -27,11 +27,15 @@
 </template>
 <script>
 import HeaderInfoComponent from "@/components/UI/header/HeaderInfoComponent.vue";
-import {mapActions, mapGetters, mapMutations} from "vuex";
+import {
+	mapActions,
+	mapGetters,
+	mapMutations
+} from "vuex";
 import UiModalWindow from "@/components/UI/modal/uiModalWindow.vue";
 import UiHeaderNavigation from "@/components/UI/header/uiHeaderNavigation.vue";
 import UiHeaderSubNavigation from "@/components/UI/header/uiHeaderSubNavigation.vue";
-import UiLogo from "@/components/UI/uiLogo.vue";
+import UiLogo from "@/components/UI/icons/uiLogo.vue";
 import AuthenticationForm from "@/components/UI/forms/AuthenticationForm.vue";
 
 export default {

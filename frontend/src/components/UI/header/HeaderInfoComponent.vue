@@ -16,6 +16,6 @@ import UiBurgerButton from "@/components/UI/burger/uiBurgerButton.vue";
 
 export default {
 	name: "HeaderInfoComponent",
-  components: {UiBurgerButton, UiContacts },
+  components: { UiBurgerButton, UiContacts },
 }
 </script>

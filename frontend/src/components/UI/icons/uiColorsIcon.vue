@@ -1,14 +1,28 @@
 <template>
-  <div class="color-panel" :style="`justify-content: ${position}`" :id="item._id">
+  <div
+		class="color-panel"
+		:style="`justify-content: ${position}`"
+		:id="item._id"
+	>
     <p
       v-for="color in colorsArray"
       :key="color._id"
       ref="colors"
-      :style="`background-color: ${color.value}; border: 1px solid ${color.value === 'white' ? 'lightgray' : 'none'}; width: ${size}px; height: ${size}px; margin-right: 5px`"
+      :style="`background-color: ${color.value};
+		border: 1px solid ${color.value === 'white' ? 'lightgray' : 'none'};
+		width: ${size}px;
+		height: ${size}px;
+		margin-right: 5px;
+      `"
       class="render-colors"
       @click.prevent="$emit('check', color.value)"
     ></p>
-    <span v-if="!details" @click="isFull = !isFull">{{ !isFull ? colorItemsShowMore(item.color) : 'Hide'}}</span>
+    <span
+      v-if="!details"
+      @click="isFull = !isFull"
+	>
+      {{ !isFull ? colorItemsShowMore(item.color) : 'Hide'}}
+	</span>
   </div>
 
 </template>
@@ -43,24 +57,19 @@ export default {
   emits: ['check'],
   computed: {
     cuttedItemsArray() {
-      return this.isFull ? this.item.color : this.item.color.slice(0, 4)
+      return this.isFull ? this.item.color : this.item.color.slice(0, 4);
     },
     colorsArray() {
-      return this.details ? this.item.color : this.cuttedItemsArray
+      return this.details ? this.item.color : this.cuttedItemsArray;
     }
   },
   methods: {
     colorItemsShowMore(colors) {
-      return colors.length > 4 ? `${colors.length - 4} +` : ''
+      return colors.length > 4 ? `${colors.length - 4} +` : '';
     },
   },
-  mounted() {
-    // console.log(this.item)
-  }
 }
 </script>
-
-
 
 <style scoped lang="sass">
 .render-colors

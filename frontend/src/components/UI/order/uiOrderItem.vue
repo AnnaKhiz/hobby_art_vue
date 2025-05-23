@@ -5,7 +5,7 @@
 				<div class="main__user-page-content-story-container-items-img order-image">
 					<img :src="`/uploads/${item._id.photo}`" alt="image card">
 				</div>
-				<p class="main__user-page-content-story-container-items-name" style="width: 100%">
+				<p class="main__user-page-content-story-container-items-name w-100">
 					{{ item._id.name }}
 					<span style="font-size: 0.8rem; font-weight: 400">
 										( {{ parseCheckedColors(item.checkedColor, item) }} )

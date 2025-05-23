@@ -1,13 +1,27 @@
 <template>
   <form action="#" class="main__product-page-sidebar-search" id="search-sidebar">
-    <div class="main__product-page-sidebar-item" v-for="header in headersSearch" :key="header">
+    <div
+			v-for="header in headersSearch"
+			:key="header"
+			class="main__product-page-sidebar-item"
+		>
       <h3 class="main__product-page-sidebar-title">
         {{ header.text }}
       </h3>
-      <ul class="main__product-page-sidebar-block list-filters" v-for="item in $store.getters[`filter/${header.value}`]" :key="item.value">
+      <ul
+				v-for="item in $store.getters[`filter/${header.value}`]"
+				:key="item.value"
+				class="main__product-page-sidebar-block list-filters"
+			>
         <li>
           <label :for="item.value">
-            <input v-model="search[header.value]" type="checkbox" name="type" :value="item.value" :id="item.value">
+            <input
+							v-model="search[header.value]"
+							type="checkbox"
+							name="type"
+							:value="item.value"
+							:id="item.value"
+						>
             {{item.text}}
           </label>
         </li>
@@ -27,12 +41,10 @@
         Подобрано {{ filterItemsQuantity }} товаров
       </div>
     </div>
-
   </form>
 </template>
 
 <script>
-
 export default {
   name: "uiFilterSidebar.vue",
   props: {
@@ -60,10 +72,6 @@ export default {
   emits: ['search'],
 
   methods: {
-
-    // saveFilters() {
-    //   this.$emit('search', this.search);
-    // },
     resetForm() {
       this.search = {
         type: [],

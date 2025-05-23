@@ -6,7 +6,11 @@
 					v-for="link in links"
 					:key="link.url"
 				>
-					<span @click="openMenuPage(link.url, link.value)">{{ link.text }} </span>
+					<span
+						@click="openMenuPage(link.url, link.value)"
+					>
+						{{ link.text }}
+					</span>
 				</li>
 				<li class="burger__item address-block">
 					<a href="tel:+88009503398">8 800 950-33-98</a>
@@ -18,7 +22,10 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {
+	mapGetters,
+	mapMutations
+} from "vuex";
 
 export default {
 	name: "uiBurger.vue",

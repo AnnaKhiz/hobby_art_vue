@@ -14,7 +14,7 @@ import UiOrderItem from "@/components/UI/order/uiOrderItem.vue";
 
 export default {
 	name: "uiOrderItemsList.vue",
-	components: {UiOrderItem},
+	components: { UiOrderItem },
 	props: {
 		order: {
 			type: Object,
@@ -23,7 +23,3 @@ export default {
 	}
 }
 </script>
-
-<style scoped lang="sass">
-
-</style>

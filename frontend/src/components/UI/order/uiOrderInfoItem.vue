@@ -40,7 +40,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
 	name: "uiOrderInfoItem.vue",
-	components: {UiOrderItemsList},
+	components: { UiOrderItemsList },
 	props: {
 		userOrdersList: {
 			type: Array,

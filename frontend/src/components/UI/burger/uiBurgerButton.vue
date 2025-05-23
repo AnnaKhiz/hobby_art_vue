@@ -2,7 +2,10 @@
 	<div
 		class="menu__btn"
 		id="callBurger"
-		:class="[{'active': isShow}, {'user-info': user}]"
+		:class="[
+			{'active': isShow},
+			{'user-info': user}
+		]"
 		@click="isShow = !isShow"
 	>
 		<span></span>
@@ -15,7 +18,7 @@
 		:userData="userData"
 		:is-show="isShow"
 		:parent="parentRef"
-		@update-is-show="isShow = $event"
+		@update-is-show="handleUpdateIsShow"
 	/>
 
 	<teleport to="body" v-else >
@@ -24,7 +27,7 @@
 			@close="setDisplayDialogState(false)"
 		>
 			<template #default>
-				<ui-burger-body @update-is-show="isShow = $event" />
+				<ui-burger-body @update-is-show="handleUpdateIsShow" />
 			</template>
 		</ui-modal-window>
 	</teleport>
@@ -59,6 +62,9 @@ export default {
 		...mapMutations({
 			setDisplayDialogState: 'dialog/setDisplayDialogState',
 		}),
+		handleUpdateIsShow(value) {
+			this.isShow = value;
+		},
 	},
 	mounted() {
 		this.parentRef = this.$refs.burgerButton;

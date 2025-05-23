@@ -23,28 +23,20 @@ export default {
   emits: ['input'],
   methods: {
     removeItem() {
-      if (this.quantity === 1) {
-        return false
-      }
-      return this.quantity -= 1
+      if (this.quantity === 1) return;
+      return this.quantity -= 1;
     },
     addItem() {
       return this.quantity += 1
     },
   },
   mounted() {
-    this.orderCount ? this.quantity = this.orderCount : this.quantity
+		this.quantity = this.orderCount ? this.orderCount : this.quantity;
   },
   watch: {
     quantity(newValue) {
-      this.$emit('input', newValue)
+      this.$emit('input', newValue);
     }
   }
 }
 </script>
-
-
-
-<style scoped lang="sass">
-
-</style>

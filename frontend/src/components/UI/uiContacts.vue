@@ -4,7 +4,13 @@
 				v-for="item in contactsList"
 				:key="item.value"
 		>
-			<a v-if="item.isLink" :href="`${item.href}`" class="header__contacts-tel" >{{ item.text }}</a>
+			<a
+				v-if="item.isLink"
+				:href="`${item.href}`"
+				class="header__contacts-tel"
+			>
+				{{ item.text }}
+			</a>
 			<span v-else>{{ item.text }}</span>
 		</li>
 		<slot name="burger" />
