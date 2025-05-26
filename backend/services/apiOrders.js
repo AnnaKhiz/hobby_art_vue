@@ -19,16 +19,14 @@ async function getOrderById(req, res, next) {
 
     res.status(200).send({result: true, data: order });
   } catch (error) {
-    console.log(error)
+    console.error('Error getting order by ID', error)
     res.status(404).send({result: false, data: `Error: ${error}`})
   }
 }
 
 
 async function getUserOrdersById(req, res, next) {
-  console.log('req auth', req._auth)
   const { id } = req._auth;
-  console.log(id)
 
   try {
     const orders = await Order.find({ users: new ObjectId(id)}).populate('items._id').populate('users')
@@ -49,7 +47,6 @@ async function addNewOrder(req, res, next) {
     return res.send({ "result" : false, data: 'No incoming data!' });
   }
 
-	console.log(order)
 	if (!order.users) {
 		guestUser = new GuestUser({
 			name: order.deliveryInfo.receiver.name,
@@ -86,7 +83,6 @@ async function addNewOrder(req, res, next) {
 				}
 			}, { new: true, runValidators: true});
 		} else {
-			console.log('result', result)
 			await User.findByIdAndUpdate(order.users, {
 				$push: {
 					orders: { _id: result._id }
@@ -113,7 +109,7 @@ async function updateOrderData(req, res, next) {
 
     res.status(200).send({result: true, data: updatedOrder });
   } catch (error) {
-    console.log(error)
+    console.error('Error updating order data', error)
     res.status(404).send({result: false, data: `Error: ${error}`})
   }
 }
@@ -136,7 +132,7 @@ async function updateOrderItemById(req, res, next) {
 
     res.status(200).send({result: true, data: updatedOrder });
   } catch (error) {
-    console.log(error)
+    console.error('Error updating order item by ID', error)
     res.status(404).send({result: false, data: `Error: ${error}`})
   }
 }

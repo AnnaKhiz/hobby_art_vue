@@ -4,5 +4,4 @@ const { upload } = require("../middleware/upload.js");
 
 router.post('/upload', upload.single('file'), uploadFile );
 
-
 module.exports = { router }

@@ -4,7 +4,7 @@ async function getFeedbackList(req, res, next) {
 		const result = await Feedback.find().populate('user');
 		res.send({result: true, data: result})
 	} catch (error) {
-		console.log('Error in getting feedbacks', error);
+		console.error('Error in getting feedbacks', error);
 		res.status(404).send({result: false, data: []});
 	}
 }
@@ -28,7 +28,7 @@ async function addNewFeedback(req, res, next) {
 
 		res.status(200).send({result: true, data: result})
 	} catch (error) {
-		console.log('Error adding feedback', error);
+		console.error('Error adding feedback', error);
 		res.status(409).send({result: false, data: {}})
 	}
 }
@@ -44,7 +44,7 @@ async function getFeedbackById(req, res, next) {
 
 		res.send({result: true, data: result})
 	} catch (error) {
-		console.log('Error getting feedback by ID', error);
+		console.error('Error getting feedback by ID', error);
 		res.status(404).send({result: false, data: []})
 	}
 }
@@ -60,7 +60,7 @@ async function getFeedbackByUserId(req, res, next) {
 
 		res.send({result: true, data: result})
 	} catch (error) {
-		console.log('Error getting feedback by ID', error);
+		console.error('Error getting feedback by ID', error);
 		res.status(404).send({result: false, data: []})
 	}
 }

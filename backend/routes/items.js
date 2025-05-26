@@ -11,8 +11,8 @@ const {
 
 router.get('/', getAllItems );
 router.get('/:id', getOneItemById );
-router.post('/recommended', getRecommendedItems)
 
+router.post('/recommended', getRecommendedItems)
 router.post('/add', addNewItem );
 
 router.patch('/update/:id', updateItemData );

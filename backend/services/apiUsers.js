@@ -60,7 +60,7 @@ async function registerNewUser(req, res) {
 		})
 
 	} catch (error) {
-		console.log(error)
+		console.error('Error register new user', error);
 		if (error.code === 11000) {
 			res.status(401).send({'result': false});
 		}
@@ -135,7 +135,7 @@ async function updateUserInfo(req, res, next) {
 		const updatedUser = await User.findByIdAndUpdate({ _id: new ObjectId(id)}, { $set: newUser }, { new: true, runValidators: true} )
 		res.send({ "result": updatedUser })
 	} catch (error) {
-		console.log('update user error', error)
+		console.error('Error update user error', error)
 	}
 }
 
@@ -186,7 +186,7 @@ async function toggleFavorites(req, res, next) {
 
 		res.send({ "result": true, data: updatedUser })
 	} catch (error) {
-		console.log('Add favorite item to user error', error)
+		console.error('Add favorite item to user error', error)
 	}
 }
 
@@ -299,7 +299,7 @@ async function getAllFeedbacks(req, res) {
 		const result = await Feedback.find().populate('user');
 		res.send({result: true, data: result})
 	} catch (error) {
-		console.log('Error in getting feedbacks', error);
+		console.error('Error in getting feedbacks', error);
 		res.status(404).send({result: false, data: []});
 	}
 }
@@ -320,7 +320,7 @@ async function updateFeedbackText(req, res) {
 
 		res.send({result: true, data: result})
 	} catch (error) {
-		console.log('Error updating feedback by ID', error);
+		console.error('Error updating feedback by ID', error);
 		res.status(404).send({result: false, data: []})
 	}
 }
@@ -334,15 +334,13 @@ async function deleteFeedbackById(req, res) {
 
 	try {
 		const result = await Feedback.findOneAndDelete({ _id: new ObjectId(id)}).populate('user');
-		console.log(result)
-
 		if (!result) {
 			return res.send({result: true, data: {}});
 		}
 
 		res.send({result: true, data: result});
 	} catch (error) {
-		console.log('Error deleting feedback by ID', error);
+		console.error('Error deleting feedback by ID', error);
 		res.status(404).send({result: false, data: {}});
 	}
 

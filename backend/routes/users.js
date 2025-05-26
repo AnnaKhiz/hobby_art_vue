@@ -20,13 +20,12 @@ const {
 } = require('../services/apiUsers');
 const { upload} = require("../middleware/upload");
 const { uploadFile } = require("../services/apiUploadFiles");
-const {getFeedbackByUserId} = require("../services/apiFeedback");
+const { getFeedbackByUserId } = require("../services/apiFeedback");
 router.get('/', async (req, res) => {
 	res.send({ "result": "Server started here" })
 })
 
 // USER PAGES
-
 router.get('/user', parserJwt, getAllPages );
 router.get('/user/logout',  logoutUserPage );
 router.post('/user/login', logInUserPage );
@@ -39,8 +38,8 @@ router.delete('/user/feedback/remove/:id', parserJwt, protectedRoute(['admin', '
 
 // ADMIN PAGEs
 router.get('/admin', parserJwt, protectedRoute(['admin']), uploadAdminPage );
-router.post('/admin/login', logInToAdminPanel );
 router.get('/admin/logout', logoutFromAdminPanel);
+router.post('/admin/login', logInToAdminPanel );
 
 // ADMIN users
 router.get('/admin/users', parserJwt, protectedRoute(['admin'], '/auth/login'), getAllUsers);

@@ -1,9 +1,6 @@
 const {Item, ObjectId} = require("../db");
-
-
 async function getAllItems(req, res, next) {
   const items = await Item.find().populate('users._id');
-	console.log(items)
 
   if (!items) {
     res.send({ "result": false, items: [] });
@@ -19,7 +16,7 @@ async function getOneItemById(req, res, next) {
     res.send({ "result": true, item: item });
 
   } catch (e) {
-    console.log(e)
+    console.error('Error getting one item by ID', e)
     res.send({ "result": false, item: {} });
   }
 }
@@ -37,7 +34,7 @@ async function getRecommendedItems(req, res, next) {
 		res.send({ "result": true, items: items });
 
 	} catch (e) {
-		console.log(e)
+		console.error('Error gerring recommended items', e)
 		res.send({ "result": false, items: [] });
 	}
 }
@@ -71,7 +68,7 @@ async function updateItemData(req, res, next) {
     const updatedItem = await Item.findOneAndUpdate({ _id: new ObjectId(id)}, itemBody, { new: true })
     res.send({"result": true, data: updatedItem})
   } catch (error) {
-    console.log('update user error', error)
+    console.error('Error update user error', error)
   }
 }
 
@@ -82,7 +79,7 @@ async function removeItem(req, res, next) {
     const result = await Item.findByIdAndDelete({ _id: new ObjectId(id)});
     res.status(200).send({ "result": true, data: result });
   } catch (error) {
-    console.log(error)
+    console.error('Error removing item', error)
     res.status(404).send({ "result": false, data: `Remove item error: ${error}` });
   }
 }

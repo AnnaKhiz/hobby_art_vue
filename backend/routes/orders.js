@@ -11,7 +11,6 @@ const {
   getOrderById,
   getUserOrdersById
   } = require('../services/apiOrders');
-const {Order, ObjectId} = require("../db");
 
 router.get('/', gelAllOrders );
 router.get('/:id/user-orders', parserJwt, getUserOrdersById );
