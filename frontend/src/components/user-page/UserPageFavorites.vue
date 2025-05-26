@@ -38,7 +38,6 @@
 import { mapGetters } from "vuex";
 import likeIcon from "@/assets/icons/like.svg";
 import menuDots from "@/assets/icons/menu-dots.svg";
-import mockedColors from "@/assets/icons/mocked-color-options.svg";
 import uiProductItem from "@/components/UI/product/uiProductItem.vue";
 import UiNotifyDialog from "@/components/UI/modal/uiNotifyDialog.vue";
 export default {
@@ -51,7 +50,6 @@ export default {
 			display: false,
 			likeIcon,
 			menuDots,
-			mockedColors,
     }
   },
 	computed: {
