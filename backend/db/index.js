@@ -37,13 +37,6 @@ const OrderSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
     default: null,
-    // type: new mongoose.Schema({
-    //   _id: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'users',
-    //   },
-    // }, { _id: false }),
-    // default: {}
   },
   items: [
     {
@@ -79,7 +72,7 @@ const ItemSchema = new mongoose.Schema({
   rating: { type: Number },
   comments: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'comments'
+    ref: 'feedback'
   }],
 	users: [
 		{
@@ -128,7 +121,7 @@ const UserSchema = new mongoose.Schema({
 		}],
   comments: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'comments'
+    ref: 'feedback'
   }],
 	isGuest: {type: Boolean, required: false }
 });
@@ -169,24 +162,12 @@ const GuestUserSchema = new mongoose.Schema({
 	}],
 	comments: [{
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'comments',
+		ref: 'feedback',
 		required: false
 	}],
 	isGuest: {type: Boolean, required: true }
 });
-const CommentSchema = new mongoose.Schema({
-  text: { type: String },
-  date: { type: String },
-	rating: { type: Number},
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'users'
-  },
-  item: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'items'
-  }
-});
+
 const FeedbackSchema = new mongoose.Schema({
 	text: { type: String },
 	date: { type: String },
@@ -234,7 +215,6 @@ const Item = mongoose.model('items', ItemSchema);
 const User = mongoose.model('users', UserSchema);
 const GuestUser = mongoose.model('guest-user', GuestUserSchema);
 const Order = mongoose.model('orders', OrderSchema);
-const Comment = mongoose.model('comments', CommentSchema);
 const Feedback = mongoose.model('feedback', FeedbackSchema);
 const Admin = mongoose.model('admins', AdminSchema);
 
@@ -255,7 +235,6 @@ module.exports = {
   ObjectId,
   User,
   Order,
-  Comment,
   Item,
   Admin,
 	GuestUser,

@@ -1,4 +1,4 @@
-const { User, Page, ObjectId, Item, Comment, Order, Admin, Feedback} = require('../db');
+const { User, Page, ObjectId, Item, Order, Admin, Feedback} = require('../db');
 const { checkPass, generateJWt, hashPass } = require("../utils/authEncoding");
 const { getFeedbackList } = require("./apiFeedback");
 const isProd = process.env.NODE_ENV === 'production';
@@ -200,7 +200,6 @@ async function uploadAdminPage(req,res) {
 
 	const users = await User.find().populate('orders').populate('comments').populate('favorites._id');
 	const items = await Item.find().populate('comments').populate('users._id');
-	const comments = await Comment.find().populate('users').populate('items');
 	const orders = await Order.find().populate('users').populate('items._id');
 
 	res.send({"result": true, role: role, data: [users, orders, items]})
