@@ -202,7 +202,7 @@ UserSchema.pre('findOneAndDelete', async function(next) {
   const query = this.getQuery();
 
   try {
-    const comment = await Comment.findOne(query);
+    const comment = await Feedback.findOne(query);
 
     if (!comment) return;
 
@@ -218,6 +218,7 @@ UserSchema.pre('findOneAndDelete', async function(next) {
     await mongoose.model('orders').deleteMany({ _id: { $in: user.orders }})
 		await mongoose.model('items').deleteMany({ _id: { $in: user.favorites }})
 
+		console.log(comment, order, items)
   } catch (error) {
     next(error);
   }
