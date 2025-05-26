@@ -23,7 +23,7 @@ async function addNewFeedback(req, res, next) {
 			const user = await User.findOneAndUpdate({_id: feedback.user._id}, { $push: { 'comments': newFeedback}}, { new: true, runValidators: true});
 			if (!user) return;
 
-			result = await Feedback.findOneAndUpdate({_id: new ObjectId(result._id)}, {$push: { "user": user}}, { new: true, runValidators: true});
+			result = await Feedback.findOneAndUpdate({_id: new ObjectId(result._id)}, {$set: { "user": user}}, { new: true, runValidators: true});
 		}
 
 		res.status(200).send({result: true, data: result})
