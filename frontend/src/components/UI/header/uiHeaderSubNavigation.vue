@@ -65,7 +65,8 @@ export default {
 			await this.getUser(true);
 		},
 	},
-	mounted() {
+	async mounted() {
+		await this.getAuthUser();
 		setTimeout(() => {
 			this.basketQuantity = this.order.totalQuantity;
 			document.documentElement.style.setProperty('--favorite-count', `"${ this.favoritesCount || 0 }"`);
