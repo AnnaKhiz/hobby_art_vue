@@ -7,7 +7,7 @@ Login: admin
 Password: 1
 
 The project is deployed [here](https://hobby-art-vue.vercel.app/), but it is a free hosting and sometimes it is necessary to reload it.
-If you have problems with rendering, [contact me](khizhniak.work@gmail.com) to update it or run the project by cloning this repository.
+If you have problems with rendering, contact me (khizhniak.work@gmail.com) to update it or run the project by cloning this repository.
 
 ### Used technologies:
 **Frontend**
